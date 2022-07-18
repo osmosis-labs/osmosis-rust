@@ -68,3 +68,4 @@ Rust **1.56**
 
 [osmosis-build-image]: https://github.com/cosmos/cosmos-rust/workflows/osmosis-proto/badge.svg
 [osmosis-build-link]: https://github.com/cosmos/cosmos-rust/actions/workflows/osmosis-proto.yml# osmosis-rust
+# osmosis-rust
