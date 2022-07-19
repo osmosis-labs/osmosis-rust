@@ -1,0 +1,6 @@
+[submodule "dependencies/cosmos-sdk"]
+	path = dependencies/cosmos-sdk
+	url = git@github.com:cosmos/cosmos-sdk.git
+[submodule "dependencies/osmosis"]
+	path = dependencies/osmosis
+	url = git@github.com:osmosis-labs/osmosis.git
