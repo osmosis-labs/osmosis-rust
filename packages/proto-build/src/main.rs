@@ -29,7 +29,7 @@ const OSMOSIS_REV: &str = "v10.0.1";
 // working directory.
 
 /// The directory generated cosmos-sdk proto files go into in this repo
-const OSMOSIS_PROTO_DIR: &str = "../osmosis-proto/src/prost/";
+const OSMOSIS_PROTO_DIR: &str = "../osmosis-std/src/prost/";
 /// Directory where the cosmos-sdk submodule is located
 const COSMOS_SDK_DIR: &str = "../../dependencies/cosmos-sdk";
 /// Directory where the osmosis submodule is located
