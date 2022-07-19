@@ -168,21 +168,10 @@ fn compile_osmosis_proto(out_dir: &Path) {
     // List available paths for dependencies
     let includes: Vec<PathBuf> = proto_includes_paths.iter().map(PathBuf::from).collect();
 
-    let proto_paths = [
-        "epochs",
-        "gamm",
-        "incentives",
-        "lockup",
-        "mint",
-        "pool-incentives",
-        "simulation",
-        "superfluid",
-        "tokenfactory",
-        "txfees",
-    ]
-    .iter()
-    .map(|module| format!("{}/proto/osmosis/{}", osmosis_dir.display(), module))
-    .collect::<Vec<String>>();
+    let proto_paths = fs::read_dir(osmosis_dir.join("proto/osmosis"))
+        .unwrap()
+        .map(|d| d.unwrap().path().to_string_lossy().to_string())
+        .collect::<Vec<String>>();
 
     // List available proto files
     let mut protos: Vec<PathBuf> = vec![];
