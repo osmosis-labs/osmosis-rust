@@ -6,9 +6,11 @@ publish = false
 version = "0.1.0"
 
 [dependencies]
+prettyplease = "0.1.16"
 prost = "0.10"
 prost-build = "0.10"
 regex = "1"
+syn = {version = "1.0.98", features = ["full", "parsing"]}
 tonic = "0.7"
 tonic-build = "0.7"
 walkdir = "2"

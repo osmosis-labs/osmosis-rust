@@ -295,5 +295,11 @@ fn copy_and_patch(src: impl AsRef<Path>, dest: impl AsRef<Path>) -> io::Result<(
             .to_string();
     }
 
+    let file = &syn::parse_file(&contents);
+    if let Ok(file) = file {
+        // only prettify rust file (skipping `*_COMMIT` file)
+        contents = prettyplease::unparse(file);
+    }
+
     fs::write(dest, &*contents)
 }
