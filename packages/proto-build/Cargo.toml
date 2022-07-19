@@ -1,0 +1,14 @@
+[package]
+authors = ["Supanat Potiwarakorn <boss@osmosis.team>", "Justin Kilpatrick <justin@althea.net>", "Tony Arcieri <tony@iqlusion.io>"]
+edition = "2021"
+name = "proto-build"
+publish = false
+version = "0.1.0"
+
+[dependencies]
+prost = "0.10"
+prost-build = "0.10"
+regex = "1"
+tonic = "0.7"
+tonic-build = "0.7"
+walkdir = "2"
