@@ -41,6 +41,9 @@ pub struct SmoothWeightChangeParams {
     #[prost(message, repeated, tag = "4")]
     pub target_pool_weights: ::prost::alloc::vec::Vec<PoolAsset>,
 }
+impl crate::cosmwasm::ToCosmosMsg for SmoothWeightChangeParams {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.SmoothWeightChangeParams";
+}
 /// PoolParams defined the parameters that will be managed by the pool
 /// governance in the future. This params are not managed by the chain
 /// governance. Instead they will be managed by the token holders of the pool.
@@ -53,6 +56,9 @@ pub struct PoolParams {
     pub exit_fee: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "3")]
     pub smooth_weight_change_params: ::core::option::Option<SmoothWeightChangeParams>,
+}
+impl crate::cosmwasm::ToCosmosMsg for PoolParams {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.PoolParams";
 }
 /// Pool asset is an internal struct that combines the amount of the
 /// token in the pool, and its balancer weight.
@@ -67,6 +73,9 @@ pub struct PoolAsset {
     /// Weight that is not normalized. This weight must be less than 2^50
     #[prost(string, tag = "2")]
     pub weight: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for PoolAsset {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.PoolAsset";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Pool {
@@ -100,6 +109,9 @@ pub struct Pool {
     #[prost(string, tag = "7")]
     pub total_weight: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for Pool {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.Pool";
+}
 /// ===================== MsgJoinPool
 /// This is really MsgJoinPoolNoSwap
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -115,8 +127,14 @@ pub struct MsgJoinPool {
         cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
     >,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgJoinPool {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgJoinPool";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgJoinPoolResponse {}
+impl crate::cosmwasm::ToCosmosMsg for MsgJoinPoolResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgJoinPoolResponse";
+}
 /// ===================== MsgExitPool
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgExitPool {
@@ -131,8 +149,14 @@ pub struct MsgExitPool {
         cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
     >,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgExitPool {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgExitPool";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgExitPoolResponse {}
+impl crate::cosmwasm::ToCosmosMsg for MsgExitPoolResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgExitPoolResponse";
+}
 /// ===================== MsgSwapExactAmountIn
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SwapAmountInRoute {
@@ -140,6 +164,9 @@ pub struct SwapAmountInRoute {
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub token_out_denom: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for SwapAmountInRoute {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.SwapAmountInRoute";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSwapExactAmountIn {
@@ -152,10 +179,16 @@ pub struct MsgSwapExactAmountIn {
     #[prost(string, tag = "4")]
     pub token_out_min_amount: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgSwapExactAmountIn {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgSwapExactAmountIn";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSwapExactAmountInResponse {
     #[prost(string, tag = "1")]
     pub token_out_amount: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for MsgSwapExactAmountInResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgSwapExactAmountInResponse";
 }
 /// ===================== MsgSwapExactAmountOut
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -164,6 +197,9 @@ pub struct SwapAmountOutRoute {
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub token_in_denom: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for SwapAmountOutRoute {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.SwapAmountOutRoute";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSwapExactAmountOut {
@@ -176,10 +212,16 @@ pub struct MsgSwapExactAmountOut {
     #[prost(message, optional, tag = "4")]
     pub token_out: ::core::option::Option<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgSwapExactAmountOut {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgSwapExactAmountOut";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSwapExactAmountOutResponse {
     #[prost(string, tag = "1")]
     pub token_in_amount: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for MsgSwapExactAmountOutResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgSwapExactAmountOutResponse";
 }
 /// ===================== MsgJoinSwapExternAmountIn
 /// TODO: Rename to MsgJoinSwapExactAmountIn
@@ -198,10 +240,16 @@ pub struct MsgJoinSwapExternAmountIn {
     #[prost(string, tag = "4")]
     pub share_out_min_amount: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgJoinSwapExternAmountIn {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgJoinSwapExternAmountIn";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgJoinSwapExternAmountInResponse {
     #[prost(string, tag = "1")]
     pub share_out_amount: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for MsgJoinSwapExternAmountInResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgJoinSwapExternAmountInResponse";
 }
 /// ===================== MsgJoinSwapShareAmountOut
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -217,10 +265,16 @@ pub struct MsgJoinSwapShareAmountOut {
     #[prost(string, tag = "5")]
     pub token_in_max_amount: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgJoinSwapShareAmountOut {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgJoinSwapShareAmountOut";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgJoinSwapShareAmountOutResponse {
     #[prost(string, tag = "1")]
     pub token_in_amount: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for MsgJoinSwapShareAmountOutResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgJoinSwapShareAmountOutResponse";
 }
 /// ===================== MsgExitSwapShareAmountIn
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -236,10 +290,16 @@ pub struct MsgExitSwapShareAmountIn {
     #[prost(string, tag = "5")]
     pub token_out_min_amount: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgExitSwapShareAmountIn {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgExitSwapShareAmountIn";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgExitSwapShareAmountInResponse {
     #[prost(string, tag = "1")]
     pub token_out_amount: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for MsgExitSwapShareAmountInResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgExitSwapShareAmountInResponse";
 }
 /// ===================== MsgExitSwapExternAmountOut
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -253,10 +313,16 @@ pub struct MsgExitSwapExternAmountOut {
     #[prost(string, tag = "4")]
     pub share_in_max_amount: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgExitSwapExternAmountOut {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgExitSwapExternAmountOut";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgExitSwapExternAmountOutResponse {
     #[prost(string, tag = "1")]
     pub share_in_amount: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for MsgExitSwapExternAmountOutResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.MsgExitSwapExternAmountOutResponse";
 }
 ///=============================== Pool
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -264,10 +330,16 @@ pub struct QueryPoolRequest {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
 }
+impl crate::cosmwasm::ToCosmosMsg for QueryPoolRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryPoolRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryPoolResponse {
     #[prost(message, optional, tag = "1")]
     pub pool: ::core::option::Option<::prost_types::Any>,
+}
+impl crate::cosmwasm::ToCosmosMsg for QueryPoolResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryPoolResponse";
 }
 ///=============================== Pools
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -277,6 +349,9 @@ pub struct QueryPoolsRequest {
     pub pagination: ::core::option::Option<
         cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest,
     >,
+}
+impl crate::cosmwasm::ToCosmosMsg for QueryPoolsRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryPoolsRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryPoolsResponse {
@@ -288,13 +363,22 @@ pub struct QueryPoolsResponse {
         cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse,
     >,
 }
+impl crate::cosmwasm::ToCosmosMsg for QueryPoolsResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryPoolsResponse";
+}
 ///=============================== NumPools
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryNumPoolsRequest {}
+impl crate::cosmwasm::ToCosmosMsg for QueryNumPoolsRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryNumPoolsRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryNumPoolsResponse {
     #[prost(uint64, tag = "1")]
     pub num_pools: u64,
+}
+impl crate::cosmwasm::ToCosmosMsg for QueryNumPoolsResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryNumPoolsResponse";
 }
 ///=============================== PoolParams
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -302,16 +386,25 @@ pub struct QueryPoolParamsRequest {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
 }
+impl crate::cosmwasm::ToCosmosMsg for QueryPoolParamsRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryPoolParamsRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryPoolParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<::prost_types::Any>,
+}
+impl crate::cosmwasm::ToCosmosMsg for QueryPoolParamsResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryPoolParamsResponse";
 }
 ///=============================== PoolLiquidity
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryTotalPoolLiquidityRequest {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
+}
+impl crate::cosmwasm::ToCosmosMsg for QueryTotalPoolLiquidityRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryTotalPoolLiquidityRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryTotalPoolLiquidityResponse {
@@ -320,11 +413,17 @@ pub struct QueryTotalPoolLiquidityResponse {
         cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
     >,
 }
+impl crate::cosmwasm::ToCosmosMsg for QueryTotalPoolLiquidityResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryTotalPoolLiquidityResponse";
+}
 ///=============================== TotalShares
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryTotalSharesRequest {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
+}
+impl crate::cosmwasm::ToCosmosMsg for QueryTotalSharesRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryTotalSharesRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryTotalSharesResponse {
@@ -332,6 +431,9 @@ pub struct QueryTotalSharesResponse {
     pub total_shares: ::core::option::Option<
         cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
     >,
+}
+impl crate::cosmwasm::ToCosmosMsg for QueryTotalSharesResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryTotalSharesResponse";
 }
 /// QuerySpotPriceRequest defines the gRPC request structure for a SpotPrice
 /// query.
@@ -344,6 +446,9 @@ pub struct QuerySpotPriceRequest {
     #[prost(string, tag = "3")]
     pub quote_asset_denom: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for QuerySpotPriceRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QuerySpotPriceRequest";
+}
 /// QuerySpotPriceResponse defines the gRPC response structure for a SpotPrice
 /// query.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -351,6 +456,9 @@ pub struct QuerySpotPriceResponse {
     /// String of the Dec. Ex) 10.203uatom
     #[prost(string, tag = "1")]
     pub spot_price: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for QuerySpotPriceResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QuerySpotPriceResponse";
 }
 ///=============================== EstimateSwapExactAmountIn
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -364,10 +472,16 @@ pub struct QuerySwapExactAmountInRequest {
     #[prost(message, repeated, tag = "4")]
     pub routes: ::prost::alloc::vec::Vec<SwapAmountInRoute>,
 }
+impl crate::cosmwasm::ToCosmosMsg for QuerySwapExactAmountInRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QuerySwapExactAmountInRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QuerySwapExactAmountInResponse {
     #[prost(string, tag = "1")]
     pub token_out_amount: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for QuerySwapExactAmountInResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QuerySwapExactAmountInResponse";
 }
 ///=============================== EstimateSwapExactAmountOut
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -381,19 +495,31 @@ pub struct QuerySwapExactAmountOutRequest {
     #[prost(string, tag = "4")]
     pub token_out: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for QuerySwapExactAmountOutRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QuerySwapExactAmountOutRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QuerySwapExactAmountOutResponse {
     #[prost(string, tag = "1")]
     pub token_in_amount: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for QuerySwapExactAmountOutResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QuerySwapExactAmountOutResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryTotalLiquidityRequest {}
+impl crate::cosmwasm::ToCosmosMsg for QueryTotalLiquidityRequest {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryTotalLiquidityRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryTotalLiquidityResponse {
     #[prost(message, repeated, tag = "1")]
     pub liquidity: ::prost::alloc::vec::Vec<
         cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
     >,
+}
+impl crate::cosmwasm::ToCosmosMsg for QueryTotalLiquidityResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.QueryTotalLiquidityResponse";
 }
 /// Params holds parameters for the incentives module
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -402,6 +528,9 @@ pub struct Params {
     pub pool_creation_fee: ::prost::alloc::vec::Vec<
         cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
     >,
+}
+impl crate::cosmwasm::ToCosmosMsg for Params {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.Params";
 }
 /// GenesisState defines the gamm module's genesis state.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -412,4 +541,7 @@ pub struct GenesisState {
     pub next_pool_number: u64,
     #[prost(message, optional, tag = "3")]
     pub params: ::core::option::Option<Params>,
+}
+impl crate::cosmwasm::ToCosmosMsg for GenesisState {
+    const TYPE_URL: &'static str = "/osmosis.gamm.v1beta1.GenesisState";
 }

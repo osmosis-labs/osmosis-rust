@@ -6,6 +6,9 @@ pub struct SuperfluidAsset {
     #[prost(enumeration = "SuperfluidAssetType", tag = "2")]
     pub asset_type: i32,
 }
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidAsset {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidAsset";
+}
 /// SuperfluidIntermediaryAccount takes the role of intermediary between LP token
 /// and OSMO tokens for superfluid staking
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -17,6 +20,9 @@ pub struct SuperfluidIntermediaryAccount {
     /// perpetual gauge for rewards distribution
     #[prost(uint64, tag = "3")]
     pub gauge_id: u64,
+}
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidIntermediaryAccount {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidIntermediaryAccount";
 }
 /// The Osmo-Equivalent-Multiplier Record for epoch N refers to the osmo worth we
 /// treat an LP share as having, for all of epoch N. Eventually this is intended
@@ -35,6 +41,9 @@ pub struct OsmoEquivalentMultiplierRecord {
     #[prost(string, tag = "3")]
     pub multiplier: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for OsmoEquivalentMultiplierRecord {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.OsmoEquivalentMultiplierRecord";
+}
 /// SuperfluidDelegationRecord takes the role of intermediary between LP token
 /// and OSMO tokens for superfluid staking
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -52,6 +61,9 @@ pub struct SuperfluidDelegationRecord {
         cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
     >,
 }
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidDelegationRecord {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidDelegationRecord";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LockIdIntermediaryAccountConnection {
     #[prost(uint64, tag = "1")]
@@ -59,10 +71,16 @@ pub struct LockIdIntermediaryAccountConnection {
     #[prost(string, tag = "2")]
     pub intermediary_account: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for LockIdIntermediaryAccountConnection {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.LockIdIntermediaryAccountConnection";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UnpoolWhitelistedPools {
     #[prost(uint64, repeated, tag = "1")]
     pub ids: ::prost::alloc::vec::Vec<u64>,
+}
+impl crate::cosmwasm::ToCosmosMsg for UnpoolWhitelistedPools {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.UnpoolWhitelistedPools";
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -80,8 +98,14 @@ pub struct MsgSuperfluidDelegate {
     #[prost(string, tag = "3")]
     pub val_addr: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgSuperfluidDelegate {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgSuperfluidDelegate";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSuperfluidDelegateResponse {}
+impl crate::cosmwasm::ToCosmosMsg for MsgSuperfluidDelegateResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgSuperfluidDelegateResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSuperfluidUndelegate {
     #[prost(string, tag = "1")]
@@ -89,8 +113,14 @@ pub struct MsgSuperfluidUndelegate {
     #[prost(uint64, tag = "2")]
     pub lock_id: u64,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgSuperfluidUndelegate {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgSuperfluidUndelegate";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSuperfluidUndelegateResponse {}
+impl crate::cosmwasm::ToCosmosMsg for MsgSuperfluidUndelegateResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgSuperfluidUndelegateResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSuperfluidUnbondLock {
     #[prost(string, tag = "1")]
@@ -98,8 +128,14 @@ pub struct MsgSuperfluidUnbondLock {
     #[prost(uint64, tag = "2")]
     pub lock_id: u64,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgSuperfluidUnbondLock {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgSuperfluidUnbondLock";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgSuperfluidUnbondLockResponse {}
+impl crate::cosmwasm::ToCosmosMsg for MsgSuperfluidUnbondLockResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgSuperfluidUnbondLockResponse";
+}
 /// MsgLockAndSuperfluidDelegate locks coins with the unbonding period duration,
 /// and then does a superfluid lock from the newly created lockup, to the
 /// specified validator addr.
@@ -112,10 +148,16 @@ pub struct MsgLockAndSuperfluidDelegate {
     #[prost(string, tag = "3")]
     pub val_addr: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgLockAndSuperfluidDelegate {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgLockAndSuperfluidDelegate";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgLockAndSuperfluidDelegateResponse {
     #[prost(uint64, tag = "1")]
     pub id: u64,
+}
+impl crate::cosmwasm::ToCosmosMsg for MsgLockAndSuperfluidDelegateResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse";
 }
 /// MsgUnPoolWhitelistedPool Unpools every lock the sender has, that is
 /// associated with pool pool_id. If pool_id is not approved for unpooling by
@@ -132,10 +174,16 @@ pub struct MsgUnPoolWhitelistedPool {
     #[prost(uint64, tag = "2")]
     pub pool_id: u64,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgUnPoolWhitelistedPool {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgUnPoolWhitelistedPool";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgUnPoolWhitelistedPoolResponse {
     #[prost(uint64, repeated, tag = "1")]
     pub exited_lock_ids: ::prost::alloc::vec::Vec<u64>,
+}
+impl crate::cosmwasm::ToCosmosMsg for MsgUnPoolWhitelistedPoolResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.MsgUnPoolWhitelistedPoolResponse";
 }
 /// Params holds parameters for the superfluid module
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -145,35 +193,59 @@ pub struct Params {
     #[prost(string, tag = "1")]
     pub minimum_risk_factor: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for Params {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.Params";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryParamsRequest {}
+impl crate::cosmwasm::ToCosmosMsg for QueryParamsRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.QueryParamsRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryParamsResponse {
     /// params defines the parameters of the module.
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
 }
+impl crate::cosmwasm::ToCosmosMsg for QueryParamsResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.QueryParamsResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AssetTypeRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for AssetTypeRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.AssetTypeRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AssetTypeResponse {
     #[prost(enumeration = "SuperfluidAssetType", tag = "1")]
     pub asset_type: i32,
 }
+impl crate::cosmwasm::ToCosmosMsg for AssetTypeResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.AssetTypeResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AllAssetsRequest {}
+impl crate::cosmwasm::ToCosmosMsg for AllAssetsRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.AllAssetsRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AllAssetsResponse {
     #[prost(message, repeated, tag = "1")]
     pub assets: ::prost::alloc::vec::Vec<SuperfluidAsset>,
 }
+impl crate::cosmwasm::ToCosmosMsg for AllAssetsResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.AllAssetsResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AssetMultiplierRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for AssetMultiplierRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.AssetMultiplierRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AssetMultiplierResponse {
@@ -181,6 +253,9 @@ pub struct AssetMultiplierResponse {
     pub osmo_equivalent_multiplier: ::core::option::Option<
         OsmoEquivalentMultiplierRecord,
     >,
+}
+impl crate::cosmwasm::ToCosmosMsg for AssetMultiplierResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.AssetMultiplierResponse";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuperfluidIntermediaryAccountInfo {
@@ -193,12 +268,18 @@ pub struct SuperfluidIntermediaryAccountInfo {
     #[prost(string, tag = "4")]
     pub address: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidIntermediaryAccountInfo {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidIntermediaryAccountInfo";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AllIntermediaryAccountsRequest {
     #[prost(message, optional, tag = "1")]
     pub pagination: ::core::option::Option<
         cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest,
     >,
+}
+impl crate::cosmwasm::ToCosmosMsg for AllIntermediaryAccountsRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.AllIntermediaryAccountsRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AllIntermediaryAccountsResponse {
@@ -209,22 +290,37 @@ pub struct AllIntermediaryAccountsResponse {
         cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse,
     >,
 }
+impl crate::cosmwasm::ToCosmosMsg for AllIntermediaryAccountsResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.AllIntermediaryAccountsResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ConnectedIntermediaryAccountRequest {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
+}
+impl crate::cosmwasm::ToCosmosMsg for ConnectedIntermediaryAccountRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.ConnectedIntermediaryAccountRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ConnectedIntermediaryAccountResponse {
     #[prost(message, optional, tag = "1")]
     pub account: ::core::option::Option<SuperfluidIntermediaryAccountInfo>,
 }
+impl crate::cosmwasm::ToCosmosMsg for ConnectedIntermediaryAccountResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.ConnectedIntermediaryAccountResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TotalSuperfluidDelegationsRequest {}
+impl crate::cosmwasm::ToCosmosMsg for TotalSuperfluidDelegationsRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.TotalSuperfluidDelegationsRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TotalSuperfluidDelegationsResponse {
     #[prost(string, tag = "1")]
     pub total_delegations: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for TotalSuperfluidDelegationsResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.TotalSuperfluidDelegationsResponse";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuperfluidDelegationAmountRequest {
@@ -235,15 +331,24 @@ pub struct SuperfluidDelegationAmountRequest {
     #[prost(string, tag = "3")]
     pub denom: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidDelegationAmountRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidDelegationAmountRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuperfluidDelegationAmountResponse {
     #[prost(message, repeated, tag = "1")]
     pub amount: ::prost::alloc::vec::Vec<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidDelegationAmountResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidDelegationAmountResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuperfluidDelegationsByDelegatorRequest {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidDelegationsByDelegatorRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuperfluidDelegationsByDelegatorResponse {
@@ -260,12 +365,18 @@ pub struct SuperfluidDelegationsByDelegatorResponse {
         cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
     >,
 }
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidDelegationsByDelegatorResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuperfluidUndelegationsByDelegatorRequest {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub denom: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidUndelegationsByDelegatorRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuperfluidUndelegationsByDelegatorResponse {
@@ -280,12 +391,18 @@ pub struct SuperfluidUndelegationsByDelegatorResponse {
     #[prost(message, repeated, tag = "3")]
     pub synthetic_locks: ::prost::alloc::vec::Vec<super::lockup::SyntheticLock>,
 }
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidUndelegationsByDelegatorResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuperfluidDelegationsByValidatorDenomRequest {
     #[prost(string, tag = "1")]
     pub validator_address: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub denom: ::prost::alloc::string::String,
+}
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidDelegationsByValidatorDenomRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SuperfluidDelegationsByValidatorDenomResponse {
@@ -294,6 +411,9 @@ pub struct SuperfluidDelegationsByValidatorDenomResponse {
         SuperfluidDelegationRecord,
     >,
 }
+impl crate::cosmwasm::ToCosmosMsg for SuperfluidDelegationsByValidatorDenomResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomResponse";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
     #[prost(string, tag = "1")]
@@ -301,12 +421,20 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
     #[prost(string, tag = "2")]
     pub denom: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg
+for EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.EstimateSuperfluidDelegatedAmountByValidatorDenomRequest";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub total_delegated_coins: ::prost::alloc::vec::Vec<
         cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
     >,
+}
+impl crate::cosmwasm::ToCosmosMsg
+for EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.EstimateSuperfluidDelegatedAmountByValidatorDenomResponse";
 }
 /// GenesisState defines the module's genesis state.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -325,4 +453,7 @@ pub struct GenesisState {
     pub intemediary_account_connections: ::prost::alloc::vec::Vec<
         LockIdIntermediaryAccountConnection,
     >,
+}
+impl crate::cosmwasm::ToCosmosMsg for GenesisState {
+    const TYPE_URL: &'static str = "/osmosis.superfluid.GenesisState";
 }

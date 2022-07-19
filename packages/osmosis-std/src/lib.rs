@@ -4,6 +4,7 @@
 #![warn(trivial_casts, trivial_numeric_casts, unused_import_braces)]
 
 pub use cosmos_sdk_proto;
+pub mod cosmwasm;
 
 /// The version (commit hash) of the Cosmos SDK used when generating this library.
 pub const OSMOSISD_VERSION: &str = include_str!("prost/OSMOSIS_COMMIT");

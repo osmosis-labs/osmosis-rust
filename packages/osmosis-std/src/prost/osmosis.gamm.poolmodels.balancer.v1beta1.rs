@@ -10,8 +10,14 @@ pub struct MsgCreateBalancerPool {
     #[prost(string, tag = "4")]
     pub future_pool_governor: ::prost::alloc::string::String,
 }
+impl crate::cosmwasm::ToCosmosMsg for MsgCreateBalancerPool {
+    const TYPE_URL: &'static str = "/osmosis.gamm.poolmodels.balancer.v1beta1.MsgCreateBalancerPool";
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgCreateBalancerPoolResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
+}
+impl crate::cosmwasm::ToCosmosMsg for MsgCreateBalancerPoolResponse {
+    const TYPE_URL: &'static str = "/osmosis.gamm.poolmodels.balancer.v1beta1.MsgCreateBalancerPoolResponse";
 }

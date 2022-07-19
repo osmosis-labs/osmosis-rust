@@ -13,6 +13,7 @@ use std::{
     process,
     sync::atomic::{self, AtomicBool},
 };
+use syn::{File, ItemImpl, LitStr, __private::Span};
 use walkdir::WalkDir;
 
 /// Suppress log messages
@@ -245,7 +246,7 @@ fn copy_generated_files(from_dir: &Path, to_dir: &Path) {
     }
 }
 
-fn copy_and_patch(src: impl AsRef<Path>, dest: impl AsRef<Path>) -> io::Result<()> {
+fn copy_and_patch(src: &Path, dest: impl AsRef<Path>) -> io::Result<()> {
     /// Regex substitutions to apply to the prost-generated output
     const REPLACEMENTS: &[(&str, &str)] = &[
         // Use `tendermint-proto` proto definitions
@@ -268,7 +269,7 @@ fn copy_and_patch(src: impl AsRef<Path>, dest: impl AsRef<Path>) -> io::Result<(
 
     // Skip proto files belonging to `EXCLUDED_PROTO_PACKAGES`
     for package in EXCLUDED_PROTO_PACKAGES {
-        if let Some(filename) = src.as_ref().file_name().and_then(OsStr::to_str) {
+        if let Some(filename) = src.file_name().and_then(OsStr::to_str) {
             if filename.starts_with(&format!("{}.", package)) {
                 return Ok(());
             }
@@ -284,10 +285,67 @@ fn copy_and_patch(src: impl AsRef<Path>, dest: impl AsRef<Path>) -> io::Result<(
             .to_string();
     }
 
-    let file = &syn::parse_file(&contents);
+    let file = syn::parse_file(&contents);
     if let Ok(file) = file {
-        // only prettify rust file (skipping `*_COMMIT` file)
-        contents = prettyplease::unparse(file);
+        // only transform rust file (skipping `*_COMMIT` file)
+        let items = file
+            .items
+            .into_iter()
+            .flat_map(|i| match i.clone() {
+                syn::Item::Struct(s) => {
+                    let ident = s.ident.clone();
+                    let type_path = src.file_stem().unwrap().to_str().unwrap();
+                    let type_url = LitStr::new(
+                        format!("/{}.{}", type_path, s.ident).as_str(),
+                        Span::call_site(),
+                    );
+                    let impl_to_cosmos_msg: ItemImpl = syn::parse_quote! {
+                        impl crate::cosmwasm::ToCosmosMsg for #ident {
+                            const TYPE_URL: &'static str = #type_url;
+                        }
+                    };
+
+                    vec![i, syn::Item::Impl(impl_to_cosmos_msg)]
+                }
+                // syn::Item::Enum(e) => {
+                //     let ident = e.ident.clone();
+                //     let type_path = src.file_stem().unwrap().to_str().unwrap();
+                //     let type_url = LitStr::new(
+                //         format!("/{}.{}", type_path, e.ident).as_str(),
+                //         Span::call_site(),
+                //     );
+                //     let impl_to_cosmos_msg: ItemImpl = syn::parse_quote! {
+                //         impl crate::cosmwasm::ToCosmosMsg for #ident {
+                //             const TYPE_URL: &'static str = #type_url;
+                //         }
+                //     };
+
+                //     vec![i, syn::Item::Impl(impl_to_cosmos_msg)]
+                // }
+                _ => vec![i],
+            })
+            // .map(|i| match i {
+            //     syn::Item::Struct(s) => {
+            //         // gen type url attr
+            //         let mut attrs = s.attrs.clone();
+            //         let type_path = src.file_stem().unwrap().to_str().unwrap();
+            //         let type_url = LitStr::new(
+            //             format!("/{}.{}", type_path, s.ident).as_str(),
+            //             Span::call_site(),
+            //         );
+            //         attrs.push(syn::parse_quote! {
+            //             #[derive(osmosis_std_derive::CosmosMsg)]
+            //         });
+            //         attrs.push(syn::parse_quote! {
+            //             #[proto(type_url = #type_url)]
+            //         });
+            //         syn::Item::Struct(ItemStruct { attrs, ..s })
+            //     }
+            //     _ => i,
+            // })
+            .collect::<Vec<syn::Item>>();
+
+        contents = prettyplease::unparse(&File { items, ..file });
     }
 
     fs::write(dest, &*contents)
