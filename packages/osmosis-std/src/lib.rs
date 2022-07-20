@@ -19,6 +19,19 @@ pub mod gamm {
     pub mod v1beta1 {
         include!("prost/osmosis.gamm.v1beta1.rs");
     }
+
+    pub mod poolmodels {
+        pub mod balancer {
+            pub mod v1beta1 {
+                include!("prost/osmosis.gamm.poolmodels.balancer.v1beta1.rs");
+            }
+        }
+        pub mod stableswap {
+            pub mod v1beta1 {
+                include!("prost/osmosis.gamm.poolmodels.stableswap.v1beta1.rs");
+            }
+        }
+    }
 }
 pub mod incentives {
     include!("prost/osmosis.incentives.rs");
@@ -39,7 +52,6 @@ pub mod poolincentives {
         include!("prost/osmosis.poolincentives.v1beta1.rs");
     }
 }
-
 pub mod superfluid {
     include!("prost/osmosis.superfluid.rs");
     pub mod v1beta1 {
