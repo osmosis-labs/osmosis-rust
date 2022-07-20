@@ -1,5 +1,8 @@
+use osmosis_std_derive::CosmwasmExt;
 /// SuperfluidAsset stores the pair of superfluid asset type and denom pair
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidAsset")]
 pub struct SuperfluidAsset {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -9,6 +12,8 @@ pub struct SuperfluidAsset {
 /// SuperfluidIntermediaryAccount takes the role of intermediary between LP token
 /// and OSMO tokens for superfluid staking
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidIntermediaryAccount")]
 pub struct SuperfluidIntermediaryAccount {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -26,6 +31,8 @@ pub struct SuperfluidIntermediaryAccount {
 /// price at the boundary.  For different types of assets in the future, it could
 /// change.
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.OsmoEquivalentMultiplierRecord")]
 pub struct OsmoEquivalentMultiplierRecord {
     #[prost(int64, tag = "1")]
     pub epoch_number: i64,
@@ -38,6 +45,8 @@ pub struct OsmoEquivalentMultiplierRecord {
 /// SuperfluidDelegationRecord takes the role of intermediary between LP token
 /// and OSMO tokens for superfluid staking
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationRecord")]
 pub struct SuperfluidDelegationRecord {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -53,6 +62,8 @@ pub struct SuperfluidDelegationRecord {
     >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.LockIdIntermediaryAccountConnection")]
 pub struct LockIdIntermediaryAccountConnection {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
@@ -60,6 +71,8 @@ pub struct LockIdIntermediaryAccountConnection {
     pub intermediary_account: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.UnpoolWhitelistedPools")]
 pub struct UnpoolWhitelistedPools {
     #[prost(uint64, repeated, tag = "1")]
     pub ids: ::prost::alloc::vec::Vec<u64>,
@@ -72,6 +85,8 @@ pub enum SuperfluidAssetType {
     LpShare = 1,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidDelegate")]
 pub struct MsgSuperfluidDelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -81,8 +96,12 @@ pub struct MsgSuperfluidDelegate {
     pub val_addr: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidDelegateResponse")]
 pub struct MsgSuperfluidDelegateResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegate")]
 pub struct MsgSuperfluidUndelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -90,8 +109,12 @@ pub struct MsgSuperfluidUndelegate {
     pub lock_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateResponse")]
 pub struct MsgSuperfluidUndelegateResponse {}
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLock")]
 pub struct MsgSuperfluidUnbondLock {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -99,11 +122,15 @@ pub struct MsgSuperfluidUnbondLock {
     pub lock_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLockResponse")]
 pub struct MsgSuperfluidUnbondLockResponse {}
 /// MsgLockAndSuperfluidDelegate locks coins with the unbonding period duration,
 /// and then does a superfluid lock from the newly created lockup, to the
 /// specified validator addr.
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegate")]
 pub struct MsgLockAndSuperfluidDelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -113,6 +140,8 @@ pub struct MsgLockAndSuperfluidDelegate {
     pub val_addr: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse")]
 pub struct MsgLockAndSuperfluidDelegateResponse {
     #[prost(uint64, tag = "1")]
     pub id: u64,
@@ -126,6 +155,8 @@ pub struct MsgLockAndSuperfluidDelegateResponse {
 /// If the lock was unbonding, the new lockup durations should be the time left
 /// until unbond completion.
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPool")]
 pub struct MsgUnPoolWhitelistedPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -133,12 +164,16 @@ pub struct MsgUnPoolWhitelistedPool {
     pub pool_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPoolResponse")]
 pub struct MsgUnPoolWhitelistedPoolResponse {
     #[prost(uint64, repeated, tag = "1")]
     pub exited_lock_ids: ::prost::alloc::vec::Vec<u64>,
 }
 /// Params holds parameters for the superfluid module
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.Params")]
 pub struct Params {
     /// the risk_factor is to be cut on OSMO equivalent value of lp tokens for
     /// superfluid staking, default: 5%
@@ -146,36 +181,52 @@ pub struct Params {
     pub minimum_risk_factor: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.QueryParamsRequest")]
 pub struct QueryParamsRequest {}
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.QueryParamsResponse")]
 pub struct QueryParamsResponse {
     /// params defines the parameters of the module.
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.AssetTypeRequest")]
 pub struct AssetTypeRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.AssetTypeResponse")]
 pub struct AssetTypeResponse {
     #[prost(enumeration = "SuperfluidAssetType", tag = "1")]
     pub asset_type: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.AllAssetsRequest")]
 pub struct AllAssetsRequest {}
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.AllAssetsResponse")]
 pub struct AllAssetsResponse {
     #[prost(message, repeated, tag = "1")]
     pub assets: ::prost::alloc::vec::Vec<SuperfluidAsset>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.AssetMultiplierRequest")]
 pub struct AssetMultiplierRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.AssetMultiplierResponse")]
 pub struct AssetMultiplierResponse {
     #[prost(message, optional, tag = "1")]
     pub osmo_equivalent_multiplier: ::core::option::Option<
@@ -183,6 +234,8 @@ pub struct AssetMultiplierResponse {
     >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidIntermediaryAccountInfo")]
 pub struct SuperfluidIntermediaryAccountInfo {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -194,6 +247,8 @@ pub struct SuperfluidIntermediaryAccountInfo {
     pub address: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.AllIntermediaryAccountsRequest")]
 pub struct AllIntermediaryAccountsRequest {
     #[prost(message, optional, tag = "1")]
     pub pagination: ::core::option::Option<
@@ -201,6 +256,8 @@ pub struct AllIntermediaryAccountsRequest {
     >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.AllIntermediaryAccountsResponse")]
 pub struct AllIntermediaryAccountsResponse {
     #[prost(message, repeated, tag = "1")]
     pub accounts: ::prost::alloc::vec::Vec<SuperfluidIntermediaryAccountInfo>,
@@ -210,23 +267,33 @@ pub struct AllIntermediaryAccountsResponse {
     >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.ConnectedIntermediaryAccountRequest")]
 pub struct ConnectedIntermediaryAccountRequest {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.ConnectedIntermediaryAccountResponse")]
 pub struct ConnectedIntermediaryAccountResponse {
     #[prost(message, optional, tag = "1")]
     pub account: ::core::option::Option<SuperfluidIntermediaryAccountInfo>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.TotalSuperfluidDelegationsRequest")]
 pub struct TotalSuperfluidDelegationsRequest {}
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.TotalSuperfluidDelegationsResponse")]
 pub struct TotalSuperfluidDelegationsResponse {
     #[prost(string, tag = "1")]
     pub total_delegations: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationAmountRequest")]
 pub struct SuperfluidDelegationAmountRequest {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -236,16 +303,22 @@ pub struct SuperfluidDelegationAmountRequest {
     pub denom: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationAmountResponse")]
 pub struct SuperfluidDelegationAmountResponse {
     #[prost(message, repeated, tag = "1")]
     pub amount: ::prost::alloc::vec::Vec<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorRequest")]
 pub struct SuperfluidDelegationsByDelegatorRequest {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorResponse")]
 pub struct SuperfluidDelegationsByDelegatorResponse {
     #[prost(message, repeated, tag = "1")]
     pub superfluid_delegation_records: ::prost::alloc::vec::Vec<
@@ -261,6 +334,8 @@ pub struct SuperfluidDelegationsByDelegatorResponse {
     >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorRequest")]
 pub struct SuperfluidUndelegationsByDelegatorRequest {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -268,6 +343,8 @@ pub struct SuperfluidUndelegationsByDelegatorRequest {
     pub denom: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorResponse")]
 pub struct SuperfluidUndelegationsByDelegatorResponse {
     #[prost(message, repeated, tag = "1")]
     pub superfluid_delegation_records: ::prost::alloc::vec::Vec<
@@ -281,6 +358,8 @@ pub struct SuperfluidUndelegationsByDelegatorResponse {
     pub synthetic_locks: ::prost::alloc::vec::Vec<super::lockup::SyntheticLock>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomRequest")]
 pub struct SuperfluidDelegationsByValidatorDenomRequest {
     #[prost(string, tag = "1")]
     pub validator_address: ::prost::alloc::string::String,
@@ -288,6 +367,8 @@ pub struct SuperfluidDelegationsByValidatorDenomRequest {
     pub denom: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomResponse")]
 pub struct SuperfluidDelegationsByValidatorDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub superfluid_delegation_records: ::prost::alloc::vec::Vec<
@@ -295,6 +376,10 @@ pub struct SuperfluidDelegationsByValidatorDenomResponse {
     >,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(
+    type_url = "/osmosis.superfluid.EstimateSuperfluidDelegatedAmountByValidatorDenomRequest"
+)]
 pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
     #[prost(string, tag = "1")]
     pub validator_address: ::prost::alloc::string::String,
@@ -302,6 +387,10 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
     pub denom: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(
+    type_url = "/osmosis.superfluid.EstimateSuperfluidDelegatedAmountByValidatorDenomResponse"
+)]
 pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub total_delegated_coins: ::prost::alloc::vec::Vec<
@@ -310,6 +399,8 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
 }
 /// GenesisState defines the module's genesis state.
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.GenesisState")]
 pub struct GenesisState {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,

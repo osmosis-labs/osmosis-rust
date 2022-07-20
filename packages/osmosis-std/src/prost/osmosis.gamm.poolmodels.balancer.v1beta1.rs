@@ -1,5 +1,8 @@
+use osmosis_std_derive::CosmwasmExt;
 /// ===================== MsgCreatePool
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.gamm.poolmodels.balancer.v1beta1.MsgCreateBalancerPool")]
 pub struct MsgCreateBalancerPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -11,6 +14,10 @@ pub struct MsgCreateBalancerPool {
     pub future_pool_governor: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(
+    type_url = "/osmosis.gamm.poolmodels.balancer.v1beta1.MsgCreateBalancerPoolResponse"
+)]
 pub struct MsgCreateBalancerPoolResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,

@@ -1,6 +1,9 @@
+use osmosis_std_derive::CosmwasmExt;
 /// SetSuperfluidAssetsProposal is a gov Content type to update the superfluid
 /// assets
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.v1beta1.SetSuperfluidAssetsProposal")]
 pub struct SetSuperfluidAssetsProposal {
     #[prost(string, tag = "1")]
     pub title: ::prost::alloc::string::String,
@@ -12,6 +15,8 @@ pub struct SetSuperfluidAssetsProposal {
 /// RemoveSuperfluidAssetsProposal is a gov Content type to remove the superfluid
 /// assets by denom
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.superfluid.v1beta1.RemoveSuperfluidAssetsProposal")]
 pub struct RemoveSuperfluidAssetsProposal {
     #[prost(string, tag = "1")]
     pub title: ::prost::alloc::string::String,

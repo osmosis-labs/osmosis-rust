@@ -1,4 +1,7 @@
+use osmosis_std_derive::CosmwasmExt;
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.epochs.v1beta1.EpochInfo")]
 pub struct EpochInfo {
     #[prost(string, tag = "1")]
     pub identifier: ::prost::alloc::string::String,
@@ -17,23 +20,33 @@ pub struct EpochInfo {
 }
 /// GenesisState defines the epochs module's genesis state.
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.epochs.v1beta1.GenesisState")]
 pub struct GenesisState {
     #[prost(message, repeated, tag = "1")]
     pub epochs: ::prost::alloc::vec::Vec<EpochInfo>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoRequest")]
 pub struct QueryEpochsInfoRequest {}
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoResponse")]
 pub struct QueryEpochsInfoResponse {
     #[prost(message, repeated, tag = "1")]
     pub epochs: ::prost::alloc::vec::Vec<EpochInfo>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochRequest")]
 pub struct QueryCurrentEpochRequest {
     #[prost(string, tag = "1")]
     pub identifier: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochResponse")]
 pub struct QueryCurrentEpochResponse {
     #[prost(int64, tag = "1")]
     pub current_epoch: i64,

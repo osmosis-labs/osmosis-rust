@@ -1,8 +1,11 @@
+use osmosis_std_derive::CosmwasmExt;
 /// PoolParams defined the parameters that will be managed by the pool
 /// governance in the future. This params are not managed by the chain
 /// governance. Instead they will be managed by the token holders of the pool.
 /// The pool's token holders are specified in future_pool_governor.
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.PoolParams")]
 pub struct PoolParams {
     #[prost(string, tag = "1")]
     pub swap_fee: ::prost::alloc::string::String,
@@ -11,6 +14,8 @@ pub struct PoolParams {
 }
 /// Pool is the stableswap Pool struct
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.Pool")]
 pub struct Pool {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
@@ -46,6 +51,10 @@ pub struct Pool {
     pub scaling_factor_governor: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(
+    type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPool"
+)]
 pub struct MsgCreateStableswapPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -59,11 +68,19 @@ pub struct MsgCreateStableswapPool {
     pub future_pool_governor: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(
+    type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPoolResponse"
+)]
 pub struct MsgCreateStableswapPoolResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(
+    type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactors"
+)]
 pub struct MsgStableSwapAdjustScalingFactors {
     /// Sender must be the pool's scaling_factor_governor in order for the tx to
     /// succeed
@@ -75,4 +92,8 @@ pub struct MsgStableSwapAdjustScalingFactors {
     pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(CosmwasmExt)]
+#[proto(
+    type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactorsResponse"
+)]
 pub struct MsgStableSwapAdjustScalingFactorsResponse {}

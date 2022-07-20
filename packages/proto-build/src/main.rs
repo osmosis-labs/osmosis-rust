@@ -293,23 +293,19 @@ fn copy_and_patch(src: &Path, dest: impl AsRef<Path>) -> io::Result<()> {
             .into_iter()
             .map(|i| match i.clone() {
                 syn::Item::Struct(mut s) => {
-                    // append_attrs(src, &s.ident, &mut s.attrs);
+                    append_attrs(src, &s.ident, &mut s.attrs);
                     syn::Item::Struct(s)
-                }
-                syn::Item::Enum(mut e) => {
-                    // append_attrs(src, &e.ident, &mut e.attrs);
-                    syn::Item::Enum(e)
                 }
                 _ => i,
             })
             .collect::<Vec<syn::Item>>();
 
-        // prepend(
-        //     &mut items,
-        //     &mut vec![syn::parse_quote! {
-        //         use osmosis_std_derive::CosmwasmExt;
-        //     }],
-        // );
+        prepend(
+            &mut items,
+            &mut vec![syn::parse_quote! {
+                use osmosis_std_derive::CosmwasmExt;
+            }],
+        );
 
         contents = prettyplease::unparse(&File { items, ..file });
     }
