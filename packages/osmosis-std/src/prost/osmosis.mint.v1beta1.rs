@@ -5,18 +5,12 @@ pub struct Minter {
     #[prost(string, tag = "1")]
     pub epoch_provisions: ::prost::alloc::string::String,
 }
-impl crate::cosmwasm::ToCosmosMsg for Minter {
-    const TYPE_URL: &'static str = "/osmosis.mint.v1beta1.Minter";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct WeightedAddress {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub weight: ::prost::alloc::string::String,
-}
-impl crate::cosmwasm::ToCosmosMsg for WeightedAddress {
-    const TYPE_URL: &'static str = "/osmosis.mint.v1beta1.WeightedAddress";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DistributionProportions {
@@ -36,9 +30,6 @@ pub struct DistributionProportions {
     /// to be allocated to the community pool.
     #[prost(string, tag = "4")]
     pub community_pool: ::prost::alloc::string::String,
-}
-impl crate::cosmwasm::ToCosmosMsg for DistributionProportions {
-    const TYPE_URL: &'static str = "/osmosis.mint.v1beta1.DistributionProportions";
 }
 /// Params holds parameters for the mint module.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -68,15 +59,9 @@ pub struct Params {
     #[prost(int64, tag = "8")]
     pub minting_rewards_distribution_start_epoch: i64,
 }
-impl crate::cosmwasm::ToCosmosMsg for Params {
-    const TYPE_URL: &'static str = "/osmosis.mint.v1beta1.Params";
-}
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryParamsRequest {}
-impl crate::cosmwasm::ToCosmosMsg for QueryParamsRequest {
-    const TYPE_URL: &'static str = "/osmosis.mint.v1beta1.QueryParamsRequest";
-}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryParamsResponse {
@@ -84,16 +69,10 @@ pub struct QueryParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
 }
-impl crate::cosmwasm::ToCosmosMsg for QueryParamsResponse {
-    const TYPE_URL: &'static str = "/osmosis.mint.v1beta1.QueryParamsResponse";
-}
 /// QueryEpochProvisionsRequest is the request type for the
 /// Query/EpochProvisions RPC method.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryEpochProvisionsRequest {}
-impl crate::cosmwasm::ToCosmosMsg for QueryEpochProvisionsRequest {
-    const TYPE_URL: &'static str = "/osmosis.mint.v1beta1.QueryEpochProvisionsRequest";
-}
 /// QueryEpochProvisionsResponse is the response type for the
 /// Query/EpochProvisions RPC method.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -101,9 +80,6 @@ pub struct QueryEpochProvisionsResponse {
     /// epoch_provisions is the current minting per epoch provisions value.
     #[prost(bytes = "vec", tag = "1")]
     pub epoch_provisions: ::prost::alloc::vec::Vec<u8>,
-}
-impl crate::cosmwasm::ToCosmosMsg for QueryEpochProvisionsResponse {
-    const TYPE_URL: &'static str = "/osmosis.mint.v1beta1.QueryEpochProvisionsResponse";
 }
 /// GenesisState defines the mint module's genesis state.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -117,7 +93,4 @@ pub struct GenesisState {
     /// current halven period start epoch
     #[prost(int64, tag = "3")]
     pub halven_started_epoch: i64,
-}
-impl crate::cosmwasm::ToCosmosMsg for GenesisState {
-    const TYPE_URL: &'static str = "/osmosis.mint.v1beta1.GenesisState";
 }

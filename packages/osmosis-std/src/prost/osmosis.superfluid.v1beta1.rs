@@ -9,9 +9,6 @@ pub struct SetSuperfluidAssetsProposal {
     #[prost(message, repeated, tag = "3")]
     pub assets: ::prost::alloc::vec::Vec<super::SuperfluidAsset>,
 }
-impl crate::cosmwasm::ToCosmosMsg for SetSuperfluidAssetsProposal {
-    const TYPE_URL: &'static str = "/osmosis.superfluid.v1beta1.SetSuperfluidAssetsProposal";
-}
 /// RemoveSuperfluidAssetsProposal is a gov Content type to remove the superfluid
 /// assets by denom
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -24,7 +21,4 @@ pub struct RemoveSuperfluidAssetsProposal {
     pub superfluid_asset_denoms: ::prost::alloc::vec::Vec<
         ::prost::alloc::string::String,
     >,
-}
-impl crate::cosmwasm::ToCosmosMsg for RemoveSuperfluidAssetsProposal {
-    const TYPE_URL: &'static str = "/osmosis.superfluid.v1beta1.RemoveSuperfluidAssetsProposal";
 }

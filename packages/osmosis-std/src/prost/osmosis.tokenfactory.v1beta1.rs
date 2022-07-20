@@ -13,18 +13,12 @@ pub struct MsgCreateDenom {
     #[prost(string, tag = "2")]
     pub subdenom: ::prost::alloc::string::String,
 }
-impl crate::cosmwasm::ToCosmosMsg for MsgCreateDenom {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.MsgCreateDenom";
-}
 /// MsgCreateDenomResponse is the return value of MsgCreateDenom
 /// It returns the full string of the newly created denom
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgCreateDenomResponse {
     #[prost(string, tag = "1")]
     pub new_token_denom: ::prost::alloc::string::String,
-}
-impl crate::cosmwasm::ToCosmosMsg for MsgCreateDenomResponse {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.MsgCreateDenomResponse";
 }
 /// MsgMint is the sdk.Msg type for allowing an admin account to mint
 /// more of a token.  For now, we only support minting to the sender account
@@ -35,14 +29,8 @@ pub struct MsgMint {
     #[prost(message, optional, tag = "2")]
     pub amount: ::core::option::Option<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
-impl crate::cosmwasm::ToCosmosMsg for MsgMint {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.MsgMint";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgMintResponse {}
-impl crate::cosmwasm::ToCosmosMsg for MsgMintResponse {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.MsgMintResponse";
-}
 /// MsgBurn is the sdk.Msg type for allowing an admin account to burn
 /// a token.  For now, we only support burning from the sender account.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -52,14 +40,8 @@ pub struct MsgBurn {
     #[prost(message, optional, tag = "2")]
     pub amount: ::core::option::Option<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
-impl crate::cosmwasm::ToCosmosMsg for MsgBurn {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.MsgBurn";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgBurnResponse {}
-impl crate::cosmwasm::ToCosmosMsg for MsgBurnResponse {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.MsgBurnResponse";
-}
 /// MsgChangeAdmin is the sdk.Msg type for allowing an admin account to reassign
 /// adminship of a denom to a new account
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -71,14 +53,8 @@ pub struct MsgChangeAdmin {
     #[prost(string, tag = "3")]
     pub new_admin: ::prost::alloc::string::String,
 }
-impl crate::cosmwasm::ToCosmosMsg for MsgChangeAdmin {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.MsgChangeAdmin";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgChangeAdminResponse {}
-impl crate::cosmwasm::ToCosmosMsg for MsgChangeAdminResponse {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.MsgChangeAdminResponse";
-}
 /// DenomAuthorityMetadata specifies metadata for addresses that have specific
 /// capabilities over a token factory denom. Right now there is only one Admin
 /// permission, but is planned to be extended to the future.
@@ -88,26 +64,15 @@ pub struct DenomAuthorityMetadata {
     #[prost(string, tag = "1")]
     pub admin: ::prost::alloc::string::String,
 }
-impl crate::cosmwasm::ToCosmosMsg for DenomAuthorityMetadata {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.DenomAuthorityMetadata";
-}
 /// Params holds parameters for the tokenfactory module
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Params {
     #[prost(message, repeated, tag = "1")]
-    pub denom_creation_fee: ::prost::alloc::vec::Vec<
-        cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
-    >,
-}
-impl crate::cosmwasm::ToCosmosMsg for Params {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.Params";
+    pub denom_creation_fee: ::prost::alloc::vec::Vec<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryParamsRequest {}
-impl crate::cosmwasm::ToCosmosMsg for QueryParamsRequest {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.QueryParamsRequest";
-}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryParamsResponse {
@@ -115,40 +80,25 @@ pub struct QueryParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
 }
-impl crate::cosmwasm::ToCosmosMsg for QueryParamsResponse {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.QueryParamsResponse";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryDenomAuthorityMetadataRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
-}
-impl crate::cosmwasm::ToCosmosMsg for QueryDenomAuthorityMetadataRequest {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.QueryDenomAuthorityMetadataRequest";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryDenomAuthorityMetadataResponse {
     #[prost(message, optional, tag = "1")]
     pub authority_metadata: ::core::option::Option<DenomAuthorityMetadata>,
 }
-impl crate::cosmwasm::ToCosmosMsg for QueryDenomAuthorityMetadataResponse {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.QueryDenomAuthorityMetadataResponse";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryDenomsFromCreatorRequest {
     #[prost(string, tag = "1")]
     pub creator: ::prost::alloc::string::String,
 }
-impl crate::cosmwasm::ToCosmosMsg for QueryDenomsFromCreatorRequest {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.QueryDenomsFromCreatorRequest";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct QueryDenomsFromCreatorResponse {
     #[prost(string, repeated, tag = "1")]
     pub denoms: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-impl crate::cosmwasm::ToCosmosMsg for QueryDenomsFromCreatorResponse {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.QueryDenomsFromCreatorResponse";
 }
 /// GenesisState defines the tokenfactory module's genesis state.
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -159,16 +109,10 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "2")]
     pub factory_denoms: ::prost::alloc::vec::Vec<GenesisDenom>,
 }
-impl crate::cosmwasm::ToCosmosMsg for GenesisState {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.GenesisState";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GenesisDenom {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
     pub authority_metadata: ::core::option::Option<DenomAuthorityMetadata>,
-}
-impl crate::cosmwasm::ToCosmosMsg for GenesisDenom {
-    const TYPE_URL: &'static str = "/osmosis.tokenfactory.v1beta1.GenesisDenom";
 }

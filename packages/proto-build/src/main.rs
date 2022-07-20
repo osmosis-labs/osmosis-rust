@@ -13,7 +13,7 @@ use std::{
     process,
     sync::atomic::{self, AtomicBool},
 };
-use syn::{File, ItemImpl, LitStr, __private::Span};
+use syn::{Attribute, File, Ident, LitStr, __private::Span};
 use walkdir::WalkDir;
 
 /// Suppress log messages
@@ -288,65 +288,52 @@ fn copy_and_patch(src: &Path, dest: impl AsRef<Path>) -> io::Result<()> {
     let file = syn::parse_file(&contents);
     if let Ok(file) = file {
         // only transform rust file (skipping `*_COMMIT` file)
-        let items = file
+        let mut items = file
             .items
             .into_iter()
-            .flat_map(|i| match i.clone() {
-                syn::Item::Struct(s) => {
-                    let ident = s.ident.clone();
-                    let type_path = src.file_stem().unwrap().to_str().unwrap();
-                    let type_url = LitStr::new(
-                        format!("/{}.{}", type_path, s.ident).as_str(),
-                        Span::call_site(),
-                    );
-                    let impl_to_cosmos_msg: ItemImpl = syn::parse_quote! {
-                        impl crate::cosmwasm::ToCosmosMsg for #ident {
-                            const TYPE_URL: &'static str = #type_url;
-                        }
-                    };
-
-                    vec![i, syn::Item::Impl(impl_to_cosmos_msg)]
+            .map(|i| match i.clone() {
+                syn::Item::Struct(mut s) => {
+                    // append_attrs(src, &s.ident, &mut s.attrs);
+                    syn::Item::Struct(s)
                 }
-                // syn::Item::Enum(e) => {
-                //     let ident = e.ident.clone();
-                //     let type_path = src.file_stem().unwrap().to_str().unwrap();
-                //     let type_url = LitStr::new(
-                //         format!("/{}.{}", type_path, e.ident).as_str(),
-                //         Span::call_site(),
-                //     );
-                //     let impl_to_cosmos_msg: ItemImpl = syn::parse_quote! {
-                //         impl crate::cosmwasm::ToCosmosMsg for #ident {
-                //             const TYPE_URL: &'static str = #type_url;
-                //         }
-                //     };
-
-                //     vec![i, syn::Item::Impl(impl_to_cosmos_msg)]
-                // }
-                _ => vec![i],
+                syn::Item::Enum(mut e) => {
+                    // append_attrs(src, &e.ident, &mut e.attrs);
+                    syn::Item::Enum(e)
+                }
+                _ => i,
             })
-            // .map(|i| match i {
-            //     syn::Item::Struct(s) => {
-            //         // gen type url attr
-            //         let mut attrs = s.attrs.clone();
-            //         let type_path = src.file_stem().unwrap().to_str().unwrap();
-            //         let type_url = LitStr::new(
-            //             format!("/{}.{}", type_path, s.ident).as_str(),
-            //             Span::call_site(),
-            //         );
-            //         attrs.push(syn::parse_quote! {
-            //             #[derive(osmosis_std_derive::CosmosMsg)]
-            //         });
-            //         attrs.push(syn::parse_quote! {
-            //             #[proto(type_url = #type_url)]
-            //         });
-            //         syn::Item::Struct(ItemStruct { attrs, ..s })
-            //     }
-            //     _ => i,
-            // })
             .collect::<Vec<syn::Item>>();
+
+        // prepend(
+        //     &mut items,
+        //     &mut vec![syn::parse_quote! {
+        //         use osmosis_std_derive::CosmwasmExt;
+        //     }],
+        // );
 
         contents = prettyplease::unparse(&File { items, ..file });
     }
 
     fs::write(dest, &*contents)
+}
+
+fn append_attrs(src: &Path, ident: &Ident, attrs: &mut Vec<Attribute>) {
+    let type_url = get_type_url(src, ident);
+    attrs.append(&mut vec![
+        syn::parse_quote! { #[derive(CosmwasmExt)] },
+        syn::parse_quote! { #[proto(type_url = #type_url)] },
+    ]);
+}
+
+fn get_type_url(src: &Path, ident: &Ident) -> LitStr {
+    let type_path = src.file_stem().unwrap().to_str().unwrap();
+    let type_url = LitStr::new(
+        format!("/{}.{}", type_path, ident).as_str(),
+        Span::call_site(),
+    );
+    type_url
+}
+
+fn prepend<T>(v: &mut Vec<T>, other: &mut Vec<T>) {
+    v.splice(0..0, other.drain(..));
 }

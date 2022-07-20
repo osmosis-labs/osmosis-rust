@@ -9,9 +9,6 @@ pub struct PoolParams {
     #[prost(string, tag = "2")]
     pub exit_fee: ::prost::alloc::string::String,
 }
-impl crate::cosmwasm::ToCosmosMsg for PoolParams {
-    const TYPE_URL: &'static str = "/osmosis.gamm.poolmodels.stableswap.v1beta1.PoolParams";
-}
 /// Pool is the stableswap Pool struct
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Pool {
@@ -48,9 +45,6 @@ pub struct Pool {
     #[prost(string, tag = "8")]
     pub scaling_factor_governor: ::prost::alloc::string::String,
 }
-impl crate::cosmwasm::ToCosmosMsg for Pool {
-    const TYPE_URL: &'static str = "/osmosis.gamm.poolmodels.stableswap.v1beta1.Pool";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgCreateStableswapPool {
     #[prost(string, tag = "1")]
@@ -64,16 +58,10 @@ pub struct MsgCreateStableswapPool {
     #[prost(string, tag = "4")]
     pub future_pool_governor: ::prost::alloc::string::String,
 }
-impl crate::cosmwasm::ToCosmosMsg for MsgCreateStableswapPool {
-    const TYPE_URL: &'static str = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPool";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgCreateStableswapPoolResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
-}
-impl crate::cosmwasm::ToCosmosMsg for MsgCreateStableswapPoolResponse {
-    const TYPE_URL: &'static str = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPoolResponse";
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgStableSwapAdjustScalingFactors {
@@ -86,11 +74,5 @@ pub struct MsgStableSwapAdjustScalingFactors {
     #[prost(uint64, repeated, packed = "false", tag = "3")]
     pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
 }
-impl crate::cosmwasm::ToCosmosMsg for MsgStableSwapAdjustScalingFactors {
-    const TYPE_URL: &'static str = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactors";
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MsgStableSwapAdjustScalingFactorsResponse {}
-impl crate::cosmwasm::ToCosmosMsg for MsgStableSwapAdjustScalingFactorsResponse {
-    const TYPE_URL: &'static str = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactorsResponse";
-}
