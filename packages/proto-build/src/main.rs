@@ -3,6 +3,7 @@
 //! uses that to build the required proto files for further compilation.
 //! This is based on the proto-compiler code in github.com/informalsystems/ibc-rs
 
+use itertools::Itertools;
 use regex::Regex;
 use std::{
     env,
@@ -13,7 +14,13 @@ use std::{
     process,
     sync::atomic::{self, AtomicBool},
 };
-use syn::{Attribute, File, Ident, LitStr, __private::Span};
+use syn::{
+    Attribute, File, Ident, LitStr,
+    __private::{
+        quote::{format_ident, quote},
+        Span,
+    },
+};
 use walkdir::WalkDir;
 
 /// Suppress log messages
@@ -30,7 +37,7 @@ const OSMOSIS_REV: &str = "v10.0.1";
 // working directory.
 
 /// The directory generated cosmos-sdk proto files go into in this repo
-const OSMOSIS_PROTO_DIR: &str = "../osmosis-std/src/prost/";
+const OSMOSIS_PROTO_DIR: &str = "../osmosis-std/src/types/";
 /// Directory where the cosmos-sdk submodule is located
 const COSMOS_SDK_DIR: &str = "../../dependencies/cosmos-sdk";
 /// Directory where the osmosis submodule is located
@@ -83,6 +90,7 @@ fn main() {
     compile_osmosis_proto(&temp_osmosis_dir);
 
     copy_generated_files(&temp_osmosis_dir, &proto_dir);
+    generate_mod_file(&proto_dir);
 
     if is_github() {
         println!(
@@ -210,6 +218,96 @@ fn collect_protos(proto_paths: &[String], protos: &mut Vec<PathBuf>) {
                 .map(|e| e.into_path())
                 .collect(),
         );
+    }
+}
+
+fn generate_mod_file(for_dir: &Path) {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let for_dir = root.join(for_dir);
+
+    let paths = fs::read_dir(&for_dir)
+        .expect("[error] Unable to read dir")
+        .filter_map(|d| {
+            let f = d.expect("[error] Unable to get dir entry");
+            if f.path().extension() == Some(OsStr::new("rs")) {
+                f.path()
+                    .file_stem()
+                    .and_then(|s| s.to_str())
+                    .map(|s| s.to_string())
+            } else {
+                None
+            }
+        })
+        .map(|s| s.split('.').map(|s| s.to_string()).collect::<Vec<String>>())
+        .collect::<Vec<Vec<String>>>();
+
+    let ts = recur_gen_mod(paths, "");
+
+    let file = syn::parse_file(ts.to_string().as_str())
+        .expect("[error] Unable to parse generated content as file while genrating mod.rs");
+
+    let write = fs::write(for_dir.join("mod.rs"), prettyplease::unparse(&file));
+
+    if let Err(e) = write {
+        panic!("[error] Error while generating mod.rs: {}", e);
+    }
+}
+
+fn recur_gen_mod(paths: Vec<Vec<String>>, include_file: &str) -> syn::__private::TokenStream2 {
+    let uniq_keys = paths
+        .iter()
+        .filter_map(|p| (*p).get(0))
+        .map(|s| s.to_owned())
+        .unique()
+        .sorted()
+        .collect::<Vec<String>>();
+
+    // base case
+    if uniq_keys.is_empty() {
+        let incl = LitStr::new(format!("{}.rs", include_file).as_str(), Span::call_site());
+        quote! {
+            include!(#incl);
+        }
+    } else {
+        let mut tks: Vec<syn::__private::TokenStream2> = Vec::new();
+        for k in uniq_keys {
+            let paths: Vec<Vec<String>> = paths
+                .iter()
+                // only if head = k
+                .filter(|p| (**p).get(0) == Some(&k))
+                // get tail
+                .map(|p| p.split_at(1).1.to_vec())
+                .collect();
+            let include_file = if include_file.is_empty() {
+                k.clone()
+            } else {
+                format!("{include_file}.{k}")
+            };
+
+            let block_content = recur_gen_mod(paths.clone(), &include_file);
+
+            let k = format_ident!("{}", k);
+
+            let is_non_leave = paths.len() > 1;
+            let has_file_to_include = paths.iter().any(|p| p.is_empty());
+
+            let non_leave_mod_incl = if has_file_to_include && is_non_leave {
+                let incl = LitStr::new(format!("{}.rs", include_file).as_str(), Span::call_site());
+                quote! {
+                    include!(#incl);
+                }
+            } else {
+                quote!()
+            };
+
+            tks.push(quote! {
+                pub mod #k {
+                    #non_leave_mod_incl
+                    #block_content
+                }
+            });
+        }
+        quote!(#(#tks)*)
     }
 }
 
