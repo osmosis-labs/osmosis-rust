@@ -3,8 +3,8 @@
 start [localosmis](https://docs.osmosis.zone/developing/tools/localosmosis.html) then deploy and generate client:
 
 ```sh
-beaker wasm deploy tokenfactory --signer-account test1 --no-wasm-opt --admin signer --raw '{}'
-beaker wasm ts-gen tokenfactory
+beaker wasm deploy osmosis-stargate --signer-account test1 --no-wasm-opt --admin signer --raw '{}'
+beaker wasm ts-gen osmosis-stargate
 ```
 
 try it out on beaker console
