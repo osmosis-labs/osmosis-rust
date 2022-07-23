@@ -8,10 +8,26 @@ import { CosmWasmClient, ExecuteResult, SigningCosmWasmClient } from "@cosmjs/co
 import { Coin, StdFee } from "@cosmjs/amino";
 export type ExecuteMsg = {
   create_denom: {
+    initial_mint?: string | null;
+    initial_pool?: InitPoolCfg | null;
     subdenom: string;
     [k: string]: unknown;
   };
 };
+export interface InitPoolCfg {
+  exit_fee: string;
+  pairing_denom: string;
+  pool_assets: PoolAssests;
+  swap_fee: string;
+  [k: string]: unknown;
+}
+export interface PoolAssests {
+  new_token_amount: string;
+  new_token_weight: string;
+  pairing_token_amount: string;
+  pairing_token_weight: string;
+  [k: string]: unknown;
+}
 export interface InstantiateMsg {
   [k: string]: unknown;
 }
@@ -33,8 +49,12 @@ export interface OsmosisStargateInterface extends OsmosisStargateReadOnlyInterfa
   contractAddress: string;
   sender: string;
   createDenom: ({
+    initialMint,
+    initialPool,
     subdenom
   }: {
+    initialMint?: string;
+    initialPool?: InitPoolCfg;
     subdenom: string;
   }, fee?: number | StdFee | "auto", memo?: string, funds?: readonly Coin[]) => Promise<ExecuteResult>;
 }
@@ -52,12 +72,18 @@ export class OsmosisStargateClient extends OsmosisStargateQueryClient implements
   }
 
   createDenom = async ({
+    initialMint,
+    initialPool,
     subdenom
   }: {
+    initialMint?: string;
+    initialPool?: InitPoolCfg;
     subdenom: string;
   }, fee: number | StdFee | "auto" = "auto", memo?: string, funds?: readonly Coin[]): Promise<ExecuteResult> => {
     return await this.client.execute(this.sender, this.contractAddress, {
       create_denom: {
+        initial_mint: initialMint,
+        initial_pool: initialPool,
         subdenom
       }
     }, fee, memo, funds);

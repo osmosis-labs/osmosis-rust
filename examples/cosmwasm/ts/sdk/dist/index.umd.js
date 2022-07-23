@@ -96,13 +96,15 @@
         function OsmosisStargateClient(client, sender, contractAddress) {
             var _this = _super.call(this, client, contractAddress) || this;
             _this.createDenom = function (_a, fee, memo, funds) {
-                var subdenom = _a.subdenom;
+                var initialMint = _a.initialMint, initialPool = _a.initialPool, subdenom = _a.subdenom;
                 if (fee === void 0) { fee = "auto"; }
                 return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0: return [4 /*yield*/, this.client.execute(this.sender, this.contractAddress, {
                                     create_denom: {
+                                        initial_mint: initialMint,
+                                        initial_pool: initialPool,
                                         subdenom: subdenom
                                     }
                                 }, fee, memo, funds)];
