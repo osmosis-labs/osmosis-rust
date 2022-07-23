@@ -1,3 +1,4 @@
+pub mod v1beta1;
 use osmosis_std_derive::CosmwasmExt;
 /// SuperfluidAsset stores the pair of superfluid asset type and denom pair
 #[derive(Clone, PartialEq, ::prost::Message)]

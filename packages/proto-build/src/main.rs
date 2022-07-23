@@ -223,9 +223,9 @@ fn collect_protos(proto_paths: &[String], protos: &mut Vec<PathBuf>) {
 
 fn generate_mod_file(for_dir: &Path) {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let for_dir = root.join(for_dir);
+    let types_dir = root.join(for_dir);
 
-    let paths = fs::read_dir(&for_dir)
+    let paths = fs::read_dir(&types_dir)
         .expect("[error] Unable to read dir")
         .filter_map(|d| {
             let f = d.expect("[error] Unable to get dir entry");
@@ -241,19 +241,14 @@ fn generate_mod_file(for_dir: &Path) {
         .map(|s| s.split('.').map(|s| s.to_string()).collect::<Vec<String>>())
         .collect::<Vec<Vec<String>>>();
 
-    let ts = recur_gen_mod(paths, "");
+    paths
+        .iter()
+        .for_each(|p| fs::create_dir_all(for_dir.join(p[..(p.len() - 1)].join("/"))).unwrap());
 
-    let file = syn::parse_file(ts.to_string().as_str())
-        .expect("[error] Unable to parse generated content as file while genrating mod.rs");
-
-    let write = fs::write(for_dir.join("mod.rs"), prettyplease::unparse(&file));
-
-    if let Err(e) = write {
-        panic!("[error] Error while generating mod.rs: {}", e);
-    }
+    recur_gen_mod(&types_dir, &types_dir, paths, "");
 }
 
-fn recur_gen_mod(paths: Vec<Vec<String>>, include_file: &str) -> syn::__private::TokenStream2 {
+fn recur_gen_mod(for_dir: &Path, start_dir: &Path, paths: Vec<Vec<String>>, include_file: &str) {
     let uniq_keys = paths
         .iter()
         .filter_map(|p| (*p).get(0))
@@ -264,12 +259,41 @@ fn recur_gen_mod(paths: Vec<Vec<String>>, include_file: &str) -> syn::__private:
 
     // base case
     if uniq_keys.is_empty() {
-        let incl = LitStr::new(format!("{}.rs", include_file).as_str(), Span::call_site());
-        quote! {
-            include!(#incl);
-        }
+        let from = start_dir.join(format!("{}.rs", include_file.replace('/', ".")));
+        let to = for_dir
+            .parent()
+            .unwrap()
+            .join(format!("{}.rs", include_file.split('.').last().unwrap()));
+        fs::rename(from, to).unwrap();
     } else {
-        let mut tks: Vec<syn::__private::TokenStream2> = Vec::new();
+        let ts = uniq_keys.iter().map(|k| {
+            let module = format_ident!("{}", k);
+            quote! { pub mod #module; }
+        });
+
+        let additional_mod_content = if paths.iter().any(|p| p.is_empty()) && paths.len() > 1 {
+            let src_file = start_dir.join(format!("{}.rs", include_file));
+            let tk = fs::read_to_string(src_file.clone())
+                .unwrap()
+                .parse::<syn::__private::TokenStream2>()
+                .unwrap();
+
+            fs::remove_file(src_file).unwrap();
+
+            tk
+        } else {
+            quote!()
+        };
+
+        create_mod_rs(
+            quote! {
+                #(#ts)*
+
+                #additional_mod_content
+            },
+            for_dir,
+        );
+
         for k in uniq_keys {
             let paths: Vec<Vec<String>> = paths
                 .iter()
@@ -284,30 +308,13 @@ fn recur_gen_mod(paths: Vec<Vec<String>>, include_file: &str) -> syn::__private:
                 format!("{include_file}.{k}")
             };
 
-            let block_content = recur_gen_mod(paths.clone(), &include_file);
-
-            let k = format_ident!("{}", k);
-
-            let is_non_leave = paths.len() > 1;
-            let has_file_to_include = paths.iter().any(|p| p.is_empty());
-
-            let non_leave_mod_incl = if has_file_to_include && is_non_leave {
-                let incl = LitStr::new(format!("{}.rs", include_file).as_str(), Span::call_site());
-                quote! {
-                    include!(#incl);
-                }
-            } else {
-                quote!()
-            };
-
-            tks.push(quote! {
-                pub mod #k {
-                    #non_leave_mod_incl
-                    #block_content
-                }
-            });
+            recur_gen_mod(
+                &for_dir.join(k.clone()),
+                start_dir,
+                paths.clone(),
+                &include_file,
+            );
         }
-        quote!(#(#tks)*)
     }
 }
 
@@ -430,4 +437,15 @@ fn get_type_url(src: &Path, ident: &Ident) -> LitStr {
 
 fn prepend<T>(v: &mut Vec<T>, other: &mut Vec<T>) {
     v.splice(0..0, other.drain(..));
+}
+
+fn create_mod_rs(ts: syn::__private::TokenStream2, path: &Path) {
+    let file = syn::parse_file(ts.to_string().as_str())
+        .expect("[error] Unable to parse generated content as file while genrating mod.rs");
+
+    let write = fs::write(path.join("mod.rs"), prettyplease::unparse(&file));
+
+    if let Err(e) = write {
+        panic!("[error] Error while generating mod.rs: {}", e);
+    }
 }
