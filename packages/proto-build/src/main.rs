@@ -92,6 +92,15 @@ fn main() {
     copy_generated_files(&temp_osmosis_dir, &proto_dir);
     generate_mod_file(&proto_dir);
 
+    // format osmosis std
+    env::set_current_dir(Path::new("../osmosis-std")).unwrap();
+    Command::new("cargo")
+        .arg("fmt")
+        .spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
+
     if is_github() {
         println!(
             "Rebuild protos with proto-build (osmosis rev: {})",

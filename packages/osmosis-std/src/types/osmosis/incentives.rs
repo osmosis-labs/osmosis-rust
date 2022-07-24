@@ -1,6 +1,5 @@
 use osmosis_std_derive::CosmwasmExt;
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.Gauge")]
 pub struct Gauge {
     /// unique ID of a Gauge
@@ -29,19 +28,15 @@ pub struct Gauge {
     pub filled_epochs: u64,
     /// already distributed coins
     #[prost(message, repeated, tag = "8")]
-    pub distributed_coins: ::prost::alloc::vec::Vec<
-        cosmos_sdk_proto::cosmos::base::v1beta1::Coin,
-    >,
+    pub distributed_coins: ::prost::alloc::vec::Vec<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.LockableDurationsInfo")]
 pub struct LockableDurationsInfo {
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<::prost_types::Duration>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.MsgCreateGauge")]
 pub struct MsgCreateGauge {
     /// flag to show if it's perpetual or multi-epoch
@@ -63,12 +58,10 @@ pub struct MsgCreateGauge {
     #[prost(uint64, tag = "6")]
     pub num_epochs_paid_over: u64,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.MsgCreateGaugeResponse")]
 pub struct MsgCreateGaugeResponse {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.MsgAddToGauge")]
 pub struct MsgAddToGauge {
     #[prost(string, tag = "1")]
@@ -78,160 +71,132 @@ pub struct MsgAddToGauge {
     #[prost(message, repeated, tag = "3")]
     pub rewards: ::prost::alloc::vec::Vec<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.MsgAddToGaugeResponse")]
 pub struct MsgAddToGaugeResponse {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.ModuleToDistributeCoinsRequest")]
 pub struct ModuleToDistributeCoinsRequest {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.ModuleToDistributeCoinsResponse")]
 pub struct ModuleToDistributeCoinsResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.ModuleDistributedCoinsRequest")]
 pub struct ModuleDistributedCoinsRequest {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.ModuleDistributedCoinsResponse")]
 pub struct ModuleDistributedCoinsResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.GaugeByIdRequest")]
 pub struct GaugeByIdRequest {
     #[prost(uint64, tag = "1")]
     pub id: u64,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.GaugeByIdResponse")]
 pub struct GaugeByIdResponse {
     #[prost(message, optional, tag = "1")]
     pub gauge: ::core::option::Option<Gauge>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.GaugesRequest")]
 pub struct GaugesRequest {
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "1")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.GaugesResponse")]
 pub struct GaugesResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
     /// pagination defines an pagination for the response.
     #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.ActiveGaugesRequest")]
 pub struct ActiveGaugesRequest {
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "1")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.ActiveGaugesResponse")]
 pub struct ActiveGaugesResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
     /// pagination defines an pagination for the response.
     #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.ActiveGaugesPerDenomRequest")]
 pub struct ActiveGaugesPerDenomRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.ActiveGaugesPerDenomResponse")]
 pub struct ActiveGaugesPerDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
     /// pagination defines an pagination for the response.
     #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.UpcomingGaugesRequest")]
 pub struct UpcomingGaugesRequest {
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "1")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.UpcomingGaugesResponse")]
 pub struct UpcomingGaugesResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
     /// pagination defines an pagination for the response.
     #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.UpcomingGaugesPerDenomRequest")]
 pub struct UpcomingGaugesPerDenomRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageRequest>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.UpcomingGaugesPerDenomResponse")]
 pub struct UpcomingGaugesPerDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub upcoming_gauges: ::prost::alloc::vec::Vec<Gauge>,
     #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<
-        cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse,
-    >,
+    pub pagination:
+        ::core::option::Option<cosmos_sdk_proto::cosmos::base::query::v1beta1::PageResponse>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.RewardsEstRequest")]
 pub struct RewardsEstRequest {
     #[prost(string, tag = "1")]
@@ -241,27 +206,23 @@ pub struct RewardsEstRequest {
     #[prost(int64, tag = "3")]
     pub end_epoch: i64,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.RewardsEstResponse")]
 pub struct RewardsEstResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<cosmos_sdk_proto::cosmos::base::v1beta1::Coin>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.QueryLockableDurationsRequest")]
 pub struct QueryLockableDurationsRequest {}
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.QueryLockableDurationsResponse")]
 pub struct QueryLockableDurationsResponse {
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<::prost_types::Duration>,
 }
 /// Params holds parameters for the incentives module
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.Params")]
 pub struct Params {
     /// distribution epoch identifier
@@ -269,8 +230,7 @@ pub struct Params {
     pub distr_epoch_identifier: ::prost::alloc::string::String,
 }
 /// GenesisState defines the incentives module's genesis state.
-#[derive(Clone, PartialEq, ::prost::Message)]
-#[derive(CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.GenesisState")]
 pub struct GenesisState {
     /// params defines all the parameters of the module
