@@ -30,8 +30,26 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
                 }
             }
         }
-    }
-    .into()
+
+        impl TryFrom<cosmwasm_std::Binary> for #ident {
+            type Error = cosmwasm_std::StdError;
+
+            fn try_from(binary: cosmwasm_std::Binary) -> Result<Self, Self::Error> {
+                use prost::Message;
+                Self::decode(&binary[..]).map_err(|e| {
+                    cosmwasm_std::StdError::ParseErr {
+                        target_type: stringify!(#ident).to_string(),
+                        msg: format!(
+                            "Unable to decode binary: \n  - base64: {}\n  - bytes array: {:?}\n\n{:?}",
+                            binary,
+                            binary.to_vec(),
+                            e
+                        ),
+                    }
+                })
+            }
+        }
+    }.into()
 }
 
 fn get_type_url(attrs: &Vec<syn::Attribute>) -> proc_macro2::TokenStream {

@@ -1,9 +1,9 @@
 {
   "local": {
     "osmosis-stargate": {
-      "code_id": 21,
+      "code_id": 40,
       "addresses": {
-        "default": "osmo1maqs3qvslrjaq8xz9402shucnr4wzdujty8lr7ux5z5rnj989lwsla84q0"
+        "default": "osmo1xcy206pcydldprk6rmvqfpek7rz2f0gatdaf035zt0r0tg2eu33s4dn2gp"
       },
       "proposal": {
         "store_code": null

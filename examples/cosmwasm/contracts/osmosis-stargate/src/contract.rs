@@ -1,11 +1,15 @@
-use std::num::ParseIntError;
+use std::convert::TryInto;
 
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{CosmosMsg, DepsMut, Env, MessageInfo, Response, StdError};
+use cosmwasm_std::{
+    CosmosMsg, DepsMut, Env, MessageInfo, Reply, Response, SubMsg, SubMsgResponse, SubMsgResult,
+};
 use cw2::set_contract_version;
 use osmosis_std::cosmos_sdk_proto::cosmos::base::v1beta1::Coin;
-use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::MsgCreateBalancerPool;
+use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::{
+    MsgCreateBalancerPool, MsgCreateBalancerPoolResponse,
+};
 use osmosis_std::types::osmosis::gamm::v1beta1::{PoolAsset, PoolParams};
 use osmosis_std::types::osmosis::tokenfactory::v1beta1::{MsgCreateDenom, MsgMint};
 
@@ -15,6 +19,8 @@ use crate::msg::{ExecuteMsg, InitPoolCfg, InstantiateMsg};
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:osmosis-stargate";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+const CREATE_POOL_REPLY_ID: u64 = 1;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
@@ -58,7 +64,7 @@ pub fn try_create_denom(
     }
     .into();
 
-    let mut msgs = vec![msg_create_denom];
+    let mut msgs = vec![SubMsg::new(msg_create_denom)];
 
     if let Some(initial_mint) = initial_mint {
         let msg_mint: CosmosMsg = MsgMint {
@@ -70,7 +76,7 @@ pub fn try_create_denom(
         }
         .into();
 
-        msgs.push(msg_mint);
+        msgs.push(SubMsg::new(msg_mint));
 
         if let Some(InitPoolCfg {
             swap_fee,
@@ -109,13 +115,28 @@ pub fn try_create_denom(
             }
             .into();
 
-            msgs.push(msg_create_pool);
+            msgs.push(SubMsg::reply_on_success(
+                msg_create_pool,
+                CREATE_POOL_REPLY_ID,
+            ));
         }
     };
 
     Ok(Response::new()
-        .add_messages(msgs)
+        .add_submessages(msgs)
         .add_attribute("method", "try_create_denom"))
+}
+
+#[cfg_attr(not(feature = "library"), entry_point)]
+pub fn reply(_deps: DepsMut, _env: Env, msg: Reply) -> Result<Response, ContractError> {
+    if msg.id == CREATE_POOL_REPLY_ID {
+        if let SubMsgResult::Ok(SubMsgResponse { data: Some(b), .. }) = msg.result {
+            let res: MsgCreateBalancerPoolResponse = b.try_into().map_err(ContractError::Std)?;
+            return Ok(Response::new().add_attribute("pool_id", format!("{}", res.pool_id)));
+        }
+    };
+
+    Ok(Response::new())
 }
 
 pub fn try_create_balancer_pool(env: Env, subdenom: String) -> Result<Response, ContractError> {
@@ -154,13 +175,4 @@ pub fn try_create_balancer_pool(env: Env, subdenom: String) -> Result<Response, 
     Ok(Response::new()
         .add_message(msg)
         .add_attribute("method", "try_create_denom"))
-}
-
-fn to_u64(s: String) -> Result<u64, ContractError> {
-    s.clone().parse().map_err(|_| {
-        ContractError::Std(StdError::ParseErr {
-            target_type: "u64".to_string(),
-            msg: s,
-        })
-    })
 }

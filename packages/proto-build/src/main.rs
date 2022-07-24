@@ -11,7 +11,7 @@ use std::{
     fs::{self, create_dir_all, remove_dir_all},
     io,
     path::{Path, PathBuf},
-    process,
+    process::{self, Command},
     sync::atomic::{self, AtomicBool},
 };
 use syn::{

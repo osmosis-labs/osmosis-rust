@@ -82,8 +82,11 @@ test("tokenfactory createDenom with initial mint", async () => {
   );
 
   const poolId = getEventAttr(res, "pool_created", "pool_id");
-  const lpToken = `100000000000000000000gamm/pool/${poolId}`;
 
+  // from submsg reply response
+  expect(getEventAttr(res, "wasm", "pool_id")).toBe(poolId);
+
+  const lpToken = `100000000000000000000gamm/pool/${poolId}`;
   expect(
     getEventAttr(res, "transfer").attributes.find(
       (attr) => attr.value === lpToken
