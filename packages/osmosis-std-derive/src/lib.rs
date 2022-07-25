@@ -35,7 +35,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
             type Error = cosmwasm_std::StdError;
 
             fn try_from(binary: cosmwasm_std::Binary) -> Result<Self, Self::Error> {
-                use prost::Message;
+                use ::prost::Message;
                 Self::decode(&binary[..]).map_err(|e| {
                     cosmwasm_std::StdError::ParseErr {
                         target_type: stringify!(#ident).to_string(),
