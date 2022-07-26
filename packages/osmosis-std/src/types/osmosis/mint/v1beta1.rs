@@ -1,13 +1,13 @@
 use osmosis_std_derive::CosmwasmExt;
 /// Minter represents the minting state.
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.mint.v1beta1.Minter")]
 pub struct Minter {
     /// current epoch provisions
     #[prost(string, tag = "1")]
     pub epoch_provisions: ::prost::alloc::string::String,
 }
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.mint.v1beta1.WeightedAddress")]
 pub struct WeightedAddress {
     #[prost(string, tag = "1")]
@@ -15,7 +15,7 @@ pub struct WeightedAddress {
     #[prost(string, tag = "2")]
     pub weight: ::prost::alloc::string::String,
 }
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.mint.v1beta1.DistributionProportions")]
 pub struct DistributionProportions {
     /// staking defines the proportion of the minted minted_denom that is to be
@@ -36,7 +36,7 @@ pub struct DistributionProportions {
     pub community_pool: ::prost::alloc::string::String,
 }
 /// Params holds parameters for the mint module.
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.mint.v1beta1.Params")]
 pub struct Params {
     /// type of coin to mint
@@ -65,11 +65,11 @@ pub struct Params {
     pub minting_rewards_distribution_start_epoch: i64,
 }
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.mint.v1beta1.QueryParamsRequest")]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.mint.v1beta1.QueryParamsResponse")]
 pub struct QueryParamsResponse {
     /// params defines the parameters of the module.
@@ -78,12 +78,12 @@ pub struct QueryParamsResponse {
 }
 /// QueryEpochProvisionsRequest is the request type for the
 /// Query/EpochProvisions RPC method.
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.mint.v1beta1.QueryEpochProvisionsRequest")]
 pub struct QueryEpochProvisionsRequest {}
 /// QueryEpochProvisionsResponse is the response type for the
 /// Query/EpochProvisions RPC method.
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.mint.v1beta1.QueryEpochProvisionsResponse")]
 pub struct QueryEpochProvisionsResponse {
     /// epoch_provisions is the current minting per epoch provisions value.
@@ -91,7 +91,7 @@ pub struct QueryEpochProvisionsResponse {
     pub epoch_provisions: ::prost::alloc::vec::Vec<u8>,
 }
 /// GenesisState defines the mint module's genesis state.
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.mint.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// minter is a space for holding current rewards information.

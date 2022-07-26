@@ -6,12 +6,14 @@ use cosmwasm_std::{
     CosmosMsg, DepsMut, Env, MessageInfo, Reply, Response, SubMsg, SubMsgResponse, SubMsgResult,
 };
 use cw2::set_contract_version;
-use osmosis_std::cosmos_sdk_proto::cosmos::base::v1beta1::Coin;
+use osmosis_std::types::cosmos::base::v1beta1::Coin;
 use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::{
     MsgCreateBalancerPool, MsgCreateBalancerPoolResponse,
 };
 use osmosis_std::types::osmosis::gamm::v1beta1::{PoolAsset, PoolParams};
-use osmosis_std::types::osmosis::tokenfactory::v1beta1::{MsgCreateDenom, MsgMint};
+use osmosis_std::types::osmosis::tokenfactory::v1beta1::{
+    MsgCreateDenom, MsgMint, QueryDenomsFromCreatorRequest, QueryDenomsFromCreatorResponse,
+};
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InitPoolCfg, InstantiateMsg};

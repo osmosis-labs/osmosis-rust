@@ -8,4 +8,5 @@ pub use cosmos_sdk_proto;
 /// The version (commit hash) of the Cosmos SDK used when generating this library.
 pub const OSMOSISD_VERSION: &str = include_str!("types/OSMOSIS_COMMIT");
 
+pub mod shim;
 pub mod types;

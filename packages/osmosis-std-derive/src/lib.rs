@@ -18,15 +18,30 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
             pub const TYPE_URL: &'static str = #type_url;
         }
 
-        impl From<#ident> for cosmwasm_std::CosmosMsg {
+        impl From<#ident> for cosmwasm_std::Binary {
             fn from(msg: #ident) -> Self {
                 let mut bytes = Vec::new();
                 prost::Message::encode(&msg, &mut bytes)
                     .expect("Message encoding must be infallible");
 
+                cosmwasm_std::Binary(bytes)
+            }
+        }
+
+        impl From<#ident> for cosmwasm_std::CosmosMsg {
+            fn from(msg: #ident) -> Self {
                 cosmwasm_std::CosmosMsg::<cosmwasm_std::Empty>::Stargate {
                     type_url: #type_url.to_string(),
-                    value: cosmwasm_std::Binary(bytes),
+                    value: msg.into(),
+                }
+            }
+        }
+
+        impl From<#ident> for cosmwasm_std::QueryRequest<cosmwasm_std::Empty> {
+            fn from(msg: #ident) -> Self {
+                cosmwasm_std::QueryRequest::<cosmwasm_std::Empty>::Stargate {
+                    path: #type_url.to_string(),
+                    data: msg.into(),
                 }
             }
         }

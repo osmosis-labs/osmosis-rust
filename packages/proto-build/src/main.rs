@@ -15,11 +15,8 @@ use std::{
     sync::atomic::{self, AtomicBool},
 };
 use syn::{
-    Attribute, File, Ident, LitStr,
-    __private::{
-        quote::{format_ident, quote},
-        Span,
-    },
+    Attribute, File, Ident, ItemMod,
+    __private::quote::{format_ident, quote},
 };
 use walkdir::WalkDir;
 
@@ -37,7 +34,7 @@ const OSMOSIS_REV: &str = "v10.0.1";
 // working directory.
 
 /// The directory generated cosmos-sdk proto files go into in this repo
-const OSMOSIS_PROTO_DIR: &str = "../osmosis-std/src/types/";
+const PROTO_DIR: &str = "../osmosis-std/src/types/";
 /// Directory where the cosmos-sdk submodule is located
 const COSMOS_SDK_DIR: &str = "../../dependencies/cosmos-sdk";
 /// Directory where the osmosis submodule is located
@@ -49,7 +46,7 @@ const TMP_BUILD_DIR: &str = "/tmp/tmp-protobuf/";
 /// Protos belonging to these Protobuf packages will be excluded
 /// (i.e. because they are sourced from `tendermint-proto`)
 const EXCLUDED_PROTO_PACKAGES: &[&str] = &[
-    "cosmos",
+    // "cosmos",
     "cosmos_proto",
     "gogoproto",
     "google",
@@ -75,7 +72,7 @@ fn main() {
     }
 
     let tmp_build_dir: PathBuf = TMP_BUILD_DIR.parse().unwrap();
-    let proto_dir: PathBuf = OSMOSIS_PROTO_DIR.parse().unwrap();
+    let proto_dir: PathBuf = PROTO_DIR.parse().unwrap();
 
     if tmp_build_dir.exists() {
         fs::remove_dir_all(tmp_build_dir.clone()).unwrap();
@@ -86,10 +83,11 @@ fn main() {
     fs::create_dir_all(&temp_osmosis_dir).unwrap();
 
     update_submodules();
+
     output_osmosis_version(&temp_osmosis_dir);
     compile_osmosis_proto(&temp_osmosis_dir);
-
     copy_generated_files(&temp_osmosis_dir, &proto_dir);
+
     generate_mod_file(&proto_dir);
 
     // format osmosis std
@@ -195,14 +193,15 @@ fn compile_osmosis_proto(out_dir: &Path) {
     let mut protos: Vec<PathBuf> = vec![];
     collect_protos(&proto_paths, &mut protos);
 
-    // Compile all proto client for GRPC services
-    info!("Compiling wasmd proto clients for GRPC services!");
+    info!("Compiling osmosis sdk proto to rust types!");
+
     tonic_build::configure()
         .build_client(false)
         .build_server(false)
         .out_dir(out_dir)
-        .extern_path(".tendermint", "::tendermint_proto")
-        .extern_path(".cosmos", "cosmos_sdk_proto::cosmos")
+        .extern_path(".google.protobuf.Timestamp", "crate::shim::Timestamp")
+        .extern_path(".google.protobuf.Duration", "crate::shim::Duration")
+        .extern_path(".google.protobuf.Any", "crate::shim::Any")
         .compile(&protos, &includes)
         .unwrap();
 
@@ -390,7 +389,13 @@ fn copy_and_patch(src: &Path, dest: impl AsRef<Path>) -> io::Result<()> {
         }
     }
 
-    let mut contents = fs::read_to_string(src)?;
+    let mut contents = match fs::read_to_string(src) {
+        Ok(c) => c,
+        Err(e) => {
+            info!("{:?} – {}, copy_and_patch skipped", src, e);
+            return Ok(());
+        }
+    };
 
     for &(regex, replacement) in REPLACEMENTS {
         contents = Regex::new(regex)
@@ -402,24 +407,7 @@ fn copy_and_patch(src: &Path, dest: impl AsRef<Path>) -> io::Result<()> {
     let file = syn::parse_file(&contents);
     if let Ok(file) = file {
         // only transform rust file (skipping `*_COMMIT` file)
-        let mut items = file
-            .items
-            .into_iter()
-            .map(|i| match i.clone() {
-                syn::Item::Struct(mut s) => {
-                    append_attrs(src, &s.ident, &mut s.attrs);
-                    syn::Item::Struct(s)
-                }
-                _ => i,
-            })
-            .collect::<Vec<syn::Item>>();
-
-        prepend(
-            &mut items,
-            &mut vec![syn::parse_quote! {
-                use osmosis_std_derive::CosmwasmExt;
-            }],
-        );
+        let items = recur_append_attrs(file.items, src, &[]);
 
         contents = prettyplease::unparse(&File { items, ..file });
     }
@@ -427,21 +415,55 @@ fn copy_and_patch(src: &Path, dest: impl AsRef<Path>) -> io::Result<()> {
     fs::write(dest, &*contents)
 }
 
-fn append_attrs(src: &Path, ident: &Ident, attrs: &mut Vec<Attribute>) {
+fn recur_append_attrs(items: Vec<syn::Item>, src: &Path, ancestors: &[String]) -> Vec<syn::Item> {
+    let mut items = items
+        .into_iter()
+        .map(|i| match i.clone() {
+            syn::Item::Struct(mut s) => {
+                append_attrs(src, ancestors, &s.ident, &mut s.attrs);
+                syn::Item::Struct(s)
+            }
+            syn::Item::Mod(m) => {
+                let parent = snake_to_pascal(&m.ident.to_string());
+
+                syn::Item::Mod(ItemMod {
+                    content: m.content.map(|(brace, items)| {
+                        (
+                            brace,
+                            recur_append_attrs(items, src, &[ancestors, &[parent]].concat()),
+                        )
+                    }),
+                    ..m
+                })
+            }
+            _ => i,
+        })
+        .collect::<Vec<syn::Item>>();
+
+    prepend(
+        &mut items,
+        &mut vec![syn::parse_quote! {
+            use osmosis_std_derive::CosmwasmExt;
+        }],
+    );
+    items
+}
+
+fn append_attrs(src: &Path, ancestors: &[String], ident: &Ident, attrs: &mut Vec<Attribute>) {
     let type_url = get_type_url(src, ident);
+    let path: Vec<String> = type_url.split('.').map(|s| s.to_string()).collect();
+    let type_url = [&path[..(path.len() - 1)], ancestors, &[ident.to_string()]]
+        .concat()
+        .join(".");
     attrs.append(&mut vec![
-        syn::parse_quote! { #[derive(CosmwasmExt)] },
+        syn::parse_quote! { #[derive(serde::Serialize, serde::Deserialize, CosmwasmExt)] },
         syn::parse_quote! { #[proto(type_url = #type_url)] },
     ]);
 }
 
-fn get_type_url(src: &Path, ident: &Ident) -> LitStr {
+fn get_type_url(src: &Path, ident: &Ident) -> String {
     let type_path = src.file_stem().unwrap().to_str().unwrap();
-    let type_url = LitStr::new(
-        format!("/{}.{}", type_path, ident).as_str(),
-        Span::call_site(),
-    );
-    type_url
+    format!("/{}.{}", type_path, ident)
 }
 
 fn prepend<T>(v: &mut Vec<T>, other: &mut Vec<T>) {
@@ -457,4 +479,13 @@ fn create_mod_rs(ts: syn::__private::TokenStream2, path: &Path) {
     if let Err(e) = write {
         panic!("[error] Error while generating mod.rs: {}", e);
     }
+}
+
+fn snake_to_pascal(s: &str) -> String {
+    s.split('_')
+        .map(|w| {
+            let (head, tail) = w.split_at(1);
+            format!("{}{}", head.to_uppercase(), tail)
+        })
+        .join("")
 }
