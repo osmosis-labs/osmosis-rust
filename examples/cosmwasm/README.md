@@ -10,7 +10,8 @@ beaker wasm ts-gen osmosis-stargate
 try it out on beaker console
 
 ```js
-sc = tokenfactory.signer(test1);
+contract = global["osmosis-stargate"]
+sc = contract.signer(test1);
 await sc.createDenom({ subdenom: "token1" }, "auto", undefined, [
   { denom: "uosmo", amount: "10000000" },
 ]);
@@ -20,7 +21,7 @@ since stargate query whitelisting is still in progress, you can check the result
 
 ```js
 // get address from contract info for later query
-(await tokenfactory.getInfo()).address; // => <contract_addr>
+(await contract.getInfo()).address; // => <contract_addr>
 ```
 
 ```sh
