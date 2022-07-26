@@ -131,6 +131,8 @@ pub fn try_create_denom(
 pub fn reply(_deps: DepsMut, _env: Env, msg: Reply) -> Result<Response, ContractError> {
     if msg.id == CREATE_POOL_REPLY_ID {
         if let SubMsgResult::Ok(SubMsgResponse { data: Some(b), .. }) = msg.result {
+            // This is only for response deserialization demonstration purpose.
+            // `pool_id` can actually be retreived from `pool_created` event.
             let res: MsgCreateBalancerPoolResponse = b.try_into().map_err(ContractError::Std)?;
             return Ok(Response::new().add_attribute("pool_id", format!("{}", res.pool_id)));
         }

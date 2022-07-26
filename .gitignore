@@ -18,3 +18,4 @@ Cargo.lock
 .vscode
 node_modules
 .DS_Store
+.beaker/state.local.json
