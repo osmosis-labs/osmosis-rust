@@ -7,7 +7,7 @@ pub struct SuperfluidAsset {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     #[prost(enumeration = "SuperfluidAssetType", tag = "2")]
-    pub asset_type: i32,
+    pub asset_type: u32,
 }
 /// SuperfluidIntermediaryAccount takes the role of intermediary between LP token
 /// and OSMO tokens for superfluid staking
@@ -33,7 +33,7 @@ pub struct SuperfluidIntermediaryAccount {
 #[proto(type_url = "/osmosis.superfluid.OsmoEquivalentMultiplierRecord")]
 pub struct OsmoEquivalentMultiplierRecord {
     #[prost(int64, tag = "1")]
-    pub epoch_number: i64,
+    pub epoch_number: u64,
     /// superfluid asset denom, can be LP token or native token
     #[prost(string, tag = "2")]
     pub denom: ::prost::alloc::string::String,
@@ -69,7 +69,7 @@ pub struct UnpoolWhitelistedPools {
     pub ids: ::prost::alloc::vec::Vec<u64>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
+#[repr(u32)]
 pub enum SuperfluidAssetType {
     Native = 0,
     /// SuperfluidAssetTypeLendingShare = 2; // for now not exist
@@ -180,7 +180,7 @@ pub struct AssetTypeRequest {
 #[proto(type_url = "/osmosis.superfluid.AssetTypeResponse")]
 pub struct AssetTypeResponse {
     #[prost(enumeration = "SuperfluidAssetType", tag = "1")]
-    pub asset_type: i32,
+    pub asset_type: u32,
 }
 #[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.superfluid.AllAssetsRequest")]

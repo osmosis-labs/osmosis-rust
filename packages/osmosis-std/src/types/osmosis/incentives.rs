@@ -199,7 +199,7 @@ pub struct RewardsEstRequest {
     #[prost(uint64, repeated, tag = "2")]
     pub lock_ids: ::prost::alloc::vec::Vec<u64>,
     #[prost(int64, tag = "3")]
-    pub end_epoch: i64,
+    pub end_epoch: u64,
 }
 #[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
 #[proto(type_url = "/osmosis.incentives.RewardsEstResponse")]

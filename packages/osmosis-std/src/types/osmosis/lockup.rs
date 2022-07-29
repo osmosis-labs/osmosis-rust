@@ -21,7 +21,7 @@ pub struct PeriodLock {
 pub struct QueryCondition {
     /// type of lock query, ByLockDuration | ByLockTime
     #[prost(enumeration = "LockQueryType", tag = "1")]
-    pub lock_query_type: i32,
+    pub lock_query_type: u32,
     /// What token denomination are we looking for lockups of
     #[prost(string, tag = "2")]
     pub denom: ::prost::alloc::string::String,
@@ -62,7 +62,7 @@ pub struct SyntheticLock {
     pub duration: ::core::option::Option<crate::shim::Duration>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
+#[repr(u32)]
 pub enum LockQueryType {
     /// Queries for locks that are longer than a certain duration
     ByDuration = 0,

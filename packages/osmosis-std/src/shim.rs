@@ -4,13 +4,13 @@ pub struct Timestamp {
     /// 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
     /// 9999-12-31T23:59:59Z inclusive.
     #[prost(int64, tag = "1")]
-    pub seconds: i64,
+    pub seconds: u64,
     /// Non-negative fractions of a second at nanosecond resolution. Negative
     /// second values with fractions must still have non-negative nanos values
     /// that count forward in time. Must be from 0 to 999,999,999
     /// inclusive.
     #[prost(int32, tag = "2")]
-    pub nanos: i32,
+    pub nanos: u32,
 }
 
 #[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize)]
@@ -19,7 +19,7 @@ pub struct Duration {
     /// to +315,576,000,000 inclusive. Note: these bounds are computed from:
     /// 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years
     #[prost(int64, tag = "1")]
-    pub seconds: i64,
+    pub seconds: u64,
     /// Signed fractions of a second at nanosecond resolution of the span
     /// of time. Durations less than one second are represented with a 0
     /// `seconds` field and a positive or negative `nanos` field. For durations
@@ -27,7 +27,7 @@ pub struct Duration {
     /// of the same sign as the `seconds` field. Must be from -999,999,999
     /// to +999,999,999 inclusive.
     #[prost(int32, tag = "2")]
-    pub nanos: i32,
+    pub nanos: u32,
 }
 
 #[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize)]

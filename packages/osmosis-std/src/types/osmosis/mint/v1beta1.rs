@@ -50,7 +50,7 @@ pub struct Params {
     pub epoch_identifier: ::prost::alloc::string::String,
     /// number of epochs take to reduce rewards
     #[prost(int64, tag = "4")]
-    pub reduction_period_in_epochs: i64,
+    pub reduction_period_in_epochs: u64,
     /// reduction multiplier to execute on each period
     #[prost(string, tag = "5")]
     pub reduction_factor: ::prost::alloc::string::String,
@@ -62,7 +62,7 @@ pub struct Params {
     pub weighted_developer_rewards_receivers: ::prost::alloc::vec::Vec<WeightedAddress>,
     /// start epoch to distribute minting rewards
     #[prost(int64, tag = "8")]
-    pub minting_rewards_distribution_start_epoch: i64,
+    pub minting_rewards_distribution_start_epoch: u64,
 }
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
 #[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
@@ -102,5 +102,5 @@ pub struct GenesisState {
     pub params: ::core::option::Option<Params>,
     /// current halven period start epoch
     #[prost(int64, tag = "3")]
-    pub halven_started_epoch: i64,
+    pub halven_started_epoch: u64,
 }
