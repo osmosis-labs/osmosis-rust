@@ -11,9 +11,7 @@ use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::{
     MsgCreateBalancerPool, MsgCreateBalancerPoolResponse,
 };
 use osmosis_std::types::osmosis::gamm::v1beta1::{PoolAsset, PoolParams};
-use osmosis_std::types::osmosis::tokenfactory::v1beta1::{
-    MsgCreateDenom, MsgMint, QueryDenomsFromCreatorRequest, QueryDenomsFromCreatorResponse,
-};
+use osmosis_std::types::osmosis::tokenfactory::v1beta1::{MsgCreateDenom, MsgMint};
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InitPoolCfg, InstantiateMsg};
