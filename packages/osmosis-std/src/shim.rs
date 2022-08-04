@@ -1,4 +1,6 @@
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize)]
+#[derive(
+    Clone, PartialEq, ::prost::Message, schemars::JsonSchema, serde::Serialize, serde::Deserialize,
+)]
 pub struct Timestamp {
     /// Represents seconds of UTC time since Unix epoch
     /// 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
@@ -13,7 +15,9 @@ pub struct Timestamp {
     pub nanos: i32,
 }
 
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize)]
+#[derive(
+    Clone, PartialEq, ::prost::Message, schemars::JsonSchema, serde::Serialize, serde::Deserialize,
+)]
 pub struct Duration {
     /// Signed seconds of the span of time. Must be from -315,576,000,000
     /// to +315,576,000,000 inclusive. Note: these bounds are computed from:
@@ -30,7 +34,9 @@ pub struct Duration {
     pub nanos: i32,
 }
 
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize)]
+#[derive(
+    Clone, PartialEq, ::prost::Message, schemars::JsonSchema, serde::Serialize, serde::Deserialize,
+)]
 pub struct Any {
     /// A URL/resource name that uniquely identifies the type of the serialized
     /// protocol buffer message. This string must contain at least

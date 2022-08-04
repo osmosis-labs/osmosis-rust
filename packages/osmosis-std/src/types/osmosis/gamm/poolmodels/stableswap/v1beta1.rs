@@ -3,7 +3,15 @@ use osmosis_std_derive::CosmwasmExt;
 /// governance in the future. This params are not managed by the chain
 /// governance. Instead they will be managed by the token holders of the pool.
 /// The pool's token holders are specified in future_pool_governor.
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.PoolParams")]
 pub struct PoolParams {
     #[prost(string, tag = "1")]
@@ -12,7 +20,15 @@ pub struct PoolParams {
     pub exit_fee: ::prost::alloc::string::String,
 }
 /// Pool is the stableswap Pool struct
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.Pool")]
 pub struct Pool {
     #[prost(string, tag = "1")]
@@ -46,7 +62,15 @@ pub struct Pool {
     #[prost(string, tag = "8")]
     pub scaling_factor_governor: ::prost::alloc::string::String,
 }
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPool")]
 pub struct MsgCreateStableswapPool {
     #[prost(string, tag = "1")]
@@ -59,13 +83,29 @@ pub struct MsgCreateStableswapPool {
     #[prost(string, tag = "4")]
     pub future_pool_governor: ::prost::alloc::string::String,
 }
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPoolResponse")]
 pub struct MsgCreateStableswapPoolResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
 }
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactors")]
 pub struct MsgStableSwapAdjustScalingFactors {
     /// Sender must be the pool's scaling_factor_governor in order for the tx to
@@ -77,7 +117,15 @@ pub struct MsgStableSwapAdjustScalingFactors {
     #[prost(uint64, repeated, packed = "false", tag = "3")]
     pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
 }
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto(
     type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactorsResponse"
 )]

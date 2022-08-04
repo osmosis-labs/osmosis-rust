@@ -28,7 +28,7 @@ static QUIET: AtomicBool = AtomicBool::new(false);
 const COSMOS_SDK_REV: &str = "v0.45.4";
 
 /// The osmosis commit or tag to be cloned and used to build the proto files
-const OSMOSIS_REV: &str = "v10.0.1";
+const OSMOSIS_REV: &str = "v11.0.0";
 
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.
@@ -456,7 +456,7 @@ fn append_attrs(src: &Path, ancestors: &[String], ident: &Ident, attrs: &mut Vec
         .concat()
         .join(".");
     attrs.append(&mut vec![
-        syn::parse_quote! { #[derive(serde::Serialize, serde::Deserialize, CosmwasmExt)] },
+        syn::parse_quote! { #[derive(serde::Serialize, serde::Deserialize, schemars::JsonSchema, CosmwasmExt)] },
         syn::parse_quote! { #[proto(type_url = #type_url)] },
     ]);
 }

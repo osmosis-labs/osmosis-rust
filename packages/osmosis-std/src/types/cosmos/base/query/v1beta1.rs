@@ -6,7 +6,15 @@ use osmosis_std_derive::CosmwasmExt;
 ///          Foo some_parameter = 1;
 ///          PageRequest pagination = 2;
 ///  }
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto(type_url = "/cosmos.base.query.v1beta1.PageRequest")]
 pub struct PageRequest {
     /// key is a value returned in PageResponse.next_key to begin
@@ -42,7 +50,15 @@ pub struct PageRequest {
 ///          repeated Bar results = 1;
 ///          PageResponse page = 2;
 ///  }
-#[derive(Clone, PartialEq, ::prost::Message, serde::Serialize, serde::Deserialize, CosmwasmExt)]
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto(type_url = "/cosmos.base.query.v1beta1.PageResponse")]
 pub struct PageResponse {
     /// next_key is the key to be passed to PageRequest.key to
