@@ -10,7 +10,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidAsset")]
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidAsset")]
 pub struct SuperfluidAsset {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -28,7 +28,7 @@ pub struct SuperfluidAsset {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidIntermediaryAccount")]
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidIntermediaryAccount")]
 pub struct SuperfluidIntermediaryAccount {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -54,7 +54,7 @@ pub struct SuperfluidIntermediaryAccount {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.OsmoEquivalentMultiplierRecord")]
+#[proto_message(type_url = "/osmosis.superfluid.OsmoEquivalentMultiplierRecord")]
 pub struct OsmoEquivalentMultiplierRecord {
     #[prost(int64, tag = "1")]
     pub epoch_number: i64,
@@ -75,7 +75,7 @@ pub struct OsmoEquivalentMultiplierRecord {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationRecord")]
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationRecord")]
 pub struct SuperfluidDelegationRecord {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -95,7 +95,7 @@ pub struct SuperfluidDelegationRecord {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.LockIdIntermediaryAccountConnection")]
+#[proto_message(type_url = "/osmosis.superfluid.LockIdIntermediaryAccountConnection")]
 pub struct LockIdIntermediaryAccountConnection {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
@@ -111,7 +111,7 @@ pub struct LockIdIntermediaryAccountConnection {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.UnpoolWhitelistedPools")]
+#[proto_message(type_url = "/osmosis.superfluid.UnpoolWhitelistedPools")]
 pub struct UnpoolWhitelistedPools {
     #[prost(uint64, repeated, tag = "1")]
     pub ids: ::prost::alloc::vec::Vec<u64>,
@@ -132,7 +132,7 @@ pub enum SuperfluidAssetType {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidDelegate")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidDelegate")]
 pub struct MsgSuperfluidDelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -150,7 +150,7 @@ pub struct MsgSuperfluidDelegate {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidDelegateResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidDelegateResponse")]
 pub struct MsgSuperfluidDelegateResponse {}
 #[derive(
     Clone,
@@ -161,7 +161,7 @@ pub struct MsgSuperfluidDelegateResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegate")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegate")]
 pub struct MsgSuperfluidUndelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -177,7 +177,7 @@ pub struct MsgSuperfluidUndelegate {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateResponse")]
 pub struct MsgSuperfluidUndelegateResponse {}
 #[derive(
     Clone,
@@ -188,7 +188,7 @@ pub struct MsgSuperfluidUndelegateResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLock")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLock")]
 pub struct MsgSuperfluidUnbondLock {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -204,7 +204,7 @@ pub struct MsgSuperfluidUnbondLock {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLockResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLockResponse")]
 pub struct MsgSuperfluidUnbondLockResponse {}
 /// MsgLockAndSuperfluidDelegate locks coins with the unbonding period duration,
 /// and then does a superfluid lock from the newly created lockup, to the
@@ -218,7 +218,7 @@ pub struct MsgSuperfluidUnbondLockResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegate")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegate")]
 pub struct MsgLockAndSuperfluidDelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -236,7 +236,7 @@ pub struct MsgLockAndSuperfluidDelegate {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse")]
 pub struct MsgLockAndSuperfluidDelegateResponse {
     #[prost(uint64, tag = "1")]
     pub id: u64,
@@ -258,7 +258,7 @@ pub struct MsgLockAndSuperfluidDelegateResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPool")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPool")]
 pub struct MsgUnPoolWhitelistedPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -274,7 +274,7 @@ pub struct MsgUnPoolWhitelistedPool {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPoolResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPoolResponse")]
 pub struct MsgUnPoolWhitelistedPoolResponse {
     #[prost(uint64, repeated, tag = "1")]
     pub exited_lock_ids: ::prost::alloc::vec::Vec<u64>,
@@ -289,7 +289,7 @@ pub struct MsgUnPoolWhitelistedPoolResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.Params")]
+#[proto_message(type_url = "/osmosis.superfluid.Params")]
 pub struct Params {
     /// the risk_factor is to be cut on OSMO equivalent value of lp tokens for
     /// superfluid staking, default: 5%
@@ -305,8 +305,11 @@ pub struct Params {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.QueryParamsRequest")]
-#[query(path = "/osmosis.superfluid.Query/Params", reponse_type = QueryParamsResponse)]
+#[proto_message(type_url = "/osmosis.superfluid.QueryParamsRequest")]
+#[proto_query(
+    path = "/osmosis.superfluid.Query/Params",
+    reponse_type = QueryParamsResponse
+)]
 pub struct QueryParamsRequest {}
 #[derive(
     Clone,
@@ -317,7 +320,7 @@ pub struct QueryParamsRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.QueryParamsResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.QueryParamsResponse")]
 pub struct QueryParamsResponse {
     /// params defines the parameters of the module.
     #[prost(message, optional, tag = "1")]
@@ -332,8 +335,11 @@ pub struct QueryParamsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.AssetTypeRequest")]
-#[query(path = "/osmosis.superfluid.Query/AssetType", reponse_type = AssetTypeResponse)]
+#[proto_message(type_url = "/osmosis.superfluid.AssetTypeRequest")]
+#[proto_query(
+    path = "/osmosis.superfluid.Query/AssetType",
+    reponse_type = AssetTypeResponse
+)]
 pub struct AssetTypeRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -347,7 +353,7 @@ pub struct AssetTypeRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.AssetTypeResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.AssetTypeResponse")]
 pub struct AssetTypeResponse {
     #[prost(enumeration = "SuperfluidAssetType", tag = "1")]
     pub asset_type: i32,
@@ -361,8 +367,11 @@ pub struct AssetTypeResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.AllAssetsRequest")]
-#[query(path = "/osmosis.superfluid.Query/AllAssets", reponse_type = AllAssetsResponse)]
+#[proto_message(type_url = "/osmosis.superfluid.AllAssetsRequest")]
+#[proto_query(
+    path = "/osmosis.superfluid.Query/AllAssets",
+    reponse_type = AllAssetsResponse
+)]
 pub struct AllAssetsRequest {}
 #[derive(
     Clone,
@@ -373,7 +382,7 @@ pub struct AllAssetsRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.AllAssetsResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.AllAssetsResponse")]
 pub struct AllAssetsResponse {
     #[prost(message, repeated, tag = "1")]
     pub assets: ::prost::alloc::vec::Vec<SuperfluidAsset>,
@@ -387,8 +396,8 @@ pub struct AllAssetsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.AssetMultiplierRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.superfluid.AssetMultiplierRequest")]
+#[proto_query(
     path = "/osmosis.superfluid.Query/AssetMultiplier",
     reponse_type = AssetMultiplierResponse
 )]
@@ -405,7 +414,7 @@ pub struct AssetMultiplierRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.AssetMultiplierResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.AssetMultiplierResponse")]
 pub struct AssetMultiplierResponse {
     #[prost(message, optional, tag = "1")]
     pub osmo_equivalent_multiplier: ::core::option::Option<OsmoEquivalentMultiplierRecord>,
@@ -419,7 +428,7 @@ pub struct AssetMultiplierResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidIntermediaryAccountInfo")]
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidIntermediaryAccountInfo")]
 pub struct SuperfluidIntermediaryAccountInfo {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -439,8 +448,8 @@ pub struct SuperfluidIntermediaryAccountInfo {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.AllIntermediaryAccountsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.superfluid.AllIntermediaryAccountsRequest")]
+#[proto_query(
     path = "/osmosis.superfluid.Query/AllIntermediaryAccounts",
     reponse_type = AllIntermediaryAccountsResponse
 )]
@@ -457,7 +466,7 @@ pub struct AllIntermediaryAccountsRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.AllIntermediaryAccountsResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.AllIntermediaryAccountsResponse")]
 pub struct AllIntermediaryAccountsResponse {
     #[prost(message, repeated, tag = "1")]
     pub accounts: ::prost::alloc::vec::Vec<SuperfluidIntermediaryAccountInfo>,
@@ -474,8 +483,8 @@ pub struct AllIntermediaryAccountsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.ConnectedIntermediaryAccountRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.superfluid.ConnectedIntermediaryAccountRequest")]
+#[proto_query(
     path = "/osmosis.superfluid.Query/ConnectedIntermediaryAccount",
     reponse_type = ConnectedIntermediaryAccountResponse
 )]
@@ -492,7 +501,7 @@ pub struct ConnectedIntermediaryAccountRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.ConnectedIntermediaryAccountResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.ConnectedIntermediaryAccountResponse")]
 pub struct ConnectedIntermediaryAccountResponse {
     #[prost(message, optional, tag = "1")]
     pub account: ::core::option::Option<SuperfluidIntermediaryAccountInfo>,
@@ -506,8 +515,8 @@ pub struct ConnectedIntermediaryAccountResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.TotalSuperfluidDelegationsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.superfluid.TotalSuperfluidDelegationsRequest")]
+#[proto_query(
     path = "/osmosis.superfluid.Query/TotalSuperfluidDelegations",
     reponse_type = TotalSuperfluidDelegationsResponse
 )]
@@ -521,7 +530,7 @@ pub struct TotalSuperfluidDelegationsRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.TotalSuperfluidDelegationsResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.TotalSuperfluidDelegationsResponse")]
 pub struct TotalSuperfluidDelegationsResponse {
     #[prost(string, tag = "1")]
     pub total_delegations: ::prost::alloc::string::String,
@@ -535,8 +544,8 @@ pub struct TotalSuperfluidDelegationsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationAmountRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationAmountRequest")]
+#[proto_query(
     path = "/osmosis.superfluid.Query/SuperfluidDelegationAmount",
     reponse_type = SuperfluidDelegationAmountResponse
 )]
@@ -557,7 +566,7 @@ pub struct SuperfluidDelegationAmountRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationAmountResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationAmountResponse")]
 pub struct SuperfluidDelegationAmountResponse {
     #[prost(message, repeated, tag = "1")]
     pub amount: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -571,8 +580,8 @@ pub struct SuperfluidDelegationAmountResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorRequest")]
+#[proto_query(
     path = "/osmosis.superfluid.Query/SuperfluidDelegationsByDelegator",
     reponse_type = SuperfluidDelegationsByDelegatorResponse
 )]
@@ -589,7 +598,7 @@ pub struct SuperfluidDelegationsByDelegatorRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorResponse")]
 pub struct SuperfluidDelegationsByDelegatorResponse {
     #[prost(message, repeated, tag = "1")]
     pub superfluid_delegation_records: ::prost::alloc::vec::Vec<SuperfluidDelegationRecord>,
@@ -608,8 +617,8 @@ pub struct SuperfluidDelegationsByDelegatorResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorRequest")]
+#[proto_query(
     path = "/osmosis.superfluid.Query/SuperfluidUndelegationsByDelegator",
     reponse_type = SuperfluidUndelegationsByDelegatorResponse
 )]
@@ -628,7 +637,7 @@ pub struct SuperfluidUndelegationsByDelegatorRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorResponse")]
 pub struct SuperfluidUndelegationsByDelegatorResponse {
     #[prost(message, repeated, tag = "1")]
     pub superfluid_delegation_records: ::prost::alloc::vec::Vec<SuperfluidDelegationRecord>,
@@ -647,8 +656,8 @@ pub struct SuperfluidUndelegationsByDelegatorResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomRequest")]
+#[proto_query(
     path = "/osmosis.superfluid.Query/SuperfluidDelegationsByValidatorDenom",
     reponse_type = SuperfluidDelegationsByValidatorDenomResponse
 )]
@@ -667,7 +676,7 @@ pub struct SuperfluidDelegationsByValidatorDenomRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomResponse")]
+#[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomResponse")]
 pub struct SuperfluidDelegationsByValidatorDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub superfluid_delegation_records: ::prost::alloc::vec::Vec<SuperfluidDelegationRecord>,
@@ -681,8 +690,10 @@ pub struct SuperfluidDelegationsByValidatorDenomResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.EstimateSuperfluidDelegatedAmountByValidatorDenomRequest")]
-#[query(
+#[proto_message(
+    type_url = "/osmosis.superfluid.EstimateSuperfluidDelegatedAmountByValidatorDenomRequest"
+)]
+#[proto_query(
     path = "/osmosis.superfluid.Query/EstimateSuperfluidDelegatedAmountByValidatorDenom",
     reponse_type = EstimateSuperfluidDelegatedAmountByValidatorDenomResponse
 )]
@@ -701,7 +712,9 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.EstimateSuperfluidDelegatedAmountByValidatorDenomResponse")]
+#[proto_message(
+    type_url = "/osmosis.superfluid.EstimateSuperfluidDelegatedAmountByValidatorDenomResponse"
+)]
 pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub total_delegated_coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -716,7 +729,7 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.GenesisState")]
+#[proto_message(type_url = "/osmosis.superfluid.GenesisState")]
 pub struct GenesisState {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,

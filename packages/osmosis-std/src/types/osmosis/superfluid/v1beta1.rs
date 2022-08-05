@@ -10,7 +10,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.v1beta1.SetSuperfluidAssetsProposal")]
+#[proto_message(type_url = "/osmosis.superfluid.v1beta1.SetSuperfluidAssetsProposal")]
 pub struct SetSuperfluidAssetsProposal {
     #[prost(string, tag = "1")]
     pub title: ::prost::alloc::string::String,
@@ -30,7 +30,7 @@ pub struct SetSuperfluidAssetsProposal {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.superfluid.v1beta1.RemoveSuperfluidAssetsProposal")]
+#[proto_message(type_url = "/osmosis.superfluid.v1beta1.RemoveSuperfluidAssetsProposal")]
 pub struct RemoveSuperfluidAssetsProposal {
     #[prost(string, tag = "1")]
     pub title: ::prost::alloc::string::String,

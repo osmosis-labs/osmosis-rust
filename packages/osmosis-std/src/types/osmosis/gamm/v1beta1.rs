@@ -19,7 +19,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.SmoothWeightChangeParams")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.SmoothWeightChangeParams")]
 pub struct SmoothWeightChangeParams {
     /// The start time for beginning the weight change.
     /// If a parameter change / pool instantiation leaves this blank,
@@ -64,7 +64,7 @@ pub struct SmoothWeightChangeParams {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.PoolParams")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.PoolParams")]
 pub struct PoolParams {
     #[prost(string, tag = "1")]
     pub swap_fee: ::prost::alloc::string::String,
@@ -86,7 +86,7 @@ pub struct PoolParams {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.PoolAsset")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.PoolAsset")]
 pub struct PoolAsset {
     /// Coins we are talking about,
     /// the denomination must be unique amongst all PoolAssets for this pool.
@@ -105,7 +105,7 @@ pub struct PoolAsset {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.Pool")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.Pool")]
 pub struct Pool {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
@@ -146,7 +146,7 @@ pub struct Pool {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgJoinPool")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgJoinPool")]
 pub struct MsgJoinPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -166,7 +166,7 @@ pub struct MsgJoinPool {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgJoinPoolResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgJoinPoolResponse")]
 pub struct MsgJoinPoolResponse {}
 /// ===================== MsgExitPool
 #[derive(
@@ -178,7 +178,7 @@ pub struct MsgJoinPoolResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgExitPool")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgExitPool")]
 pub struct MsgExitPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -198,7 +198,7 @@ pub struct MsgExitPool {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgExitPoolResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgExitPoolResponse")]
 pub struct MsgExitPoolResponse {}
 /// ===================== MsgSwapExactAmountIn
 #[derive(
@@ -210,7 +210,7 @@ pub struct MsgExitPoolResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.SwapAmountInRoute")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.SwapAmountInRoute")]
 pub struct SwapAmountInRoute {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
@@ -226,7 +226,7 @@ pub struct SwapAmountInRoute {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgSwapExactAmountIn")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgSwapExactAmountIn")]
 pub struct MsgSwapExactAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -246,7 +246,7 @@ pub struct MsgSwapExactAmountIn {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgSwapExactAmountInResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgSwapExactAmountInResponse")]
 pub struct MsgSwapExactAmountInResponse {
     #[prost(string, tag = "1")]
     pub token_out_amount: ::prost::alloc::string::String,
@@ -261,7 +261,7 @@ pub struct MsgSwapExactAmountInResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.SwapAmountOutRoute")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.SwapAmountOutRoute")]
 pub struct SwapAmountOutRoute {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
@@ -277,7 +277,7 @@ pub struct SwapAmountOutRoute {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgSwapExactAmountOut")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgSwapExactAmountOut")]
 pub struct MsgSwapExactAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -297,7 +297,7 @@ pub struct MsgSwapExactAmountOut {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgSwapExactAmountOutResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgSwapExactAmountOutResponse")]
 pub struct MsgSwapExactAmountOutResponse {
     #[prost(string, tag = "1")]
     pub token_in_amount: ::prost::alloc::string::String,
@@ -313,7 +313,7 @@ pub struct MsgSwapExactAmountOutResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgJoinSwapExternAmountIn")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgJoinSwapExternAmountIn")]
 pub struct MsgJoinSwapExternAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -337,7 +337,7 @@ pub struct MsgJoinSwapExternAmountIn {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgJoinSwapExternAmountInResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgJoinSwapExternAmountInResponse")]
 pub struct MsgJoinSwapExternAmountInResponse {
     #[prost(string, tag = "1")]
     pub share_out_amount: ::prost::alloc::string::String,
@@ -352,7 +352,7 @@ pub struct MsgJoinSwapExternAmountInResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgJoinSwapShareAmountOut")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgJoinSwapShareAmountOut")]
 pub struct MsgJoinSwapShareAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -374,7 +374,7 @@ pub struct MsgJoinSwapShareAmountOut {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgJoinSwapShareAmountOutResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgJoinSwapShareAmountOutResponse")]
 pub struct MsgJoinSwapShareAmountOutResponse {
     #[prost(string, tag = "1")]
     pub token_in_amount: ::prost::alloc::string::String,
@@ -389,7 +389,7 @@ pub struct MsgJoinSwapShareAmountOutResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgExitSwapShareAmountIn")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgExitSwapShareAmountIn")]
 pub struct MsgExitSwapShareAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -411,7 +411,7 @@ pub struct MsgExitSwapShareAmountIn {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgExitSwapShareAmountInResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgExitSwapShareAmountInResponse")]
 pub struct MsgExitSwapShareAmountInResponse {
     #[prost(string, tag = "1")]
     pub token_out_amount: ::prost::alloc::string::String,
@@ -426,7 +426,7 @@ pub struct MsgExitSwapShareAmountInResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgExitSwapExternAmountOut")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgExitSwapExternAmountOut")]
 pub struct MsgExitSwapExternAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -446,7 +446,7 @@ pub struct MsgExitSwapExternAmountOut {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.MsgExitSwapExternAmountOutResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgExitSwapExternAmountOutResponse")]
 pub struct MsgExitSwapExternAmountOutResponse {
     #[prost(string, tag = "1")]
     pub share_in_amount: ::prost::alloc::string::String,
@@ -461,8 +461,11 @@ pub struct MsgExitSwapExternAmountOutResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryPoolRequest")]
-#[query(path = "/osmosis.gamm.v1beta1.Query/Pool", reponse_type = QueryPoolResponse)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolRequest")]
+#[proto_query(
+    path = "/osmosis.gamm.v1beta1.Query/Pool",
+    reponse_type = QueryPoolResponse
+)]
 pub struct QueryPoolRequest {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
@@ -476,7 +479,7 @@ pub struct QueryPoolRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryPoolResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolResponse")]
 pub struct QueryPoolResponse {
     #[prost(message, optional, tag = "1")]
     pub pool: ::core::option::Option<crate::shim::Any>,
@@ -491,8 +494,11 @@ pub struct QueryPoolResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryPoolsRequest")]
-#[query(path = "/osmosis.gamm.v1beta1.Query/Pools", reponse_type = QueryPoolsResponse)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolsRequest")]
+#[proto_query(
+    path = "/osmosis.gamm.v1beta1.Query/Pools",
+    reponse_type = QueryPoolsResponse
+)]
 pub struct QueryPoolsRequest {
     /// pagination defines an optional pagination for the request.
     #[prost(message, optional, tag = "2")]
@@ -508,7 +514,7 @@ pub struct QueryPoolsRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryPoolsResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolsResponse")]
 pub struct QueryPoolsResponse {
     #[prost(message, repeated, tag = "1")]
     pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
@@ -527,8 +533,8 @@ pub struct QueryPoolsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryNumPoolsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryNumPoolsRequest")]
+#[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/NumPools",
     reponse_type = QueryNumPoolsResponse
 )]
@@ -542,7 +548,7 @@ pub struct QueryNumPoolsRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryNumPoolsResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryNumPoolsResponse")]
 pub struct QueryNumPoolsResponse {
     #[prost(uint64, tag = "1")]
     pub num_pools: u64,
@@ -557,8 +563,8 @@ pub struct QueryNumPoolsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryPoolParamsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolParamsRequest")]
+#[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/PoolParams",
     reponse_type = QueryPoolParamsResponse
 )]
@@ -575,7 +581,7 @@ pub struct QueryPoolParamsRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryPoolParamsResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolParamsResponse")]
 pub struct QueryPoolParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<crate::shim::Any>,
@@ -590,8 +596,8 @@ pub struct QueryPoolParamsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryTotalPoolLiquidityRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalPoolLiquidityRequest")]
+#[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/TotalPoolLiquidity",
     reponse_type = QueryTotalPoolLiquidityResponse
 )]
@@ -608,7 +614,7 @@ pub struct QueryTotalPoolLiquidityRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryTotalPoolLiquidityResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalPoolLiquidityResponse")]
 pub struct QueryTotalPoolLiquidityResponse {
     #[prost(message, repeated, tag = "1")]
     pub liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
@@ -623,8 +629,8 @@ pub struct QueryTotalPoolLiquidityResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryTotalSharesRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalSharesRequest")]
+#[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/TotalShares",
     reponse_type = QueryTotalSharesResponse
 )]
@@ -641,7 +647,7 @@ pub struct QueryTotalSharesRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryTotalSharesResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalSharesResponse")]
 pub struct QueryTotalSharesResponse {
     #[prost(message, optional, tag = "1")]
     pub total_shares: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
@@ -657,8 +663,8 @@ pub struct QueryTotalSharesResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QuerySpotPriceRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySpotPriceRequest")]
+#[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/SpotPrice",
     reponse_type = QuerySpotPriceResponse
 )]
@@ -681,7 +687,7 @@ pub struct QuerySpotPriceRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QuerySpotPriceResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySpotPriceResponse")]
 pub struct QuerySpotPriceResponse {
     /// String of the Dec. Ex) 10.203uatom
     #[prost(string, tag = "1")]
@@ -697,8 +703,8 @@ pub struct QuerySpotPriceResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountInRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountInRequest")]
+#[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/EstimateSwapExactAmountIn",
     reponse_type = QuerySwapExactAmountInResponse
 )]
@@ -721,7 +727,7 @@ pub struct QuerySwapExactAmountInRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountInResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountInResponse")]
 pub struct QuerySwapExactAmountInResponse {
     #[prost(string, tag = "1")]
     pub token_out_amount: ::prost::alloc::string::String,
@@ -736,8 +742,8 @@ pub struct QuerySwapExactAmountInResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountOutRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountOutRequest")]
+#[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/EstimateSwapExactAmountOut",
     reponse_type = QuerySwapExactAmountOutResponse
 )]
@@ -760,7 +766,7 @@ pub struct QuerySwapExactAmountOutRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountOutResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountOutResponse")]
 pub struct QuerySwapExactAmountOutResponse {
     #[prost(string, tag = "1")]
     pub token_in_amount: ::prost::alloc::string::String,
@@ -774,8 +780,8 @@ pub struct QuerySwapExactAmountOutResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryTotalLiquidityRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalLiquidityRequest")]
+#[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/TotalLiquidity",
     reponse_type = QueryTotalLiquidityResponse
 )]
@@ -789,7 +795,7 @@ pub struct QueryTotalLiquidityRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.QueryTotalLiquidityResponse")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalLiquidityResponse")]
 pub struct QueryTotalLiquidityResponse {
     #[prost(message, repeated, tag = "1")]
     pub liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
@@ -804,7 +810,7 @@ pub struct QueryTotalLiquidityResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.Params")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.Params")]
 pub struct Params {
     #[prost(message, repeated, tag = "1")]
     pub pool_creation_fee:
@@ -820,7 +826,7 @@ pub struct Params {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.v1beta1.GenesisState")]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.GenesisState")]
 pub struct GenesisState {
     #[prost(message, repeated, tag = "1")]
     pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,

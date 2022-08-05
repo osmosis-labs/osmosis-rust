@@ -2,7 +2,7 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, DeriveInput};
 
-#[proc_macro_derive(CosmwasmExt, attributes(proto, query))]
+#[proc_macro_derive(CosmwasmExt, attributes(proto_message, proto_query))]
 pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let ident = input.ident;
@@ -68,7 +68,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
 }
 
 fn get_type_url(attrs: &Vec<syn::Attribute>) -> proc_macro2::TokenStream {
-    let proto = get_attr("proto", attrs).and_then(|a| a.parse_meta().ok());
+    let proto = get_attr("proto_message", attrs).and_then(|a| a.parse_meta().ok());
 
     if let Some(syn::Meta::List(meta)) = proto.clone() {
         match meta.nested[0].clone() {

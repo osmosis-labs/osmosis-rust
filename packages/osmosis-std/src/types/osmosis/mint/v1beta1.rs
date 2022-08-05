@@ -9,7 +9,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.mint.v1beta1.Minter")]
+#[proto_message(type_url = "/osmosis.mint.v1beta1.Minter")]
 pub struct Minter {
     /// current epoch provisions
     #[prost(string, tag = "1")]
@@ -24,7 +24,7 @@ pub struct Minter {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.mint.v1beta1.WeightedAddress")]
+#[proto_message(type_url = "/osmosis.mint.v1beta1.WeightedAddress")]
 pub struct WeightedAddress {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
@@ -40,7 +40,7 @@ pub struct WeightedAddress {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.mint.v1beta1.DistributionProportions")]
+#[proto_message(type_url = "/osmosis.mint.v1beta1.DistributionProportions")]
 pub struct DistributionProportions {
     /// staking defines the proportion of the minted minted_denom that is to be
     /// allocated as staking rewards.
@@ -69,7 +69,7 @@ pub struct DistributionProportions {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.mint.v1beta1.Params")]
+#[proto_message(type_url = "/osmosis.mint.v1beta1.Params")]
 pub struct Params {
     /// type of coin to mint
     #[prost(string, tag = "1")]
@@ -106,8 +106,11 @@ pub struct Params {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.mint.v1beta1.QueryParamsRequest")]
-#[query(path = "/osmosis.mint.v1beta1.Query/Params", reponse_type = QueryParamsResponse)]
+#[proto_message(type_url = "/osmosis.mint.v1beta1.QueryParamsRequest")]
+#[proto_query(
+    path = "/osmosis.mint.v1beta1.Query/Params",
+    reponse_type = QueryParamsResponse
+)]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[derive(
@@ -119,7 +122,7 @@ pub struct QueryParamsRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.mint.v1beta1.QueryParamsResponse")]
+#[proto_message(type_url = "/osmosis.mint.v1beta1.QueryParamsResponse")]
 pub struct QueryParamsResponse {
     /// params defines the parameters of the module.
     #[prost(message, optional, tag = "1")]
@@ -136,8 +139,8 @@ pub struct QueryParamsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.mint.v1beta1.QueryEpochProvisionsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.mint.v1beta1.QueryEpochProvisionsRequest")]
+#[proto_query(
     path = "/osmosis.mint.v1beta1.Query/EpochProvisions",
     reponse_type = QueryEpochProvisionsResponse
 )]
@@ -153,7 +156,7 @@ pub struct QueryEpochProvisionsRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.mint.v1beta1.QueryEpochProvisionsResponse")]
+#[proto_message(type_url = "/osmosis.mint.v1beta1.QueryEpochProvisionsResponse")]
 pub struct QueryEpochProvisionsResponse {
     /// epoch_provisions is the current minting per epoch provisions value.
     #[prost(bytes = "vec", tag = "1")]
@@ -169,7 +172,7 @@ pub struct QueryEpochProvisionsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.mint.v1beta1.GenesisState")]
+#[proto_message(type_url = "/osmosis.mint.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// minter is a space for holding current rewards information.
     #[prost(message, optional, tag = "1")]

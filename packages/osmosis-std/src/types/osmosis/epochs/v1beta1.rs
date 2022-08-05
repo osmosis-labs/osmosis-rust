@@ -10,7 +10,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.epochs.v1beta1.EpochInfo")]
+#[proto_message(type_url = "/osmosis.epochs.v1beta1.EpochInfo")]
 pub struct EpochInfo {
     /// identifier is a unique reference to this particular timer.
     #[prost(string, tag = "1")]
@@ -70,7 +70,7 @@ pub struct EpochInfo {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.epochs.v1beta1.GenesisState")]
+#[proto_message(type_url = "/osmosis.epochs.v1beta1.GenesisState")]
 pub struct GenesisState {
     #[prost(message, repeated, tag = "1")]
     pub epochs: ::prost::alloc::vec::Vec<EpochInfo>,
@@ -84,8 +84,8 @@ pub struct GenesisState {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoRequest")]
+#[proto_query(
     path = "/osmosis.epochs.v1beta1.Query/EpochInfos",
     reponse_type = QueryEpochsInfoResponse
 )]
@@ -99,7 +99,7 @@ pub struct QueryEpochsInfoRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoResponse")]
+#[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoResponse")]
 pub struct QueryEpochsInfoResponse {
     #[prost(message, repeated, tag = "1")]
     pub epochs: ::prost::alloc::vec::Vec<EpochInfo>,
@@ -113,8 +113,8 @@ pub struct QueryEpochsInfoResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochRequest")]
+#[proto_query(
     path = "/osmosis.epochs.v1beta1.Query/CurrentEpoch",
     reponse_type = QueryCurrentEpochResponse
 )]
@@ -131,7 +131,7 @@ pub struct QueryCurrentEpochRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochResponse")]
+#[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochResponse")]
 pub struct QueryCurrentEpochResponse {
     #[prost(int64, tag = "1")]
     pub current_epoch: i64,

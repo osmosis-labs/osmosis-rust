@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.PoolParams")]
+#[proto_message(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.PoolParams")]
 pub struct PoolParams {
     #[prost(string, tag = "1")]
     pub swap_fee: ::prost::alloc::string::String,
@@ -29,7 +29,7 @@ pub struct PoolParams {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.Pool")]
+#[proto_message(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.Pool")]
 pub struct Pool {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
@@ -71,7 +71,7 @@ pub struct Pool {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPool")]
+#[proto_message(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPool")]
 pub struct MsgCreateStableswapPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -92,7 +92,9 @@ pub struct MsgCreateStableswapPool {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPoolResponse")]
+#[proto_message(
+    type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgCreateStableswapPoolResponse"
+)]
 pub struct MsgCreateStableswapPoolResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
@@ -106,7 +108,9 @@ pub struct MsgCreateStableswapPoolResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactors")]
+#[proto_message(
+    type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactors"
+)]
 pub struct MsgStableSwapAdjustScalingFactors {
     /// Sender must be the pool's scaling_factor_governor in order for the tx to
     /// succeed
@@ -126,7 +130,7 @@ pub struct MsgStableSwapAdjustScalingFactors {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(
+#[proto_message(
     type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactorsResponse"
 )]
 pub struct MsgStableSwapAdjustScalingFactorsResponse {}

@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.PeriodLock")]
+#[proto_message(type_url = "/osmosis.lockup.PeriodLock")]
 pub struct PeriodLock {
     #[prost(uint64, tag = "1")]
     pub id: u64,
@@ -33,7 +33,7 @@ pub struct PeriodLock {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.QueryCondition")]
+#[proto_message(type_url = "/osmosis.lockup.QueryCondition")]
 pub struct QueryCondition {
     /// type of lock query, ByLockDuration | ByLockTime
     #[prost(enumeration = "LockQueryType", tag = "1")]
@@ -71,7 +71,7 @@ pub struct QueryCondition {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.SyntheticLock")]
+#[proto_message(type_url = "/osmosis.lockup.SyntheticLock")]
 pub struct SyntheticLock {
     /// underlying native lockup id for this synthetic lockup
     #[prost(uint64, tag = "1")]
@@ -102,7 +102,7 @@ pub enum LockQueryType {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.MsgLockTokens")]
+#[proto_message(type_url = "/osmosis.lockup.MsgLockTokens")]
 pub struct MsgLockTokens {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -120,7 +120,7 @@ pub struct MsgLockTokens {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.MsgLockTokensResponse")]
+#[proto_message(type_url = "/osmosis.lockup.MsgLockTokensResponse")]
 pub struct MsgLockTokensResponse {
     #[prost(uint64, tag = "1")]
     pub id: u64,
@@ -134,7 +134,7 @@ pub struct MsgLockTokensResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.MsgBeginUnlockingAll")]
+#[proto_message(type_url = "/osmosis.lockup.MsgBeginUnlockingAll")]
 pub struct MsgBeginUnlockingAll {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -148,7 +148,7 @@ pub struct MsgBeginUnlockingAll {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.MsgBeginUnlockingAllResponse")]
+#[proto_message(type_url = "/osmosis.lockup.MsgBeginUnlockingAllResponse")]
 pub struct MsgBeginUnlockingAllResponse {
     #[prost(message, repeated, tag = "1")]
     pub unlocks: ::prost::alloc::vec::Vec<PeriodLock>,
@@ -162,7 +162,7 @@ pub struct MsgBeginUnlockingAllResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.MsgBeginUnlocking")]
+#[proto_message(type_url = "/osmosis.lockup.MsgBeginUnlocking")]
 pub struct MsgBeginUnlocking {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -181,7 +181,7 @@ pub struct MsgBeginUnlocking {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.MsgBeginUnlockingResponse")]
+#[proto_message(type_url = "/osmosis.lockup.MsgBeginUnlockingResponse")]
 pub struct MsgBeginUnlockingResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
@@ -197,7 +197,7 @@ pub struct MsgBeginUnlockingResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.MsgExtendLockup")]
+#[proto_message(type_url = "/osmosis.lockup.MsgExtendLockup")]
 pub struct MsgExtendLockup {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -217,7 +217,7 @@ pub struct MsgExtendLockup {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.MsgExtendLockupResponse")]
+#[proto_message(type_url = "/osmosis.lockup.MsgExtendLockupResponse")]
 pub struct MsgExtendLockupResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
@@ -231,8 +231,8 @@ pub struct MsgExtendLockupResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.ModuleBalanceRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.ModuleBalanceRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/ModuleBalance",
     reponse_type = ModuleBalanceResponse
 )]
@@ -246,7 +246,7 @@ pub struct ModuleBalanceRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.ModuleBalanceResponse")]
+#[proto_message(type_url = "/osmosis.lockup.ModuleBalanceResponse")]
 pub struct ModuleBalanceResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -260,8 +260,8 @@ pub struct ModuleBalanceResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.ModuleLockedAmountRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.ModuleLockedAmountRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/ModuleLockedAmount",
     reponse_type = ModuleLockedAmountResponse
 )]
@@ -275,7 +275,7 @@ pub struct ModuleLockedAmountRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.ModuleLockedAmountResponse")]
+#[proto_message(type_url = "/osmosis.lockup.ModuleLockedAmountResponse")]
 pub struct ModuleLockedAmountResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -289,8 +289,8 @@ pub struct ModuleLockedAmountResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountUnlockableCoinsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockableCoinsRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountUnlockableCoins",
     reponse_type = AccountUnlockableCoinsResponse
 )]
@@ -307,7 +307,7 @@ pub struct AccountUnlockableCoinsRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountUnlockableCoinsResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockableCoinsResponse")]
 pub struct AccountUnlockableCoinsResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -321,8 +321,8 @@ pub struct AccountUnlockableCoinsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountUnlockingCoinsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockingCoinsRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountUnlockingCoins",
     reponse_type = AccountUnlockingCoinsResponse
 )]
@@ -339,7 +339,7 @@ pub struct AccountUnlockingCoinsRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountUnlockingCoinsResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockingCoinsResponse")]
 pub struct AccountUnlockingCoinsResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -353,8 +353,8 @@ pub struct AccountUnlockingCoinsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedCoinsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedCoinsRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedCoins",
     reponse_type = AccountLockedCoinsResponse
 )]
@@ -371,7 +371,7 @@ pub struct AccountLockedCoinsRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedCoinsResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedCoinsResponse")]
 pub struct AccountLockedCoinsResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -385,8 +385,8 @@ pub struct AccountLockedCoinsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedPastTimeRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedPastTime",
     reponse_type = AccountLockedPastTimeResponse
 )]
@@ -405,7 +405,7 @@ pub struct AccountLockedPastTimeRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedPastTimeResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeResponse")]
 pub struct AccountLockedPastTimeResponse {
     #[prost(message, repeated, tag = "1")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
@@ -419,8 +419,8 @@ pub struct AccountLockedPastTimeResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedPastTimeNotUnlockingOnly",
     reponse_type = AccountLockedPastTimeNotUnlockingOnlyResponse
 )]
@@ -439,7 +439,7 @@ pub struct AccountLockedPastTimeNotUnlockingOnlyRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyResponse")]
 pub struct AccountLockedPastTimeNotUnlockingOnlyResponse {
     #[prost(message, repeated, tag = "1")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
@@ -453,8 +453,8 @@ pub struct AccountLockedPastTimeNotUnlockingOnlyResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountUnlockedBeforeTime",
     reponse_type = AccountUnlockedBeforeTimeResponse
 )]
@@ -473,7 +473,7 @@ pub struct AccountUnlockedBeforeTimeRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeResponse")]
 pub struct AccountUnlockedBeforeTimeResponse {
     #[prost(message, repeated, tag = "1")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
@@ -487,8 +487,8 @@ pub struct AccountUnlockedBeforeTimeResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedPastTimeDenom",
     reponse_type = AccountLockedPastTimeDenomResponse
 )]
@@ -509,7 +509,7 @@ pub struct AccountLockedPastTimeDenomRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomResponse")]
 pub struct AccountLockedPastTimeDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
@@ -523,8 +523,11 @@ pub struct AccountLockedPastTimeDenomResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.LockedDenomRequest")]
-#[query(path = "/osmosis.lockup.Query/LockedDenom", reponse_type = LockedDenomResponse)]
+#[proto_message(type_url = "/osmosis.lockup.LockedDenomRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/LockedDenom",
+    reponse_type = LockedDenomResponse
+)]
 pub struct LockedDenomRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -540,7 +543,7 @@ pub struct LockedDenomRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.LockedDenomResponse")]
+#[proto_message(type_url = "/osmosis.lockup.LockedDenomResponse")]
 pub struct LockedDenomResponse {
     #[prost(string, tag = "1")]
     pub amount: ::prost::alloc::string::String,
@@ -554,8 +557,8 @@ pub struct LockedDenomResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.LockedRequest")]
-#[query(path = "/osmosis.lockup.Query/LockedByID", reponse_type = LockedResponse)]
+#[proto_message(type_url = "/osmosis.lockup.LockedRequest")]
+#[proto_query(path = "/osmosis.lockup.Query/LockedByID", reponse_type = LockedResponse)]
 pub struct LockedRequest {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
@@ -569,7 +572,7 @@ pub struct LockedRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.LockedResponse")]
+#[proto_message(type_url = "/osmosis.lockup.LockedResponse")]
 pub struct LockedResponse {
     #[prost(message, optional, tag = "1")]
     pub lock: ::core::option::Option<PeriodLock>,
@@ -583,7 +586,7 @@ pub struct LockedResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIdRequest")]
+#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIdRequest")]
 pub struct SyntheticLockupsByLockupIdRequest {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
@@ -597,7 +600,7 @@ pub struct SyntheticLockupsByLockupIdRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIdResponse")]
+#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIdResponse")]
 pub struct SyntheticLockupsByLockupIdResponse {
     #[prost(message, repeated, tag = "1")]
     pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
@@ -611,8 +614,8 @@ pub struct SyntheticLockupsByLockupIdResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedLongerDurationRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedLongerDuration",
     reponse_type = AccountLockedLongerDurationResponse
 )]
@@ -631,7 +634,7 @@ pub struct AccountLockedLongerDurationRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedLongerDurationResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationResponse")]
 pub struct AccountLockedLongerDurationResponse {
     #[prost(message, repeated, tag = "1")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
@@ -645,8 +648,8 @@ pub struct AccountLockedLongerDurationResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedDurationRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedDurationRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedDuration",
     reponse_type = AccountLockedDurationResponse
 )]
@@ -665,7 +668,7 @@ pub struct AccountLockedDurationRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedDurationResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedDurationResponse")]
 pub struct AccountLockedDurationResponse {
     #[prost(message, repeated, tag = "1")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
@@ -679,8 +682,8 @@ pub struct AccountLockedDurationResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedLongerDurationNotUnlockingOnly",
     reponse_type = AccountLockedLongerDurationNotUnlockingOnlyResponse
 )]
@@ -699,7 +702,7 @@ pub struct AccountLockedLongerDurationNotUnlockingOnlyRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyResponse")]
 pub struct AccountLockedLongerDurationNotUnlockingOnlyResponse {
     #[prost(message, repeated, tag = "1")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
@@ -713,8 +716,8 @@ pub struct AccountLockedLongerDurationNotUnlockingOnlyResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomRequest")]
+#[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedLongerDurationDenom",
     reponse_type = AccountLockedLongerDurationDenomResponse
 )]
@@ -735,7 +738,7 @@ pub struct AccountLockedLongerDurationDenomRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomResponse")]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomResponse")]
 pub struct AccountLockedLongerDurationDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
@@ -750,7 +753,7 @@ pub struct AccountLockedLongerDurationDenomResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.lockup.GenesisState")]
+#[proto_message(type_url = "/osmosis.lockup.GenesisState")]
 pub struct GenesisState {
     #[prost(uint64, tag = "1")]
     pub last_lock_id: u64,

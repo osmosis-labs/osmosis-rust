@@ -9,7 +9,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.poolmodels.balancer.v1beta1.MsgCreateBalancerPool")]
+#[proto_message(type_url = "/osmosis.gamm.poolmodels.balancer.v1beta1.MsgCreateBalancerPool")]
 pub struct MsgCreateBalancerPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
@@ -29,7 +29,9 @@ pub struct MsgCreateBalancerPool {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.gamm.poolmodels.balancer.v1beta1.MsgCreateBalancerPoolResponse")]
+#[proto_message(
+    type_url = "/osmosis.gamm.poolmodels.balancer.v1beta1.MsgCreateBalancerPoolResponse"
+)]
 pub struct MsgCreateBalancerPoolResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,

@@ -521,7 +521,7 @@ fn append_attrs(
         .join(".");
     attrs.append(&mut vec![
         syn::parse_quote! { #[derive(serde::Serialize, serde::Deserialize, schemars::JsonSchema, CosmwasmExt)] },
-        syn::parse_quote! { #[proto(type_url = #type_url)] },
+        syn::parse_quote! { #[proto_message(type_url = #type_url)] },
     ]);
 
     if let Some(attr) = get_query_attr(src, ident, query_services) {
@@ -550,7 +550,7 @@ fn get_query_attr(
     let response_type = format_ident!("{}", response_type);
 
     let path = format!("/{}.Query/{}", package, method_name);
-    Some(syn::parse_quote! { #[query(path = #path, reponse_type = #response_type)] })
+    Some(syn::parse_quote! { #[proto_query(path = #path, reponse_type = #response_type)] })
 }
 
 fn get_type_url(src: &Path, ident: &Ident) -> String {

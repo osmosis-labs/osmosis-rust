@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.FeeToken")]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.FeeToken")]
 pub struct FeeToken {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -33,7 +33,7 @@ pub struct FeeToken {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.UpdateFeeTokenProposal")]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.UpdateFeeTokenProposal")]
 pub struct UpdateFeeTokenProposal {
     #[prost(string, tag = "1")]
     pub title: ::prost::alloc::string::String,
@@ -51,8 +51,8 @@ pub struct UpdateFeeTokenProposal {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.QueryFeeTokensRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryFeeTokensRequest")]
+#[proto_query(
     path = "/osmosis.txfees.v1beta1.Query/FeeTokens",
     reponse_type = QueryFeeTokensResponse
 )]
@@ -66,7 +66,7 @@ pub struct QueryFeeTokensRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.QueryFeeTokensResponse")]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryFeeTokensResponse")]
 pub struct QueryFeeTokensResponse {
     #[prost(message, repeated, tag = "1")]
     pub fee_tokens: ::prost::alloc::vec::Vec<FeeToken>,
@@ -82,8 +82,8 @@ pub struct QueryFeeTokensResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceRequest")]
+#[proto_query(
     path = "/osmosis.txfees.v1beta1.Query/DenomSpotPrice",
     reponse_type = QueryDenomSpotPriceResponse
 )]
@@ -102,7 +102,7 @@ pub struct QueryDenomSpotPriceRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceResponse")]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceResponse")]
 pub struct QueryDenomSpotPriceResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
@@ -118,8 +118,8 @@ pub struct QueryDenomSpotPriceResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdRequest")]
+#[proto_query(
     path = "/osmosis.txfees.v1beta1.Query/DenomPoolId",
     reponse_type = QueryDenomPoolIdResponse
 )]
@@ -136,7 +136,7 @@ pub struct QueryDenomPoolIdRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdResponse")]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdResponse")]
 pub struct QueryDenomPoolIdResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
@@ -150,8 +150,8 @@ pub struct QueryDenomPoolIdResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.QueryBaseDenomRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryBaseDenomRequest")]
+#[proto_query(
     path = "/osmosis.txfees.v1beta1.Query/BaseDenom",
     reponse_type = QueryBaseDenomResponse
 )]
@@ -165,7 +165,7 @@ pub struct QueryBaseDenomRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.QueryBaseDenomResponse")]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryBaseDenomResponse")]
 pub struct QueryBaseDenomResponse {
     #[prost(string, tag = "1")]
     pub base_denom: ::prost::alloc::string::String,
@@ -180,7 +180,7 @@ pub struct QueryBaseDenomResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.txfees.v1beta1.GenesisState")]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.GenesisState")]
 pub struct GenesisState {
     #[prost(string, tag = "1")]
     pub basedenom: ::prost::alloc::string::String,

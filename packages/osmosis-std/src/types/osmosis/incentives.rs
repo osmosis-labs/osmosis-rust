@@ -8,7 +8,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.Gauge")]
+#[proto_message(type_url = "/osmosis.incentives.Gauge")]
 pub struct Gauge {
     /// unique ID of a Gauge
     #[prost(uint64, tag = "1")]
@@ -47,7 +47,7 @@ pub struct Gauge {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.LockableDurationsInfo")]
+#[proto_message(type_url = "/osmosis.incentives.LockableDurationsInfo")]
 pub struct LockableDurationsInfo {
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
@@ -61,7 +61,7 @@ pub struct LockableDurationsInfo {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.MsgCreateGauge")]
+#[proto_message(type_url = "/osmosis.incentives.MsgCreateGauge")]
 pub struct MsgCreateGauge {
     /// flag to show if it's perpetual or multi-epoch
     /// distribution incentives by third party
@@ -91,7 +91,7 @@ pub struct MsgCreateGauge {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.MsgCreateGaugeResponse")]
+#[proto_message(type_url = "/osmosis.incentives.MsgCreateGaugeResponse")]
 pub struct MsgCreateGaugeResponse {}
 #[derive(
     Clone,
@@ -102,7 +102,7 @@ pub struct MsgCreateGaugeResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.MsgAddToGauge")]
+#[proto_message(type_url = "/osmosis.incentives.MsgAddToGauge")]
 pub struct MsgAddToGauge {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -120,7 +120,7 @@ pub struct MsgAddToGauge {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.MsgAddToGaugeResponse")]
+#[proto_message(type_url = "/osmosis.incentives.MsgAddToGaugeResponse")]
 pub struct MsgAddToGaugeResponse {}
 #[derive(
     Clone,
@@ -131,8 +131,8 @@ pub struct MsgAddToGaugeResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.ModuleToDistributeCoinsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.incentives.ModuleToDistributeCoinsRequest")]
+#[proto_query(
     path = "/osmosis.incentives.Query/ModuleToDistributeCoins",
     reponse_type = ModuleToDistributeCoinsResponse
 )]
@@ -146,7 +146,7 @@ pub struct ModuleToDistributeCoinsRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.ModuleToDistributeCoinsResponse")]
+#[proto_message(type_url = "/osmosis.incentives.ModuleToDistributeCoinsResponse")]
 pub struct ModuleToDistributeCoinsResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -160,8 +160,8 @@ pub struct ModuleToDistributeCoinsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.ModuleDistributedCoinsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.incentives.ModuleDistributedCoinsRequest")]
+#[proto_query(
     path = "/osmosis.incentives.Query/ModuleDistributedCoins",
     reponse_type = ModuleDistributedCoinsResponse
 )]
@@ -175,7 +175,7 @@ pub struct ModuleDistributedCoinsRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.ModuleDistributedCoinsResponse")]
+#[proto_message(type_url = "/osmosis.incentives.ModuleDistributedCoinsResponse")]
 pub struct ModuleDistributedCoinsResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -189,7 +189,7 @@ pub struct ModuleDistributedCoinsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.GaugeByIdRequest")]
+#[proto_message(type_url = "/osmosis.incentives.GaugeByIdRequest")]
 pub struct GaugeByIdRequest {
     #[prost(uint64, tag = "1")]
     pub id: u64,
@@ -203,7 +203,7 @@ pub struct GaugeByIdRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.GaugeByIdResponse")]
+#[proto_message(type_url = "/osmosis.incentives.GaugeByIdResponse")]
 pub struct GaugeByIdResponse {
     #[prost(message, optional, tag = "1")]
     pub gauge: ::core::option::Option<Gauge>,
@@ -217,8 +217,8 @@ pub struct GaugeByIdResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.GaugesRequest")]
-#[query(path = "/osmosis.incentives.Query/Gauges", reponse_type = GaugesResponse)]
+#[proto_message(type_url = "/osmosis.incentives.GaugesRequest")]
+#[proto_query(path = "/osmosis.incentives.Query/Gauges", reponse_type = GaugesResponse)]
 pub struct GaugesRequest {
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "1")]
@@ -233,7 +233,7 @@ pub struct GaugesRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.GaugesResponse")]
+#[proto_message(type_url = "/osmosis.incentives.GaugesResponse")]
 pub struct GaugesResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
@@ -251,8 +251,8 @@ pub struct GaugesResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.ActiveGaugesRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.incentives.ActiveGaugesRequest")]
+#[proto_query(
     path = "/osmosis.incentives.Query/ActiveGauges",
     reponse_type = ActiveGaugesResponse
 )]
@@ -270,7 +270,7 @@ pub struct ActiveGaugesRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.ActiveGaugesResponse")]
+#[proto_message(type_url = "/osmosis.incentives.ActiveGaugesResponse")]
 pub struct ActiveGaugesResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
@@ -288,8 +288,8 @@ pub struct ActiveGaugesResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.ActiveGaugesPerDenomRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.incentives.ActiveGaugesPerDenomRequest")]
+#[proto_query(
     path = "/osmosis.incentives.Query/ActiveGaugesPerDenom",
     reponse_type = ActiveGaugesPerDenomResponse
 )]
@@ -309,7 +309,7 @@ pub struct ActiveGaugesPerDenomRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.ActiveGaugesPerDenomResponse")]
+#[proto_message(type_url = "/osmosis.incentives.ActiveGaugesPerDenomResponse")]
 pub struct ActiveGaugesPerDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
@@ -327,8 +327,8 @@ pub struct ActiveGaugesPerDenomResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.UpcomingGaugesRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.incentives.UpcomingGaugesRequest")]
+#[proto_query(
     path = "/osmosis.incentives.Query/UpcomingGauges",
     reponse_type = UpcomingGaugesResponse
 )]
@@ -346,7 +346,7 @@ pub struct UpcomingGaugesRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.UpcomingGaugesResponse")]
+#[proto_message(type_url = "/osmosis.incentives.UpcomingGaugesResponse")]
 pub struct UpcomingGaugesResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
@@ -364,8 +364,8 @@ pub struct UpcomingGaugesResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.UpcomingGaugesPerDenomRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.incentives.UpcomingGaugesPerDenomRequest")]
+#[proto_query(
     path = "/osmosis.incentives.Query/UpcomingGaugesPerDenom",
     reponse_type = UpcomingGaugesPerDenomResponse
 )]
@@ -384,7 +384,7 @@ pub struct UpcomingGaugesPerDenomRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.UpcomingGaugesPerDenomResponse")]
+#[proto_message(type_url = "/osmosis.incentives.UpcomingGaugesPerDenomResponse")]
 pub struct UpcomingGaugesPerDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub upcoming_gauges: ::prost::alloc::vec::Vec<Gauge>,
@@ -401,8 +401,8 @@ pub struct UpcomingGaugesPerDenomResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.RewardsEstRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.incentives.RewardsEstRequest")]
+#[proto_query(
     path = "/osmosis.incentives.Query/RewardsEst",
     reponse_type = RewardsEstResponse
 )]
@@ -423,7 +423,7 @@ pub struct RewardsEstRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.RewardsEstResponse")]
+#[proto_message(type_url = "/osmosis.incentives.RewardsEstResponse")]
 pub struct RewardsEstResponse {
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -437,8 +437,8 @@ pub struct RewardsEstResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.QueryLockableDurationsRequest")]
-#[query(
+#[proto_message(type_url = "/osmosis.incentives.QueryLockableDurationsRequest")]
+#[proto_query(
     path = "/osmosis.incentives.Query/LockableDurations",
     reponse_type = QueryLockableDurationsResponse
 )]
@@ -452,7 +452,7 @@ pub struct QueryLockableDurationsRequest {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.QueryLockableDurationsResponse")]
+#[proto_message(type_url = "/osmosis.incentives.QueryLockableDurationsResponse")]
 pub struct QueryLockableDurationsResponse {
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
@@ -467,7 +467,7 @@ pub struct QueryLockableDurationsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.Params")]
+#[proto_message(type_url = "/osmosis.incentives.Params")]
 pub struct Params {
     /// distribution epoch identifier
     #[prost(string, tag = "1")]
@@ -483,7 +483,7 @@ pub struct Params {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto(type_url = "/osmosis.incentives.GenesisState")]
+#[proto_message(type_url = "/osmosis.incentives.GenesisState")]
 pub struct GenesisState {
     /// params defines all the parameters of the module
     #[prost(message, optional, tag = "1")]
