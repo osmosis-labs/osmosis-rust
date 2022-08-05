@@ -85,6 +85,10 @@ pub struct GenesisState {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoRequest")]
+#[query(
+    path = "/osmosis.epochs.v1beta1.Query/EpochInfos",
+    reponse_type = QueryEpochsInfoResponse
+)]
 pub struct QueryEpochsInfoRequest {}
 #[derive(
     Clone,
@@ -110,6 +114,10 @@ pub struct QueryEpochsInfoResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochRequest")]
+#[query(
+    path = "/osmosis.epochs.v1beta1.Query/CurrentEpoch",
+    reponse_type = QueryCurrentEpochResponse
+)]
 pub struct QueryCurrentEpochRequest {
     #[prost(string, tag = "1")]
     pub identifier: ::prost::alloc::string::String,

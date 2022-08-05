@@ -232,6 +232,10 @@ pub struct MsgExtendLockupResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.ModuleBalanceRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/ModuleBalance",
+    reponse_type = ModuleBalanceResponse
+)]
 pub struct ModuleBalanceRequest {}
 #[derive(
     Clone,
@@ -257,6 +261,10 @@ pub struct ModuleBalanceResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.ModuleLockedAmountRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/ModuleLockedAmount",
+    reponse_type = ModuleLockedAmountResponse
+)]
 pub struct ModuleLockedAmountRequest {}
 #[derive(
     Clone,
@@ -282,6 +290,10 @@ pub struct ModuleLockedAmountResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountUnlockableCoinsRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountUnlockableCoins",
+    reponse_type = AccountUnlockableCoinsResponse
+)]
 pub struct AccountUnlockableCoinsRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -310,6 +322,10 @@ pub struct AccountUnlockableCoinsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountUnlockingCoinsRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountUnlockingCoins",
+    reponse_type = AccountUnlockingCoinsResponse
+)]
 pub struct AccountUnlockingCoinsRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -338,6 +354,10 @@ pub struct AccountUnlockingCoinsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountLockedCoinsRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountLockedCoins",
+    reponse_type = AccountLockedCoinsResponse
+)]
 pub struct AccountLockedCoinsRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -366,6 +386,10 @@ pub struct AccountLockedCoinsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountLockedPastTimeRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountLockedPastTime",
+    reponse_type = AccountLockedPastTimeResponse
+)]
 pub struct AccountLockedPastTimeRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -396,6 +420,10 @@ pub struct AccountLockedPastTimeResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountLockedPastTimeNotUnlockingOnly",
+    reponse_type = AccountLockedPastTimeNotUnlockingOnlyResponse
+)]
 pub struct AccountLockedPastTimeNotUnlockingOnlyRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -426,6 +454,10 @@ pub struct AccountLockedPastTimeNotUnlockingOnlyResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountUnlockedBeforeTime",
+    reponse_type = AccountUnlockedBeforeTimeResponse
+)]
 pub struct AccountUnlockedBeforeTimeRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -456,6 +488,10 @@ pub struct AccountUnlockedBeforeTimeResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountLockedPastTimeDenom",
+    reponse_type = AccountLockedPastTimeDenomResponse
+)]
 pub struct AccountLockedPastTimeDenomRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -488,6 +524,7 @@ pub struct AccountLockedPastTimeDenomResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.LockedDenomRequest")]
+#[query(path = "/osmosis.lockup.Query/LockedDenom", reponse_type = LockedDenomResponse)]
 pub struct LockedDenomRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -518,6 +555,7 @@ pub struct LockedDenomResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.LockedRequest")]
+#[query(path = "/osmosis.lockup.Query/LockedByID", reponse_type = LockedResponse)]
 pub struct LockedRequest {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
@@ -574,6 +612,10 @@ pub struct SyntheticLockupsByLockupIdResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountLockedLongerDurationRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountLockedLongerDuration",
+    reponse_type = AccountLockedLongerDurationResponse
+)]
 pub struct AccountLockedLongerDurationRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -604,6 +646,10 @@ pub struct AccountLockedLongerDurationResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountLockedDurationRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountLockedDuration",
+    reponse_type = AccountLockedDurationResponse
+)]
 pub struct AccountLockedDurationRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -634,6 +680,10 @@ pub struct AccountLockedDurationResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountLockedLongerDurationNotUnlockingOnly",
+    reponse_type = AccountLockedLongerDurationNotUnlockingOnlyResponse
+)]
 pub struct AccountLockedLongerDurationNotUnlockingOnlyRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -664,6 +714,10 @@ pub struct AccountLockedLongerDurationNotUnlockingOnlyResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomRequest")]
+#[query(
+    path = "/osmosis.lockup.Query/AccountLockedLongerDurationDenom",
+    reponse_type = AccountLockedLongerDurationDenomResponse
+)]
 pub struct AccountLockedLongerDurationDenomRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,

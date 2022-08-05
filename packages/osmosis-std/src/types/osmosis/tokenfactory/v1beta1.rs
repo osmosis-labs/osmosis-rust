@@ -173,6 +173,10 @@ pub struct Params {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.tokenfactory.v1beta1.QueryParamsRequest")]
+#[query(
+    path = "/osmosis.tokenfactory.v1beta1.Query/Params",
+    reponse_type = QueryParamsResponse
+)]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[derive(
@@ -200,6 +204,10 @@ pub struct QueryParamsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.tokenfactory.v1beta1.QueryDenomAuthorityMetadataRequest")]
+#[query(
+    path = "/osmosis.tokenfactory.v1beta1.Query/DenomAuthorityMetadata",
+    reponse_type = QueryDenomAuthorityMetadataResponse
+)]
 pub struct QueryDenomAuthorityMetadataRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -228,6 +236,10 @@ pub struct QueryDenomAuthorityMetadataResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.tokenfactory.v1beta1.QueryDenomsFromCreatorRequest")]
+#[query(
+    path = "/osmosis.tokenfactory.v1beta1.Query/DenomsFromCreator",
+    reponse_type = QueryDenomsFromCreatorResponse
+)]
 pub struct QueryDenomsFromCreatorRequest {
     #[prost(string, tag = "1")]
     pub creator: ::prost::alloc::string::String,

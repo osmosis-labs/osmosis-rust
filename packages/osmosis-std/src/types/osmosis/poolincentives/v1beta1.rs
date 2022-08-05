@@ -123,6 +123,10 @@ pub struct UpdatePoolIncentivesProposal {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.poolincentives.v1beta1.QueryGaugeIdsRequest")]
+#[query(
+    path = "/osmosis.poolincentives.v1beta1.Query/GaugeIds",
+    reponse_type = QueryGaugeIdsResponse
+)]
 pub struct QueryGaugeIdsRequest {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
@@ -172,6 +176,10 @@ pub mod query_gauge_ids_response {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.poolincentives.v1beta1.QueryDistrInfoRequest")]
+#[query(
+    path = "/osmosis.poolincentives.v1beta1.Query/DistrInfo",
+    reponse_type = QueryDistrInfoResponse
+)]
 pub struct QueryDistrInfoRequest {}
 #[derive(
     Clone,
@@ -197,6 +205,10 @@ pub struct QueryDistrInfoResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.poolincentives.v1beta1.QueryParamsRequest")]
+#[query(
+    path = "/osmosis.poolincentives.v1beta1.Query/Params",
+    reponse_type = QueryParamsResponse
+)]
 pub struct QueryParamsRequest {}
 #[derive(
     Clone,
@@ -222,6 +234,10 @@ pub struct QueryParamsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.poolincentives.v1beta1.QueryLockableDurationsRequest")]
+#[query(
+    path = "/osmosis.poolincentives.v1beta1.Query/LockableDurations",
+    reponse_type = QueryLockableDurationsResponse
+)]
 pub struct QueryLockableDurationsRequest {}
 #[derive(
     Clone,
@@ -247,6 +263,10 @@ pub struct QueryLockableDurationsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.poolincentives.v1beta1.QueryIncentivizedPoolsRequest")]
+#[query(
+    path = "/osmosis.poolincentives.v1beta1.Query/IncentivizedPools",
+    reponse_type = QueryIncentivizedPoolsResponse
+)]
 pub struct QueryIncentivizedPoolsRequest {}
 #[derive(
     Clone,
@@ -290,6 +310,10 @@ pub struct QueryIncentivizedPoolsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.poolincentives.v1beta1.QueryExternalIncentiveGaugesRequest")]
+#[query(
+    path = "/osmosis.poolincentives.v1beta1.Query/ExternalIncentiveGauges",
+    reponse_type = QueryExternalIncentiveGaugesResponse
+)]
 pub struct QueryExternalIncentiveGaugesRequest {}
 #[derive(
     Clone,

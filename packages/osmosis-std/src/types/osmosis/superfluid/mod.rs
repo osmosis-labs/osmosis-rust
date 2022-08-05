@@ -306,6 +306,7 @@ pub struct Params {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.QueryParamsRequest")]
+#[query(path = "/osmosis.superfluid.Query/Params", reponse_type = QueryParamsResponse)]
 pub struct QueryParamsRequest {}
 #[derive(
     Clone,
@@ -332,6 +333,7 @@ pub struct QueryParamsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.AssetTypeRequest")]
+#[query(path = "/osmosis.superfluid.Query/AssetType", reponse_type = AssetTypeResponse)]
 pub struct AssetTypeRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -360,6 +362,7 @@ pub struct AssetTypeResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.AllAssetsRequest")]
+#[query(path = "/osmosis.superfluid.Query/AllAssets", reponse_type = AllAssetsResponse)]
 pub struct AllAssetsRequest {}
 #[derive(
     Clone,
@@ -385,6 +388,10 @@ pub struct AllAssetsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.AssetMultiplierRequest")]
+#[query(
+    path = "/osmosis.superfluid.Query/AssetMultiplier",
+    reponse_type = AssetMultiplierResponse
+)]
 pub struct AssetMultiplierRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -433,6 +440,10 @@ pub struct SuperfluidIntermediaryAccountInfo {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.AllIntermediaryAccountsRequest")]
+#[query(
+    path = "/osmosis.superfluid.Query/AllIntermediaryAccounts",
+    reponse_type = AllIntermediaryAccountsResponse
+)]
 pub struct AllIntermediaryAccountsRequest {
     #[prost(message, optional, tag = "1")]
     pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
@@ -464,6 +475,10 @@ pub struct AllIntermediaryAccountsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.ConnectedIntermediaryAccountRequest")]
+#[query(
+    path = "/osmosis.superfluid.Query/ConnectedIntermediaryAccount",
+    reponse_type = ConnectedIntermediaryAccountResponse
+)]
 pub struct ConnectedIntermediaryAccountRequest {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
@@ -492,6 +507,10 @@ pub struct ConnectedIntermediaryAccountResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.TotalSuperfluidDelegationsRequest")]
+#[query(
+    path = "/osmosis.superfluid.Query/TotalSuperfluidDelegations",
+    reponse_type = TotalSuperfluidDelegationsResponse
+)]
 pub struct TotalSuperfluidDelegationsRequest {}
 #[derive(
     Clone,
@@ -517,6 +536,10 @@ pub struct TotalSuperfluidDelegationsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationAmountRequest")]
+#[query(
+    path = "/osmosis.superfluid.Query/SuperfluidDelegationAmount",
+    reponse_type = SuperfluidDelegationAmountResponse
+)]
 pub struct SuperfluidDelegationAmountRequest {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -549,6 +572,10 @@ pub struct SuperfluidDelegationAmountResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorRequest")]
+#[query(
+    path = "/osmosis.superfluid.Query/SuperfluidDelegationsByDelegator",
+    reponse_type = SuperfluidDelegationsByDelegatorResponse
+)]
 pub struct SuperfluidDelegationsByDelegatorRequest {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -582,6 +609,10 @@ pub struct SuperfluidDelegationsByDelegatorResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorRequest")]
+#[query(
+    path = "/osmosis.superfluid.Query/SuperfluidUndelegationsByDelegator",
+    reponse_type = SuperfluidUndelegationsByDelegatorResponse
+)]
 pub struct SuperfluidUndelegationsByDelegatorRequest {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -617,6 +648,10 @@ pub struct SuperfluidUndelegationsByDelegatorResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomRequest")]
+#[query(
+    path = "/osmosis.superfluid.Query/SuperfluidDelegationsByValidatorDenom",
+    reponse_type = SuperfluidDelegationsByValidatorDenomResponse
+)]
 pub struct SuperfluidDelegationsByValidatorDenomRequest {
     #[prost(string, tag = "1")]
     pub validator_address: ::prost::alloc::string::String,
@@ -647,6 +682,10 @@ pub struct SuperfluidDelegationsByValidatorDenomResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.superfluid.EstimateSuperfluidDelegatedAmountByValidatorDenomRequest")]
+#[query(
+    path = "/osmosis.superfluid.Query/EstimateSuperfluidDelegatedAmountByValidatorDenom",
+    reponse_type = EstimateSuperfluidDelegatedAmountByValidatorDenomResponse
+)]
 pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
     #[prost(string, tag = "1")]
     pub validator_address: ::prost::alloc::string::String,

@@ -10,6 +10,7 @@ itertools = "0.10.3"
 prettyplease = "0.1.16"
 prost = "0.10"
 prost-build = "0.10"
+prost-types = "0.10"
 regex = "1"
 syn = {version = "1.0.98", features = ["full", "parsing"]}
 tonic = "0.7"

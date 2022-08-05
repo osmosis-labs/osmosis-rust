@@ -132,6 +132,10 @@ pub struct MsgAddToGaugeResponse {}
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.incentives.ModuleToDistributeCoinsRequest")]
+#[query(
+    path = "/osmosis.incentives.Query/ModuleToDistributeCoins",
+    reponse_type = ModuleToDistributeCoinsResponse
+)]
 pub struct ModuleToDistributeCoinsRequest {}
 #[derive(
     Clone,
@@ -157,6 +161,10 @@ pub struct ModuleToDistributeCoinsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.incentives.ModuleDistributedCoinsRequest")]
+#[query(
+    path = "/osmosis.incentives.Query/ModuleDistributedCoins",
+    reponse_type = ModuleDistributedCoinsResponse
+)]
 pub struct ModuleDistributedCoinsRequest {}
 #[derive(
     Clone,
@@ -210,6 +218,7 @@ pub struct GaugeByIdResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.incentives.GaugesRequest")]
+#[query(path = "/osmosis.incentives.Query/Gauges", reponse_type = GaugesResponse)]
 pub struct GaugesRequest {
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "1")]
@@ -243,6 +252,10 @@ pub struct GaugesResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.incentives.ActiveGaugesRequest")]
+#[query(
+    path = "/osmosis.incentives.Query/ActiveGauges",
+    reponse_type = ActiveGaugesResponse
+)]
 pub struct ActiveGaugesRequest {
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "1")]
@@ -276,6 +289,10 @@ pub struct ActiveGaugesResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.incentives.ActiveGaugesPerDenomRequest")]
+#[query(
+    path = "/osmosis.incentives.Query/ActiveGaugesPerDenom",
+    reponse_type = ActiveGaugesPerDenomResponse
+)]
 pub struct ActiveGaugesPerDenomRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -311,6 +328,10 @@ pub struct ActiveGaugesPerDenomResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.incentives.UpcomingGaugesRequest")]
+#[query(
+    path = "/osmosis.incentives.Query/UpcomingGauges",
+    reponse_type = UpcomingGaugesResponse
+)]
 pub struct UpcomingGaugesRequest {
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "1")]
@@ -344,6 +365,10 @@ pub struct UpcomingGaugesResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.incentives.UpcomingGaugesPerDenomRequest")]
+#[query(
+    path = "/osmosis.incentives.Query/UpcomingGaugesPerDenom",
+    reponse_type = UpcomingGaugesPerDenomResponse
+)]
 pub struct UpcomingGaugesPerDenomRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -377,6 +402,10 @@ pub struct UpcomingGaugesPerDenomResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.incentives.RewardsEstRequest")]
+#[query(
+    path = "/osmosis.incentives.Query/RewardsEst",
+    reponse_type = RewardsEstResponse
+)]
 pub struct RewardsEstRequest {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
@@ -409,6 +438,10 @@ pub struct RewardsEstResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.incentives.QueryLockableDurationsRequest")]
+#[query(
+    path = "/osmosis.incentives.Query/LockableDurations",
+    reponse_type = QueryLockableDurationsResponse
+)]
 pub struct QueryLockableDurationsRequest {}
 #[derive(
     Clone,

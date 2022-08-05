@@ -2,7 +2,7 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, DeriveInput};
 
-#[proc_macro_derive(CosmwasmExt, attributes(proto))]
+#[proc_macro_derive(CosmwasmExt, attributes(proto, query))]
 pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     let ident = input.ident;

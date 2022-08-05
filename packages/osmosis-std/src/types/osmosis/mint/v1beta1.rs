@@ -107,6 +107,7 @@ pub struct Params {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.mint.v1beta1.QueryParamsRequest")]
+#[query(path = "/osmosis.mint.v1beta1.Query/Params", reponse_type = QueryParamsResponse)]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[derive(
@@ -136,6 +137,10 @@ pub struct QueryParamsResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.mint.v1beta1.QueryEpochProvisionsRequest")]
+#[query(
+    path = "/osmosis.mint.v1beta1.Query/EpochProvisions",
+    reponse_type = QueryEpochProvisionsResponse
+)]
 pub struct QueryEpochProvisionsRequest {}
 /// QueryEpochProvisionsResponse is the response type for the
 /// Query/EpochProvisions RPC method.

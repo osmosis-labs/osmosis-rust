@@ -4,8 +4,11 @@
 //! This is based on the proto-compiler code in github.com/informalsystems/ibc-rs
 
 use itertools::Itertools;
+use prost::Message;
+use prost_types::{FileDescriptorSet, ServiceDescriptorProto};
 use regex::Regex;
 use std::{
+    collections::HashMap,
     env,
     ffi::OsStr,
     fs::{self, create_dir_all, remove_dir_all},
@@ -82,11 +85,15 @@ fn main() {
 
     fs::create_dir_all(&temp_osmosis_dir).unwrap();
 
-    update_submodules();
+    let args: Vec<String> = env::args().collect();
+
+    if args.iter().any(|arg| arg == "--update-deps") {
+        update_submodules();
+    }
 
     output_osmosis_version(&temp_osmosis_dir);
-    compile_osmosis_proto(&temp_osmosis_dir);
-    copy_generated_files(&temp_osmosis_dir, &proto_dir);
+    let query_services = compile_osmosis_proto(&temp_osmosis_dir);
+    copy_and_patch_generated_files(&temp_osmosis_dir, &proto_dir, query_services);
 
     generate_mod_file(&proto_dir);
 
@@ -170,10 +177,12 @@ fn output_osmosis_version(out_dir: &Path) {
     fs::write(path, OSMOSIS_REV).unwrap();
 }
 
-fn compile_osmosis_proto(out_dir: &Path) {
+fn compile_osmosis_proto(out_dir: &Path) -> HashMap<String, ServiceDescriptorProto> {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let osmosis_dir = root.join(OSMOSIS_DIR);
     let sdk_dir = root.join(COSMOS_SDK_DIR);
+
+    let descriptor_file = out_dir.join("descriptors.bin");
 
     let proto_includes_paths = [
         sdk_dir.join("proto"),
@@ -202,10 +211,37 @@ fn compile_osmosis_proto(out_dir: &Path) {
         .extern_path(".google.protobuf.Timestamp", "crate::shim::Timestamp")
         .extern_path(".google.protobuf.Duration", "crate::shim::Duration")
         .extern_path(".google.protobuf.Any", "crate::shim::Any")
+        .file_descriptor_set_path(&descriptor_file)
         .compile(&protos, &includes)
         .unwrap();
 
+    let descriptor_bytes = &std::fs::read(descriptor_file).unwrap()[..];
+
+    let descriptor = FileDescriptorSet::decode(descriptor_bytes).unwrap();
+
+    let query_services: HashMap<String, ServiceDescriptorProto> = descriptor
+        .file
+        .into_iter()
+        .filter_map(|f| {
+            let service = f
+                .service
+                .into_iter()
+                .find(|s| s.name == Some("Query".to_string()));
+
+            if let Some(service) = service {
+                Some((
+                    f.package.expect("Missing package name in file descriptor"),
+                    service,
+                ))
+            } else {
+                None
+            }
+        })
+        .collect();
+
     info!("=> Done!");
+
+    query_services
 }
 
 /// collect_protos walks every path in `proto_paths` and recursively locates all .proto
@@ -326,7 +362,11 @@ fn recur_gen_mod(for_dir: &Path, start_dir: &Path, paths: Vec<Vec<String>>, incl
     }
 }
 
-fn copy_generated_files(from_dir: &Path, to_dir: &Path) {
+fn copy_and_patch_generated_files(
+    from_dir: &Path,
+    to_dir: &Path,
+    query_services: HashMap<String, ServiceDescriptorProto>,
+) {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let to_dir = root.join(to_dir);
     info!("Copying generated files into '{}'...", to_dir.display());
@@ -345,7 +385,11 @@ fn copy_generated_files(from_dir: &Path, to_dir: &Path) {
         .map(|e| {
             let filename = e.file_name().to_os_string().to_str().unwrap().to_string();
             filenames.push(filename.clone());
-            copy_and_patch(e.path(), format!("{}/{}", to_dir.display(), &filename))
+            copy_and_patch(
+                e.path(),
+                format!("{}/{}", to_dir.display(), &filename),
+                &query_services,
+            )
         })
         .filter_map(|e| e.err())
         .collect::<Vec<_>>();
@@ -359,7 +403,11 @@ fn copy_generated_files(from_dir: &Path, to_dir: &Path) {
     }
 }
 
-fn copy_and_patch(src: &Path, dest: impl AsRef<Path>) -> io::Result<()> {
+fn copy_and_patch(
+    src: &Path,
+    dest: impl AsRef<Path>,
+    query_services: &HashMap<String, ServiceDescriptorProto>,
+) -> io::Result<()> {
     /// Regex substitutions to apply to the prost-generated output
     const REPLACEMENTS: &[(&str, &str)] = &[
         // Use `tendermint-proto` proto definitions
@@ -407,7 +455,7 @@ fn copy_and_patch(src: &Path, dest: impl AsRef<Path>) -> io::Result<()> {
     let file = syn::parse_file(&contents);
     if let Ok(file) = file {
         // only transform rust file (skipping `*_COMMIT` file)
-        let items = recur_append_attrs(file.items, src, &[]);
+        let items = recur_append_attrs(file.items, src, &[], query_services);
 
         contents = prettyplease::unparse(&File { items, ..file });
     }
@@ -415,12 +463,17 @@ fn copy_and_patch(src: &Path, dest: impl AsRef<Path>) -> io::Result<()> {
     fs::write(dest, &*contents)
 }
 
-fn recur_append_attrs(items: Vec<syn::Item>, src: &Path, ancestors: &[String]) -> Vec<syn::Item> {
+fn recur_append_attrs(
+    items: Vec<syn::Item>,
+    src: &Path,
+    ancestors: &[String],
+    query_services: &HashMap<String, ServiceDescriptorProto>,
+) -> Vec<syn::Item> {
     let mut items = items
         .into_iter()
         .map(|i| match i.clone() {
             syn::Item::Struct(mut s) => {
-                append_attrs(src, ancestors, &s.ident, &mut s.attrs);
+                append_attrs(src, ancestors, &s.ident, &mut s.attrs, query_services);
                 syn::Item::Struct(s)
             }
             syn::Item::Mod(m) => {
@@ -430,7 +483,12 @@ fn recur_append_attrs(items: Vec<syn::Item>, src: &Path, ancestors: &[String]) -
                     content: m.content.map(|(brace, items)| {
                         (
                             brace,
-                            recur_append_attrs(items, src, &[ancestors, &[parent]].concat()),
+                            recur_append_attrs(
+                                items,
+                                src,
+                                &[ancestors, &[parent]].concat(),
+                                query_services,
+                            ),
                         )
                     }),
                     ..m
@@ -449,7 +507,13 @@ fn recur_append_attrs(items: Vec<syn::Item>, src: &Path, ancestors: &[String]) -
     items
 }
 
-fn append_attrs(src: &Path, ancestors: &[String], ident: &Ident, attrs: &mut Vec<Attribute>) {
+fn append_attrs(
+    src: &Path,
+    ancestors: &[String],
+    ident: &Ident,
+    attrs: &mut Vec<Attribute>,
+    query_services: &HashMap<String, ServiceDescriptorProto>,
+) {
     let type_url = get_type_url(src, ident);
     let path: Vec<String> = type_url.split('.').map(|s| s.to_string()).collect();
     let type_url = [&path[..(path.len() - 1)], ancestors, &[ident.to_string()]]
@@ -459,6 +523,34 @@ fn append_attrs(src: &Path, ancestors: &[String], ident: &Ident, attrs: &mut Vec
         syn::parse_quote! { #[derive(serde::Serialize, serde::Deserialize, schemars::JsonSchema, CosmwasmExt)] },
         syn::parse_quote! { #[proto(type_url = #type_url)] },
     ]);
+
+    if let Some(attr) = get_query_attr(src, ident, query_services) {
+        attrs.append(&mut vec![attr])
+    }
+}
+
+fn get_query_attr(
+    src: &Path,
+    ident: &Ident,
+    query_services: &HashMap<String, ServiceDescriptorProto>,
+) -> Option<Attribute> {
+    let package = src.file_stem().unwrap().to_str().unwrap();
+
+    let service = query_services.get(package);
+
+    let method = service?.method.iter().find(|m| {
+        let input_type = (*m).input_type.clone().unwrap();
+        let input_type = input_type.split('.').last().unwrap();
+        *ident == input_type
+    });
+
+    let method_name = method?.name.clone().unwrap();
+    let response_type = method?.output_type.clone().unwrap();
+    let response_type = response_type.split('.').last().unwrap();
+    let response_type = format_ident!("{}", response_type);
+
+    let path = format!("/{}.Query/{}", package, method_name);
+    Some(syn::parse_quote! { #[query(path = #path, reponse_type = #response_type)] })
 }
 
 fn get_type_url(src: &Path, ident: &Ident) -> String {

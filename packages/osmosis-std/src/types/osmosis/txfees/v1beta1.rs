@@ -52,6 +52,10 @@ pub struct UpdateFeeTokenProposal {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.txfees.v1beta1.QueryFeeTokensRequest")]
+#[query(
+    path = "/osmosis.txfees.v1beta1.Query/FeeTokens",
+    reponse_type = QueryFeeTokensResponse
+)]
 pub struct QueryFeeTokensRequest {}
 #[derive(
     Clone,
@@ -79,6 +83,10 @@ pub struct QueryFeeTokensResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceRequest")]
+#[query(
+    path = "/osmosis.txfees.v1beta1.Query/DenomSpotPrice",
+    reponse_type = QueryDenomSpotPriceResponse
+)]
 pub struct QueryDenomSpotPriceRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -111,6 +119,10 @@ pub struct QueryDenomSpotPriceResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdRequest")]
+#[query(
+    path = "/osmosis.txfees.v1beta1.Query/DenomPoolId",
+    reponse_type = QueryDenomPoolIdResponse
+)]
 pub struct QueryDenomPoolIdRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -139,6 +151,10 @@ pub struct QueryDenomPoolIdResponse {
     CosmwasmExt,
 )]
 #[proto(type_url = "/osmosis.txfees.v1beta1.QueryBaseDenomRequest")]
+#[query(
+    path = "/osmosis.txfees.v1beta1.Query/BaseDenom",
+    reponse_type = QueryBaseDenomResponse
+)]
 pub struct QueryBaseDenomRequest {}
 #[derive(
     Clone,
