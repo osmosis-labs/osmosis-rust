@@ -16,4 +16,5 @@ schemars = "0.8.8"
 prost-types = {version = "0.10.1", default-features = false}
 
 # for query
-serde = {version = "1.0", default-features = false, features = ["derive"]}
+serde = { version = "1.0.137", default-features = false, features = ["derive"] }
+wasm-bindgen = { version = "0.2", features = ["serde-serialize"] }
