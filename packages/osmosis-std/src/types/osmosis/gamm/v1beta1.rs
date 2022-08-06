@@ -464,7 +464,7 @@ pub struct MsgExitSwapExternAmountOutResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/Pool",
-    reponse_type = QueryPoolResponse
+    response_type = QueryPoolResponse
 )]
 pub struct QueryPoolRequest {
     #[prost(uint64, tag = "1")]
@@ -497,7 +497,7 @@ pub struct QueryPoolResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolsRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/Pools",
-    reponse_type = QueryPoolsResponse
+    response_type = QueryPoolsResponse
 )]
 pub struct QueryPoolsRequest {
     /// pagination defines an optional pagination for the request.
@@ -536,7 +536,7 @@ pub struct QueryPoolsResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryNumPoolsRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/NumPools",
-    reponse_type = QueryNumPoolsResponse
+    response_type = QueryNumPoolsResponse
 )]
 pub struct QueryNumPoolsRequest {}
 #[derive(
@@ -566,7 +566,7 @@ pub struct QueryNumPoolsResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolParamsRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/PoolParams",
-    reponse_type = QueryPoolParamsResponse
+    response_type = QueryPoolParamsResponse
 )]
 pub struct QueryPoolParamsRequest {
     #[prost(uint64, tag = "1")]
@@ -599,7 +599,7 @@ pub struct QueryPoolParamsResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalPoolLiquidityRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/TotalPoolLiquidity",
-    reponse_type = QueryTotalPoolLiquidityResponse
+    response_type = QueryTotalPoolLiquidityResponse
 )]
 pub struct QueryTotalPoolLiquidityRequest {
     #[prost(uint64, tag = "1")]
@@ -632,7 +632,7 @@ pub struct QueryTotalPoolLiquidityResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalSharesRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/TotalShares",
-    reponse_type = QueryTotalSharesResponse
+    response_type = QueryTotalSharesResponse
 )]
 pub struct QueryTotalSharesRequest {
     #[prost(uint64, tag = "1")]
@@ -666,7 +666,7 @@ pub struct QueryTotalSharesResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySpotPriceRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/SpotPrice",
-    reponse_type = QuerySpotPriceResponse
+    response_type = QuerySpotPriceResponse
 )]
 pub struct QuerySpotPriceRequest {
     #[prost(uint64, tag = "1")]
@@ -706,7 +706,7 @@ pub struct QuerySpotPriceResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountInRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/EstimateSwapExactAmountIn",
-    reponse_type = QuerySwapExactAmountInResponse
+    response_type = QuerySwapExactAmountInResponse
 )]
 pub struct QuerySwapExactAmountInRequest {
     #[prost(string, tag = "1")]
@@ -745,7 +745,7 @@ pub struct QuerySwapExactAmountInResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountOutRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/EstimateSwapExactAmountOut",
-    reponse_type = QuerySwapExactAmountOutResponse
+    response_type = QuerySwapExactAmountOutResponse
 )]
 pub struct QuerySwapExactAmountOutRequest {
     #[prost(string, tag = "1")]
@@ -783,7 +783,7 @@ pub struct QuerySwapExactAmountOutResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalLiquidityRequest")]
 #[proto_query(
     path = "/osmosis.gamm.v1beta1.Query/TotalLiquidity",
-    reponse_type = QueryTotalLiquidityResponse
+    response_type = QueryTotalLiquidityResponse
 )]
 pub struct QueryTotalLiquidityRequest {}
 #[derive(

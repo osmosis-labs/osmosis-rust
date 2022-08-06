@@ -308,7 +308,7 @@ pub struct Params {
 #[proto_message(type_url = "/osmosis.superfluid.QueryParamsRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/Params",
-    reponse_type = QueryParamsResponse
+    response_type = QueryParamsResponse
 )]
 pub struct QueryParamsRequest {}
 #[derive(
@@ -338,7 +338,7 @@ pub struct QueryParamsResponse {
 #[proto_message(type_url = "/osmosis.superfluid.AssetTypeRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/AssetType",
-    reponse_type = AssetTypeResponse
+    response_type = AssetTypeResponse
 )]
 pub struct AssetTypeRequest {
     #[prost(string, tag = "1")]
@@ -370,7 +370,7 @@ pub struct AssetTypeResponse {
 #[proto_message(type_url = "/osmosis.superfluid.AllAssetsRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/AllAssets",
-    reponse_type = AllAssetsResponse
+    response_type = AllAssetsResponse
 )]
 pub struct AllAssetsRequest {}
 #[derive(
@@ -399,7 +399,7 @@ pub struct AllAssetsResponse {
 #[proto_message(type_url = "/osmosis.superfluid.AssetMultiplierRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/AssetMultiplier",
-    reponse_type = AssetMultiplierResponse
+    response_type = AssetMultiplierResponse
 )]
 pub struct AssetMultiplierRequest {
     #[prost(string, tag = "1")]
@@ -451,7 +451,7 @@ pub struct SuperfluidIntermediaryAccountInfo {
 #[proto_message(type_url = "/osmosis.superfluid.AllIntermediaryAccountsRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/AllIntermediaryAccounts",
-    reponse_type = AllIntermediaryAccountsResponse
+    response_type = AllIntermediaryAccountsResponse
 )]
 pub struct AllIntermediaryAccountsRequest {
     #[prost(message, optional, tag = "1")]
@@ -486,7 +486,7 @@ pub struct AllIntermediaryAccountsResponse {
 #[proto_message(type_url = "/osmosis.superfluid.ConnectedIntermediaryAccountRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/ConnectedIntermediaryAccount",
-    reponse_type = ConnectedIntermediaryAccountResponse
+    response_type = ConnectedIntermediaryAccountResponse
 )]
 pub struct ConnectedIntermediaryAccountRequest {
     #[prost(uint64, tag = "1")]
@@ -518,7 +518,7 @@ pub struct ConnectedIntermediaryAccountResponse {
 #[proto_message(type_url = "/osmosis.superfluid.TotalSuperfluidDelegationsRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/TotalSuperfluidDelegations",
-    reponse_type = TotalSuperfluidDelegationsResponse
+    response_type = TotalSuperfluidDelegationsResponse
 )]
 pub struct TotalSuperfluidDelegationsRequest {}
 #[derive(
@@ -547,7 +547,7 @@ pub struct TotalSuperfluidDelegationsResponse {
 #[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationAmountRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/SuperfluidDelegationAmount",
-    reponse_type = SuperfluidDelegationAmountResponse
+    response_type = SuperfluidDelegationAmountResponse
 )]
 pub struct SuperfluidDelegationAmountRequest {
     #[prost(string, tag = "1")]
@@ -583,7 +583,7 @@ pub struct SuperfluidDelegationAmountResponse {
 #[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationsByDelegatorRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/SuperfluidDelegationsByDelegator",
-    reponse_type = SuperfluidDelegationsByDelegatorResponse
+    response_type = SuperfluidDelegationsByDelegatorResponse
 )]
 pub struct SuperfluidDelegationsByDelegatorRequest {
     #[prost(string, tag = "1")]
@@ -620,7 +620,7 @@ pub struct SuperfluidDelegationsByDelegatorResponse {
 #[proto_message(type_url = "/osmosis.superfluid.SuperfluidUndelegationsByDelegatorRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/SuperfluidUndelegationsByDelegator",
-    reponse_type = SuperfluidUndelegationsByDelegatorResponse
+    response_type = SuperfluidUndelegationsByDelegatorResponse
 )]
 pub struct SuperfluidUndelegationsByDelegatorRequest {
     #[prost(string, tag = "1")]
@@ -659,7 +659,7 @@ pub struct SuperfluidUndelegationsByDelegatorResponse {
 #[proto_message(type_url = "/osmosis.superfluid.SuperfluidDelegationsByValidatorDenomRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/SuperfluidDelegationsByValidatorDenom",
-    reponse_type = SuperfluidDelegationsByValidatorDenomResponse
+    response_type = SuperfluidDelegationsByValidatorDenomResponse
 )]
 pub struct SuperfluidDelegationsByValidatorDenomRequest {
     #[prost(string, tag = "1")]
@@ -695,7 +695,7 @@ pub struct SuperfluidDelegationsByValidatorDenomResponse {
 )]
 #[proto_query(
     path = "/osmosis.superfluid.Query/EstimateSuperfluidDelegatedAmountByValidatorDenom",
-    reponse_type = EstimateSuperfluidDelegatedAmountByValidatorDenomResponse
+    response_type = EstimateSuperfluidDelegatedAmountByValidatorDenomResponse
 )]
 pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
     #[prost(string, tag = "1")]

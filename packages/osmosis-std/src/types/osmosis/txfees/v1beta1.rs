@@ -54,7 +54,7 @@ pub struct UpdateFeeTokenProposal {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryFeeTokensRequest")]
 #[proto_query(
     path = "/osmosis.txfees.v1beta1.Query/FeeTokens",
-    reponse_type = QueryFeeTokensResponse
+    response_type = QueryFeeTokensResponse
 )]
 pub struct QueryFeeTokensRequest {}
 #[derive(
@@ -85,7 +85,7 @@ pub struct QueryFeeTokensResponse {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceRequest")]
 #[proto_query(
     path = "/osmosis.txfees.v1beta1.Query/DenomSpotPrice",
-    reponse_type = QueryDenomSpotPriceResponse
+    response_type = QueryDenomSpotPriceResponse
 )]
 pub struct QueryDenomSpotPriceRequest {
     #[prost(string, tag = "1")]
@@ -121,7 +121,7 @@ pub struct QueryDenomSpotPriceResponse {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdRequest")]
 #[proto_query(
     path = "/osmosis.txfees.v1beta1.Query/DenomPoolId",
-    reponse_type = QueryDenomPoolIdResponse
+    response_type = QueryDenomPoolIdResponse
 )]
 pub struct QueryDenomPoolIdRequest {
     #[prost(string, tag = "1")]
@@ -153,7 +153,7 @@ pub struct QueryDenomPoolIdResponse {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryBaseDenomRequest")]
 #[proto_query(
     path = "/osmosis.txfees.v1beta1.Query/BaseDenom",
-    reponse_type = QueryBaseDenomResponse
+    response_type = QueryBaseDenomResponse
 )]
 pub struct QueryBaseDenomRequest {}
 #[derive(

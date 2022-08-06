@@ -125,7 +125,7 @@ pub struct UpdatePoolIncentivesProposal {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.QueryGaugeIdsRequest")]
 #[proto_query(
     path = "/osmosis.poolincentives.v1beta1.Query/GaugeIds",
-    reponse_type = QueryGaugeIdsResponse
+    response_type = QueryGaugeIdsResponse
 )]
 pub struct QueryGaugeIdsRequest {
     #[prost(uint64, tag = "1")]
@@ -180,7 +180,7 @@ pub mod query_gauge_ids_response {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.QueryDistrInfoRequest")]
 #[proto_query(
     path = "/osmosis.poolincentives.v1beta1.Query/DistrInfo",
-    reponse_type = QueryDistrInfoResponse
+    response_type = QueryDistrInfoResponse
 )]
 pub struct QueryDistrInfoRequest {}
 #[derive(
@@ -209,7 +209,7 @@ pub struct QueryDistrInfoResponse {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.QueryParamsRequest")]
 #[proto_query(
     path = "/osmosis.poolincentives.v1beta1.Query/Params",
-    reponse_type = QueryParamsResponse
+    response_type = QueryParamsResponse
 )]
 pub struct QueryParamsRequest {}
 #[derive(
@@ -238,7 +238,7 @@ pub struct QueryParamsResponse {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.QueryLockableDurationsRequest")]
 #[proto_query(
     path = "/osmosis.poolincentives.v1beta1.Query/LockableDurations",
-    reponse_type = QueryLockableDurationsResponse
+    response_type = QueryLockableDurationsResponse
 )]
 pub struct QueryLockableDurationsRequest {}
 #[derive(
@@ -267,7 +267,7 @@ pub struct QueryLockableDurationsResponse {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.QueryIncentivizedPoolsRequest")]
 #[proto_query(
     path = "/osmosis.poolincentives.v1beta1.Query/IncentivizedPools",
-    reponse_type = QueryIncentivizedPoolsResponse
+    response_type = QueryIncentivizedPoolsResponse
 )]
 pub struct QueryIncentivizedPoolsRequest {}
 #[derive(
@@ -314,7 +314,7 @@ pub struct QueryIncentivizedPoolsResponse {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.QueryExternalIncentiveGaugesRequest")]
 #[proto_query(
     path = "/osmosis.poolincentives.v1beta1.Query/ExternalIncentiveGauges",
-    reponse_type = QueryExternalIncentiveGaugesResponse
+    response_type = QueryExternalIncentiveGaugesResponse
 )]
 pub struct QueryExternalIncentiveGaugesRequest {}
 #[derive(

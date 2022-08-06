@@ -109,7 +109,7 @@ pub struct Params {
 #[proto_message(type_url = "/osmosis.mint.v1beta1.QueryParamsRequest")]
 #[proto_query(
     path = "/osmosis.mint.v1beta1.Query/Params",
-    reponse_type = QueryParamsResponse
+    response_type = QueryParamsResponse
 )]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
@@ -142,7 +142,7 @@ pub struct QueryParamsResponse {
 #[proto_message(type_url = "/osmosis.mint.v1beta1.QueryEpochProvisionsRequest")]
 #[proto_query(
     path = "/osmosis.mint.v1beta1.Query/EpochProvisions",
-    reponse_type = QueryEpochProvisionsResponse
+    response_type = QueryEpochProvisionsResponse
 )]
 pub struct QueryEpochProvisionsRequest {}
 /// QueryEpochProvisionsResponse is the response type for the

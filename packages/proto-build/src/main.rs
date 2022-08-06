@@ -535,7 +535,6 @@ fn get_query_attr(
     query_services: &HashMap<String, ServiceDescriptorProto>,
 ) -> Option<Attribute> {
     let package = src.file_stem().unwrap().to_str().unwrap();
-
     let service = query_services.get(package);
 
     let method = service?.method.iter().find(|m| {
@@ -550,7 +549,7 @@ fn get_query_attr(
     let response_type = format_ident!("{}", response_type);
 
     let path = format!("/{}.Query/{}", package, method_name);
-    Some(syn::parse_quote! { #[proto_query(path = #path, reponse_type = #response_type)] })
+    Some(syn::parse_quote! { #[proto_query(path = #path, response_type = #response_type)] })
 }
 
 fn get_type_url(src: &Path, ident: &Ident) -> String {

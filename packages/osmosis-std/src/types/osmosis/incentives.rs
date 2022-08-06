@@ -134,7 +134,7 @@ pub struct MsgAddToGaugeResponse {}
 #[proto_message(type_url = "/osmosis.incentives.ModuleToDistributeCoinsRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/ModuleToDistributeCoins",
-    reponse_type = ModuleToDistributeCoinsResponse
+    response_type = ModuleToDistributeCoinsResponse
 )]
 pub struct ModuleToDistributeCoinsRequest {}
 #[derive(
@@ -163,7 +163,7 @@ pub struct ModuleToDistributeCoinsResponse {
 #[proto_message(type_url = "/osmosis.incentives.ModuleDistributedCoinsRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/ModuleDistributedCoins",
-    reponse_type = ModuleDistributedCoinsResponse
+    response_type = ModuleDistributedCoinsResponse
 )]
 pub struct ModuleDistributedCoinsRequest {}
 #[derive(
@@ -218,7 +218,7 @@ pub struct GaugeByIdResponse {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.incentives.GaugesRequest")]
-#[proto_query(path = "/osmosis.incentives.Query/Gauges", reponse_type = GaugesResponse)]
+#[proto_query(path = "/osmosis.incentives.Query/Gauges", response_type = GaugesResponse)]
 pub struct GaugesRequest {
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "1")]
@@ -254,7 +254,7 @@ pub struct GaugesResponse {
 #[proto_message(type_url = "/osmosis.incentives.ActiveGaugesRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/ActiveGauges",
-    reponse_type = ActiveGaugesResponse
+    response_type = ActiveGaugesResponse
 )]
 pub struct ActiveGaugesRequest {
     /// pagination defines an pagination for the request.
@@ -291,7 +291,7 @@ pub struct ActiveGaugesResponse {
 #[proto_message(type_url = "/osmosis.incentives.ActiveGaugesPerDenomRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/ActiveGaugesPerDenom",
-    reponse_type = ActiveGaugesPerDenomResponse
+    response_type = ActiveGaugesPerDenomResponse
 )]
 pub struct ActiveGaugesPerDenomRequest {
     #[prost(string, tag = "1")]
@@ -330,7 +330,7 @@ pub struct ActiveGaugesPerDenomResponse {
 #[proto_message(type_url = "/osmosis.incentives.UpcomingGaugesRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/UpcomingGauges",
-    reponse_type = UpcomingGaugesResponse
+    response_type = UpcomingGaugesResponse
 )]
 pub struct UpcomingGaugesRequest {
     /// pagination defines an pagination for the request.
@@ -367,7 +367,7 @@ pub struct UpcomingGaugesResponse {
 #[proto_message(type_url = "/osmosis.incentives.UpcomingGaugesPerDenomRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/UpcomingGaugesPerDenom",
-    reponse_type = UpcomingGaugesPerDenomResponse
+    response_type = UpcomingGaugesPerDenomResponse
 )]
 pub struct UpcomingGaugesPerDenomRequest {
     #[prost(string, tag = "1")]
@@ -404,7 +404,7 @@ pub struct UpcomingGaugesPerDenomResponse {
 #[proto_message(type_url = "/osmosis.incentives.RewardsEstRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/RewardsEst",
-    reponse_type = RewardsEstResponse
+    response_type = RewardsEstResponse
 )]
 pub struct RewardsEstRequest {
     #[prost(string, tag = "1")]
@@ -440,7 +440,7 @@ pub struct RewardsEstResponse {
 #[proto_message(type_url = "/osmosis.incentives.QueryLockableDurationsRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/LockableDurations",
-    reponse_type = QueryLockableDurationsResponse
+    response_type = QueryLockableDurationsResponse
 )]
 pub struct QueryLockableDurationsRequest {}
 #[derive(

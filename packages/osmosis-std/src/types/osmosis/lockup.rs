@@ -234,7 +234,7 @@ pub struct MsgExtendLockupResponse {
 #[proto_message(type_url = "/osmosis.lockup.ModuleBalanceRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/ModuleBalance",
-    reponse_type = ModuleBalanceResponse
+    response_type = ModuleBalanceResponse
 )]
 pub struct ModuleBalanceRequest {}
 #[derive(
@@ -263,7 +263,7 @@ pub struct ModuleBalanceResponse {
 #[proto_message(type_url = "/osmosis.lockup.ModuleLockedAmountRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/ModuleLockedAmount",
-    reponse_type = ModuleLockedAmountResponse
+    response_type = ModuleLockedAmountResponse
 )]
 pub struct ModuleLockedAmountRequest {}
 #[derive(
@@ -292,7 +292,7 @@ pub struct ModuleLockedAmountResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountUnlockableCoinsRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountUnlockableCoins",
-    reponse_type = AccountUnlockableCoinsResponse
+    response_type = AccountUnlockableCoinsResponse
 )]
 pub struct AccountUnlockableCoinsRequest {
     #[prost(string, tag = "1")]
@@ -324,7 +324,7 @@ pub struct AccountUnlockableCoinsResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountUnlockingCoinsRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountUnlockingCoins",
-    reponse_type = AccountUnlockingCoinsResponse
+    response_type = AccountUnlockingCoinsResponse
 )]
 pub struct AccountUnlockingCoinsRequest {
     #[prost(string, tag = "1")]
@@ -356,7 +356,7 @@ pub struct AccountUnlockingCoinsResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountLockedCoinsRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedCoins",
-    reponse_type = AccountLockedCoinsResponse
+    response_type = AccountLockedCoinsResponse
 )]
 pub struct AccountLockedCoinsRequest {
     #[prost(string, tag = "1")]
@@ -388,7 +388,7 @@ pub struct AccountLockedCoinsResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedPastTime",
-    reponse_type = AccountLockedPastTimeResponse
+    response_type = AccountLockedPastTimeResponse
 )]
 pub struct AccountLockedPastTimeRequest {
     #[prost(string, tag = "1")]
@@ -422,7 +422,7 @@ pub struct AccountLockedPastTimeResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedPastTimeNotUnlockingOnly",
-    reponse_type = AccountLockedPastTimeNotUnlockingOnlyResponse
+    response_type = AccountLockedPastTimeNotUnlockingOnlyResponse
 )]
 pub struct AccountLockedPastTimeNotUnlockingOnlyRequest {
     #[prost(string, tag = "1")]
@@ -456,7 +456,7 @@ pub struct AccountLockedPastTimeNotUnlockingOnlyResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountUnlockedBeforeTime",
-    reponse_type = AccountUnlockedBeforeTimeResponse
+    response_type = AccountUnlockedBeforeTimeResponse
 )]
 pub struct AccountUnlockedBeforeTimeRequest {
     #[prost(string, tag = "1")]
@@ -490,7 +490,7 @@ pub struct AccountUnlockedBeforeTimeResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedPastTimeDenom",
-    reponse_type = AccountLockedPastTimeDenomResponse
+    response_type = AccountLockedPastTimeDenomResponse
 )]
 pub struct AccountLockedPastTimeDenomRequest {
     #[prost(string, tag = "1")]
@@ -526,7 +526,7 @@ pub struct AccountLockedPastTimeDenomResponse {
 #[proto_message(type_url = "/osmosis.lockup.LockedDenomRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/LockedDenom",
-    reponse_type = LockedDenomResponse
+    response_type = LockedDenomResponse
 )]
 pub struct LockedDenomRequest {
     #[prost(string, tag = "1")]
@@ -558,7 +558,7 @@ pub struct LockedDenomResponse {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.LockedRequest")]
-#[proto_query(path = "/osmosis.lockup.Query/LockedByID", reponse_type = LockedResponse)]
+#[proto_query(path = "/osmosis.lockup.Query/LockedByID", response_type = LockedResponse)]
 pub struct LockedRequest {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
@@ -617,7 +617,7 @@ pub struct SyntheticLockupsByLockupIdResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedLongerDuration",
-    reponse_type = AccountLockedLongerDurationResponse
+    response_type = AccountLockedLongerDurationResponse
 )]
 pub struct AccountLockedLongerDurationRequest {
     #[prost(string, tag = "1")]
@@ -651,7 +651,7 @@ pub struct AccountLockedLongerDurationResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountLockedDurationRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedDuration",
-    reponse_type = AccountLockedDurationResponse
+    response_type = AccountLockedDurationResponse
 )]
 pub struct AccountLockedDurationRequest {
     #[prost(string, tag = "1")]
@@ -685,7 +685,7 @@ pub struct AccountLockedDurationResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedLongerDurationNotUnlockingOnly",
-    reponse_type = AccountLockedLongerDurationNotUnlockingOnlyResponse
+    response_type = AccountLockedLongerDurationNotUnlockingOnlyResponse
 )]
 pub struct AccountLockedLongerDurationNotUnlockingOnlyRequest {
     #[prost(string, tag = "1")]
@@ -719,7 +719,7 @@ pub struct AccountLockedLongerDurationNotUnlockingOnlyResponse {
 #[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/AccountLockedLongerDurationDenom",
-    reponse_type = AccountLockedLongerDurationDenomResponse
+    response_type = AccountLockedLongerDurationDenomResponse
 )]
 pub struct AccountLockedLongerDurationDenomRequest {
     #[prost(string, tag = "1")]

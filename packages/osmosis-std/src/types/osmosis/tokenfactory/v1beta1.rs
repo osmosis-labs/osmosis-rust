@@ -175,7 +175,7 @@ pub struct Params {
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.QueryParamsRequest")]
 #[proto_query(
     path = "/osmosis.tokenfactory.v1beta1.Query/Params",
-    reponse_type = QueryParamsResponse
+    response_type = QueryParamsResponse
 )]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
@@ -206,7 +206,7 @@ pub struct QueryParamsResponse {
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.QueryDenomAuthorityMetadataRequest")]
 #[proto_query(
     path = "/osmosis.tokenfactory.v1beta1.Query/DenomAuthorityMetadata",
-    reponse_type = QueryDenomAuthorityMetadataResponse
+    response_type = QueryDenomAuthorityMetadataResponse
 )]
 pub struct QueryDenomAuthorityMetadataRequest {
     #[prost(string, tag = "1")]
@@ -238,7 +238,7 @@ pub struct QueryDenomAuthorityMetadataResponse {
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.QueryDenomsFromCreatorRequest")]
 #[proto_query(
     path = "/osmosis.tokenfactory.v1beta1.Query/DenomsFromCreator",
-    reponse_type = QueryDenomsFromCreatorResponse
+    response_type = QueryDenomsFromCreatorResponse
 )]
 pub struct QueryDenomsFromCreatorRequest {
     #[prost(string, tag = "1")]

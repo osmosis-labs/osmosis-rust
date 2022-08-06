@@ -1,6 +1,26 @@
+use itertools::Itertools;
 use proc_macro::TokenStream;
+use proc_macro2::TokenTree;
 use quote::quote;
 use syn::{parse_macro_input, DeriveInput};
+
+macro_rules! match_kv_attr {
+    ($key:expr, $value_type:tt) => {
+        |tt| {
+            if let [TokenTree::Ident(key), TokenTree::Punct(eq), TokenTree::$value_type(value)] =
+                &tt[..]
+            {
+                if (key == $key) && (eq.as_char() == '=') {
+                    Some(quote!(#value))
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
+        }
+    };
+}
 
 #[proc_macro_derive(CosmwasmExt, attributes(proto_message, proto_query))]
 pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
@@ -13,10 +33,41 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
     // provided buffer had insufficient capacity. Message encoding is otherwise
     // infallible.
 
+    let (query_request_conversion, cosmwasm_query) = if get_attr("proto_query", &input.attrs)
+        .is_some()
+    {
+        let path = get_query_attrs(&input.attrs, match_kv_attr!("path", Literal));
+        let res = get_query_attrs(&input.attrs, match_kv_attr!("response_type", Ident));
+
+        let query_request_conversion = quote! {
+            impl From<#ident> for cosmwasm_std::QueryRequest<cosmwasm_std::Empty> {
+                fn from(msg: #ident) -> Self {
+                    cosmwasm_std::QueryRequest::<cosmwasm_std::Empty>::Stargate {
+                        path: #path.to_string(),
+                        data: msg.into(),
+                    }
+                }
+            }
+        };
+
+        let cosmwasm_query = quote! {
+            fn query(self, querier: cosmwasm_std::QuerierWrapper<cosmwasm_std::Empty>) -> cosmwasm_std::StdResult<#res> {
+                querier.query::<#res>(&self.into())
+            }
+        };
+
+        (query_request_conversion, cosmwasm_query)
+    } else {
+        (quote!(), quote!())
+    };
+
     quote! {
         impl #ident {
             pub const TYPE_URL: &'static str = #type_url;
+            #cosmwasm_query
         }
+
+        #query_request_conversion
 
         impl From<#ident> for cosmwasm_std::Binary {
             fn from(msg: #ident) -> Self {
@@ -33,15 +84,6 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
                 cosmwasm_std::CosmosMsg::<cosmwasm_std::Empty>::Stargate {
                     type_url: #type_url.to_string(),
                     value: msg.into(),
-                }
-            }
-        }
-
-        impl From<#ident> for cosmwasm_std::QueryRequest<cosmwasm_std::Empty> {
-            fn from(msg: #ident) -> Self {
-                cosmwasm_std::QueryRequest::<cosmwasm_std::Empty>::Stargate {
-                    path: #type_url.to_string(),
-                    data: msg.into(),
                 }
             }
         }
@@ -68,24 +110,63 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
 }
 
 fn get_type_url(attrs: &Vec<syn::Attribute>) -> proc_macro2::TokenStream {
-    let proto = get_attr("proto_message", attrs).and_then(|a| a.parse_meta().ok());
+    let proto_message = get_attr("proto_message", attrs).and_then(|a| a.parse_meta().ok());
 
-    if let Some(syn::Meta::List(meta)) = proto.clone() {
+    if let Some(syn::Meta::List(meta)) = proto_message.clone() {
         match meta.nested[0].clone() {
             syn::NestedMeta::Meta(syn::Meta::NameValue(meta)) => {
                 if meta.path.is_ident("type_url") {
                     match meta.lit {
                         syn::Lit::Str(s) => quote!(#s),
-                        _ => proto_attr_error(meta.lit),
+                        _ => proto_message_attr_error(meta.lit),
                     }
                 } else {
-                    proto_attr_error(meta.path)
+                    proto_message_attr_error(meta.path)
                 }
             }
-            t => proto_attr_error(t),
+            t => proto_message_attr_error(t),
         }
     } else {
-        proto_attr_error(proto)
+        proto_message_attr_error(proto_message)
+    }
+}
+
+fn get_query_attrs<F>(attrs: &Vec<syn::Attribute>, f: F) -> proc_macro2::TokenStream
+where
+    F: FnMut(&Vec<TokenTree>) -> Option<proc_macro2::TokenStream>,
+{
+    let proto_query = get_attr("proto_query", attrs);
+
+    if let Some(attr) = proto_query {
+        if attr.tokens.clone().into_iter().count() != 1 {
+            return proto_query_attr_error(proto_query);
+        }
+
+        if let Some(TokenTree::Group(group)) = attr.tokens.clone().into_iter().next() {
+            let kv_groups = group.stream().into_iter().group_by(|t| {
+                if let TokenTree::Punct(punct) = t {
+                    punct.as_char() != ','
+                } else {
+                    true
+                }
+            });
+            let mut key_values: Vec<Vec<TokenTree>> = vec![];
+
+            for (non_sep, g) in &kv_groups {
+                if non_sep {
+                    key_values.push(g.collect());
+                }
+            }
+
+            return key_values
+                .iter()
+                .find_map(f)
+                .unwrap_or_else(|| proto_query_attr_error(proto_query));
+        }
+
+        proto_query_attr_error(proto_query)
+    } else {
+        proto_query_attr_error(proto_query)
     }
 }
 
@@ -98,6 +179,15 @@ fn get_attr<'a>(attr_ident: &str, attrs: &'a Vec<syn::Attribute>) -> Option<&'a 
     None
 }
 
-fn proto_attr_error<T: quote::ToTokens>(tokens: T) -> proc_macro2::TokenStream {
-    syn::Error::new_spanned(tokens, "expected `proto(type_url = \"...\")`").to_compile_error()
+fn proto_message_attr_error<T: quote::ToTokens>(tokens: T) -> proc_macro2::TokenStream {
+    syn::Error::new_spanned(tokens, "expected `proto_message(type_url = \"...\")`")
+        .to_compile_error()
+}
+
+fn proto_query_attr_error<T: quote::ToTokens>(tokens: T) -> proc_macro2::TokenStream {
+    syn::Error::new_spanned(
+        tokens,
+        "expected `proto_query(path = \"...\", response_type = ...)`",
+    )
+    .to_compile_error()
 }

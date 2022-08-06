@@ -87,7 +87,7 @@ pub struct GenesisState {
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoRequest")]
 #[proto_query(
     path = "/osmosis.epochs.v1beta1.Query/EpochInfos",
-    reponse_type = QueryEpochsInfoResponse
+    response_type = QueryEpochsInfoResponse
 )]
 pub struct QueryEpochsInfoRequest {}
 #[derive(
@@ -116,7 +116,7 @@ pub struct QueryEpochsInfoResponse {
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochRequest")]
 #[proto_query(
     path = "/osmosis.epochs.v1beta1.Query/CurrentEpoch",
-    reponse_type = QueryCurrentEpochResponse
+    response_type = QueryCurrentEpochResponse
 )]
 pub struct QueryCurrentEpochRequest {
     #[prost(string, tag = "1")]
