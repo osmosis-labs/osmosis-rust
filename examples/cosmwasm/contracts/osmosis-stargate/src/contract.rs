@@ -1,10 +1,10 @@
 use std::convert::TryInto;
 
-#[cfg(not(feature = "library"))]
-use cosmwasm_std::entry_point;
 use cosmwasm_std::{
     CosmosMsg, DepsMut, Env, MessageInfo, Reply, Response, SubMsg, SubMsgResponse, SubMsgResult,
 };
+#[cfg(not(feature = "library"))]
+use cosmwasm_std::entry_point;
 use cw2::set_contract_version;
 use osmosis_std::types::cosmos::base::v1beta1::Coin;
 use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::{
@@ -122,6 +122,7 @@ pub fn try_create_denom(
         }
     };
 
+
     Ok(Response::new()
         .add_submessages(msgs)
         .add_attribute("method", "try_create_denom"))
@@ -132,7 +133,7 @@ pub fn reply(_deps: DepsMut, _env: Env, msg: Reply) -> Result<Response, Contract
     if msg.id == CREATE_POOL_REPLY_ID {
         if let SubMsgResult::Ok(SubMsgResponse { data: Some(b), .. }) = msg.result {
             // This is only for response deserialization demonstration purpose.
-            // `pool_id` can actually be retreived from `pool_created` event.
+            // `pool_id` can actually be retrieved from `pool_created` event.
             let res: MsgCreateBalancerPoolResponse = b.try_into().map_err(ContractError::Std)?;
             return Ok(Response::new().add_attribute("pool_id", format!("{}", res.pool_id)));
         }
