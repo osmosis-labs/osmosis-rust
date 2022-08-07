@@ -18,3 +18,6 @@ Cargo.lock
 .vscode
 node_modules
 .DS_Store
+
+# intellij
+.idea
