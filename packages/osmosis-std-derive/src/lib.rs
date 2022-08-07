@@ -61,7 +61,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
         (quote!(), quote!())
     };
 
-    quote! {
+    (quote! {
         impl #ident {
             pub const TYPE_URL: &'static str = #type_url;
             #cosmwasm_query
@@ -106,7 +106,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
                 })
             }
         }
-    }.into()
+    }).into()
 }
 
 fn get_type_url(attrs: &Vec<syn::Attribute>) -> proc_macro2::TokenStream {
