@@ -100,3 +100,25 @@ macro_rules! impl_prost_types_exact_conversion {
 impl_prost_types_exact_conversion! { Timestamp | seconds, nanos }
 impl_prost_types_exact_conversion! { Duration | seconds, nanos }
 impl_prost_types_exact_conversion! { Any | type_url, value }
+
+impl From<cosmwasm_std::Coin> for crate::types::cosmos::base::v1beta1::Coin {
+    fn from(cosmwasm_std::Coin { denom, amount }: cosmwasm_std::Coin) -> Self {
+        crate::types::cosmos::base::v1beta1::Coin {
+            denom,
+            amount: amount.into(),
+        }
+    }
+}
+
+impl TryFrom<crate::types::cosmos::base::v1beta1::Coin> for cosmwasm_std::Coin {
+    type Error = cosmwasm_std::StdError;
+
+    fn try_from(
+        crate::types::cosmos::base::v1beta1::Coin { denom, amount }: crate::types::cosmos::base::v1beta1::Coin,
+    ) -> cosmwasm_std::StdResult<Self> {
+        Ok(cosmwasm_std::Coin {
+            denom: denom.into(),
+            amount: amount.parse()?,
+        })
+    }
+}
