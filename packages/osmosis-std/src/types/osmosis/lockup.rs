@@ -587,6 +587,10 @@ pub struct LockedResponse {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIdRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/SyntheticLockupsByLockupID",
+    response_type = SyntheticLockupsByLockupIdResponse
+)]
 pub struct SyntheticLockupsByLockupIdRequest {
     #[prost(uint64, tag = "1")]
     pub lock_id: u64,
@@ -761,4 +765,108 @@ pub struct GenesisState {
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
     #[prost(message, repeated, tag = "3")]
     pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
+}
+pub struct LockupQuerierWrapper<'a> {
+    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+}
+impl<'a> LockupQuerierWrapper<'a> {
+    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+        Self { querier }
+    }
+    pub fn module_balance(
+        &self,
+        req: ModuleBalanceRequest,
+    ) -> Result<ModuleBalanceResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn module_locked_amount(
+        &self,
+        req: ModuleLockedAmountRequest,
+    ) -> Result<ModuleLockedAmountResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_unlockable_coins(
+        &self,
+        req: AccountUnlockableCoinsRequest,
+    ) -> Result<AccountUnlockableCoinsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_unlocking_coins(
+        &self,
+        req: AccountUnlockingCoinsRequest,
+    ) -> Result<AccountUnlockingCoinsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_locked_coins(
+        &self,
+        req: AccountLockedCoinsRequest,
+    ) -> Result<AccountLockedCoinsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_locked_past_time(
+        &self,
+        req: AccountLockedPastTimeRequest,
+    ) -> Result<AccountLockedPastTimeResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_locked_past_time_not_unlocking_only(
+        &self,
+        req: AccountLockedPastTimeNotUnlockingOnlyRequest,
+    ) -> Result<AccountLockedPastTimeNotUnlockingOnlyResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_unlocked_before_time(
+        &self,
+        req: AccountUnlockedBeforeTimeRequest,
+    ) -> Result<AccountUnlockedBeforeTimeResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_locked_past_time_denom(
+        &self,
+        req: AccountLockedPastTimeDenomRequest,
+    ) -> Result<AccountLockedPastTimeDenomResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn locked_denom(
+        &self,
+        req: LockedDenomRequest,
+    ) -> Result<LockedDenomResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn locked_by_id(
+        &self,
+        req: LockedRequest,
+    ) -> Result<LockedResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn synthetic_lockups_by_lockup_id(
+        &self,
+        req: SyntheticLockupsByLockupIdRequest,
+    ) -> Result<SyntheticLockupsByLockupIdResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_locked_longer_duration(
+        &self,
+        req: AccountLockedLongerDurationRequest,
+    ) -> Result<AccountLockedLongerDurationResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_locked_duration(
+        &self,
+        req: AccountLockedDurationRequest,
+    ) -> Result<AccountLockedDurationResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_locked_longer_duration_not_unlocking_only(
+        &self,
+        req: AccountLockedLongerDurationNotUnlockingOnlyRequest,
+    ) -> Result<AccountLockedLongerDurationNotUnlockingOnlyResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn account_locked_longer_duration_denom(
+        &self,
+        req: AccountLockedLongerDurationDenomRequest,
+    ) -> Result<AccountLockedLongerDurationDenomResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
 }

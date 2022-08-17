@@ -835,3 +835,68 @@ pub struct GenesisState {
     #[prost(message, optional, tag = "3")]
     pub params: ::core::option::Option<Params>,
 }
+pub struct GammQuerierWrapper<'a> {
+    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+}
+impl<'a> GammQuerierWrapper<'a> {
+    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+        Self { querier }
+    }
+    pub fn pools(
+        &self,
+        req: QueryPoolsRequest,
+    ) -> Result<QueryPoolsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn num_pools(
+        &self,
+        req: QueryNumPoolsRequest,
+    ) -> Result<QueryNumPoolsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn total_liquidity(
+        &self,
+        req: QueryTotalLiquidityRequest,
+    ) -> Result<QueryTotalLiquidityResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn pool(&self, req: QueryPoolRequest) -> Result<QueryPoolResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn pool_params(
+        &self,
+        req: QueryPoolParamsRequest,
+    ) -> Result<QueryPoolParamsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn total_pool_liquidity(
+        &self,
+        req: QueryTotalPoolLiquidityRequest,
+    ) -> Result<QueryTotalPoolLiquidityResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn total_shares(
+        &self,
+        req: QueryTotalSharesRequest,
+    ) -> Result<QueryTotalSharesResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn spot_price(
+        &self,
+        req: QuerySpotPriceRequest,
+    ) -> Result<QuerySpotPriceResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn estimate_swap_exact_amount_in(
+        &self,
+        req: QuerySwapExactAmountInRequest,
+    ) -> Result<QuerySwapExactAmountInResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn estimate_swap_exact_amount_out(
+        &self,
+        req: QuerySwapExactAmountOutRequest,
+    ) -> Result<QuerySwapExactAmountOutResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+}

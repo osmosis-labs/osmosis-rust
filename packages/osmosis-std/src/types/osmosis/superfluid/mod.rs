@@ -743,3 +743,84 @@ pub struct GenesisState {
     pub intemediary_account_connections:
         ::prost::alloc::vec::Vec<LockIdIntermediaryAccountConnection>,
 }
+pub struct SuperfluidQuerierWrapper<'a> {
+    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+}
+impl<'a> SuperfluidQuerierWrapper<'a> {
+    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+        Self { querier }
+    }
+    pub fn params(
+        &self,
+        req: QueryParamsRequest,
+    ) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn asset_type(
+        &self,
+        req: AssetTypeRequest,
+    ) -> Result<AssetTypeResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn all_assets(
+        &self,
+        req: AllAssetsRequest,
+    ) -> Result<AllAssetsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn asset_multiplier(
+        &self,
+        req: AssetMultiplierRequest,
+    ) -> Result<AssetMultiplierResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn all_intermediary_accounts(
+        &self,
+        req: AllIntermediaryAccountsRequest,
+    ) -> Result<AllIntermediaryAccountsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn connected_intermediary_account(
+        &self,
+        req: ConnectedIntermediaryAccountRequest,
+    ) -> Result<ConnectedIntermediaryAccountResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn total_superfluid_delegations(
+        &self,
+        req: TotalSuperfluidDelegationsRequest,
+    ) -> Result<TotalSuperfluidDelegationsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn superfluid_delegation_amount(
+        &self,
+        req: SuperfluidDelegationAmountRequest,
+    ) -> Result<SuperfluidDelegationAmountResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn superfluid_delegations_by_delegator(
+        &self,
+        req: SuperfluidDelegationsByDelegatorRequest,
+    ) -> Result<SuperfluidDelegationsByDelegatorResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn superfluid_undelegations_by_delegator(
+        &self,
+        req: SuperfluidUndelegationsByDelegatorRequest,
+    ) -> Result<SuperfluidUndelegationsByDelegatorResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn superfluid_delegations_by_validator_denom(
+        &self,
+        req: SuperfluidDelegationsByValidatorDenomRequest,
+    ) -> Result<SuperfluidDelegationsByValidatorDenomResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn estimate_superfluid_delegated_amount_by_validator_denom(
+        &self,
+        req: EstimateSuperfluidDelegatedAmountByValidatorDenomRequest,
+    ) -> Result<EstimateSuperfluidDelegatedAmountByValidatorDenomResponse, cosmwasm_std::StdError>
+    {
+        req.query(self.querier)
+    }
+}

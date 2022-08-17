@@ -190,6 +190,10 @@ pub struct ModuleDistributedCoinsResponse {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.incentives.GaugeByIdRequest")]
+#[proto_query(
+    path = "/osmosis.incentives.Query/GaugeByID",
+    response_type = GaugeByIdResponse
+)]
 pub struct GaugeByIdRequest {
     #[prost(uint64, tag = "1")]
     pub id: u64,
@@ -494,4 +498,69 @@ pub struct GenesisState {
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
     #[prost(uint64, tag = "4")]
     pub last_gauge_id: u64,
+}
+pub struct IncentivesQuerierWrapper<'a> {
+    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+}
+impl<'a> IncentivesQuerierWrapper<'a> {
+    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+        Self { querier }
+    }
+    pub fn module_to_distribute_coins(
+        &self,
+        req: ModuleToDistributeCoinsRequest,
+    ) -> Result<ModuleToDistributeCoinsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn module_distributed_coins(
+        &self,
+        req: ModuleDistributedCoinsRequest,
+    ) -> Result<ModuleDistributedCoinsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn gauge_by_id(
+        &self,
+        req: GaugeByIdRequest,
+    ) -> Result<GaugeByIdResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn gauges(&self, req: GaugesRequest) -> Result<GaugesResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn active_gauges(
+        &self,
+        req: ActiveGaugesRequest,
+    ) -> Result<ActiveGaugesResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn active_gauges_per_denom(
+        &self,
+        req: ActiveGaugesPerDenomRequest,
+    ) -> Result<ActiveGaugesPerDenomResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn upcoming_gauges(
+        &self,
+        req: UpcomingGaugesRequest,
+    ) -> Result<UpcomingGaugesResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn upcoming_gauges_per_denom(
+        &self,
+        req: UpcomingGaugesPerDenomRequest,
+    ) -> Result<UpcomingGaugesPerDenomResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn rewards_est(
+        &self,
+        req: RewardsEstRequest,
+    ) -> Result<RewardsEstResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
+    pub fn lockable_durations(
+        &self,
+        req: QueryLockableDurationsRequest,
+    ) -> Result<QueryLockableDurationsResponse, cosmwasm_std::StdError> {
+        req.query(self.querier)
+    }
 }

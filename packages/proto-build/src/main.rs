@@ -3,10 +3,6 @@
 //! uses that to build the required proto files for further compilation.
 //! This is based on the proto-compiler code in github.com/informalsystems/ibc-rs
 
-use itertools::Itertools;
-use prost::Message;
-use prost_types::{FileDescriptorSet, ServiceDescriptorProto};
-use regex::Regex;
 use std::{
     collections::HashMap,
     env,
@@ -17,9 +13,16 @@ use std::{
     process::{self, Command},
     sync::atomic::{self, AtomicBool},
 };
+
+use heck::{ToSnakeCase, ToUpperCamelCase};
+use itertools::Itertools;
+use prost::Message;
+use prost_types::{FileDescriptorSet, ServiceDescriptorProto};
+use regex::Regex;
+use syn::__private::TokenStream2;
 use syn::{
-    Attribute, File, Ident, ItemMod,
     __private::quote::{format_ident, quote},
+    parse_quote, Attribute, File, Ident, ItemMod,
 };
 use walkdir::WalkDir;
 
@@ -455,7 +458,7 @@ fn copy_and_patch(
     let file = syn::parse_file(&contents);
     if let Ok(file) = file {
         // only transform rust file (skipping `*_COMMIT` file)
-        let items = recur_append_attrs(file.items, src, &[], query_services);
+        let items = recur_append_attrs(file.items, src, &[], query_services, false);
 
         contents = prettyplease::unparse(&File { items, ..file });
     }
@@ -468,6 +471,7 @@ fn recur_append_attrs(
     src: &Path,
     ancestors: &[String],
     query_services: &HashMap<String, ServiceDescriptorProto>,
+    nested_mod: bool,
 ) -> Vec<syn::Item> {
     let mut items = items
         .into_iter()
@@ -477,7 +481,7 @@ fn recur_append_attrs(
                 syn::Item::Struct(s)
             }
             syn::Item::Mod(m) => {
-                let parent = snake_to_pascal(&m.ident.to_string());
+                let parent = &m.ident.to_string().to_upper_camel_case();
 
                 syn::Item::Mod(ItemMod {
                     content: m.content.map(|(brace, items)| {
@@ -486,8 +490,9 @@ fn recur_append_attrs(
                             recur_append_attrs(
                                 items,
                                 src,
-                                &[ancestors, &[parent]].concat(),
+                                &[ancestors, &[parent.to_string()]].concat(),
                                 query_services,
+                                true,
                             ),
                         )
                     }),
@@ -497,6 +502,50 @@ fn recur_append_attrs(
             _ => i,
         })
         .collect::<Vec<syn::Item>>();
+
+    let package = src.file_stem().unwrap().to_str().unwrap();
+    let re = Regex::new(r"([^\.]*)(\.v\d+(beta\d+)?)?$").unwrap();
+
+    let package_stem = re.captures(&package).unwrap().get(1).unwrap().as_str();
+
+    let querier_wrapper_ident =
+        format_ident!("{}QuerierWrapper", &package_stem.to_upper_camel_case());
+
+    let query_fns = query_services.get(package).map(|service| service.method.iter().map(|method_desc| {
+        let method_desc = method_desc.clone();
+
+        let name = format_ident!("{}", method_desc.name.unwrap().as_str().to_snake_case());
+        let req_type = format_ident!("{}", method_desc.input_type.unwrap().split('.').last().unwrap().to_string().to_upper_camel_case());
+        let res_type = format_ident!("{}", method_desc.output_type.unwrap().split('.').last().unwrap().to_string().to_upper_camel_case());
+
+
+
+        quote! {
+           pub fn #name(&self, req: #req_type) -> Result<#res_type, cosmwasm_std::StdError> {
+               req.query(self.querier)
+           }
+       }
+    }).collect::<Vec<TokenStream2>>());
+
+    if let Some(query_fns) = query_fns {
+        if !nested_mod {
+            items.append(&mut vec![
+                parse_quote! {
+                pub struct #querier_wrapper_ident<'a> {
+                    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>
+                }
+            },
+                parse_quote! {
+                impl<'a> #querier_wrapper_ident<'a> {
+                    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+                        Self { querier }
+                    }
+                    #(#query_fns)*
+                }
+            },
+            ]);
+        }
+    }
 
     prepend(
         &mut items,
@@ -540,13 +589,13 @@ fn get_query_attr(
     let method = service?.method.iter().find(|m| {
         let input_type = (*m).input_type.clone().unwrap();
         let input_type = input_type.split('.').last().unwrap();
-        *ident == input_type
+        *ident == input_type.to_upper_camel_case()
     });
 
     let method_name = method?.name.clone().unwrap();
     let response_type = method?.output_type.clone().unwrap();
     let response_type = response_type.split('.').last().unwrap();
-    let response_type = format_ident!("{}", response_type);
+    let response_type = format_ident!("{}", response_type.to_upper_camel_case());
 
     let path = format!("/{}.Query/{}", package, method_name);
     Some(syn::parse_quote! { #[proto_query(path = #path, response_type = #response_type)] })
@@ -570,13 +619,4 @@ fn create_mod_rs(ts: syn::__private::TokenStream2, path: &Path) {
     if let Err(e) = write {
         panic!("[error] Error while generating mod.rs: {}", e);
     }
-}
-
-fn snake_to_pascal(s: &str) -> String {
-    s.split('_')
-        .map(|w| {
-            let (head, tail) = w.split_at(1);
-            format!("{}{}", head.to_uppercase(), tail)
-        })
-        .join("")
 }

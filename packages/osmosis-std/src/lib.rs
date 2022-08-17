@@ -8,10 +8,3 @@ pub const OSMOSISD_VERSION: &str = include_str!("types/OSMOSIS_COMMIT");
 
 pub mod shim;
 pub mod types;
-
-pub trait CosmwasmQuery<R> {
-    fn query(
-        self,
-        querier: cosmwasm_std::QuerierWrapper<cosmwasm_std::Empty>,
-    ) -> cosmwasm_std::StdResult<R>;
-}

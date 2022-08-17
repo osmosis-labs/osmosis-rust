@@ -6,6 +6,7 @@ publish = false
 version = "0.1.0"
 
 [dependencies]
+heck = "0.4.0"
 itertools = "0.10.3"
 prettyplease = "0.1.16"
 prost = "0.10"
