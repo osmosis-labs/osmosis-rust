@@ -20,10 +20,7 @@ use prost::Message;
 use prost_types::{FileDescriptorSet, ServiceDescriptorProto};
 use regex::Regex;
 use syn::__private::TokenStream2;
-use syn::{
-    __private::quote::{format_ident, quote},
-    parse_quote, Attribute, File, Ident, ItemMod,
-};
+use syn::{__private::quote::{format_ident, quote}, parse_quote, Attribute, File, Ident, ItemMod, Item, Fields, Type};
 use walkdir::WalkDir;
 
 /// Suppress log messages
@@ -512,19 +509,41 @@ fn recur_append_attrs(
         format_ident!("{}Querier", &package_stem.to_upper_camel_case());
 
     let query_fns = query_services.get(package).map(|service| service.method.iter().map(|method_desc| {
+        if nested_mod {
+            return quote! {}
+        }
+
         let method_desc = method_desc.clone();
 
         let name = format_ident!("{}", method_desc.name.unwrap().as_str().to_snake_case());
         let req_type = format_ident!("{}", method_desc.input_type.unwrap().split('.').last().unwrap().to_string().to_upper_camel_case());
         let res_type = format_ident!("{}", method_desc.output_type.unwrap().split('.').last().unwrap().to_string().to_upper_camel_case());
 
+        let req_args = items.clone().into_iter()
+            .find_map(|item| match item {
+            Item::Struct(s) => {
+                if s.ident == req_type {
+                    match s.fields {
+                        Fields::Named(fields_named) => {
+                            Some(fields_named.named)
+                        }
+                        _ => None
+                    }
+                } else {
+                    None
+                }
+            },
+            _ => None
+        });
 
+        let arg_idents = req_args.clone().unwrap().into_iter().map(|arg| arg.ident.unwrap()).collect::<Vec<Ident>>();
+        let arg_ty = req_args.clone().unwrap().into_iter().map(|arg| arg.ty).collect::<Vec<Type>>();
 
         quote! {
-           pub fn #name(&self, req: #req_type) -> Result<#res_type, cosmwasm_std::StdError> {
-               req.query(self.querier)
+           pub fn #name( &self, #(#arg_idents : #arg_ty),* ) -> Result<#res_type, cosmwasm_std::StdError> {
+               #req_type { #(#arg_idents),* }.query(self.querier)
            }
-       }
+        }
     }).collect::<Vec<TokenStream2>>());
 
     if let Some(query_fns) = query_fns {
@@ -620,3 +639,8 @@ fn create_mod_rs(ts: syn::__private::TokenStream2, path: &Path) {
         panic!("[error] Error while generating mod.rs: {}", e);
     }
 }
+
+
+// pass file descriptor in and have fn to get query service from it
+// with file descriptor we can have real detail about type paths
+// now, type that contains `ID` will not be serialized properly

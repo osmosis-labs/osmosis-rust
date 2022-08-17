@@ -358,40 +358,28 @@ impl<'a> PoolincentivesQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
-    pub fn gauge_ids(
-        &self,
-        req: QueryGaugeIdsRequest,
-    ) -> Result<QueryGaugeIdsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn gauge_ids(&self, pool_id: u64) -> Result<QueryGaugeIdsResponse, cosmwasm_std::StdError> {
+        QueryGaugeIdsRequest { pool_id }.query(self.querier)
     }
-    pub fn distr_info(
-        &self,
-        req: QueryDistrInfoRequest,
-    ) -> Result<QueryDistrInfoResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn distr_info(&self) -> Result<QueryDistrInfoResponse, cosmwasm_std::StdError> {
+        QueryDistrInfoRequest {}.query(self.querier)
     }
-    pub fn params(
-        &self,
-        req: QueryParamsRequest,
-    ) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
     }
     pub fn lockable_durations(
         &self,
-        req: QueryLockableDurationsRequest,
     ) -> Result<QueryLockableDurationsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryLockableDurationsRequest {}.query(self.querier)
     }
     pub fn incentivized_pools(
         &self,
-        req: QueryIncentivizedPoolsRequest,
     ) -> Result<QueryIncentivizedPoolsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryIncentivizedPoolsRequest {}.query(self.querier)
     }
     pub fn external_incentive_gauges(
         &self,
-        req: QueryExternalIncentiveGaugesRequest,
     ) -> Result<QueryExternalIncentiveGaugesResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryExternalIncentiveGaugesRequest {}.query(self.querier)
     }
 }

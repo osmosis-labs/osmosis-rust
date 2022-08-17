@@ -191,16 +191,10 @@ impl<'a> MintQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
-    pub fn params(
-        &self,
-        req: QueryParamsRequest,
-    ) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
     }
-    pub fn epoch_provisions(
-        &self,
-        req: QueryEpochProvisionsRequest,
-    ) -> Result<QueryEpochProvisionsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn epoch_provisions(&self) -> Result<QueryEpochProvisionsResponse, cosmwasm_std::StdError> {
+        QueryEpochProvisionsRequest {}.query(self.querier)
     }
 }

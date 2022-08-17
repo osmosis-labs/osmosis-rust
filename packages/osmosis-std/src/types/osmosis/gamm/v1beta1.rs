@@ -844,59 +844,80 @@ impl<'a> GammQuerier<'a> {
     }
     pub fn pools(
         &self,
-        req: QueryPoolsRequest,
+        pagination: ::core::option::Option<
+            super::super::super::cosmos::base::query::v1beta1::PageRequest,
+        >,
     ) -> Result<QueryPoolsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryPoolsRequest { pagination }.query(self.querier)
     }
-    pub fn num_pools(
-        &self,
-        req: QueryNumPoolsRequest,
-    ) -> Result<QueryNumPoolsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn num_pools(&self) -> Result<QueryNumPoolsResponse, cosmwasm_std::StdError> {
+        QueryNumPoolsRequest {}.query(self.querier)
     }
-    pub fn total_liquidity(
-        &self,
-        req: QueryTotalLiquidityRequest,
-    ) -> Result<QueryTotalLiquidityResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn total_liquidity(&self) -> Result<QueryTotalLiquidityResponse, cosmwasm_std::StdError> {
+        QueryTotalLiquidityRequest {}.query(self.querier)
     }
-    pub fn pool(&self, req: QueryPoolRequest) -> Result<QueryPoolResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn pool(&self, pool_id: u64) -> Result<QueryPoolResponse, cosmwasm_std::StdError> {
+        QueryPoolRequest { pool_id }.query(self.querier)
     }
     pub fn pool_params(
         &self,
-        req: QueryPoolParamsRequest,
+        pool_id: u64,
     ) -> Result<QueryPoolParamsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryPoolParamsRequest { pool_id }.query(self.querier)
     }
     pub fn total_pool_liquidity(
         &self,
-        req: QueryTotalPoolLiquidityRequest,
+        pool_id: u64,
     ) -> Result<QueryTotalPoolLiquidityResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryTotalPoolLiquidityRequest { pool_id }.query(self.querier)
     }
     pub fn total_shares(
         &self,
-        req: QueryTotalSharesRequest,
+        pool_id: u64,
     ) -> Result<QueryTotalSharesResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryTotalSharesRequest { pool_id }.query(self.querier)
     }
     pub fn spot_price(
         &self,
-        req: QuerySpotPriceRequest,
+        pool_id: u64,
+        base_asset_denom: ::prost::alloc::string::String,
+        quote_asset_denom: ::prost::alloc::string::String,
     ) -> Result<QuerySpotPriceResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QuerySpotPriceRequest {
+            pool_id,
+            base_asset_denom,
+            quote_asset_denom,
+        }
+        .query(self.querier)
     }
     pub fn estimate_swap_exact_amount_in(
         &self,
-        req: QuerySwapExactAmountInRequest,
+        sender: ::prost::alloc::string::String,
+        pool_id: u64,
+        token_in: ::prost::alloc::string::String,
+        routes: ::prost::alloc::vec::Vec<SwapAmountInRoute>,
     ) -> Result<QuerySwapExactAmountInResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QuerySwapExactAmountInRequest {
+            sender,
+            pool_id,
+            token_in,
+            routes,
+        }
+        .query(self.querier)
     }
     pub fn estimate_swap_exact_amount_out(
         &self,
-        req: QuerySwapExactAmountOutRequest,
+        sender: ::prost::alloc::string::String,
+        pool_id: u64,
+        routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
+        token_out: ::prost::alloc::string::String,
     ) -> Result<QuerySwapExactAmountOutResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QuerySwapExactAmountOutRequest {
+            sender,
+            pool_id,
+            routes,
+            token_out,
+        }
+        .query(self.querier)
     }
 }

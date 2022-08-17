@@ -773,100 +773,114 @@ impl<'a> LockupQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
-    pub fn module_balance(
-        &self,
-        req: ModuleBalanceRequest,
-    ) -> Result<ModuleBalanceResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn module_balance(&self) -> Result<ModuleBalanceResponse, cosmwasm_std::StdError> {
+        ModuleBalanceRequest {}.query(self.querier)
     }
     pub fn module_locked_amount(
         &self,
-        req: ModuleLockedAmountRequest,
     ) -> Result<ModuleLockedAmountResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        ModuleLockedAmountRequest {}.query(self.querier)
     }
     pub fn account_unlockable_coins(
         &self,
-        req: AccountUnlockableCoinsRequest,
+        owner: ::prost::alloc::string::String,
     ) -> Result<AccountUnlockableCoinsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountUnlockableCoinsRequest { owner }.query(self.querier)
     }
     pub fn account_unlocking_coins(
         &self,
-        req: AccountUnlockingCoinsRequest,
+        owner: ::prost::alloc::string::String,
     ) -> Result<AccountUnlockingCoinsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountUnlockingCoinsRequest { owner }.query(self.querier)
     }
     pub fn account_locked_coins(
         &self,
-        req: AccountLockedCoinsRequest,
+        owner: ::prost::alloc::string::String,
     ) -> Result<AccountLockedCoinsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountLockedCoinsRequest { owner }.query(self.querier)
     }
     pub fn account_locked_past_time(
         &self,
-        req: AccountLockedPastTimeRequest,
+        owner: ::prost::alloc::string::String,
+        timestamp: ::core::option::Option<crate::shim::Timestamp>,
     ) -> Result<AccountLockedPastTimeResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountLockedPastTimeRequest { owner, timestamp }.query(self.querier)
     }
     pub fn account_locked_past_time_not_unlocking_only(
         &self,
-        req: AccountLockedPastTimeNotUnlockingOnlyRequest,
+        owner: ::prost::alloc::string::String,
+        timestamp: ::core::option::Option<crate::shim::Timestamp>,
     ) -> Result<AccountLockedPastTimeNotUnlockingOnlyResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountLockedPastTimeNotUnlockingOnlyRequest { owner, timestamp }.query(self.querier)
     }
     pub fn account_unlocked_before_time(
         &self,
-        req: AccountUnlockedBeforeTimeRequest,
+        owner: ::prost::alloc::string::String,
+        timestamp: ::core::option::Option<crate::shim::Timestamp>,
     ) -> Result<AccountUnlockedBeforeTimeResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountUnlockedBeforeTimeRequest { owner, timestamp }.query(self.querier)
     }
     pub fn account_locked_past_time_denom(
         &self,
-        req: AccountLockedPastTimeDenomRequest,
+        owner: ::prost::alloc::string::String,
+        timestamp: ::core::option::Option<crate::shim::Timestamp>,
+        denom: ::prost::alloc::string::String,
     ) -> Result<AccountLockedPastTimeDenomResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountLockedPastTimeDenomRequest {
+            owner,
+            timestamp,
+            denom,
+        }
+        .query(self.querier)
     }
     pub fn locked_denom(
         &self,
-        req: LockedDenomRequest,
+        denom: ::prost::alloc::string::String,
+        duration: ::core::option::Option<crate::shim::Duration>,
     ) -> Result<LockedDenomResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        LockedDenomRequest { denom, duration }.query(self.querier)
     }
-    pub fn locked_by_id(
-        &self,
-        req: LockedRequest,
-    ) -> Result<LockedResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn locked_by_id(&self, lock_id: u64) -> Result<LockedResponse, cosmwasm_std::StdError> {
+        LockedRequest { lock_id }.query(self.querier)
     }
     pub fn synthetic_lockups_by_lockup_id(
         &self,
-        req: SyntheticLockupsByLockupIdRequest,
+        lock_id: u64,
     ) -> Result<SyntheticLockupsByLockupIdResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        SyntheticLockupsByLockupIdRequest { lock_id }.query(self.querier)
     }
     pub fn account_locked_longer_duration(
         &self,
-        req: AccountLockedLongerDurationRequest,
+        owner: ::prost::alloc::string::String,
+        duration: ::core::option::Option<crate::shim::Duration>,
     ) -> Result<AccountLockedLongerDurationResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountLockedLongerDurationRequest { owner, duration }.query(self.querier)
     }
     pub fn account_locked_duration(
         &self,
-        req: AccountLockedDurationRequest,
+        owner: ::prost::alloc::string::String,
+        duration: ::core::option::Option<crate::shim::Duration>,
     ) -> Result<AccountLockedDurationResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountLockedDurationRequest { owner, duration }.query(self.querier)
     }
     pub fn account_locked_longer_duration_not_unlocking_only(
         &self,
-        req: AccountLockedLongerDurationNotUnlockingOnlyRequest,
+        owner: ::prost::alloc::string::String,
+        duration: ::core::option::Option<crate::shim::Duration>,
     ) -> Result<AccountLockedLongerDurationNotUnlockingOnlyResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountLockedLongerDurationNotUnlockingOnlyRequest { owner, duration }.query(self.querier)
     }
     pub fn account_locked_longer_duration_denom(
         &self,
-        req: AccountLockedLongerDurationDenomRequest,
+        owner: ::prost::alloc::string::String,
+        duration: ::core::option::Option<crate::shim::Duration>,
+        denom: ::prost::alloc::string::String,
     ) -> Result<AccountLockedLongerDurationDenomResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        AccountLockedLongerDurationDenomRequest {
+            owner,
+            duration,
+            denom,
+        }
+        .query(self.querier)
     }
 }

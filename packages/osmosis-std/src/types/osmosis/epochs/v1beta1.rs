@@ -143,16 +143,13 @@ impl<'a> EpochsQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
-    pub fn epoch_infos(
-        &self,
-        req: QueryEpochsInfoRequest,
-    ) -> Result<QueryEpochsInfoResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn epoch_infos(&self) -> Result<QueryEpochsInfoResponse, cosmwasm_std::StdError> {
+        QueryEpochsInfoRequest {}.query(self.querier)
     }
     pub fn current_epoch(
         &self,
-        req: QueryCurrentEpochRequest,
+        identifier: ::prost::alloc::string::String,
     ) -> Result<QueryCurrentEpochResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryCurrentEpochRequest { identifier }.query(self.querier)
     }
 }

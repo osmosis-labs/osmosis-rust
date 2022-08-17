@@ -508,59 +508,65 @@ impl<'a> IncentivesQuerier<'a> {
     }
     pub fn module_to_distribute_coins(
         &self,
-        req: ModuleToDistributeCoinsRequest,
     ) -> Result<ModuleToDistributeCoinsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        ModuleToDistributeCoinsRequest {}.query(self.querier)
     }
     pub fn module_distributed_coins(
         &self,
-        req: ModuleDistributedCoinsRequest,
     ) -> Result<ModuleDistributedCoinsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        ModuleDistributedCoinsRequest {}.query(self.querier)
     }
-    pub fn gauge_by_id(
+    pub fn gauge_by_id(&self, id: u64) -> Result<GaugeByIdResponse, cosmwasm_std::StdError> {
+        GaugeByIdRequest { id }.query(self.querier)
+    }
+    pub fn gauges(
         &self,
-        req: GaugeByIdRequest,
-    ) -> Result<GaugeByIdResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
-    }
-    pub fn gauges(&self, req: GaugesRequest) -> Result<GaugesResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+    ) -> Result<GaugesResponse, cosmwasm_std::StdError> {
+        GaugesRequest { pagination }.query(self.querier)
     }
     pub fn active_gauges(
         &self,
-        req: ActiveGaugesRequest,
+        pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
     ) -> Result<ActiveGaugesResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        ActiveGaugesRequest { pagination }.query(self.querier)
     }
     pub fn active_gauges_per_denom(
         &self,
-        req: ActiveGaugesPerDenomRequest,
+        denom: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
     ) -> Result<ActiveGaugesPerDenomResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        ActiveGaugesPerDenomRequest { denom, pagination }.query(self.querier)
     }
     pub fn upcoming_gauges(
         &self,
-        req: UpcomingGaugesRequest,
+        pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
     ) -> Result<UpcomingGaugesResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        UpcomingGaugesRequest { pagination }.query(self.querier)
     }
     pub fn upcoming_gauges_per_denom(
         &self,
-        req: UpcomingGaugesPerDenomRequest,
+        denom: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
     ) -> Result<UpcomingGaugesPerDenomResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        UpcomingGaugesPerDenomRequest { denom, pagination }.query(self.querier)
     }
     pub fn rewards_est(
         &self,
-        req: RewardsEstRequest,
+        owner: ::prost::alloc::string::String,
+        lock_ids: ::prost::alloc::vec::Vec<u64>,
+        end_epoch: i64,
     ) -> Result<RewardsEstResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        RewardsEstRequest {
+            owner,
+            lock_ids,
+            end_epoch,
+        }
+        .query(self.querier)
     }
     pub fn lockable_durations(
         &self,
-        req: QueryLockableDurationsRequest,
     ) -> Result<QueryLockableDurationsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryLockableDurationsRequest {}.query(self.querier)
     }
 }

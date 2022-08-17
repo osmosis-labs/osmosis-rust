@@ -194,28 +194,22 @@ impl<'a> TxfeesQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
-    pub fn fee_tokens(
-        &self,
-        req: QueryFeeTokensRequest,
-    ) -> Result<QueryFeeTokensResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn fee_tokens(&self) -> Result<QueryFeeTokensResponse, cosmwasm_std::StdError> {
+        QueryFeeTokensRequest {}.query(self.querier)
     }
     pub fn denom_spot_price(
         &self,
-        req: QueryDenomSpotPriceRequest,
+        denom: ::prost::alloc::string::String,
     ) -> Result<QueryDenomSpotPriceResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryDenomSpotPriceRequest { denom }.query(self.querier)
     }
     pub fn denom_pool_id(
         &self,
-        req: QueryDenomPoolIdRequest,
+        denom: ::prost::alloc::string::String,
     ) -> Result<QueryDenomPoolIdResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryDenomPoolIdRequest { denom }.query(self.querier)
     }
-    pub fn base_denom(
-        &self,
-        req: QueryBaseDenomRequest,
-    ) -> Result<QueryBaseDenomResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn base_denom(&self) -> Result<QueryBaseDenomResponse, cosmwasm_std::StdError> {
+        QueryBaseDenomRequest {}.query(self.querier)
     }
 }

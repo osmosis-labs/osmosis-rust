@@ -299,22 +299,19 @@ impl<'a> TokenfactoryQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
-    pub fn params(
-        &self,
-        req: QueryParamsRequest,
-    ) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
     }
     pub fn denom_authority_metadata(
         &self,
-        req: QueryDenomAuthorityMetadataRequest,
+        denom: ::prost::alloc::string::String,
     ) -> Result<QueryDenomAuthorityMetadataResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryDenomAuthorityMetadataRequest { denom }.query(self.querier)
     }
     pub fn denoms_from_creator(
         &self,
-        req: QueryDenomsFromCreatorRequest,
+        creator: ::prost::alloc::string::String,
     ) -> Result<QueryDenomsFromCreatorResponse, cosmwasm_std::StdError> {
-        req.query(self.querier)
+        QueryDenomsFromCreatorRequest { creator }.query(self.querier)
     }
 }
