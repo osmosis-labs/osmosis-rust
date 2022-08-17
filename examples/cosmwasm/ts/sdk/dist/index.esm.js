@@ -80,8 +80,25 @@ function __generator(thisArg, body) {
 */
 var OsmosisStargateQueryClient = /** @class */ (function () {
     function OsmosisStargateQueryClient(client, contractAddress) {
+        var _this = this;
+        this.queryTokenCreationFee = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.client.queryContractSmart(this.contractAddress, {
+                        query_token_creation_fee: {}
+                    })];
+            });
+        }); };
+        this.queryCreatorDenoms = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.client.queryContractSmart(this.contractAddress, {
+                        query_creator_denoms: {}
+                    })];
+            });
+        }); };
         this.client = client;
         this.contractAddress = contractAddress;
+        this.queryTokenCreationFee = this.queryTokenCreationFee.bind(this);
+        this.queryCreatorDenoms = this.queryCreatorDenoms.bind(this);
     }
     return OsmosisStargateQueryClient;
 }());

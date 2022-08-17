@@ -4,7 +4,7 @@
 * and run the cosmwasm-typescript-gen generate command to regenerate this file.
 */
 import { CosmWasmClient, ExecuteResult, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { Coin, StdFee } from "@cosmjs/amino";
+import { StdFee } from "@cosmjs/amino";
 export declare type ExecuteMsg = {
     create_denom: {
         initial_mint?: string | null;
@@ -30,14 +30,40 @@ export interface PoolAssests {
 export interface InstantiateMsg {
     [k: string]: unknown;
 }
-export declare type QueryMsg = string;
+export interface QueryCreatorDenomsResponse {
+    denoms: string[];
+    [k: string]: unknown;
+}
+export declare type QueryMsg = {
+    query_token_creation_fee: {
+        [k: string]: unknown;
+    };
+} | {
+    query_creator_denoms: {
+        [k: string]: unknown;
+    };
+};
+export declare type Uint128 = string;
+export interface QueryTokenCreationFeeResponse {
+    fee: Coin[];
+    [k: string]: unknown;
+}
+export interface Coin {
+    amount: Uint128;
+    denom: string;
+    [k: string]: unknown;
+}
 export interface OsmosisStargateReadOnlyInterface {
     contractAddress: string;
+    queryTokenCreationFee: () => Promise<QueryTokenCreationFeeResponse>;
+    queryCreatorDenoms: () => Promise<QueryCreatorDenomsResponse>;
 }
 export declare class OsmosisStargateQueryClient implements OsmosisStargateReadOnlyInterface {
     client: CosmWasmClient;
     contractAddress: string;
     constructor(client: CosmWasmClient, contractAddress: string);
+    queryTokenCreationFee: () => Promise<QueryTokenCreationFeeResponse>;
+    queryCreatorDenoms: () => Promise<QueryCreatorDenomsResponse>;
 }
 export interface OsmosisStargateInterface extends OsmosisStargateReadOnlyInterface {
     contractAddress: string;

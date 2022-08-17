@@ -3,7 +3,9 @@ use std::fs::create_dir_all;
 
 use cosmwasm_schema::{export_schema, remove_schemas, schema_for};
 
-use osmosis_stargate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use osmosis_stargate::msg::{
+    ExecuteMsg, InstantiateMsg, QueryCreatorDenomsResponse, QueryMsg, QueryTokenCreationFeeResponse,
+};
 
 fn main() {
     let mut out_dir = current_dir().unwrap();
@@ -14,4 +16,6 @@ fn main() {
     export_schema(&schema_for!(InstantiateMsg), &out_dir);
     export_schema(&schema_for!(ExecuteMsg), &out_dir);
     export_schema(&schema_for!(QueryMsg), &out_dir);
+    export_schema(&schema_for!(QueryTokenCreationFeeResponse), &out_dir);
+    export_schema(&schema_for!(QueryCreatorDenomsResponse), &out_dir);
 }

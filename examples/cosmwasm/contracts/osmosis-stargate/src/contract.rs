@@ -3,7 +3,8 @@ use std::convert::TryInto;
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{
-    CosmosMsg, DepsMut, Env, MessageInfo, Reply, Response, SubMsg, SubMsgResponse, SubMsgResult,
+    to_binary, Binary, CosmosMsg, Deps, DepsMut, Env, MessageInfo, Reply, Response, StdError,
+    StdResult, SubMsg, SubMsgResponse, SubMsgResult,
 };
 use cw2::set_contract_version;
 use osmosis_std::types::cosmos::base::v1beta1::Coin;
@@ -11,10 +12,15 @@ use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::{
     MsgCreateBalancerPool, MsgCreateBalancerPoolResponse,
 };
 use osmosis_std::types::osmosis::gamm::v1beta1::{PoolAsset, PoolParams};
-use osmosis_std::types::osmosis::tokenfactory::v1beta1::{MsgCreateDenom, MsgMint};
+use osmosis_std::types::osmosis::tokenfactory::v1beta1::{
+    MsgCreateDenom, MsgMint, TokenfactoryQuerier,
+};
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InitPoolCfg, InstantiateMsg};
+use crate::msg::{
+    ExecuteMsg, InitPoolCfg, InstantiateMsg, QueryCreatorDenomsResponse, QueryMsg,
+    QueryTokenCreationFeeResponse,
+};
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:osmosis-stargate";
@@ -177,4 +183,34 @@ pub fn try_create_balancer_pool(env: Env, subdenom: String) -> Result<Response, 
     Ok(Response::new()
         .add_message(msg)
         .add_attribute("method", "try_create_denom"))
+}
+
+#[cfg_attr(not(feature = "library"), entry_point)]
+pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
+    match msg {
+        QueryMsg::QueryTokenCreationFee {} => to_binary(&query_token_creation_fee(deps)?),
+        QueryMsg::QueryCreatorDenoms {} => to_binary(&query_creator_denoms(deps, env)?),
+    }
+}
+
+fn query_token_creation_fee(deps: Deps) -> StdResult<QueryTokenCreationFeeResponse> {
+    let res = TokenfactoryQuerier::new(deps.querier).params()?;
+    let params = res.params.ok_or(StdError::NotFound {
+        kind: "osmosis_std::types::osmosis::tokenfactory::v1beta1::Params".to_string(),
+    })?;
+
+    let fee = params
+        .denom_creation_fee
+        .into_iter()
+        .map(TryInto::try_into)
+        .collect::<Result<Vec<_>, _>>()?;
+
+    Ok(QueryTokenCreationFeeResponse { fee })
+}
+
+fn query_creator_denoms(deps: Deps, env: Env) -> StdResult<QueryCreatorDenomsResponse> {
+    let res =
+        TokenfactoryQuerier::new(deps.querier).denoms_from_creator(env.contract.address.into())?;
+
+    Ok(QueryCreatorDenomsResponse { denoms: res.denoms })
 }
