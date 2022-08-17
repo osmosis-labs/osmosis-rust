@@ -743,10 +743,10 @@ pub struct GenesisState {
     pub intemediary_account_connections:
         ::prost::alloc::vec::Vec<LockIdIntermediaryAccountConnection>,
 }
-pub struct SuperfluidQuerierWrapper<'a> {
+pub struct SuperfluidQuerier<'a> {
     querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
 }
-impl<'a> SuperfluidQuerierWrapper<'a> {
+impl<'a> SuperfluidQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }

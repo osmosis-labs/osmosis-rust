@@ -499,10 +499,10 @@ pub struct GenesisState {
     #[prost(uint64, tag = "4")]
     pub last_gauge_id: u64,
 }
-pub struct IncentivesQuerierWrapper<'a> {
+pub struct IncentivesQuerier<'a> {
     querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
 }
-impl<'a> IncentivesQuerierWrapper<'a> {
+impl<'a> IncentivesQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }

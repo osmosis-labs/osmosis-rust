@@ -184,10 +184,10 @@ pub struct GenesisState {
     #[prost(int64, tag = "3")]
     pub halven_started_epoch: i64,
 }
-pub struct MintQuerierWrapper<'a> {
+pub struct MintQuerier<'a> {
     querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
 }
-impl<'a> MintQuerierWrapper<'a> {
+impl<'a> MintQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }

@@ -509,7 +509,7 @@ fn recur_append_attrs(
     let package_stem = re.captures(&package).unwrap().get(1).unwrap().as_str();
 
     let querier_wrapper_ident =
-        format_ident!("{}QuerierWrapper", &package_stem.to_upper_camel_case());
+        format_ident!("{}Querier", &package_stem.to_upper_camel_case());
 
     let query_fns = query_services.get(package).map(|service| service.method.iter().map(|method_desc| {
         let method_desc = method_desc.clone();

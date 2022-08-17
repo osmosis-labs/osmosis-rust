@@ -351,10 +351,10 @@ pub struct GenesisState {
     #[prost(message, optional, tag = "3")]
     pub distr_info: ::core::option::Option<DistrInfo>,
 }
-pub struct PoolincentivesQuerierWrapper<'a> {
+pub struct PoolincentivesQuerier<'a> {
     querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
 }
-impl<'a> PoolincentivesQuerierWrapper<'a> {
+impl<'a> PoolincentivesQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }

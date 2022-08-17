@@ -136,10 +136,10 @@ pub struct QueryCurrentEpochResponse {
     #[prost(int64, tag = "1")]
     pub current_epoch: i64,
 }
-pub struct EpochsQuerierWrapper<'a> {
+pub struct EpochsQuerier<'a> {
     querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
 }
-impl<'a> EpochsQuerierWrapper<'a> {
+impl<'a> EpochsQuerier<'a> {
     pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
