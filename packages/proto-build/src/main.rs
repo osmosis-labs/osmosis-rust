@@ -11,21 +11,17 @@ use std::{
     io,
     path::{Path, PathBuf},
     process::{self, Command},
-    sync::atomic::{self, AtomicBool},
 };
 
 use heck::{ToSnakeCase, ToUpperCamelCase};
 use itertools::Itertools;
+use log::{debug, info};
 use prost::Message;
 use prost_types::{FileDescriptorSet, ServiceDescriptorProto};
 use regex::Regex;
+use syn::{__private::quote::{format_ident, quote}, Attribute, Fields, File, Ident, Item, ItemMod, parse_quote, Type};
 use syn::__private::TokenStream2;
-use syn::{__private::quote::{format_ident, quote}, parse_quote, Attribute, File, Ident, ItemMod, Item, Fields, Type};
 use walkdir::WalkDir;
-
-/// Suppress log messages
-// TODO(tarcieri): use a logger for this
-static QUIET: AtomicBool = AtomicBool::new(false);
 
 /// The Cosmos SDK commit or tag to be cloned and used to build the proto files
 const COSMOS_SDK_REV: &str = "v0.45.4";
@@ -56,23 +52,8 @@ const EXCLUDED_PROTO_PACKAGES: &[&str] = &[
     "tendermint",
 ];
 
-/// Log info to the console (if `QUIET` is disabled)
-// TODO(tarcieri): use a logger for this
-macro_rules! info {
-    ($msg:expr) => {
-        if !is_quiet() {
-            println!("[info] {}", $msg)
-        }
-    };
-    ($fmt:expr, $($arg:tt)+) => {
-        info!(&format!($fmt, $($arg)+))
-    };
-}
-
 fn main() {
-    if is_github() {
-        set_quiet();
-    }
+    pretty_env_logger::init();
 
     let tmp_build_dir: PathBuf = TMP_BUILD_DIR.parse().unwrap();
     let proto_dir: PathBuf = PROTO_DIR.parse().unwrap();
@@ -92,9 +73,13 @@ fn main() {
     }
 
     output_osmosis_version(&temp_osmosis_dir);
-    let query_services = compile_osmosis_proto(&temp_osmosis_dir);
-    copy_and_patch_generated_files(&temp_osmosis_dir, &proto_dir, query_services);
 
+    let query_services = compile_osmosis_proto(&temp_osmosis_dir);
+
+
+
+    info!("🧪  Embellishing modules to expose nice API for library user...");
+    copy_and_patch_generated_files(&temp_osmosis_dir, &proto_dir, query_services);
     generate_mod_file(&proto_dir);
 
     // format osmosis std
@@ -106,34 +91,13 @@ fn main() {
         .wait()
         .unwrap();
 
-    if is_github() {
-        println!(
-            "Rebuild protos with proto-build (osmosis rev: {})",
-            OSMOSIS_REV
-        );
-    }
+
+    info!("✨  `osmosis-std` is successfully generated!");
 }
 
-fn is_quiet() -> bool {
-    QUIET.load(atomic::Ordering::Relaxed)
-}
-
-fn set_quiet() {
-    QUIET.store(true, atomic::Ordering::Relaxed);
-}
-
-/// Parse `--github` flag passed to `proto-build` on the eponymous GitHub Actions job.
-/// Disables `info`-level log messages, instead outputting only a commit message.
-fn is_github() -> bool {
-    env::args().any(|arg| arg == "--github")
-}
 
 fn run_git(args: impl IntoIterator<Item = impl AsRef<OsStr>>) {
-    let stdout = if is_quiet() {
-        process::Stdio::null()
-    } else {
-        process::Stdio::inherit()
-    };
+    let stdout = process::Stdio::inherit();
 
     let exit_status = process::Command::new("git")
         .args(args)
@@ -202,7 +166,7 @@ fn compile_osmosis_proto(out_dir: &Path) -> HashMap<String, ServiceDescriptorPro
     let mut protos: Vec<PathBuf> = vec![];
     collect_protos(&proto_paths, &mut protos);
 
-    info!("Compiling osmosis sdk proto to rust types!");
+    info!("🧪 Compiling Osmosis' types from protobuf definitions...");
 
     tonic_build::configure()
         .build_client(false)
@@ -239,7 +203,7 @@ fn compile_osmosis_proto(out_dir: &Path) -> HashMap<String, ServiceDescriptorPro
         })
         .collect();
 
-    info!("=> Done!");
+    info!("✨  Osmosis' types from protobuf definitions is compiled successfully!");
 
     query_services
 }
@@ -369,7 +333,7 @@ fn copy_and_patch_generated_files(
 ) {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let to_dir = root.join(to_dir);
-    info!("Copying generated files into '{}'...", to_dir.display());
+    debug!("Copying generated files into '{}'...", to_dir.display());
 
     // Remove old compiled files
     remove_dir_all(&to_dir).unwrap_or_default();
@@ -440,7 +404,7 @@ fn copy_and_patch(
     let mut contents = match fs::read_to_string(src) {
         Ok(c) => c,
         Err(e) => {
-            info!("{:?} – {}, copy_and_patch skipped", src, e);
+            debug!("{:?} – {}, copy_and_patch skipped", src, e);
             return Ok(());
         }
     };
