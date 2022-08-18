@@ -1,25 +1,32 @@
-use crate::{format_ident, quote};
-use heck::ToSnakeCase;
-use heck::ToUpperCamelCase;
-use log::debug;
-use prost_types::ServiceDescriptorProto;
-use regex::Regex;
+use std::{fs, io};
 use std::collections::HashMap;
 use std::ffi::OsStr;
 use std::fs::{create_dir_all, remove_dir_all};
 use std::path::{Path, PathBuf};
-use std::{fs, io};
+
+use heck::ToSnakeCase;
+use heck::ToUpperCamelCase;
+use log::debug;
+use prost_types::{FileDescriptorSet, ServiceDescriptorProto};
+use regex::Regex;
+use syn::{Attribute, Fields, File, Ident, Item, ItemMod, parse_quote, Type};
 use syn::__private::quote::__private::TokenStream as TokenStream2;
-use syn::{parse_quote, Attribute, Fields, File, Ident, Item, ItemMod, Type};
 use walkdir::WalkDir;
+
+use crate::{format_ident, quote};
+
+/// Protos belonging to these Protobuf packages will be excluded
+/// (i.e. because they are sourced from `tendermint-proto`)
+const EXCLUDED_PROTO_PACKAGES: &[&str] = &["cosmos_proto", "gogoproto", "google", "tendermint"];
 
 pub fn append_attrs(
     src: &Path,
     ancestors: &[String],
     ident: &Ident,
     attrs: &mut Vec<Attribute>,
-    query_services: &HashMap<String, ServiceDescriptorProto>,
+    descriptor: &FileDescriptorSet,
 ) {
+    let query_services = query_services(descriptor);
     let type_url = get_type_url(src, ident);
     let path: Vec<String> = type_url.split('.').map(|s| s.to_string()).collect();
     let type_url = [&path[..(path.len() - 1)], ancestors, &[ident.to_string()]]
@@ -30,7 +37,7 @@ pub fn append_attrs(
         syn::parse_quote! { #[proto_message(type_url = #type_url)] },
     ]);
 
-    if let Some(attr) = get_query_attr(src, ident, query_services) {
+    if let Some(attr) = get_query_attr(src, ident, &query_services) {
         attrs.append(&mut vec![attr])
     }
 }
@@ -67,20 +74,23 @@ pub fn prepend<T>(v: &mut Vec<T>, other: &mut Vec<T>) {
     v.splice(0..0, other.drain(..));
 }
 
-pub fn recur_append_attrs(
+pub fn recur_transform_module(
     items: Vec<Item>,
     src: &Path,
     ancestors: &[String],
-    query_services: &HashMap<String, ServiceDescriptorProto>,
+    descriptor: &FileDescriptorSet,
     nested_mod: bool,
 ) -> Vec<Item> {
     let mut items = items
         .into_iter()
         .map(|i| match i.clone() {
             Item::Struct(mut s) => {
-                append_attrs(src, ancestors, &s.ident, &mut s.attrs, query_services);
+                append_attrs(src, ancestors, &s.ident, &mut s.attrs, descriptor);
                 Item::Struct(s)
             }
+            _ => i,
+        })
+        .map(|i| match i.clone() {
             Item::Mod(m) => {
                 let parent = &m.ident.to_string().to_upper_camel_case();
 
@@ -88,11 +98,11 @@ pub fn recur_append_attrs(
                     content: m.content.map(|(brace, items)| {
                         (
                             brace,
-                            recur_append_attrs(
+                            recur_transform_module(
                                 items,
                                 src,
                                 &[ancestors, &[parent.to_string()]].concat(),
-                                query_services,
+                                descriptor,
                                 true,
                             ),
                         )
@@ -111,6 +121,7 @@ pub fn recur_append_attrs(
 
     let querier_wrapper_ident = format_ident!("{}Querier", &package_stem.to_upper_camel_case());
 
+    let query_services = query_services(descriptor);
     let query_fns = query_services.get(package).map(|service| service.method.iter().map(|method_desc| {
         if nested_mod {
             return quote! {};
@@ -181,7 +192,7 @@ pub fn recur_append_attrs(
 pub fn copy_and_transform_generated_files(
     from_dir: &Path,
     to_dir: &Path,
-    query_services: HashMap<String, ServiceDescriptorProto>,
+    descriptor: &FileDescriptorSet
 ) {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let to_dir = root.join(to_dir);
@@ -204,7 +215,7 @@ pub fn copy_and_transform_generated_files(
             copy_and_transform(
                 e.path(),
                 format!("{}/{}", to_dir.display(), &filename),
-                &query_services,
+                descriptor,
             )
         })
         .filter_map(|e| e.err())
@@ -222,7 +233,7 @@ pub fn copy_and_transform_generated_files(
 fn copy_and_transform(
     src: &Path,
     dest: impl AsRef<Path>,
-    query_services: &HashMap<String, ServiceDescriptorProto>,
+    descriptor: &FileDescriptorSet
 ) -> io::Result<()> {
     /// Regex substitutions to apply to the prost-generated output
     const REPLACEMENTS: &[(&str, &str)] = &[
@@ -256,7 +267,7 @@ fn copy_and_transform(
     let mut contents = match fs::read_to_string(src) {
         Ok(c) => c,
         Err(e) => {
-            debug!("{:?} – {}, copy_and_patch skipped", src, e);
+            debug!("{:?} – {}, copy_and_transform skipped", src, e);
             return Ok(());
         }
     };
@@ -271,14 +282,32 @@ fn copy_and_transform(
     let file = syn::parse_file(&contents);
     if let Ok(file) = file {
         // only transform rust file (skipping `*_COMMIT` file)
-        let items = recur_append_attrs(file.items, src, &[], query_services, false);
-
+        let items = recur_transform_module(file.items, src, &[], descriptor, false);
         contents = prettyplease::unparse(&File { items, ..file });
     }
 
     fs::write(dest, &*contents)
 }
 
-/// Protos belonging to these Protobuf packages will be excluded
-/// (i.e. because they are sourced from `tendermint-proto`)
-const EXCLUDED_PROTO_PACKAGES: &[&str] = &["cosmos_proto", "gogoproto", "google", "tendermint"];
+pub fn query_services(descriptor: &FileDescriptorSet) -> HashMap<String, ServiceDescriptorProto> {
+    descriptor
+        .clone()
+        .file
+        .into_iter()
+        .filter_map(|f| {
+            let service = f
+                .service
+                .into_iter()
+                .find(|s| s.name == Some("Query".to_string()));
+
+            if let Some(service) = service {
+                Some((
+                    f.package.expect("Missing package name in file descriptor"),
+                    service,
+                ))
+            } else {
+                None
+            }
+        })
+        .collect()
+}

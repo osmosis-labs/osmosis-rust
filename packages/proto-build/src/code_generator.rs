@@ -1,13 +1,14 @@
-use crate::{mod_gen, transform};
-use log::info;
-use prost::Message;
-use prost_types::{FileDescriptorSet, ServiceDescriptorProto};
-use std::collections::HashMap;
+use std::{env, fs};
 use std::fs::{create_dir_all, remove_dir_all};
 use std::path::{Path, PathBuf};
 use std::process::Command;
-use std::{env, fs};
+
+use log::info;
+use prost::Message;
+use prost_types::{FileDescriptorSet};
 use walkdir::WalkDir;
+
+use crate::{mod_gen, transform};
 
 const DESCRIPTOR_FILE: &'static str = "descriptor.bin";
 
@@ -70,7 +71,7 @@ impl CodeGenerator {
         transform::copy_and_transform_generated_files(
             &self.tmp_namespaced_dir(),
             &out_dir,
-            query_services(self.file_descriptor_set()),
+            &self.file_descriptor_set(),
         );
         mod_gen::generate_mod_file(&out_dir);
 
@@ -160,27 +161,6 @@ fn collect_protos(proto_paths: &[String], protos: &mut Vec<PathBuf>) {
     }
 }
 
-pub fn query_services(descriptor: FileDescriptorSet) -> HashMap<String, ServiceDescriptorProto> {
-    descriptor
-        .file
-        .into_iter()
-        .filter_map(|f| {
-            let service = f
-                .service
-                .into_iter()
-                .find(|s| s.name == Some("Query".to_string()));
-
-            if let Some(service) = service {
-                Some((
-                    f.package.expect("Missing package name in file descriptor"),
-                    service,
-                ))
-            } else {
-                None
-            }
-        })
-        .collect()
-}
 
 fn find_cargo_toml(path: &Path) -> PathBuf {
     if path.join("Cargo.toml").exists() {
