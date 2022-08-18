@@ -1,17 +1,17 @@
-use std::path::{Path, PathBuf};
-use syn::{Attribute, Fields, File, Ident, Item, ItemMod, parse_quote, Type};
-use std::collections::HashMap;
-use prost_types::ServiceDescriptorProto;
-use heck::ToUpperCamelCase;
-use regex::Regex;
-use syn::__private::quote::__private::TokenStream as TokenStream2;
-use std::fs::{create_dir_all, remove_dir_all};
-use walkdir::WalkDir;
-use std::{fs, io};
-use std::ffi::OsStr;
-use log::debug;
-use heck::ToSnakeCase;
 use crate::{format_ident, quote};
+use heck::ToSnakeCase;
+use heck::ToUpperCamelCase;
+use log::debug;
+use prost_types::ServiceDescriptorProto;
+use regex::Regex;
+use std::collections::HashMap;
+use std::ffi::OsStr;
+use std::fs::{create_dir_all, remove_dir_all};
+use std::path::{Path, PathBuf};
+use std::{fs, io};
+use syn::__private::quote::__private::TokenStream as TokenStream2;
+use syn::{parse_quote, Attribute, Fields, File, Ident, Item, ItemMod, Type};
+use walkdir::WalkDir;
 
 pub fn append_attrs(
     src: &Path,
@@ -281,9 +281,4 @@ fn copy_and_transform(
 
 /// Protos belonging to these Protobuf packages will be excluded
 /// (i.e. because they are sourced from `tendermint-proto`)
-const EXCLUDED_PROTO_PACKAGES: &[&str] = &[
-    "cosmos_proto",
-    "gogoproto",
-    "google",
-    "tendermint",
-];
+const EXCLUDED_PROTO_PACKAGES: &[&str] = &["cosmos_proto", "gogoproto", "google", "tendermint"];

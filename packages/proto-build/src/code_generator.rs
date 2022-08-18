@@ -1,10 +1,12 @@
+use crate::{mod_gen, transform};
 use log::info;
 use prost::Message;
 use prost_types::{FileDescriptorSet, ServiceDescriptorProto};
 use std::collections::HashMap;
-use std::fs;
 use std::fs::{create_dir_all, remove_dir_all};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
+use std::process::Command;
+use std::{env, fs};
 use walkdir::WalkDir;
 
 const DESCRIPTOR_FILE: &'static str = "descriptor.bin";
@@ -32,7 +34,6 @@ impl CodeGenerator {
         project: CosmosProject,
         deps: Vec<CosmosProject>,
     ) -> Self {
-
         let tonic_build_config = tonic_build::configure()
             .build_client(false)
             .build_server(false)
@@ -61,7 +62,23 @@ impl CodeGenerator {
             &self.tmp_namespaced_dir(),
         );
         self.compile_proto();
+
+        info!("🧪  Embellishing modules to expose nice API for library user...");
+
+        let out_dir = self.root.join(&self.out_dir);
+
+        transform::copy_and_transform_generated_files(
+            &self.tmp_namespaced_dir(),
+            &out_dir,
+            query_services(self.file_descriptor_set()),
+        );
+        mod_gen::generate_mod_file(&out_dir);
+
+        fmt_generated_code(&out_dir);
+
+        info!("✨  `osmosis-std` is successfully generated!");
     }
+
 
     fn compile_proto(&self) {
         let include_paths = ["proto", "third_party/proto"];
@@ -163,4 +180,31 @@ pub fn query_services(descriptor: FileDescriptorSet) -> HashMap<String, ServiceD
             }
         })
         .collect()
+}
+
+fn find_cargo_toml(path: &Path) -> PathBuf {
+    if path.join("Cargo.toml").exists() {
+        path.to_path_buf().join("Cargo.toml")
+    } else {
+        find_cargo_toml(path.parent().expect("Cargo.toml not found"))
+    }
+}
+
+fn fmt_generated_code(out_dir: &PathBuf) {
+    let manifest_path = find_cargo_toml(&out_dir);
+    let exit_status = Command::new("cargo")
+        .arg("fmt")
+        .arg("--manifest-path")
+        .arg(manifest_path.to_string_lossy().to_string())
+        .spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
+
+    if !exit_status.success() {
+        panic!(
+            "unable to format with: cargo fmt --manifest-path {}",
+            manifest_path.to_string_lossy()
+        );
+    }
 }

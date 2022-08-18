@@ -1,10 +1,10 @@
-use syn::__private::quote::__private::TokenStream as TokenStream2;
-use std::path::{Path, PathBuf};
-use std::fs;
-use std::ffi::OsStr;
-use std::fs::create_dir_all;
-use itertools::Itertools;
 use crate::{format_ident, quote};
+use itertools::Itertools;
+use std::ffi::OsStr;
+use std::fs;
+use std::fs::create_dir_all;
+use std::path::{Path, PathBuf};
+use syn::__private::quote::__private::TokenStream as TokenStream2;
 
 pub fn generate_mod_file(for_dir: &Path) {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
