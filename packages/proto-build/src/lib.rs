@@ -12,6 +12,7 @@ mod code_generator;
 mod git;
 mod mod_gen;
 mod transform;
+mod transformers;
 
 /// The Cosmos SDK commit or tag to be cloned and used to build the proto files
 const COSMOS_SDK_REV: &str = "v0.45.4";

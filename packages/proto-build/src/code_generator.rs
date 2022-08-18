@@ -1,11 +1,11 @@
-use std::{env, fs};
 use std::fs::{create_dir_all, remove_dir_all};
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::{env, fs};
 
 use log::info;
 use prost::Message;
-use prost_types::{FileDescriptorSet};
+use prost_types::FileDescriptorSet;
 use walkdir::WalkDir;
 
 use crate::{mod_gen, transform};
@@ -68,7 +68,7 @@ impl CodeGenerator {
 
         let out_dir = self.root.join(&self.out_dir);
 
-        transform::copy_and_transform_generated_files(
+        transform::copy_and_transform_all(
             &self.tmp_namespaced_dir(),
             &out_dir,
             &self.file_descriptor_set(),
@@ -79,7 +79,6 @@ impl CodeGenerator {
 
         info!("✨  `osmosis-std` is successfully generated!");
     }
-
 
     fn compile_proto(&self) {
         let include_paths = ["proto", "third_party/proto"];
@@ -160,7 +159,6 @@ fn collect_protos(proto_paths: &[String], protos: &mut Vec<PathBuf>) {
         );
     }
 }
-
 
 fn find_cargo_toml(path: &Path) -> PathBuf {
     if path.join("Cargo.toml").exists() {
