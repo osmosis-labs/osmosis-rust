@@ -730,46 +730,6 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub total_delegated_coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
-#[derive(
-    Clone,
-    PartialEq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.QueryTotalDelegationByDelegatorRequest")]
-#[proto_query(
-    path = "/osmosis.superfluid.Query/TotalDelegationByDelegator",
-    response_type = QueryTotalDelegationByDelegatorResponse
-)]
-pub struct QueryTotalDelegationByDelegatorRequest {
-    #[prost(string, tag = "1")]
-    pub delegator_address: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.QueryTotalDelegationByDelegatorResponse")]
-pub struct QueryTotalDelegationByDelegatorResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub superfluid_delegation_records: ::prost::alloc::vec::Vec<SuperfluidDelegationRecord>,
-    #[prost(message, repeated, tag = "2")]
-    pub delegation_response:
-        ::prost::alloc::vec::Vec<super::super::cosmos::staking::v1beta1::DelegationResponse>,
-    #[prost(message, repeated, tag = "3")]
-    pub total_delegated_coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(message, optional, tag = "4")]
-    pub total_equivalent_staked_amount:
-        ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-}
 /// GenesisState defines the module's genesis state.
 #[derive(
     Clone,
