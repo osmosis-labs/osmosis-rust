@@ -1,11 +1,13 @@
 use osmosis_std_derive::CosmwasmExt;
-/// MsgCreateDenom is the sdk.Msg type for allowing an account to create
-/// a new denom. It requires a sender address and a subdenomination.
-/// The (sender_address, sub_denomination) pair must be unique and cannot be
-/// re-used. The resulting denom created is `factory/{creator
-/// address}/{subdenom}`. The resultant denom's admin is originally set to be the
-/// creator, but this can be changed later. The token denom does not indicate the
-/// current admin.
+/// MsgCreateDenom defines the message structure for the CreateDenom gRPC service
+/// method. It allows an account to create a new denom. It requires a sender
+/// address and a sub denomination. The (sender_address, sub_denomination) tuple
+/// must be unique and cannot be re-used.
+///
+/// The resulting denom created is defined as
+/// <factory/{creatorAddress}/{subdenom}>. The resulting denom's admin is
+/// originally set to be the creator, but this can be changed later. The token
+/// denom does not indicate the current admin.
 #[derive(
     Clone,
     PartialEq,
@@ -56,6 +58,8 @@ pub struct MsgMint {
     pub sender: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
     pub amount: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "3")]
+    pub mint_to_address: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
@@ -85,6 +89,8 @@ pub struct MsgBurn {
     pub sender: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
     pub amount: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "3")]
+    pub burn_from_address: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
@@ -117,6 +123,8 @@ pub struct MsgChangeAdmin {
     #[prost(string, tag = "3")]
     pub new_admin: ::prost::alloc::string::String,
 }
+/// MsgChangeAdminResponse defines the response structure for an executed
+/// MsgChangeAdmin message.
 #[derive(
     Clone,
     PartialEq,
@@ -128,6 +136,101 @@ pub struct MsgChangeAdmin {
 )]
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgChangeAdminResponse")]
 pub struct MsgChangeAdminResponse {}
+/// MsgSetBeforeSendHook is the sdk.Msg type for allowing an admin account to assign a
+/// CosmWasm contract to call with a BeforeSend hook
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgSetBeforeSendHook")]
+pub struct MsgSetBeforeSendHook {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub denom: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub cosmwasm_address: ::prost::alloc::string::String,
+}
+/// MsgSetBeforeSendHookResponse defines the response structure for an executed
+/// MsgSetBeforeSendHook message.
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgSetBeforeSendHookResponse")]
+pub struct MsgSetBeforeSendHookResponse {}
+/// MsgSetDenomMetadata is the sdk.Msg type for allowing an admin account to set
+/// the denom's bank metadata
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgSetDenomMetadata")]
+pub struct MsgSetDenomMetadata {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub metadata: ::core::option::Option<super::super::super::cosmos::bank::v1beta1::Metadata>,
+}
+/// MsgSetDenomMetadataResponse defines the response structure for an executed
+/// MsgSetDenomMetadata message.
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgSetDenomMetadataResponse")]
+pub struct MsgSetDenomMetadataResponse {}
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgForceTransfer")]
+pub struct MsgForceTransfer {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub amount: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "3")]
+    pub transfer_from_address: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub transfer_to_address: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgForceTransferResponse")]
+pub struct MsgForceTransferResponse {}
 /// DenomAuthorityMetadata specifies metadata for addresses that have specific
 /// capabilities over a token factory denom. Right now there is only one Admin
 /// permission, but is planned to be extended to the future.
@@ -146,7 +249,7 @@ pub struct DenomAuthorityMetadata {
     #[prost(string, tag = "1")]
     pub admin: ::prost::alloc::string::String,
 }
-/// Params holds parameters for the tokenfactory module
+/// Params defines the parameters for the tokenfactory module.
 #[derive(
     Clone,
     PartialEq,
@@ -194,6 +297,8 @@ pub struct QueryParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
 }
+/// QueryDenomAuthorityMetadataRequest defines the request structure for the
+/// DenomAuthorityMetadata gRPC query.
 #[derive(
     Clone,
     PartialEq,
@@ -212,6 +317,8 @@ pub struct QueryDenomAuthorityMetadataRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
 }
+/// QueryDenomAuthorityMetadataResponse defines the response structure for the
+/// DenomAuthorityMetadata gRPC query.
 #[derive(
     Clone,
     PartialEq,
@@ -226,6 +333,8 @@ pub struct QueryDenomAuthorityMetadataResponse {
     #[prost(message, optional, tag = "1")]
     pub authority_metadata: ::core::option::Option<DenomAuthorityMetadata>,
 }
+/// QueryDenomsFromCreatorRequest defines the request structure for the
+/// DenomsFromCreator gRPC query.
 #[derive(
     Clone,
     PartialEq,
@@ -244,6 +353,8 @@ pub struct QueryDenomsFromCreatorRequest {
     #[prost(string, tag = "1")]
     pub creator: ::prost::alloc::string::String,
 }
+/// QueryDenomsFromCreatorRequest defines the response structure for the
+/// DenomsFromCreator gRPC query.
 #[derive(
     Clone,
     PartialEq,
@@ -257,6 +368,42 @@ pub struct QueryDenomsFromCreatorRequest {
 pub struct QueryDenomsFromCreatorResponse {
     #[prost(string, repeated, tag = "1")]
     pub denoms: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+/// QueryDenomBeforeSendHookRequest defines the request structure for the
+/// DenomBeforeSendHook gRPC query.
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.QueryDenomBeforeSendHookRequest")]
+#[proto_query(
+    path = "/osmosis.tokenfactory.v1beta1.Query/DenomBeforeSendHook",
+    response_type = QueryDenomBeforeSendHookResponse
+)]
+pub struct QueryDenomBeforeSendHookRequest {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+}
+/// QueryDenomBeforeSendHookResponse defines the response structure for the
+/// DenomBeforeSendHook gRPC query.
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.QueryDenomBeforeSendHookResponse")]
+pub struct QueryDenomBeforeSendHookResponse {
+    #[prost(string, tag = "1")]
+    pub cosmwasm_address: ::prost::alloc::string::String,
 }
 /// GenesisState defines the tokenfactory module's genesis state.
 #[derive(
@@ -276,6 +423,9 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "2")]
     pub factory_denoms: ::prost::alloc::vec::Vec<GenesisDenom>,
 }
+/// GenesisDenom defines a tokenfactory denom that is defined within genesis
+/// state. The structure contains DenomAuthorityMetadata which defines the
+/// denom's admin.
 #[derive(
     Clone,
     PartialEq,
@@ -313,5 +463,11 @@ impl<'a> TokenfactoryQuerier<'a> {
         creator: ::prost::alloc::string::String,
     ) -> Result<QueryDenomsFromCreatorResponse, cosmwasm_std::StdError> {
         QueryDenomsFromCreatorRequest { creator }.query(self.querier)
+    }
+    pub fn denom_before_send_hook(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QueryDenomBeforeSendHookResponse, cosmwasm_std::StdError> {
+        QueryDenomBeforeSendHookRequest { denom }.query(self.querier)
     }
 }

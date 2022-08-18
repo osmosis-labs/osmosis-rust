@@ -14,11 +14,14 @@ use osmosis_std_derive::CosmwasmExt;
 pub struct SuperfluidAsset {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
+    /// AssetType indicates whether the superfluid asset is a native token or an lp
+    /// share
     #[prost(enumeration = "SuperfluidAssetType", tag = "2")]
     pub asset_type: i32,
 }
 /// SuperfluidIntermediaryAccount takes the role of intermediary between LP token
-/// and OSMO tokens for superfluid staking
+/// and OSMO tokens for superfluid staking. The intermediary account is the
+/// actual account responsible for delegation, not the validator account itself.
 #[derive(
     Clone,
     PartialEq,
@@ -30,6 +33,7 @@ pub struct SuperfluidAsset {
 )]
 #[proto_message(type_url = "/osmosis.superfluid.SuperfluidIntermediaryAccount")]
 pub struct SuperfluidIntermediaryAccount {
+    /// Denom indicates the denom of the superfluid asset.
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
@@ -43,7 +47,7 @@ pub struct SuperfluidIntermediaryAccount {
 /// to be set as the Time-weighted-average-osmo-backing for the entire duration
 /// of epoch N-1. (Thereby locking whats in use for epoch N as based on the prior
 /// epochs rewards) However for now, this is not the TWAP but instead the spot
-/// price at the boundary.  For different types of assets in the future, it could
+/// price at the boundary. For different types of assets in the future, it could
 /// change.
 #[derive(
     Clone,
@@ -64,8 +68,8 @@ pub struct OsmoEquivalentMultiplierRecord {
     #[prost(string, tag = "3")]
     pub multiplier: ::prost::alloc::string::String,
 }
-/// SuperfluidDelegationRecord takes the role of intermediary between LP token
-/// and OSMO tokens for superfluid staking
+/// SuperfluidDelegationRecord is a struct used to indicate superfluid
+/// delegations of an account in the state machine in a user friendly form.
 #[derive(
     Clone,
     PartialEq,
@@ -86,6 +90,9 @@ pub struct SuperfluidDelegationRecord {
     #[prost(message, optional, tag = "4")]
     pub equivalent_staked_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
 }
+/// LockIdIntermediaryAccountConnection is a struct used to indicate the
+/// relationship between the underlying lock id and superfluid delegation done
+/// via lp shares.
 #[derive(
     Clone,
     PartialEq,
@@ -116,6 +123,8 @@ pub struct UnpoolWhitelistedPools {
     #[prost(uint64, repeated, tag = "1")]
     pub ids: ::prost::alloc::vec::Vec<u64>,
 }
+/// SuperfluidAssetType indicates whether the superfluid asset is
+/// a native token itself or the lp share of a pool.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum SuperfluidAssetType {
@@ -291,8 +300,10 @@ pub struct MsgUnPoolWhitelistedPoolResponse {
 )]
 #[proto_message(type_url = "/osmosis.superfluid.Params")]
 pub struct Params {
-    /// the risk_factor is to be cut on OSMO equivalent value of lp tokens for
-    /// superfluid staking, default: 5%
+    /// minimum_risk_factor is to be cut on OSMO equivalent value of lp tokens for
+    /// superfluid staking, default: 5%. The minimum risk factor works
+    /// to counter-balance the staked amount on chain's exposure to various asset
+    /// volatilities, and have base staking be 'resistant' to volatility.
     #[prost(string, tag = "1")]
     pub minimum_risk_factor: ::prost::alloc::string::String,
 }
@@ -719,6 +730,46 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub total_delegated_coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.QueryTotalDelegationByDelegatorRequest")]
+#[proto_query(
+    path = "/osmosis.superfluid.Query/TotalDelegationByDelegator",
+    response_type = QueryTotalDelegationByDelegatorResponse
+)]
+pub struct QueryTotalDelegationByDelegatorRequest {
+    #[prost(string, tag = "1")]
+    pub delegator_address: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.QueryTotalDelegationByDelegatorResponse")]
+pub struct QueryTotalDelegationByDelegatorResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub superfluid_delegation_records: ::prost::alloc::vec::Vec<SuperfluidDelegationRecord>,
+    #[prost(message, repeated, tag = "2")]
+    pub delegation_response:
+        ::prost::alloc::vec::Vec<super::super::cosmos::staking::v1beta1::DelegationResponse>,
+    #[prost(message, repeated, tag = "3")]
+    pub total_delegated_coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "4")]
+    pub total_equivalent_staked_amount:
+        ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+}
 /// GenesisState defines the module's genesis state.
 #[derive(
     Clone,
@@ -733,10 +784,16 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
 pub struct GenesisState {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
+    /// superfluid_assets defines the registered superfluid assets that have been
+    /// registered via governance.
     #[prost(message, repeated, tag = "2")]
     pub superfluid_assets: ::prost::alloc::vec::Vec<SuperfluidAsset>,
+    /// osmo_equivalent_multipliers is the records of osmo equivalent amount of
+    /// each superfluid registered pool, updated every epoch.
     #[prost(message, repeated, tag = "3")]
     pub osmo_equivalent_multipliers: ::prost::alloc::vec::Vec<OsmoEquivalentMultiplierRecord>,
+    /// intermediary_accounts is a secondary account for superfluid staking that
+    /// plays an intermediary role between validators and the delegators.
     #[prost(message, repeated, tag = "4")]
     pub intermediary_accounts: ::prost::alloc::vec::Vec<SuperfluidIntermediaryAccount>,
     #[prost(message, repeated, tag = "5")]
@@ -837,5 +894,11 @@ impl<'a> SuperfluidQuerier<'a> {
             denom,
         }
         .query(self.querier)
+    }
+    pub fn total_delegation_by_delegator(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryTotalDelegationByDelegatorResponse, cosmwasm_std::StdError> {
+        QueryTotalDelegationByDelegatorRequest { delegator_address }.query(self.querier)
     }
 }

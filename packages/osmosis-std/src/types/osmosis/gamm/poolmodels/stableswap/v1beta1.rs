@@ -62,6 +62,7 @@ pub struct Pool {
     #[prost(string, tag = "8")]
     pub scaling_factor_governor: ::prost::alloc::string::String,
 }
+/// ===================== MsgCreatePool
 #[derive(
     Clone,
     PartialEq,
@@ -83,6 +84,7 @@ pub struct MsgCreateStableswapPool {
     #[prost(string, tag = "4")]
     pub future_pool_governor: ::prost::alloc::string::String,
 }
+/// Returns a poolID with custom poolName.
 #[derive(
     Clone,
     PartialEq,
@@ -99,6 +101,8 @@ pub struct MsgCreateStableswapPoolResponse {
     #[prost(uint64, tag = "1")]
     pub pool_id: u64,
 }
+/// Sender must be the pool's scaling_factor_governor in order for the tx to
+/// succeed. Adjusts stableswap scaling factors.
 #[derive(
     Clone,
     PartialEq,
@@ -112,8 +116,6 @@ pub struct MsgCreateStableswapPoolResponse {
     type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactors"
 )]
 pub struct MsgStableSwapAdjustScalingFactors {
-    /// Sender must be the pool's scaling_factor_governor in order for the tx to
-    /// succeed
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
