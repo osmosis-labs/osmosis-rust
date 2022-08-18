@@ -351,3 +351,35 @@ pub struct GenesisState {
     #[prost(message, optional, tag = "3")]
     pub distr_info: ::core::option::Option<DistrInfo>,
 }
+pub struct PoolincentivesQuerier<'a> {
+    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+}
+impl<'a> PoolincentivesQuerier<'a> {
+    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+        Self { querier }
+    }
+    pub fn gauge_ids(&self, pool_id: u64) -> Result<QueryGaugeIdsResponse, cosmwasm_std::StdError> {
+        QueryGaugeIdsRequest { pool_id }.query(self.querier)
+    }
+    pub fn distr_info(&self) -> Result<QueryDistrInfoResponse, cosmwasm_std::StdError> {
+        QueryDistrInfoRequest {}.query(self.querier)
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
+    }
+    pub fn lockable_durations(
+        &self,
+    ) -> Result<QueryLockableDurationsResponse, cosmwasm_std::StdError> {
+        QueryLockableDurationsRequest {}.query(self.querier)
+    }
+    pub fn incentivized_pools(
+        &self,
+    ) -> Result<QueryIncentivizedPoolsResponse, cosmwasm_std::StdError> {
+        QueryIncentivizedPoolsRequest {}.query(self.querier)
+    }
+    pub fn external_incentive_gauges(
+        &self,
+    ) -> Result<QueryExternalIncentiveGaugesResponse, cosmwasm_std::StdError> {
+        QueryExternalIncentiveGaugesRequest {}.query(self.querier)
+    }
+}

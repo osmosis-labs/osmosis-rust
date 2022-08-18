@@ -187,3 +187,29 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "2")]
     pub feetokens: ::prost::alloc::vec::Vec<FeeToken>,
 }
+pub struct TxfeesQuerier<'a> {
+    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+}
+impl<'a> TxfeesQuerier<'a> {
+    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+        Self { querier }
+    }
+    pub fn fee_tokens(&self) -> Result<QueryFeeTokensResponse, cosmwasm_std::StdError> {
+        QueryFeeTokensRequest {}.query(self.querier)
+    }
+    pub fn denom_spot_price(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QueryDenomSpotPriceResponse, cosmwasm_std::StdError> {
+        QueryDenomSpotPriceRequest { denom }.query(self.querier)
+    }
+    pub fn denom_pool_id(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QueryDenomPoolIdResponse, cosmwasm_std::StdError> {
+        QueryDenomPoolIdRequest { denom }.query(self.querier)
+    }
+    pub fn base_denom(&self) -> Result<QueryBaseDenomResponse, cosmwasm_std::StdError> {
+        QueryBaseDenomRequest {}.query(self.querier)
+    }
+}

@@ -743,3 +743,99 @@ pub struct GenesisState {
     pub intemediary_account_connections:
         ::prost::alloc::vec::Vec<LockIdIntermediaryAccountConnection>,
 }
+pub struct SuperfluidQuerier<'a> {
+    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+}
+impl<'a> SuperfluidQuerier<'a> {
+    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+        Self { querier }
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
+    }
+    pub fn asset_type(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<AssetTypeResponse, cosmwasm_std::StdError> {
+        AssetTypeRequest { denom }.query(self.querier)
+    }
+    pub fn all_assets(&self) -> Result<AllAssetsResponse, cosmwasm_std::StdError> {
+        AllAssetsRequest {}.query(self.querier)
+    }
+    pub fn asset_multiplier(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<AssetMultiplierResponse, cosmwasm_std::StdError> {
+        AssetMultiplierRequest { denom }.query(self.querier)
+    }
+    pub fn all_intermediary_accounts(
+        &self,
+        pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+    ) -> Result<AllIntermediaryAccountsResponse, cosmwasm_std::StdError> {
+        AllIntermediaryAccountsRequest { pagination }.query(self.querier)
+    }
+    pub fn connected_intermediary_account(
+        &self,
+        lock_id: u64,
+    ) -> Result<ConnectedIntermediaryAccountResponse, cosmwasm_std::StdError> {
+        ConnectedIntermediaryAccountRequest { lock_id }.query(self.querier)
+    }
+    pub fn total_superfluid_delegations(
+        &self,
+    ) -> Result<TotalSuperfluidDelegationsResponse, cosmwasm_std::StdError> {
+        TotalSuperfluidDelegationsRequest {}.query(self.querier)
+    }
+    pub fn superfluid_delegation_amount(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+        validator_address: ::prost::alloc::string::String,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<SuperfluidDelegationAmountResponse, cosmwasm_std::StdError> {
+        SuperfluidDelegationAmountRequest {
+            delegator_address,
+            validator_address,
+            denom,
+        }
+        .query(self.querier)
+    }
+    pub fn superfluid_delegations_by_delegator(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+    ) -> Result<SuperfluidDelegationsByDelegatorResponse, cosmwasm_std::StdError> {
+        SuperfluidDelegationsByDelegatorRequest { delegator_address }.query(self.querier)
+    }
+    pub fn superfluid_undelegations_by_delegator(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<SuperfluidUndelegationsByDelegatorResponse, cosmwasm_std::StdError> {
+        SuperfluidUndelegationsByDelegatorRequest {
+            delegator_address,
+            denom,
+        }
+        .query(self.querier)
+    }
+    pub fn superfluid_delegations_by_validator_denom(
+        &self,
+        validator_address: ::prost::alloc::string::String,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<SuperfluidDelegationsByValidatorDenomResponse, cosmwasm_std::StdError> {
+        SuperfluidDelegationsByValidatorDenomRequest {
+            validator_address,
+            denom,
+        }
+        .query(self.querier)
+    }
+    pub fn estimate_superfluid_delegated_amount_by_validator_denom(
+        &self,
+        validator_address: ::prost::alloc::string::String,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<EstimateSuperfluidDelegatedAmountByValidatorDenomResponse, cosmwasm_std::StdError>
+    {
+        EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
+            validator_address,
+            denom,
+        }
+        .query(self.querier)
+    }
+}

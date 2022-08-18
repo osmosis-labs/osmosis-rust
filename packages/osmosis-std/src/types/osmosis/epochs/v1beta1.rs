@@ -136,3 +136,20 @@ pub struct QueryCurrentEpochResponse {
     #[prost(int64, tag = "1")]
     pub current_epoch: i64,
 }
+pub struct EpochsQuerier<'a> {
+    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+}
+impl<'a> EpochsQuerier<'a> {
+    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+        Self { querier }
+    }
+    pub fn epoch_infos(&self) -> Result<QueryEpochsInfoResponse, cosmwasm_std::StdError> {
+        QueryEpochsInfoRequest {}.query(self.querier)
+    }
+    pub fn current_epoch(
+        &self,
+        identifier: ::prost::alloc::string::String,
+    ) -> Result<QueryCurrentEpochResponse, cosmwasm_std::StdError> {
+        QueryCurrentEpochRequest { identifier }.query(self.querier)
+    }
+}

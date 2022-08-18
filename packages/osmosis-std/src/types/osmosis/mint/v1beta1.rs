@@ -184,3 +184,17 @@ pub struct GenesisState {
     #[prost(int64, tag = "3")]
     pub halven_started_epoch: i64,
 }
+pub struct MintQuerier<'a> {
+    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+}
+impl<'a> MintQuerier<'a> {
+    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+        Self { querier }
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
+    }
+    pub fn epoch_provisions(&self) -> Result<QueryEpochProvisionsResponse, cosmwasm_std::StdError> {
+        QueryEpochProvisionsRequest {}.query(self.querier)
+    }
+}

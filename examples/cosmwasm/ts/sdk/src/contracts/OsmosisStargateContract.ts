@@ -5,7 +5,7 @@
 */
 
 import { CosmWasmClient, ExecuteResult, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { Coin, StdFee } from "@cosmjs/amino";
+import { StdFee } from "@cosmjs/amino";
 export type ExecuteMsg = {
   create_denom: {
     initial_mint?: string | null;
@@ -31,9 +31,33 @@ export interface PoolAssests {
 export interface InstantiateMsg {
   [k: string]: unknown;
 }
-export type QueryMsg = string;
+export interface QueryCreatorDenomsResponse {
+  denoms: string[];
+  [k: string]: unknown;
+}
+export type QueryMsg = {
+  query_token_creation_fee: {
+    [k: string]: unknown;
+  };
+} | {
+  query_creator_denoms: {
+    [k: string]: unknown;
+  };
+};
+export type Uint128 = string;
+export interface QueryTokenCreationFeeResponse {
+  fee: Coin[];
+  [k: string]: unknown;
+}
+export interface Coin {
+  amount: Uint128;
+  denom: string;
+  [k: string]: unknown;
+}
 export interface OsmosisStargateReadOnlyInterface {
   contractAddress: string;
+  queryTokenCreationFee: () => Promise<QueryTokenCreationFeeResponse>;
+  queryCreatorDenoms: () => Promise<QueryCreatorDenomsResponse>;
 }
 export class OsmosisStargateQueryClient implements OsmosisStargateReadOnlyInterface {
   client: CosmWasmClient;
@@ -42,8 +66,20 @@ export class OsmosisStargateQueryClient implements OsmosisStargateReadOnlyInterf
   constructor(client: CosmWasmClient, contractAddress: string) {
     this.client = client;
     this.contractAddress = contractAddress;
+    this.queryTokenCreationFee = this.queryTokenCreationFee.bind(this);
+    this.queryCreatorDenoms = this.queryCreatorDenoms.bind(this);
   }
 
+  queryTokenCreationFee = async (): Promise<QueryTokenCreationFeeResponse> => {
+    return this.client.queryContractSmart(this.contractAddress, {
+      query_token_creation_fee: {}
+    });
+  };
+  queryCreatorDenoms = async (): Promise<QueryCreatorDenomsResponse> => {
+    return this.client.queryContractSmart(this.contractAddress, {
+      query_creator_denoms: {}
+    });
+  };
 }
 export interface OsmosisStargateInterface extends OsmosisStargateReadOnlyInterface {
   contractAddress: string;
