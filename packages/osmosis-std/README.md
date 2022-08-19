@@ -31,6 +31,19 @@ pub fn try_create_denom(env: Env, subdenom: String) -> Result<Response, Contract
 
 ## Querying Osmosis' module
 
+[This will not currently work on mainnet until osmosis v12.](https://github.com/osmosis-labs/osmosis/issues/2433). 
+But meanwhile, if you want to test this out, you can by using [osmosis hackatom-seoul branch](https://github.com/osmosis-labs/osmosis/tree/hackatom-seoul) which we enabled all stargate query for hacking purpose!
+
+```sh
+git clone git@github.com:osmosis-labs/osmosis.git
+cd osmosis
+git checkout remotes/origin/hackatom-seoul
+
+# build and run localosmosis with hackatom-seoul branch (docker required)
+make localnet-build && make localnet-start
+```
+
+
 ```rs
 use osmosis_std::types::osmosis::tokenfactory::v1beta1::TokenfactoryQuerier;
 
