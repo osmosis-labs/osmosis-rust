@@ -2,39 +2,24 @@
 
 Rust library for interacting with osmosis. CosmWasm compatible.
 
-## Use with CosmWasm
+## CosmWasm stargate message and stargate query
 
-You can find all types generated from osmosis's protobuf in their respective module in `osmosis_std` for example.
+You can find all types and querier generated from osmosis's protobuf in their respective module in `osmosis_std`.
 
-```rs
-use osmosis_std::tokenfactory::v1beta1::MsgCreateDenom;
-```
+[Full working example contract can be found here.](/examples/cosmwasm/contracts/osmosis-stargate)
 
-With this, you can convert them to `CosmosMsg`. It is `CosmosMsg::Stargate` variant, so you need to add `features = ["stargate"]` to `cosmwasm-std`
-
-For example:
-
-```toml
-# Cargo.toml
-
-[dependencies]
-cosmwasm-std = {version = "1.0.0", features = ["stargate"]}
-```
+### Publishing Osmosis' message from CosmWasm Contract
 
 ```rs
-pub fn execute(
-    _deps: DepsMut,
-    env: Env,
-    _info: MessageInfo,
-    msg: ExecuteMsg,
-) -> Result<Response, ContractError> {
-    match msg {
-        ExecuteMsg::CreateDenom { subdenom } => try_create_denom(env, subdenom),
-    }
-}
+use osmosis_std::types::osmosis::tokenfactory::v1beta1::MsgCreateDenom;
+
+// ..
 
 pub fn try_create_denom(env: Env, subdenom: String) -> Result<Response, ContractError> {
     let sender = env.contract.address.into();
+
+    // construct message and convet them into cosmos message
+    // (notice `CosmosMsg` type and `.into()`)
     let msg_create_denom: CosmosMsg = MsgCreateDenom { sender, subdenom }.into();
 
     Ok(Response::new()
@@ -43,3 +28,26 @@ pub fn try_create_denom(env: Env, subdenom: String) -> Result<Response, Contract
 }
 
 ```
+
+## Querying Osmosis' module
+
+```rs
+use osmosis_std::types::osmosis::tokenfactory::v1beta1::TokenfactoryQuerier;
+
+// .. 
+
+fn query_creator_denoms(deps: Deps, env: Env) -> StdResult<QueryCreatorDenomsResponse> {
+    // create `TokenfactoryQuerier`
+    let tokenfactory = TokenfactoryQuerier::new(deps.querier);
+
+    // `TokenfactoryQuerier` has all the fns for querying the module
+    let res = tokenfactory.denoms_from_creator(env.contract.address.into())?;
+
+    Ok(QueryCreatorDenomsResponse { denoms: res.denoms })
+}
+```
+
+
+
+## Non-CosmWasm Client
+(WIP)
