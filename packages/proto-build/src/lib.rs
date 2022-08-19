@@ -57,8 +57,8 @@ pub fn run() {
         out_dir.clone(),
         tmp_build_dir.clone(),
         osmosis_project,
-        vec![cosmos_project],
+        vec![cosmos_project.clone()],
     );
 
-    osmosis_code_generator.generate();
+    osmosis_code_generator.clean_up_and_generate();
 }

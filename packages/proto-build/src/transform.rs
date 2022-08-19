@@ -1,6 +1,6 @@
 use std::ffi::OsStr;
-use std::fs::{create_dir_all, remove_dir_all};
-use std::path::{Path, PathBuf};
+use std::fs::create_dir_all;
+use std::path::Path;
 use std::{fs, io};
 
 use heck::ToUpperCamelCase;
@@ -18,12 +18,8 @@ use crate::transformers;
 const EXCLUDED_PROTO_PACKAGES: &[&str] = &["cosmos_proto", "gogoproto", "google", "tendermint"];
 
 pub fn copy_and_transform_all(from_dir: &Path, to_dir: &Path, descriptor: &FileDescriptorSet) {
-    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let to_dir = root.join(to_dir);
     debug!("Copying generated files into '{}'...", to_dir.display());
 
-    // Remove old compiled files
-    remove_dir_all(&to_dir).unwrap_or_default();
     create_dir_all(&to_dir).unwrap();
 
     let mut filenames = Vec::new();

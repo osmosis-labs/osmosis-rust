@@ -12,6 +12,7 @@ use crate::{mod_gen, transform};
 
 const DESCRIPTOR_FILE: &'static str = "descriptor.bin";
 
+#[derive(Debug, Clone)]
 pub struct CosmosProject {
     pub name: String,
     pub version: String,
@@ -69,6 +70,13 @@ impl CodeGenerator {
             "✨  [{}] Library is successfully generated!",
             self.project.name
         );
+    }
+
+    pub fn clean_up_and_generate(&self) {
+        if self.absolute_out_dir().exists() {
+            remove_dir_all(&self.absolute_out_dir()).expect("unable to remove output directory");
+        };
+        self.generate();
     }
 
     fn prepare_dir(&self) {
