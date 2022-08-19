@@ -86,44 +86,62 @@ fn copy_and_transform(
     let file = syn::parse_file(&contents);
     if let Ok(file) = file {
         // only transform rust file (skipping `*_COMMIT` file)
-        let items = recur_transform_module(file.items, src, &[], descriptor, false);
+        let items = transform_module(file.items, src, &[], descriptor, false);
         contents = prettyplease::unparse(&File { items, ..file });
     }
 
     fs::write(dest, &*contents)
 }
 
-pub fn prepend<T>(v: &mut Vec<T>, other: &mut Vec<T>) {
-    v.splice(0..0, other.drain(..));
-}
-
-fn recur_transform_module(
+fn transform_module(
     items: Vec<Item>,
     src: &Path,
     ancestors: &[String],
     descriptor: &FileDescriptorSet,
     nested_mod: bool,
 ) -> Vec<Item> {
-    let mut items = items
+    let items = transform_items(items, src, ancestors, descriptor);
+    let items = prepend(items);
+    let items = append(items, src, descriptor, nested_mod);
+
+    items
+}
+
+fn prepend(items: Vec<Item>) -> Vec<Item> {
+    let mut items = items;
+
+    let mut prepending_items = vec![syn::parse_quote! {
+        use osmosis_std_derive::CosmwasmExt;
+    }];
+
+    items.splice(0..0, prepending_items.drain(..));
+    items
+}
+
+fn append(
+    items: Vec<Item>,
+    src: &Path,
+    descriptor: &FileDescriptorSet,
+    nested_mod: bool,
+) -> Vec<Item> {
+    transformers::append_querier(items, src, nested_mod, descriptor)
+}
+
+fn transform_items(
+    items: Vec<Item>,
+    src: &Path,
+    ancestors: &[String],
+    descriptor: &FileDescriptorSet,
+) -> Vec<Item> {
+    let items = items
         .into_iter()
         .map(|i| match i.clone() {
-            Item::Struct(mut s) => {
-                transformers::append_attrs(src, &s.ident, &mut s.attrs, descriptor);
-                Item::Struct(s)
-            }
+            Item::Struct(s) => Item::Struct(transformers::append_attrs(src, &s, descriptor)),
             _ => i,
         })
         .map(|i: Item| transform_nested_mod(i, src, ancestors, descriptor))
         .collect::<Vec<Item>>();
-
-    prepend(
-        &mut items,
-        &mut vec![syn::parse_quote! {
-            use osmosis_std_derive::CosmwasmExt;
-        }],
-    );
-
-    transformers::append_querier(items, src, nested_mod, descriptor)
+    items
 }
 
 fn transform_nested_mod(
@@ -138,7 +156,7 @@ fn transform_nested_mod(
             let content = m.content.map(|(brace, items)| {
                 (
                     brace,
-                    recur_transform_module(
+                    transform_module(
                         items,
                         &src,
                         &[ancestors, &[parent.to_string()]].concat(),

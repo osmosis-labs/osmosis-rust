@@ -53,6 +53,25 @@ impl CodeGenerator {
     }
 
     pub fn generate(&self) {
+        self.prepare_dir();
+        self.compile_proto();
+
+        info!(
+            "🧪 [{}] Embellishing modules to expose nice API for library user...",
+            self.project.name
+        );
+
+        self.transform();
+        self.generate_mod_file();
+        self.fmt();
+
+        info!(
+            "✨  [{}] Library is successfully generated!",
+            self.project.name
+        );
+    }
+
+    fn prepare_dir(&self) {
         if self.tmp_build_dir.exists() {
             remove_dir_all(self.tmp_build_dir.clone()).unwrap();
         }
@@ -62,22 +81,41 @@ impl CodeGenerator {
             &self.project.version,
             &self.tmp_namespaced_dir(),
         );
-        self.compile_proto();
+    }
 
-        info!("🧪  Embellishing modules to expose nice API for library user...");
+    fn generate_mod_file(&self) {
+        mod_gen::generate_mod_file(&self.absolute_out_dir());
+    }
 
-        let out_dir = self.root.join(&self.out_dir);
-
+    fn transform(&self) {
         transform::copy_and_transform_all(
             &self.tmp_namespaced_dir(),
-            &out_dir,
+            &self.absolute_out_dir(),
             &self.file_descriptor_set(),
         );
-        mod_gen::generate_mod_file(&out_dir);
+    }
 
-        fmt_generated_code(&out_dir);
+    fn absolute_out_dir(&self) -> PathBuf {
+        self.root.join(&self.out_dir)
+    }
 
-        info!("✨  `osmosis-std` is successfully generated!");
+    fn fmt(&self) {
+        let manifest_path = find_cargo_toml(&self.absolute_out_dir());
+        let exit_status = Command::new("cargo")
+            .arg("fmt")
+            .arg("--manifest-path")
+            .arg(manifest_path.to_string_lossy().to_string())
+            .spawn()
+            .unwrap()
+            .wait()
+            .unwrap();
+
+        if !exit_status.success() {
+            panic!(
+                "unable to format with: cargo fmt --manifest-path {}",
+                manifest_path.to_string_lossy()
+            );
+        }
     }
 
     fn compile_proto(&self) {
@@ -107,7 +145,10 @@ impl CodeGenerator {
         let mut protos: Vec<PathBuf> = vec![];
         collect_protos(&proto_paths, &mut protos);
 
-        info!("🧪 Compiling Osmosis' types from protobuf definitions...");
+        info!(
+            "🧪 [{}] Compiling types from protobuf definitions...",
+            self.project.name
+        );
 
         let descriptor_file = self.tmp_namespaced_dir().join(DESCRIPTOR_FILE);
         self.tonic_build_config
@@ -117,7 +158,10 @@ impl CodeGenerator {
             .compile(&protos, &includes)
             .unwrap();
 
-        info!("✨  Osmosis' types from protobuf definitions is compiled successfully!");
+        info!(
+            "✨  [{}] Types from protobuf definitions is compiled successfully!",
+            self.project.name
+        );
     }
 
     pub fn file_descriptor_set(&self) -> FileDescriptorSet {
@@ -165,24 +209,5 @@ fn find_cargo_toml(path: &Path) -> PathBuf {
         path.to_path_buf().join("Cargo.toml")
     } else {
         find_cargo_toml(path.parent().expect("Cargo.toml not found"))
-    }
-}
-
-fn fmt_generated_code(out_dir: &PathBuf) {
-    let manifest_path = find_cargo_toml(&out_dir);
-    let exit_status = Command::new("cargo")
-        .arg("fmt")
-        .arg("--manifest-path")
-        .arg(manifest_path.to_string_lossy().to_string())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    if !exit_status.success() {
-        panic!(
-            "unable to format with: cargo fmt --manifest-path {}",
-            manifest_path.to_string_lossy()
-        );
     }
 }

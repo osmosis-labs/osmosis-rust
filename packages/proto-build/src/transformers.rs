@@ -8,7 +8,7 @@ use prost_types::{
 };
 use regex::Regex;
 use syn::__private::quote::__private::TokenStream as TokenStream2;
-use syn::{parse_quote, Attribute, Fields, Ident, Item, Type};
+use syn::{parse_quote, Attribute, Fields, Ident, Item, ItemStruct, Type};
 
 use crate::{format_ident, quote};
 
@@ -32,23 +32,21 @@ pub const REPLACEMENTS: &[(&str, &str)] = &[
     ),
 ];
 
-pub fn append_attrs(
-    src: &Path,
-    ident: &Ident,
-    attrs: &mut Vec<Attribute>,
-    descriptor: &FileDescriptorSet,
-) {
+pub fn append_attrs(src: &Path, s: &ItemStruct, descriptor: &FileDescriptorSet) -> ItemStruct {
+    let mut s = s.clone();
     let query_services = extract_query_services(descriptor);
-    let type_url = get_type_url(src, ident, descriptor);
+    let type_url = get_type_url(src, &s.ident, descriptor);
 
-    attrs.append(&mut vec![
+    s.attrs.append(&mut vec![
         syn::parse_quote! { #[derive(serde::Serialize, serde::Deserialize, schemars::JsonSchema, CosmwasmExt)] },
         syn::parse_quote! { #[proto_message(type_url = #type_url)] },
     ]);
 
-    if let Some(attr) = get_query_attr(src, ident, &query_services) {
-        attrs.append(&mut vec![attr])
+    if let Some(attr) = get_query_attr(src, &s.ident, &query_services) {
+        s.attrs.append(&mut vec![attr])
     }
+
+    s
 }
 
 // ====== helpers ======
