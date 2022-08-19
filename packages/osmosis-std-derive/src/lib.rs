@@ -91,7 +91,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
         impl TryFrom<cosmwasm_std::Binary> for #ident {
             type Error = cosmwasm_std::StdError;
 
-            fn try_from(binary: cosmwasm_std::Binary) -> Result<Self, Self::Error> {
+            fn try_from(binary: cosmwasm_std::Binary) -> core::result::Result<Self, Self::Error> {
                 use ::prost::Message;
                 Self::decode(&binary[..]).map_err(|e| {
                     cosmwasm_std::StdError::ParseErr {
