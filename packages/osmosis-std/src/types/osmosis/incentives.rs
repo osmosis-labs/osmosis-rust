@@ -189,7 +189,7 @@ pub struct ModuleDistributedCoinsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.incentives.GaugeByIdRequest")]
+#[proto_message(type_url = "/osmosis.incentives.GaugeByIDRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/GaugeByID",
     response_type = GaugeByIdResponse
@@ -207,7 +207,7 @@ pub struct GaugeByIdRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.incentives.GaugeByIdResponse")]
+#[proto_message(type_url = "/osmosis.incentives.GaugeByIDResponse")]
 pub struct GaugeByIdResponse {
     #[prost(message, optional, tag = "1")]
     pub gauge: ::core::option::Option<Gauge>,

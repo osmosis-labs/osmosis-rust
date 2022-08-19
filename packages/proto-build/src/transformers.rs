@@ -1,12 +1,16 @@
-use crate::{format_ident, quote};
-use heck::ToUpperCamelCase;
-use prost_types::{FileDescriptorSet, ServiceDescriptorProto};
 use std::collections::HashMap;
 use std::path::Path;
-use syn::{Attribute, Fields, Ident, Item, parse_quote, Type};
+
+use heck::ToSnakeCase;
+use heck::ToUpperCamelCase;
+use prost_types::{
+    DescriptorProto, EnumDescriptorProto, FileDescriptorSet, ServiceDescriptorProto,
+};
 use regex::Regex;
 use syn::__private::quote::__private::TokenStream as TokenStream2;
-use heck::ToSnakeCase;
+use syn::{parse_quote, Attribute, Fields, Ident, Item, ItemStruct, Type};
+
+use crate::{format_ident, quote};
 
 /// Regex substitutions to apply to the prost-generated output
 pub const REPLACEMENTS: &[(&str, &str)] = &[
@@ -28,27 +32,21 @@ pub const REPLACEMENTS: &[(&str, &str)] = &[
     ),
 ];
 
-pub fn append_attrs(
-    src: &Path,
-    ancestors: &[String],
-    ident: &Ident,
-    attrs: &mut Vec<Attribute>,
-    descriptor: &FileDescriptorSet,
-) {
+pub fn append_attrs(src: &Path, s: &ItemStruct, descriptor: &FileDescriptorSet) -> ItemStruct {
+    let mut s = s.clone();
     let query_services = extract_query_services(descriptor);
-    let type_url = get_type_url(src, ident);
-    let path: Vec<String> = type_url.split('.').map(|s| s.to_string()).collect();
-    let type_url = [&path[..(path.len() - 1)], ancestors, &[ident.to_string()]]
-        .concat()
-        .join(".");
-    attrs.append(&mut vec![
+    let type_url = get_type_url(src, &s.ident, descriptor);
+
+    s.attrs.append(&mut vec![
         syn::parse_quote! { #[derive(serde::Serialize, serde::Deserialize, schemars::JsonSchema, CosmwasmExt)] },
         syn::parse_quote! { #[proto_message(type_url = #type_url)] },
     ]);
 
-    if let Some(attr) = get_query_attr(src, ident, &query_services) {
-        attrs.append(&mut vec![attr])
+    if let Some(attr) = get_query_attr(src, &s.ident, &query_services) {
+        s.attrs.append(&mut vec![attr])
     }
+
+    s
 }
 
 // ====== helpers ======
@@ -76,9 +74,65 @@ fn get_query_attr(
     Some(syn::parse_quote! { #[proto_query(path = #path, response_type = #response_type)] })
 }
 
-fn get_type_url(src: &Path, ident: &Ident) -> String {
+fn get_type_url(src: &Path, ident: &Ident, descriptor: &FileDescriptorSet) -> String {
     let type_path = src.file_stem().unwrap().to_str().unwrap();
-    format!("/{}.{}", type_path, ident)
+    let init_path = "";
+
+    let name: Option<String> = descriptor
+        .file
+        .clone()
+        .into_iter()
+        .filter(|f| f.package.to_owned().unwrap() == type_path)
+        .flat_map(|f| {
+            let target = ident.to_string();
+            vec![
+                extract_type_path_from_enum(&target, &f.enum_type, init_path),
+                extract_type_path_from_descriptor(&target, &f.message_type, init_path),
+            ]
+        })
+        .filter(|r| r.is_some())
+        .collect();
+
+    format!("/{}.{}", type_path, name.unwrap())
+}
+
+fn extract_type_path_from_descriptor(
+    target: &str,
+    message_type: &Vec<DescriptorProto>,
+    path: &str,
+) -> Option<String> {
+    message_type.iter().find_map(|descriptor| {
+        let message_name = descriptor.name.to_owned().unwrap();
+
+        if message_name.to_upper_camel_case() == target {
+            Some(append_type_path(path, &message_name))
+        } else if let Some(message_name) = extract_type_path_from_descriptor(
+            target,
+            &descriptor.nested_type,
+            &append_type_path(path, &message_name),
+        ) {
+            Some(message_name)
+        } else if let Some(message_name) = extract_type_path_from_enum(
+            target,
+            &descriptor.enum_type,
+            &append_type_path(path, &message_name),
+        ) {
+            Some(message_name)
+        } else {
+            None
+        }
+    })
+}
+
+fn extract_type_path_from_enum(
+    target: &str,
+    enum_type: &Vec<EnumDescriptorProto>,
+    path: &str,
+) -> Option<String> {
+    enum_type
+        .iter()
+        .find(|e| e.name.to_owned().unwrap().to_upper_camel_case() == target)
+        .map(|e| append_type_path(path, &e.name.to_owned().unwrap()))
 }
 
 pub fn extract_query_services(
@@ -104,6 +158,14 @@ pub fn extract_query_services(
             }
         })
         .collect()
+}
+
+fn append_type_path(path: &str, name: &str) -> String {
+    if path.is_empty() {
+        name.to_string()
+    } else {
+        format!("{}.{}", path, name)
+    }
 }
 
 pub fn append_querier(
