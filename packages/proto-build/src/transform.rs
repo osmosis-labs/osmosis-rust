@@ -3,7 +3,6 @@ use std::fs::{create_dir_all, remove_dir_all};
 use std::path::{Path, PathBuf};
 use std::{fs, io};
 
-
 use heck::ToUpperCamelCase;
 use log::debug;
 use prost_types::FileDescriptorSet;
@@ -12,7 +11,7 @@ use regex::Regex;
 use syn::{File, Item, ItemMod};
 use walkdir::WalkDir;
 
-use crate::{transformers};
+use crate::transformers;
 
 /// Protos belonging to these Protobuf packages will be excluded
 /// (i.e. because they are sourced from `tendermint-proto`)
@@ -98,7 +97,7 @@ pub fn prepend<T>(v: &mut Vec<T>, other: &mut Vec<T>) {
     v.splice(0..0, other.drain(..));
 }
 
-pub fn recur_transform_module(
+fn recur_transform_module(
     items: Vec<Item>,
     src: &Path,
     ancestors: &[String],
@@ -109,7 +108,7 @@ pub fn recur_transform_module(
         .into_iter()
         .map(|i| match i.clone() {
             Item::Struct(mut s) => {
-                transformers::append_attrs(src, ancestors, &s.ident, &mut s.attrs, descriptor);
+                transformers::append_attrs(src, &s.ident, &mut s.attrs, descriptor);
                 Item::Struct(s)
             }
             _ => i,
@@ -126,6 +125,7 @@ pub fn recur_transform_module(
 
     transformers::append_querier(items, src, nested_mod, descriptor)
 }
+
 fn transform_nested_mod(
     i: Item,
     src: &Path,

@@ -586,7 +586,7 @@ pub struct LockedResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIdRequest")]
+#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIDRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/SyntheticLockupsByLockupID",
     response_type = SyntheticLockupsByLockupIdResponse
@@ -604,7 +604,7 @@ pub struct SyntheticLockupsByLockupIdRequest {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIdResponse")]
+#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIDResponse")]
 pub struct SyntheticLockupsByLockupIdResponse {
     #[prost(message, repeated, tag = "1")]
     pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
