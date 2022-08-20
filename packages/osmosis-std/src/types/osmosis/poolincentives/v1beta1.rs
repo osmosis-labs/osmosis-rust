@@ -166,6 +166,8 @@ pub mod query_gauge_ids_response {
         pub gauge_id: u64,
         #[prost(message, optional, tag = "2")]
         pub duration: ::core::option::Option<crate::shim::Duration>,
+        #[prost(string, tag = "3")]
+        pub gauge_incentive_percentage: ::prost::alloc::string::String,
     }
 }
 #[derive(

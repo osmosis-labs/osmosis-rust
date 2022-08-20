@@ -18,7 +18,7 @@ mod transformers;
 const COSMOS_SDK_REV: &str = "v0.45.4";
 
 /// The osmosis commit or tag to be cloned and used to build the proto files
-const OSMOSIS_REV: &str = "v11.0.0";
+const OSMOSIS_REV: &str = "4b5eccf06d4a9aceafc62bc9b6c534c63985cf19";
 
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.
