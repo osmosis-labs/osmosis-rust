@@ -730,6 +730,15 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub total_delegated_coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 /// GenesisState defines the module's genesis state.
 #[derive(
     Clone,
@@ -855,3 +864,10 @@ impl<'a> SuperfluidQuerier<'a> {
         }
         .query(self.querier)
     }
+    pub fn total_delegation_by_delegator(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryTotalDelegationByDelegatorResponse, cosmwasm_std::StdError> {
+        QueryTotalDelegationByDelegatorRequest { delegator_address }.query(self.querier)
+    }
+}
