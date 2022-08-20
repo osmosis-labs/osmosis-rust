@@ -864,10 +864,4 @@ impl<'a> SuperfluidQuerier<'a> {
         }
         .query(self.querier)
     }
-    pub fn total_delegation_by_delegator(
-        &self,
-        delegator_address: ::prost::alloc::string::String,
-    ) -> Result<QueryTotalDelegationByDelegatorResponse, cosmwasm_std::StdError> {
-        QueryTotalDelegationByDelegatorRequest { delegator_address }.query(self.querier)
-    }
 }
