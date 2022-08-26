@@ -3,10 +3,12 @@ package main
 import "C"
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"sync/atomic"
 	"time"
 
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -23,10 +25,13 @@ var (
 type TestEnv struct {
 	App *app.OsmosisApp
 	Ctx sdk.Context
+
+	// cosmwasm related keepers
+	contractOpsKeeper wasmtypes.ContractOpsKeeper
+
 	// QueryHelper *baseapp.QueryServiceTestHelper
 	// 	queryClient         types.QueryClient
 	// 	msgServer           types.MsgServer
-	// contractKeeper wasmtypes.ContractOpsKeeper
 	// 	contractQueryKeeper wasmtypes.ViewKeeper
 	// 	bankMsgServer       banktypes.MsgServer
 }
@@ -50,7 +55,9 @@ func InitTestEnv() uint64 {
 	// 	GRPCQueryRouter: env.App.GRPCQueryRouter(),
 	// 	Ctx:             env.Ctx,
 	// }
-	// env.contractKeeper = wasmkeeper.NewPermissionedKeeper(env.App.WasmKeeper, SudoAuthorizationPolicy{})
+
+	// TODO: set limit to 1G
+	env.contractOpsKeeper = wasmkeeper.NewPermissionedKeeper(env.App.WasmKeeper, SudoAuthorizationPolicy{})
 
 	id := atomic.LoadUint64(&envCounter)
 
@@ -97,7 +104,45 @@ func GetAllBalances(envId uint64, bech32Addr string) *C.char {
 	return C.CString(string(bz))
 }
 
-//TODO: export CwStoreCode
+//export CwStoreCode
+func CwStoreCode(envId uint64, bech32Addr string, base64Wasm string) uint64 {
+	env := envRegister[envId]
+
+	addr, err := sdk.AccAddressFromBech32(bech32Addr)
+	if err != nil {
+		panic(err)
+	}
+
+	wasm, err := base64.StdEncoding.DecodeString(base64Wasm)
+	if err != nil {
+		panic(err)
+	}
+
+	// TODO: expose access config
+	codeId, err := env.contractOpsKeeper.Create(env.Ctx, addr, wasm, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	return codeId
+}
+
+//export CwGetCodeInfo
+func CwGetCodeInfo(envId uint64, codeId uint64) *C.char {
+	env := envRegister[envId]
+
+	codeInfo := env.App.WasmKeeper.GetCodeInfo(env.Ctx, codeId)
+
+	// TODO: proto marshal instead, so that we can use cosmrs to decode the response
+	bz, err := json.Marshal(codeInfo)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return C.CString(string(bz))
+}
+
 //TODO: export CwInstantiate
 //TODO: export CwExecute
 //TODO: export CwQuery

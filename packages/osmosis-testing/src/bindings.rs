@@ -219,3 +219,9 @@ extern "C" {
 extern "C" {
     pub fn GetAllBalances(envId: GoUint64, bech32Addr: GoString) -> *mut ::std::os::raw::c_char;
 }
+extern "C" {
+    pub fn CwStoreCode(envId: GoUint64, bech32Addr: GoString, base64Wasm: GoString) -> GoUint64;
+}
+extern "C" {
+    pub fn CwGetCodeInfo(envId: GoUint64, codeId: GoUint64) -> *mut ::std::os::raw::c_char;
+}

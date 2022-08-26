@@ -1,4 +1,7 @@
-use crate::{GetAllBalances, InitAccount, InitTestEnv};
+use crate::{
+    bindings::{CwGetCodeInfo, CwStoreCode},
+    GetAllBalances, InitAccount, InitTestEnv,
+};
 use cosmwasm_std::Coin;
 use std::ffi::CString;
 
@@ -42,10 +45,34 @@ impl TestEnv {
 
         serde_json::from_str(&bal).expect("invalid Vec<Coin> json")
     }
+
+    /// Store code to state machine, returns code id
+    pub fn store_code(&self, bech32_addr: &str, wasm: &[u8]) -> u64 {
+        let base64_wasm = base64::encode(wasm);
+        let base64_wasm_c = &CString::new(base64_wasm).unwrap();
+        let bech32_addr_c = &CString::new(bech32_addr).unwrap();
+
+        unsafe { CwStoreCode(self.id, bech32_addr_c.into(), base64_wasm_c.into()) }
+    }
+
+    /// Get code_info by code_id
+    pub fn get_code_info(&self, code_id: &u64) -> serde_json::Value {
+        let code_info = unsafe {
+            let code_info = CwGetCodeInfo(self.id, code_id.to_owned());
+            CString::from_raw(code_info)
+        }
+        .to_str()
+        .expect("invalid utf8")
+        .to_string();
+
+        serde_json::from_str(&code_info).expect("invalid json")
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    use std::path::PathBuf;
+
     use crate::test_env::TestEnv;
     use cosmwasm_std::{coins, Coin};
 
@@ -65,5 +92,25 @@ mod tests {
         ];
         let bob = env.init_account(&bob_balance);
         assert_eq!(env.get_all_balances(&bob), bob_balance);
+    }
+
+    #[test]
+    fn test_store_and_init_simple_contract() {
+        let env = TestEnv::new();
+        let contract_owner = env.init_account(&[]);
+
+        let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        let wasm_path = manifest_dir.join(
+            "../../examples/cosmwasm/target/wasm32-unknown-unknown/release/osmosis_stargate.wasm",
+        );
+
+        // TODO: refactor this to `fn store_code_from_path`
+        let wasm = std::fs::read(wasm_path).unwrap();
+        let code_id = env.store_code(&contract_owner, &wasm);
+
+        assert_eq!(code_id, 1);
+
+        let code_info = env.get_code_info(&code_id);
+        assert_eq!(code_info["creator"].as_str().unwrap(), &contract_owner);
     }
 }
