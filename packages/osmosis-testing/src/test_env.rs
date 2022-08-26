@@ -2,6 +2,8 @@ use crate::{
     bindings::{CwGetCodeInfo, CwStoreCode},
     GetAllBalances, InitAccount, InitTestEnv,
 };
+use cosmos_sdk_proto::cosmwasm::wasm::v1::CodeInfo;
+use cosmos_sdk_proto::prost::Message;
 use cosmwasm_std::Coin;
 use std::ffi::CString;
 
@@ -56,16 +58,17 @@ impl TestEnv {
     }
 
     /// Get code_info by code_id
-    pub fn get_code_info(&self, code_id: &u64) -> serde_json::Value {
-        let code_info = unsafe {
+    pub fn get_code_info(&self, code_id: &u64) -> Option<CodeInfo> {
+        unsafe {
             let code_info = CwGetCodeInfo(self.id, code_id.to_owned());
-            CString::from_raw(code_info)
-        }
-        .to_str()
-        .expect("invalid utf8")
-        .to_string();
 
-        serde_json::from_str(&code_info).expect("invalid json")
+            if code_info.is_null() {
+                None
+            } else {
+                let code_info_c = CString::from_raw(code_info);
+                Some(CodeInfo::decode(code_info_c.as_bytes()).unwrap())
+            }
+        }
     }
 }
 
@@ -111,6 +114,9 @@ mod tests {
         assert_eq!(code_id, 1);
 
         let code_info = env.get_code_info(&code_id);
-        assert_eq!(code_info["creator"].as_str().unwrap(), &contract_owner);
+        assert_eq!(code_info.unwrap().creator, contract_owner);
+
+        let code_info = env.get_code_info(&999);
+        assert_eq!(code_info, None);
     }
 }

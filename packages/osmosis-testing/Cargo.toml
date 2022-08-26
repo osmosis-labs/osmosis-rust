@@ -1,12 +1,13 @@
 [package]
+edition = "2021"
 name = "osmosis-testing"
 version = "0.1.0"
-edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 base64 = "0.13.0"
+cosmos-sdk-proto = {version = "0.14.0", features = ["cosmwasm"]}
 cosmwasm-std = "1.0.0"
 serde_json = "1.0.85"
 

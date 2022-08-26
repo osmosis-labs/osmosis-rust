@@ -8,6 +8,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/golang/protobuf/proto"
+
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -133,8 +135,11 @@ func CwGetCodeInfo(envId uint64, codeId uint64) *C.char {
 
 	codeInfo := env.App.WasmKeeper.GetCodeInfo(env.Ctx, codeId)
 
-	// TODO: proto marshal instead, so that we can use cosmrs to decode the response
-	bz, err := json.Marshal(codeInfo)
+	if codeInfo == nil {
+		return nil
+	}
+
+	bz, err := proto.Marshal(codeInfo)
 
 	if err != nil {
 		panic(err)
