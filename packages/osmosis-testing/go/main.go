@@ -10,6 +10,8 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
+	abci "github.com/tendermint/tendermint/abci/types"
+
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -78,7 +80,8 @@ func InitAccount(envId uint64, coinsJson string) *C.char {
 		panic(err)
 	}
 
-	accAddr := sdk.AccAddress(ed25519.GenPrivKey().PubKey().Address())
+	priv := ed25519.GenPrivKey()
+	accAddr := sdk.AccAddress(priv.PubKey().Address())
 
 	simapp.FundAccount(env.App.BankKeeper, env.Ctx, accAddr, coins)
 
@@ -153,81 +156,50 @@ func CwGetCodeInfo(envId uint64, codeId uint64) *C.char {
 //TODO: export CwQuery
 //TODO: export CwRawQuery
 
-//TODO: export InitPool
-//TODO: export Execute
+//export SubmitTx
+func SubmitTx(envId uint64, base64ReqDeliverTx string) *C.char {
+	env := envRegister[envId]
+	app := env.App
+
+	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
+	if err != nil {
+		panic(err)
+	}
+
+	reqDeliverTx := abci.RequestDeliverTx{}
+	err = proto.Unmarshal(reqDeliverTxBytes, &reqDeliverTx)
+	if err != nil {
+		panic(err)
+	}
+
+	// BeginBlock
+	header := env.Ctx.BlockHeader()
+	app.BeginBlock(abci.RequestBeginBlock{Header: header})
+
+	// DeliverTx
+	resDeliverTx := env.App.DeliverTx(reqDeliverTx)
+
+	// EndBlock
+	newHeight := env.Ctx.BlockHeight() + 1
+	app.EndBlock(abci.RequestEndBlock{Height: newHeight})
+	env.Ctx = env.Ctx.WithBlockHeight(newHeight)
+
+	// Commit
+	app.Commit()
+
+	bz, err := proto.Marshal(&resDeliverTx)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return C.CString(string(bz))
+	// see:
+	// - https://github.com/osmosis-labs/osmosis/blob/ibc-rate-limit/x/ibc-rate-limit/testutil/chain.go#L56-L79)
+	// - https://github.com/informalsystems/tendermint-rs/blob/9b9ed446a559c39601e83a0fb01c072642b3db06/proto/src/prost/tendermint.abci.rs#L119-L122
+}
+
 //TODO: export Query
-
-// func SetupTest(wasm string) {
-// 	s := new(TestEnv)
-// 	s.App = app.Setup(false)
-// 	s.Ctx = s.App.BaseApp.NewContext(false, tmproto.Header{Height: 1, ChainID: "osmosis-1", Time: time.Now().UTC()})
-// 	s.QueryHelper = &baseapp.QueryServiceTestHelper{
-// 		GRPCQueryRouter: s.App.GRPCQueryRouter(),
-// 		Ctx:             s.Ctx,
-// 	}
-// 	s.contractKeeper = wasmkeeper.NewPermissionedKeeper(s.App.WasmKeeper, SudoAuthorizationPolicy{})
-
-// 	// ======================= create account
-
-// 	s.TestAccs = CreateRandomAccounts(3)
-// 	// Fund every TestAcc with 1_000_000_000_000 uosmo, uion, and uatom.
-// 	fundAccsAmount := sdk.NewCoins(
-// 		sdk.NewInt64Coin("uosmo", 1_000_000_000_000),
-// 		sdk.NewInt64Coin("uion", 1_000_000_000_000),
-// 		sdk.NewInt64Coin("uatom", 1_000_000_000_000))
-
-// 	// ctxCheck := s.App.BaseApp.NewContext(true, tmproto.Header{})
-
-// 	for _, acc := range s.TestAccs {
-// 		s.FundAcc(acc, fundAccsAmount)
-// 		s.App.BankKeeper.GetAllBalances(s.Ctx, acc)
-// 	}
-
-// 	wasmCode, err := ioutil.ReadFile(wasm)
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	// =========== store_code
-// 	codeId, _ := s.contractKeeper.Create(s.Ctx, s.TestAccs[0], wasmCode, nil)
-
-// 	// =========== instantate
-// 	instantateMsg := []byte("{}")
-
-// 	contractAddr, _, err := s.contractKeeper.Instantiate(s.Ctx, codeId, s.TestAccs[0], s.TestAccs[0], instantateMsg, "", sdk.NewCoins())
-
-// 	qr, err := s.App.WasmKeeper.QuerySmart(s.Ctx, contractAddr, []byte("{ \"query_token_creation_fee\": {}}"))
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	fmt.Printf("codeId: %d\n", codeId)
-// 	fmt.Printf("contract addr: %s\n", contractAddr)
-// 	fmt.Printf("query result: %s\n", string(qr))
-// 	// fmt.Printf("%s", s.App.BankKeeper.GetAllBalances(ctxCheck, s.TestAccs[0]).Empty())
-// 	// fmt.Print(fundAccsAmount)
-
-// }
-
-// PLAN
-// - what can run through deliver tx, let it goes through that, since
-// - what could not, export them from there eg. FundAcc
-// fns
-// - init_test_env(..) -> Result<TestEnvId, TestEnvError?>
-// - clone_test_env(id: TestEnvId) -> Result<TestEnvId, TestEnvError>
-// - pub fn_execute_helper! { mint_coins: ExecuteMsg::XXX } // pub fn mint_coins(ExecuteMsg::XXX) -> Result<Resposne, TestEnvError
-// - pub fn_query_helper! { (query_wat: QueryMsg::Wat -> WatResponse) }
-// - set_block_info
-// pub struct BlockInfo {
-// 	pub height: u64,
-// 	pub time: Timestamp,
-// 	pub chain_id: String,
-// }
-// notes:
-// - consistent errors interface
-// - speaks primite / json to each other
 
 type SudoAuthorizationPolicy struct{}
 

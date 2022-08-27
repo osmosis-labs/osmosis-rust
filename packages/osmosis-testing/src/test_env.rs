@@ -103,6 +103,8 @@ mod tests {
         let contract_owner = env.init_account(&[]);
 
         let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+
+        // TODO: use cw-plus/swap_router as dev deps instead and build as wasm in build.rs to OUT_DIR
         let wasm_path = manifest_dir.join(
             "../../examples/cosmwasm/target/wasm32-unknown-unknown/release/osmosis_stargate.wasm",
         );
