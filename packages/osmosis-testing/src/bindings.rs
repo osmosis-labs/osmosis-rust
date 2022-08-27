@@ -225,3 +225,6 @@ extern "C" {
 extern "C" {
     pub fn CwGetCodeInfo(envId: GoUint64, codeId: GoUint64) -> *mut ::std::os::raw::c_char;
 }
+extern "C" {
+    pub fn SubmitTx(envId: GoUint64, base64ReqDeliverTx: GoString) -> *mut ::std::os::raw::c_char;
+}

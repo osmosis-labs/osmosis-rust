@@ -1,5 +1,5 @@
+use crate::bindings::GoString;
 use std::ffi::CString;
-use crate::GoString;
 
 /// conversion from &CString to GoString
 impl From<&CString> for GoString {

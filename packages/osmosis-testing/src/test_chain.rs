@@ -1,17 +1,14 @@
-use crate::{
-    bindings::{CwGetCodeInfo, CwStoreCode},
-    GetAllBalances, InitAccount, InitTestEnv,
-};
+use crate::bindings::{CwGetCodeInfo, CwStoreCode, GetAllBalances, InitAccount, InitTestEnv};
 use cosmos_sdk_proto::cosmwasm::wasm::v1::CodeInfo;
 use cosmos_sdk_proto::prost::Message;
 use cosmwasm_std::Coin;
 use std::ffi::CString;
 
-pub struct TestEnv {
+pub struct TestChain {
     id: u64,
 }
 
-impl TestEnv {
+impl TestChain {
     #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         Self {
@@ -76,30 +73,30 @@ impl TestEnv {
 mod tests {
     use std::path::PathBuf;
 
-    use crate::test_env::TestEnv;
+    use crate::test_chain::TestChain;
     use cosmwasm_std::{coins, Coin};
 
     #[test]
     fn test_init_account() {
-        let env = TestEnv::new();
+        let chain = TestChain::new();
 
         // alice
         let alice_balance = coins(100_000_000_000, "uosmo");
-        let alice = env.init_account(&alice_balance);
-        assert_eq!(env.get_all_balances(&alice), alice_balance);
+        let alice = chain.init_account(&alice_balance);
+        assert_eq!(chain.get_all_balances(&alice), alice_balance);
 
         // bob
         let bob_balance = [
             Coin::new(100_000_000_000, "uatom"),
             Coin::new(999_999_999_999, "uion"),
         ];
-        let bob = env.init_account(&bob_balance);
-        assert_eq!(env.get_all_balances(&bob), bob_balance);
+        let bob = chain.init_account(&bob_balance);
+        assert_eq!(chain.get_all_balances(&bob), bob_balance);
     }
 
     #[test]
     fn test_store_and_init_simple_contract() {
-        let env = TestEnv::new();
+        let env = TestChain::new();
         let contract_owner = env.init_account(&[]);
 
         let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
