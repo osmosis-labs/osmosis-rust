@@ -18,12 +18,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/osmosis-labs/osmosis/v10/app"
 	"github.com/tendermint/tendermint/crypto/ed25519"
+	"github.com/tendermint/tendermint/crypto/secp256k1"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
 
 var (
 	envCounter  uint64 = 0
-	envRegister        = make(map[uint64]TestEnv)
+	envRegister        = make(map[uint64]TestEnv) // TODO: use sync map instead, parallel tests causes concurrent map writes
 )
 
 type TestEnv struct {
@@ -80,13 +81,14 @@ func InitAccount(envId uint64, coinsJson string) *C.char {
 		panic(err)
 	}
 
-	priv := ed25519.GenPrivKey()
+	priv := secp256k1.GenPrivKey()
 	accAddr := sdk.AccAddress(priv.PubKey().Address())
 
 	simapp.FundAccount(env.App.BankKeeper, env.Ctx, accAddr, coins)
 
-	// String interface returns bech32 address
-	return C.CString(accAddr.String())
+	base64Priv := base64.StdEncoding.EncodeToString(priv)
+
+	return C.CString(base64Priv)
 }
 
 //export GetAllBalances
