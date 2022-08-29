@@ -32,11 +32,11 @@ impl SigningAccount {
     }
 }
 
-pub struct TestChain {
+pub struct App {
     id: u64,
 }
 
-impl TestChain {
+impl App {
     #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         Self {
@@ -99,37 +99,40 @@ impl TestChain {
             }
         }
     }
+
+    // fn deliver_and_commit(msgs, signing_account)
+    // https://github.com/osmosis-labs/beaker/blob/ce0ecd8a0d3eb10acd5a048f52da5d68653d1754/packages/cli/src/support/cosmos.rs#L224-L241
 }
 
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;
 
-    use crate::test_chain::TestChain;
+    use crate::test_chain::App;
     use cosmwasm_std::{coins, Coin};
 
     #[test]
     fn test_init_account() {
-        let chain = TestChain::new();
+        let app = App::new();
 
         // alice
         let alice_balance = coins(100_000_000_000, "uosmo");
-        let alice = chain.init_account(&alice_balance);
-        assert_eq!(chain.get_all_balances(&alice.address()), alice_balance);
+        let alice = app.init_account(&alice_balance);
+        assert_eq!(app.get_all_balances(&alice.address()), alice_balance);
 
         // bob
         let bob_balance = [
             Coin::new(100_000_000_000, "uatom"),
             Coin::new(999_999_999_999, "uion"),
         ];
-        let bob = chain.init_account(&bob_balance);
-        assert_eq!(chain.get_all_balances(&bob.address()), bob_balance);
+        let bob = app.init_account(&bob_balance);
+        assert_eq!(app.get_all_balances(&bob.address()), bob_balance);
     }
 
     #[test]
     fn test_store_and_init_simple_contract() {
-        let env = TestChain::new();
-        let contract_owner = env.init_account(&[]);
+        let app = App::new();
+        let contract_owner = app.init_account(&[]);
 
         let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
 
@@ -140,14 +143,14 @@ mod tests {
 
         // TODO: refactor this to `fn store_code_from_path`
         let wasm = std::fs::read(wasm_path).unwrap();
-        let code_id = env.store_code(&contract_owner.address(), &wasm);
+        let code_id = app.store_code(&contract_owner.address(), &wasm);
 
         assert_eq!(code_id, 1);
 
-        let code_info = env.get_code_info(&code_id);
+        let code_info = app.get_code_info(&code_id);
         assert_eq!(code_info.unwrap().creator, contract_owner.address());
 
-        let code_info = env.get_code_info(&999);
+        let code_info = app.get_code_info(&999);
         assert_eq!(code_info, None);
     }
 }
