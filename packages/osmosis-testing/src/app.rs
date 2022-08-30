@@ -1,8 +1,8 @@
 use crate::{
     account::{Account, SigningAccount},
     bindings::{
-        CommitTx, CwGetCodeInfo, CwGetContractInfo, CwInstantiate, CwStoreCode, GetAllBalances,
-        InitAccount, InitTestEnv,
+        CommitTx, CwExecute, CwGetCodeInfo, CwGetContractInfo, CwInstantiate, CwStoreCode,
+        GetAllBalances, InitAccount, InitTestEnv,
     },
     redefine_as_go_string,
 };
@@ -11,9 +11,10 @@ use cosmrs::{
     cosmwasm::MsgInstantiateContract,
     crypto::secp256k1::SigningKey,
     proto::{
+        cosmos,
         cosmwasm::wasm::{
             self,
-            v1::{CodeInfo, ContractInfo},
+            v1::{CodeInfo, ContractInfo, MsgExecuteContract},
         },
         tendermint::abci::{RequestDeliverTx, ResponseDeliverTx},
     },
@@ -116,6 +117,42 @@ impl App {
         unsafe {
             let addr = CwInstantiate(self.id, base64_msg);
             CString::from_raw(addr)
+                .to_str()
+                .expect("bech32 address must be valid UTF-8")
+                .to_string()
+        }
+    }
+
+    /// Execute contract
+    pub fn execute<M>(
+        &self,
+        sender: &str,
+        contract: &str,
+        msg: &M,
+        funds: Vec<impl Into<cosmos::base::v1beta1::Coin>>,
+    ) -> String
+    where
+        M: ?Sized + Serialize,
+    {
+        let msg = MsgExecuteContract {
+            sender: sender.into(),
+            contract: contract.into(),
+            msg: serde_json::to_vec(msg).expect("json serialization failed"),
+            funds: funds.into_iter().map(|c| c.into()).collect(),
+        };
+
+        let msg: wasm::v1::MsgExecuteContract = msg;
+
+        let mut buf = Vec::new();
+        wasm::v1::MsgExecuteContract::encode(&msg, &mut buf)
+            .expect("Message encoding must be infallible");
+
+        let base64_msg = base64::encode(buf);
+        redefine_as_go_string!(base64_msg);
+
+        unsafe {
+            let res = CwExecute(self.id, base64_msg);
+            CString::from_raw(res)
                 .to_str()
                 .expect("bech32 address must be valid UTF-8")
                 .to_string()
@@ -257,6 +294,41 @@ mod tests {
         assert_eq!(contract_info.code_id, code_id);
         assert_eq!(contract_info.creator, contract_owner.address());
         assert_eq!(contract_info.admin, contract_owner.address());
+    }
+
+    #[test]
+    fn test_execute_contract_and_query_contract() {
+        let app = App::new();
+        let contract_owner = app.init_account(&[]);
+        let alice = app.init_account(&[Coin::new(100_000_000_000, "uosmo")]);
+
+        let code_id = app
+            .store_code_from_path(&contract_owner.address(), osmosis_stargate_wasm_path())
+            .unwrap();
+
+        let contract_addr = app.instantiate(
+            &contract_owner,
+            code_id,
+            &json!({}),
+            vec![],
+            Some(&contract_owner),
+            None,
+        );
+
+        let _res = app.execute(
+            &alice.address(),
+            &contract_addr,
+            &json!({
+                "create_denom": {
+                    "amount": "100000000000",
+                    "subdenom": "watsub",
+                }
+            }),
+            vec![cosmrs::Coin {
+                amount: 10000000u64.into(),
+                denom: "uosmo".parse().unwrap(),
+            }],
+        );
     }
 
     #[test]

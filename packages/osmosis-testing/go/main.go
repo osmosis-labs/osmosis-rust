@@ -208,7 +208,40 @@ func CwGetContractInfo(envId uint64, bech32ContractAddr string) *C.char {
 	return C.CString(string(bz))
 }
 
-//TODO: export CwExecute
+//export CwExecute
+func CwExecute(envId uint64, base64MsgExecuteContract string) *C.char {
+	env := loadEnv(envId)
+
+	msgExecuteContractBytes, err := base64.StdEncoding.DecodeString(base64MsgExecuteContract)
+	if err != nil {
+		panic(err)
+	}
+
+	msg := wasmtypes.MsgExecuteContract{}
+	err = proto.Unmarshal(msgExecuteContractBytes, &msg)
+	if err != nil {
+		panic(err)
+	}
+
+	contractAddress, err := sdk.AccAddressFromBech32(msg.Contract)
+	if err != nil {
+		panic(err)
+	}
+
+	senderAddress, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+
+	res, err := env.contractOpsKeeper.Execute(env.Ctx, contractAddress, senderAddress, msg.Msg, msg.Funds)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return C.CString(base64.StdEncoding.EncodeToString(res))
+}
+
 //TODO: export CwQuery
 //TODO: export CwRawQuery
 
@@ -251,9 +284,6 @@ func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 	}
 
 	return C.CString(string(bz))
-	// see:
-	// - https://github.com/osmosis-labs/osmosis/blob/ibc-rate-limit/x/ibc-rate-limit/testutil/chain.go#L56-L79)
-	// - https://github.com/informalsystems/tendermint-rs/blob/9b9ed446a559c39601e83a0fb01c072642b3db06/proto/src/prost/tendermint.abci.rs#L119-L122
 }
 
 //TODO: export Query
