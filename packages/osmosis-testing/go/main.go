@@ -10,15 +10,20 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/pkg/errors"
+
 	"github.com/golang/protobuf/proto"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/osmosis-labs/osmosis/v10/app"
+	"github.com/osmosis-labs/osmosis/v10/x/gamm/pool-models/balancer"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
@@ -35,10 +40,10 @@ type TestEnv struct {
 	// cosmwasm related keepers
 	contractOpsKeeper wasmtypes.ContractOpsKeeper
 
-	// QueryHelper *baseapp.QueryServiceTestHelper
+	QueryHelper *baseapp.QueryServiceTestHelper
 	// 	queryClient         types.QueryClient
 	// 	msgServer           types.MsgServer
-	// 	bankMsgServer       banktypes.MsgServer
+	// bankMsgServer banktypes.MsgServer
 }
 
 func loadEnv(envId uint64) TestEnv {
@@ -55,6 +60,7 @@ func InitTestEnv() uint64 {
 	env := new(TestEnv)
 	env.App = app.Setup(false)
 	env.Ctx = env.App.BaseApp.NewContext(false, tmproto.Header{Height: 1, ChainID: "osmosis-1", Time: time.Now().UTC()})
+
 	// env.QueryHelper = &baseapp.QueryServiceTestHelper{
 	// 	GRPCQueryRouter: env.App.GRPCQueryRouter(),
 	// 	Ctx:             env.Ctx,
@@ -83,7 +89,10 @@ func InitAccount(envId uint64, coinsJson string) *C.char {
 	priv := secp256k1.GenPrivKey()
 	accAddr := sdk.AccAddress(priv.PubKey().Address())
 
-	simapp.FundAccount(env.App.BankKeeper, env.Ctx, accAddr, coins)
+	err := simapp.FundAccount(env.App.BankKeeper, env.Ctx, accAddr, coins)
+	if err != nil {
+		panic(errors.Wrapf(err, "Failed to fund account"))
+	}
 
 	base64Priv := base64.StdEncoding.EncodeToString(priv)
 
@@ -279,6 +288,9 @@ func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 		panic(err)
 	}
 
+	// TODO: try using app.GetContextForDeliverTx
+	// ctx := app.GetContextForDeliverTx(reqDeliverTx.Tx)
+
 	// BeginBlock
 	header := env.Ctx.BlockHeader()
 
@@ -306,6 +318,47 @@ func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 
 //TODO: export Query
 
+//export GAMMCreateBalancerPool
+func GAMMCreateBalancerPool(envId uint64, base64MsgCreateBalancerPool string) uint64 {
+	env := loadEnv(envId)
+
+	msgCreateBalancerPoolBytes, err := base64.StdEncoding.DecodeString(base64MsgCreateBalancerPool)
+	if err != nil {
+		panic(err)
+	}
+
+	msg := balancer.MsgCreateBalancerPool{}
+	err = proto.Unmarshal(msgCreateBalancerPoolBytes, &msg)
+	if err != nil {
+		panic(err)
+	}
+
+	poolId, err := env.App.GAMMKeeper.CreatePool(env.Ctx, msg)
+	if err != nil {
+		panic(err)
+	}
+
+	return poolId
+}
+
+//export GAMMGetTotalPoolLiquidity
+func GAMMGetTotalPoolLiquidity(envId uint64, poolId uint64) *C.char {
+	env := loadEnv(envId)
+	pool, err := env.App.GAMMKeeper.GetPoolAndPoke(env.Ctx, poolId)
+	if err != nil {
+		panic(err)
+	}
+
+	liq := pool.GetTotalPoolLiquidity(env.Ctx)
+	bz, err := liq.MarshalJSON()
+
+	if err != nil {
+		panic(errors.Wrapf(err, "Failed to marshal total pool liquidity:\n %s", liq))
+	}
+
+	return C.CString(string(bz))
+}
+
 type SudoAuthorizationPolicy struct{}
 
 func (p SudoAuthorizationPolicy) CanCreateCode(config wasmtypes.AccessConfig, actor sdk.AccAddress) bool {
@@ -321,4 +374,37 @@ func (p SudoAuthorizationPolicy) CanModifyContract(admin, actor sdk.AccAddress) 
 }
 
 // must define main for ffi build
-func main() {}
+func main() {
+	// envId := InitTestEnv()
+	// priv := InitAccount(envId, "[{ \"denom\": \"uosmo\", \"amount\": \"10000000000000\"}, { \"denom\": \"uatom\", \"amount\": \"10000000000000\"}]")
+	// // - priv -> bytes -> address
+	// privBytes, _ := base64.StdEncoding.DecodeString(C.GoString(priv))
+
+	// addr := secp256k1.PrivKey(privBytes).PubKey().Address()
+
+	// initialLiquidity := sdk.NewCoins(sdk.NewInt64Coin("uosmo", 1_000), sdk.NewInt64Coin("uatom", 1_000))
+
+	// var poolAssets []balancer.PoolAsset
+
+	// for _, asset := range initialLiquidity {
+	// 	poolAssets = append(poolAssets, balancer.PoolAsset{
+	// 		Weight: sdk.NewInt(1),
+	// 		Token:  asset,
+	// 	})
+	// }
+
+	// poolParams := balancer.PoolParams{
+	// 	SwapFee: sdk.NewDecWithPrec(1, 2),
+	// 	ExitFee: sdk.NewDecWithPrec(1, 2),
+	// }
+
+	// acc, _ := sdk.AccAddressFromHex(addr.String())
+	// msg := balancer.NewMsgCreateBalancerPool(acc, poolParams, poolAssets, "")
+	// m, _ := msg.Marshal()
+
+	// mb64 := base64.StdEncoding.EncodeToString(m)
+
+	// GAMMCreateBalancerPool(envId, mb64)
+
+	// fmt.Printf("%v", C.GoString(priv))
+}

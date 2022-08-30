@@ -253,3 +253,15 @@ extern "C" {
 extern "C" {
     pub fn CommitTx(envId: GoUint64, base64ReqDeliverTx: GoString) -> *mut ::std::os::raw::c_char;
 }
+extern "C" {
+    pub fn GAMMCreateBalancerPool(
+        envId: GoUint64,
+        base64MsgCreateBalancerPool: GoString,
+    ) -> GoUint64;
+}
+extern "C" {
+    pub fn GAMMGetTotalPoolLiquidity(
+        envId: GoUint64,
+        poolId: GoUint64,
+    ) -> *mut ::std::os::raw::c_char;
+}

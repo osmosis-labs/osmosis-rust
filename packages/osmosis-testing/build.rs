@@ -11,7 +11,7 @@ fn main() {
 
     let header = format!("{}/lib{}.h", out_dir, lib_name);
 
-    // TODO: remove only exist
+    //  TODO: remove only exist
     // std::fs::remove_file(format!("{}/{}", out_dir, "libosmosistesting.dylib")).unwrap();
     // std::fs::remove_file(format!("{}/{}", out_dir, "libosmosistesting.h")).unwrap();
     // std::fs::remove_file(format!("{}/{}", out_dir, "libwasmvm_muslc.aarch64.a")).unwrap();

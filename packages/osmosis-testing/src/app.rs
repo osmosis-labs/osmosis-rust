@@ -2,7 +2,8 @@ use crate::{
     account::{Account, SigningAccount},
     bindings::{
         CommitTx, CwExecute, CwGetCodeInfo, CwGetContractInfo, CwInstantiate, CwQuery, CwStoreCode,
-        GetAllBalances, InitAccount, InitTestEnv,
+        GAMMCreateBalancerPool, GAMMGetTotalPoolLiquidity, GetAllBalances, InitAccount,
+        InitTestEnv,
     },
     redefine_as_go_string,
 };
@@ -19,6 +20,10 @@ use cosmrs::{
     },
 };
 use cosmwasm_std::Coin;
+use osmosis_std::types::osmosis::gamm::{
+    poolmodels::balancer::v1beta1::MsgCreateBalancerPool,
+    v1beta1::{PoolAsset, PoolParams},
+};
 use prost::Message;
 use serde::{de::DeserializeOwned, Serialize};
 use std::{ffi::CString, io, path::PathBuf};
@@ -37,6 +42,11 @@ impl App {
 
     /// This function initialize account with initial balance of any coins.
     pub fn init_account(&self, coins: &[Coin]) -> SigningAccount {
+        let mut coins = coins.to_vec();
+
+        // invalid coins if denom are unsorted
+        coins.sort_by(|a, b| a.denom.cmp(&b.denom));
+
         let coins_json = serde_json::to_string(&coins).unwrap();
         redefine_as_go_string!(coins_json);
 
@@ -221,8 +231,45 @@ impl App {
         }
     }
 
+    /// Create basic pool
+    pub fn create_basic_pool(&self, sender: &str, initial_liquidity: &[Coin]) -> u64 {
+        let msg = MsgCreateBalancerPool {
+            sender: sender.to_string(),
+            pool_params: Some(PoolParams {
+                swap_fee: "10000000000000000".to_string(),
+                exit_fee: "10000000000000000".to_string(),
+                smooth_weight_change_params: None,
+            }),
+            pool_assets: initial_liquidity
+                .iter()
+                .map(|c| PoolAsset {
+                    token: Some(c.clone().into()),
+                    weight: "1000000".to_string(),
+                })
+                .collect(),
+            future_pool_governor: "".to_string(),
+        };
+
+        let mut buf = Vec::new();
+        MsgCreateBalancerPool::encode(&msg, &mut buf).expect("Message encoding must be infallible");
+
+        let base64_msg = base64::encode(buf);
+        redefine_as_go_string!(base64_msg);
+
+        unsafe { GAMMCreateBalancerPool(self.id, base64_msg) }
+    }
+
+    pub fn get_total_pool_liquidity(&self, pool_id: u64) -> Vec<Coin> {
+        unsafe {
+            let liq = GAMMGetTotalPoolLiquidity(self.id, pool_id);
+            let liq = CString::from_raw(liq);
+
+            serde_json::from_slice(liq.as_bytes()).unwrap()
+        }
+    }
+
     // (WIP)
-    pub fn commit_tx(&self, req: RequestDeliverTx) {
+    pub fn commit_tx(&self, req: RequestDeliverTx) -> ResponseDeliverTx {
         let mut buf = Vec::new();
         RequestDeliverTx::encode(&req, &mut buf).expect("Message encoding must be infallible");
 
@@ -232,7 +279,7 @@ impl App {
             let res = CommitTx(self.id, base64_req);
             let res_c = CString::from_raw(res);
             ResponseDeliverTx::decode(res_c.as_bytes()).unwrap()
-        };
+        }
     }
 
     // fn deliver_and_commit(msgs, signing_account)
@@ -375,6 +422,21 @@ mod tests {
     }
 
     #[test]
+    fn test_create_basic_pool() {
+        let app = App::new();
+        let alice = app.init_account(&[
+            Coin::new(100_000_000_000, "uion"),
+            Coin::new(100_000_000_000, "uatom"),
+            Coin::new(100_000_000_000, "uosmo"),
+        ]);
+
+        let liq = [Coin::new(1_000, "uatom"), Coin::new(1_000, "uosmo")];
+        let pool_id = app.create_basic_pool(&alice.address(), &liq);
+
+        assert_eq!(app.get_total_pool_liquidity(pool_id), liq.to_vec());
+    }
+
+    #[test]
     // (WIP) deliverState's context is not initialized properly
     fn test_commit_tx() {
         let app = App::new();
@@ -383,7 +445,7 @@ mod tests {
         let mut buf = Vec::new();
         let msg = MsgCreateDenom {
             sender: acc.address(),
-            subdenom: "wasasasa".to_string(),
+            subdenom: "newdenom".to_string(),
         };
 
         MsgCreateDenom::encode(&msg, &mut buf).unwrap();
@@ -400,7 +462,7 @@ mod tests {
         let fee = Fee::from_amount_and_gas(
             cosmrs::Coin {
                 amount: "1000000000".parse().unwrap(),
-                denom: "stake".parse().unwrap(),
+                denom: "stake".parse().unwrap(), // using "uosmo" causes invalid fee token
             },
             10000000,
         );
@@ -415,6 +477,7 @@ mod tests {
 
         let tx = tx_raw.to_bytes().unwrap();
 
-        app.commit_tx(RequestDeliverTx { tx })
+        let res = app.commit_tx(RequestDeliverTx { tx });
+        dbg!(res);
     }
 }
