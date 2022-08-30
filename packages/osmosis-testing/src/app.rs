@@ -105,19 +105,18 @@ impl App {
         }
     }
 
+    // (WIP)
     pub fn commit_tx(&self, req: RequestDeliverTx) {
         let mut buf = Vec::new();
         RequestDeliverTx::encode(&req, &mut buf).expect("Message encoding must be infallible");
 
         let base64_req = base64::encode(buf);
         let base64_req_c = &CString::new(base64_req).unwrap();
-        let res = unsafe {
+        unsafe {
             let res = CommitTx(self.id, base64_req_c.into());
             let res_c = CString::from_raw(res);
             ResponseDeliverTx::decode(res_c.as_bytes()).unwrap()
         };
-
-        dbg!(res);
     }
 
     // fn deliver_and_commit(msgs, signing_account)
@@ -134,7 +133,16 @@ mod tests {
     use cosmwasm_std::{coins, Coin};
     use osmosis_std::types::osmosis::tokenfactory::v1beta1::MsgCreateDenom;
     use prost::Message;
+    use rayon::prelude::*;
     use std::path::PathBuf;
+
+    #[test]
+    fn test_parrallel_env_access_should_not_cause_concurrent_map_write_issue() {
+        (1..100).into_par_iter().for_each(|_| {
+            let app = App::new();
+            app.init_account(&coins(100_000_000_000, "uosmo"));
+        });
+    }
 
     #[test]
     fn test_init_account() {

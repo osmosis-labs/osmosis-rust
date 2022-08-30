@@ -5,6 +5,8 @@ import "C"
 import (
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -17,14 +19,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/osmosis-labs/osmosis/v10/app"
-	"github.com/tendermint/tendermint/crypto/ed25519"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
 
 var (
 	envCounter  uint64 = 0
-	envRegister        = make(map[uint64]TestEnv) // TODO: use sync map instead, parallel tests causes concurrent map writes
+	envRegister        = sync.Map{}
 )
 
 type TestEnv struct {
@@ -41,14 +42,13 @@ type TestEnv struct {
 	// 	bankMsgServer       banktypes.MsgServer
 }
 
-func CreateRandomAccounts(numAccts int) []sdk.AccAddress {
-	testAddrs := make([]sdk.AccAddress, numAccts)
-	for i := 0; i < numAccts; i++ {
-		pk := ed25519.GenPrivKey().PubKey()
-		testAddrs[i] = sdk.AccAddress(pk.Address())
+func loadEnv(envId uint64) TestEnv {
+	item, ok := envRegister.Load(envId)
+	env := TestEnv(item.(TestEnv))
+	if !ok {
+		panic(fmt.Sprintf("env not found: %d", envId))
 	}
-
-	return testAddrs
+	return env
 }
 
 //export InitTestEnv
@@ -66,14 +66,14 @@ func InitTestEnv() uint64 {
 
 	id := atomic.LoadUint64(&envCounter)
 
-	envRegister[id] = *env
+	envRegister.Store(id, *env)
 	atomic.AddUint64(&envCounter, 1)
 	return id
 }
 
 //export InitAccount
 func InitAccount(envId uint64, coinsJson string) *C.char {
-	env := envRegister[envId]
+	env := loadEnv(envId)
 
 	var coins sdk.Coins
 
@@ -93,7 +93,7 @@ func InitAccount(envId uint64, coinsJson string) *C.char {
 
 //export GetAllBalances
 func GetAllBalances(envId uint64, bech32Addr string) *C.char {
-	env := envRegister[envId]
+	env := loadEnv(envId)
 
 	addr, err := sdk.AccAddressFromBech32(bech32Addr)
 
@@ -113,7 +113,7 @@ func GetAllBalances(envId uint64, bech32Addr string) *C.char {
 
 //export CwStoreCode
 func CwStoreCode(envId uint64, bech32Addr string, base64Wasm string) uint64 {
-	env := envRegister[envId]
+	env := loadEnv(envId)
 
 	addr, err := sdk.AccAddressFromBech32(bech32Addr)
 	if err != nil {
@@ -136,7 +136,7 @@ func CwStoreCode(envId uint64, bech32Addr string, base64Wasm string) uint64 {
 
 //export CwGetCodeInfo
 func CwGetCodeInfo(envId uint64, codeId uint64) *C.char {
-	env := envRegister[envId]
+	env := loadEnv(envId)
 
 	codeInfo := env.App.WasmKeeper.GetCodeInfo(env.Ctx, codeId)
 
@@ -184,7 +184,7 @@ func CwGetCodeInfo(envId uint64, codeId uint64) *C.char {
 
 //export CommitTx
 func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
-	env := envRegister[envId]
+	env := loadEnv(envId)
 	app := env.App
 
 	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
