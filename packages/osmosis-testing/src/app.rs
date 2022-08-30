@@ -133,7 +133,13 @@ impl App {
     }
 
     /// Execute contract
-    pub fn execute<M>(&self, sender: &str, contract: &str, msg: &M, funds: &[Coin]) -> String
+    pub fn execute_contract<M>(
+        &self,
+        sender: &str,
+        contract: &str,
+        msg: &M,
+        funds: &[Coin],
+    ) -> String
     where
         M: ?Sized + Serialize,
     {
@@ -342,7 +348,7 @@ mod tests {
             None,
         );
 
-        app.execute(
+        app.execute_contract(
             &alice.address(),
             &contract_addr,
             &json!({
