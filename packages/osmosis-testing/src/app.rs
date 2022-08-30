@@ -250,16 +250,13 @@ mod tests {
     use osmosis_std::types::osmosis::tokenfactory::v1beta1::MsgCreateDenom;
     use prost::Message;
     use rayon::prelude::*;
-    use serde_json::json;
     use std::path::PathBuf;
 
-    // TODO: use cw-plus/swap_router as dev deps instead and build as wasm in build.rs to OUT_DIR
-    fn osmosis_stargate_wasm_path() -> PathBuf {
+    fn cw1_whitelist_wasm_path() -> PathBuf {
         let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-
-        manifest_dir.join(
-            "../../examples/cosmwasm/target/wasm32-unknown-unknown/release/osmosis_stargate.wasm",
-        )
+        manifest_dir
+            .join("test_artifacts")
+            .join("cw1_whitelist.wasm")
     }
 
     #[test]
@@ -294,7 +291,7 @@ mod tests {
         let contract_owner = app.init_account(&[]);
 
         let code_id = app
-            .store_code_from_path(&contract_owner.address(), osmosis_stargate_wasm_path())
+            .store_code_from_path(&contract_owner.address(), cw1_whitelist_wasm_path())
             .unwrap();
 
         assert_eq!(code_id, 1);
@@ -311,13 +308,16 @@ mod tests {
         let contract_owner = app.init_account(&[]);
 
         let code_id = app
-            .store_code_from_path(&contract_owner.address(), osmosis_stargate_wasm_path())
+            .store_code_from_path(&contract_owner.address(), cw1_whitelist_wasm_path())
             .unwrap();
 
         let contract_addr = app.instantiate_contract(
             &contract_owner,
             code_id,
-            &json!({}),
+            &cw1_whitelist::msg::InstantiateMsg {
+                admins: vec![],
+                mutable: true,
+            },
             &[],
             Some(&contract_owner),
             None,
@@ -326,7 +326,6 @@ mod tests {
         let contract_info = app.get_contract_info(&contract_addr).unwrap();
         assert_eq!(contract_info.code_id, code_id);
         assert_eq!(contract_info.creator, contract_owner.address());
-        assert_eq!(contract_info.admin, contract_owner.address());
     }
 
     #[test]
@@ -336,40 +335,42 @@ mod tests {
         let alice = app.init_account(&[Coin::new(100_000_000_000, "uosmo")]);
 
         let code_id = app
-            .store_code_from_path(&contract_owner.address(), osmosis_stargate_wasm_path())
+            .store_code_from_path(&contract_owner.address(), cw1_whitelist_wasm_path())
             .unwrap();
 
         let contract_addr = app.instantiate_contract(
             &contract_owner,
             code_id,
-            &json!({}),
+            &cw1_whitelist::msg::InstantiateMsg {
+                admins: vec![contract_owner.address()],
+                mutable: true,
+            },
             &[],
             Some(&contract_owner),
             None,
         );
 
+        let admins = vec![alice.address()];
         app.execute_contract(
-            &alice.address(),
+            &contract_owner.address(),
             &contract_addr,
-            &json!({
-                "create_denom": {
-                    "amount": "100000000000",
-                    "subdenom": "watsub",
-                }
-            }),
-            &[Coin::new(10000000, "uosmo")],
+            &cw1_whitelist::msg::ExecuteMsg::<cosmwasm_std::Empty>::UpdateAdmins {
+                admins: admins.clone(),
+            },
+            &[],
         );
 
-        let res: serde_json::Value = app.query_contract(
+        let res: cw1_whitelist::msg::AdminListResponse = app.query_contract(
             &contract_addr,
-            &json!({
-                "query_creator_denoms": {}
-            }),
+            &cw1_whitelist::msg::QueryMsg::<cosmwasm_std::Empty>::AdminList {},
         );
 
         assert_eq!(
             res,
-            json!({ "denoms": [format!("factory/{contract_addr}/watsub")] })
+            cw1_whitelist::msg::AdminListResponse {
+                admins,
+                mutable: true
+            }
         );
     }
 

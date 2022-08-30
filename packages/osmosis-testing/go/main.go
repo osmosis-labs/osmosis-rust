@@ -143,7 +143,7 @@ func CwGetCodeInfo(envId uint64, codeId uint64) *C.char {
 		return nil
 	}
 
-	bz, err := proto.Marshal(codeInfo)
+	bz, err := codeInfo.Marshal()
 
 	if err != nil {
 		panic(err)
