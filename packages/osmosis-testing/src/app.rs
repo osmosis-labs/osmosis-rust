@@ -11,7 +11,6 @@ use cosmrs::{
     cosmwasm::MsgInstantiateContract,
     crypto::secp256k1::SigningKey,
     proto::{
-        cosmos,
         cosmwasm::wasm::{
             self,
             v1::{CodeInfo, ContractInfo, MsgExecuteContract},
@@ -89,7 +88,7 @@ impl App {
         sender: &impl Account,
         code_id: u64,
         msg: &M,
-        funds: Vec<cosmrs::Coin>,
+        funds: &[Coin],
         admin: Option<&impl Account>,
         label: Option<String>,
     ) -> String
@@ -102,7 +101,17 @@ impl App {
             code_id,
             label,
             msg: serde_json::to_vec(msg).expect("json serialization failed"),
-            funds,
+            funds: funds
+                .iter()
+                .map(|c| -> cosmrs::Coin {
+                    cosmrs::proto::cosmos::base::v1beta1::Coin {
+                        denom: c.denom.clone(),
+                        amount: c.amount.into(),
+                    }
+                    .try_into()
+                    .unwrap()
+                })
+                .collect(),
         };
 
         let msg: wasm::v1::MsgInstantiateContract = msg.into();
@@ -124,13 +133,7 @@ impl App {
     }
 
     /// Execute contract
-    pub fn execute<M>(
-        &self,
-        sender: &str,
-        contract: &str,
-        msg: &M,
-        funds: Vec<impl Into<cosmos::base::v1beta1::Coin>>,
-    ) -> String
+    pub fn execute<M>(&self, sender: &str, contract: &str, msg: &M, funds: &[Coin]) -> String
     where
         M: ?Sized + Serialize,
     {
@@ -138,7 +141,13 @@ impl App {
             sender: sender.into(),
             contract: contract.into(),
             msg: serde_json::to_vec(msg).expect("json serialization failed"),
-            funds: funds.into_iter().map(|c| c.into()).collect(),
+            funds: funds
+                .iter()
+                .map(|c| cosmrs::proto::cosmos::base::v1beta1::Coin {
+                    denom: c.denom.clone(),
+                    amount: c.amount.into(),
+                })
+                .collect(),
         };
 
         let msg: wasm::v1::MsgExecuteContract = msg;
@@ -285,7 +294,7 @@ mod tests {
             &contract_owner,
             code_id,
             &json!({}),
-            vec![],
+            &[],
             Some(&contract_owner),
             None,
         );
@@ -310,7 +319,7 @@ mod tests {
             &contract_owner,
             code_id,
             &json!({}),
-            vec![],
+            &[],
             Some(&contract_owner),
             None,
         );
@@ -324,14 +333,12 @@ mod tests {
                     "subdenom": "watsub",
                 }
             }),
-            vec![cosmrs::Coin {
-                amount: 10000000u64.into(),
-                denom: "uosmo".parse().unwrap(),
-            }],
+            &[Coin::new(10000000, "uosmo")],
         );
     }
 
     #[test]
+    // (WIP) deliverState's context is not initialized properly
     fn test_commit_tx() {
         let app = App::new();
         let acc = app.init_account(&[Coin::new(1000000000000000, "stake")]);
