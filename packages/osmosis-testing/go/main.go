@@ -153,13 +153,37 @@ func CwGetCodeInfo(envId uint64, codeId uint64) *C.char {
 	return C.CString(string(bz))
 }
 
-//TODO: export CwInstantiate
+//export CwInstantiate
+// func CwInstantiate(envId uint64, codeId uint64, creator, admin string, instantiateMsg string, label string, funds string) {
+// 	env := envRegister[envId]
+
+// env.contractOpsKeeper.Instantiate()
+
+// addr, err := sdk.AccAddressFromBech32(bech32Addr)
+// if err != nil {
+// 	panic(err)
+// }
+
+// wasm, err := base64.StdEncoding.DecodeString(base64Wasm)
+// if err != nil {
+// 	panic(err)
+// }
+
+// // TODO: expose access config
+// codeId, err := env.contractOpsKeeper.Create(env.Ctx, addr, wasm, nil)
+// if err != nil {
+// 	panic(err)
+// }
+
+// return codeId
+// }
+
 //TODO: export CwExecute
 //TODO: export CwQuery
 //TODO: export CwRawQuery
 
-//export SubmitTx
-func SubmitTx(envId uint64, base64ReqDeliverTx string) *C.char {
+//export CommitTx
+func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 	env := envRegister[envId]
 	app := env.App
 
@@ -176,6 +200,7 @@ func SubmitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 
 	// BeginBlock
 	header := env.Ctx.BlockHeader()
+
 	app.BeginBlock(abci.RequestBeginBlock{Header: header})
 
 	// DeliverTx

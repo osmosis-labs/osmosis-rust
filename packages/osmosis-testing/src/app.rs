@@ -1,7 +1,12 @@
-use crate::bindings::{CwGetCodeInfo, CwStoreCode, GetAllBalances, InitAccount, InitTestEnv};
+use crate::bindings::{
+    CommitTx, CwGetCodeInfo, CwStoreCode, GetAllBalances, InitAccount, InitTestEnv,
+};
 use cosmrs::{
     crypto::{secp256k1::SigningKey, PublicKey},
-    proto::cosmwasm::wasm::v1::CodeInfo,
+    proto::{
+        cosmwasm::wasm::v1::CodeInfo,
+        tendermint::abci::{RequestDeliverTx, ResponseDeliverTx},
+    },
 };
 use cosmwasm_std::Coin;
 use prost::Message;
@@ -100,16 +105,36 @@ impl App {
         }
     }
 
+    pub fn commit_tx(&self, req: RequestDeliverTx) {
+        let mut buf = Vec::new();
+        RequestDeliverTx::encode(&req, &mut buf).expect("Message encoding must be infallible");
+
+        let base64_req = base64::encode(buf);
+        let base64_req_c = &CString::new(base64_req).unwrap();
+        let res = unsafe {
+            let res = CommitTx(self.id, base64_req_c.into());
+            let res_c = CString::from_raw(res);
+            ResponseDeliverTx::decode(res_c.as_bytes()).unwrap()
+        };
+
+        dbg!(res);
+    }
+
     // fn deliver_and_commit(msgs, signing_account)
     // https://github.com/osmosis-labs/beaker/blob/ce0ecd8a0d3eb10acd5a048f52da5d68653d1754/packages/cli/src/support/cosmos.rs#L224-L241
 }
 
 #[cfg(test)]
 mod tests {
-    use std::path::PathBuf;
-
-    use crate::test_chain::App;
+    use crate::app::App;
+    use cosmrs::{
+        proto::tendermint::abci::RequestDeliverTx,
+        tx::{self, Fee, SignerInfo},
+    };
     use cosmwasm_std::{coins, Coin};
+    use osmosis_std::types::osmosis::tokenfactory::v1beta1::MsgCreateDenom;
+    use prost::Message;
+    use std::path::PathBuf;
 
     #[test]
     fn test_init_account() {
@@ -152,5 +177,49 @@ mod tests {
 
         let code_info = app.get_code_info(&999);
         assert_eq!(code_info, None);
+    }
+
+    #[test]
+    fn test_commit_tx() {
+        let app = App::new();
+        let acc = app.init_account(&[Coin::new(1000000000000000, "stake")]);
+
+        let mut buf = Vec::new();
+        let msg = MsgCreateDenom {
+            sender: acc.address(),
+            subdenom: "wasasasa".to_string(),
+        };
+
+        MsgCreateDenom::encode(&msg, &mut buf).unwrap();
+
+        let msg = cosmrs::Any {
+            type_url: MsgCreateDenom::TYPE_URL.to_string(),
+            value: buf,
+        };
+
+        // - init tx body
+        let tx_body = tx::Body::new([msg], "", 0u32);
+
+        // - [test] set big fee
+        let fee = Fee::from_amount_and_gas(
+            cosmrs::Coin {
+                amount: "1000000000".parse().unwrap(),
+                denom: "stake".parse().unwrap(),
+            },
+            10000000,
+        );
+
+        // - set auth_info
+        let auth_info =
+            SignerInfo::single_direct(Some(acc.signing_key.public_key()), 0).auth_info(fee);
+
+        // - sign
+        let sign_doc =
+            tx::SignDoc::new(&tx_body, &auth_info, &("osmosis-1".parse().unwrap()), 8).unwrap();
+        let tx_raw = sign_doc.sign(&acc.signing_key).unwrap();
+
+        let tx = tx_raw.to_bytes().unwrap();
+
+        app.commit_tx(RequestDeliverTx { tx })
     }
 }
