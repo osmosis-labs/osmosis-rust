@@ -38,7 +38,6 @@ type TestEnv struct {
 	// QueryHelper *baseapp.QueryServiceTestHelper
 	// 	queryClient         types.QueryClient
 	// 	msgServer           types.MsgServer
-	// 	contractQueryKeeper wasmtypes.ViewKeeper
 	// 	bankMsgServer       banktypes.MsgServer
 }
 
@@ -168,8 +167,6 @@ func CwInstantiate(envId uint64, base64msgInstantiateContract string) *C.char {
 		panic(err)
 	}
 
-	fmt.Printf("==> %+v\n\n", msg)
-
 	creator, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
@@ -179,13 +176,36 @@ func CwInstantiate(envId uint64, base64msgInstantiateContract string) *C.char {
 		panic(err)
 	}
 
-	// TODO: use real values
-	contractAddr, _, err := env.contractOpsKeeper.Instantiate(env.Ctx, msg.CodeID, creator, admin, msg.Msg, "", make(sdk.Coins, 0))
+	contractAddr, _, err := env.contractOpsKeeper.Instantiate(env.Ctx, msg.CodeID, creator, admin, msg.Msg, msg.Label, msg.Funds)
 	if err != nil {
 		panic(err)
 	}
 
 	return C.CString(contractAddr.String())
+}
+
+//export CwGetContractInfo
+func CwGetContractInfo(envId uint64, bech32ContractAddr string) *C.char {
+	env := loadEnv(envId)
+
+	contractAddr, err := sdk.AccAddressFromBech32(bech32ContractAddr)
+	if err != nil {
+		panic(err)
+	}
+
+	contractInfo := env.App.WasmKeeper.GetContractInfo(env.Ctx, contractAddr)
+
+	if contractInfo == nil {
+		return nil
+	}
+
+	bz, err := proto.Marshal(contractInfo)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return C.CString(string(bz))
 }
 
 //TODO: export CwExecute

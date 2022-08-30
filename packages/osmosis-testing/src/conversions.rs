@@ -12,3 +12,16 @@ impl From<&CString> for GoString {
         }
     }
 }
+
+/// This is needed to be implemented as macro since
+/// conversion from &CString to GoString requires
+/// CString to not get dropped before referecing its pointer
+#[macro_export]
+macro_rules! redefine_as_go_string {
+    ($($ident:ident),*) => {
+        $(
+            let $ident = &std::ffi::CString::new($ident).unwrap();
+            let $ident: $crate::bindings::GoString = $ident.into();
+        )*
+    };
+}
