@@ -154,29 +154,39 @@ func CwGetCodeInfo(envId uint64, codeId uint64) *C.char {
 }
 
 //export CwInstantiate
-// func CwInstantiate(envId uint64, codeId uint64, creator, admin string, instantiateMsg string, label string, funds string) {
-// 	env := envRegister[envId]
+func CwInstantiate(envId uint64, base64msgInstantiateContract string) *C.char {
+	env := loadEnv(envId)
 
-// env.contractOpsKeeper.Instantiate()
+	msgInstantiateContractBytes, err := base64.StdEncoding.DecodeString(base64msgInstantiateContract)
+	if err != nil {
+		panic(err)
+	}
 
-// addr, err := sdk.AccAddressFromBech32(bech32Addr)
-// if err != nil {
-// 	panic(err)
-// }
+	msg := wasmtypes.MsgInstantiateContract{}
+	err = proto.Unmarshal(msgInstantiateContractBytes, &msg)
+	if err != nil {
+		panic(err)
+	}
 
-// wasm, err := base64.StdEncoding.DecodeString(base64Wasm)
-// if err != nil {
-// 	panic(err)
-// }
+	fmt.Printf("==> %+v\n\n", msg)
 
-// // TODO: expose access config
-// codeId, err := env.contractOpsKeeper.Create(env.Ctx, addr, wasm, nil)
-// if err != nil {
-// 	panic(err)
-// }
+	creator, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	admin, err := sdk.AccAddressFromBech32(msg.Admin)
+	if err != nil {
+		panic(err)
+	}
 
-// return codeId
-// }
+	// TODO: use real values
+	contractAddr, _, err := env.contractOpsKeeper.Instantiate(env.Ctx, msg.CodeID, creator, admin, msg.Msg, "", make(sdk.Coins, 0))
+	if err != nil {
+		panic(err)
+	}
+
+	return C.CString(contractAddr.String())
+}
 
 //TODO: export CwExecute
 //TODO: export CwQuery

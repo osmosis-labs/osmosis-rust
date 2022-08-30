@@ -11,6 +11,7 @@ cosmrs = {version = "0.7", features = ["cosmwasm"]}
 cosmwasm-std = "1.0.0"
 osmosis-std = { version = "0.1.5", path = "../osmosis-std" }
 prost = "0.10"
+serde = "1.0.144"
 serde_json = "1.0.85"
 
 [build-dependencies]

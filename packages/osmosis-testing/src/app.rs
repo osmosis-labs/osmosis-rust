@@ -1,15 +1,19 @@
 use crate::bindings::{
-    CommitTx, CwGetCodeInfo, CwStoreCode, GetAllBalances, InitAccount, InitTestEnv,
+    CommitTx, CwGetCodeInfo, CwInstantiate, CwStoreCode, GetAllBalances, InitAccount, InitTestEnv,
 };
+
 use cosmrs::{
+    cosmwasm::MsgInstantiateContract,
     crypto::{secp256k1::SigningKey, PublicKey},
     proto::{
-        cosmwasm::wasm::v1::CodeInfo,
+        cosmwasm::wasm::{self, v1::CodeInfo},
         tendermint::abci::{RequestDeliverTx, ResponseDeliverTx},
     },
+    AccountId,
 };
 use cosmwasm_std::Coin;
 use prost::Message;
+use serde::{Serialize};
 use std::ffi::CString;
 
 const ADDRESS_PREFIX: &str = "osmo";
@@ -34,6 +38,12 @@ impl SigningAccount {
             .expect("cryptographic error")
             .as_ref()
             .to_string()
+    }
+    pub fn account_id(&self) -> AccountId {
+        self.signing_key
+            .public_key()
+            .account_id(ADDRESS_PREFIX)
+            .expect("cryptographic error")
     }
 }
 
@@ -91,6 +101,46 @@ impl App {
         unsafe { CwStoreCode(self.id, bech32_addr_c.into(), base64_wasm_c.into()) }
     }
 
+    /// Instantiate contract
+    pub fn instantiate<M>(
+        &self,
+        sender: AccountId,
+        code_id: u64,
+        msg: &M,
+        funds: Vec<cosmrs::Coin>,
+        admin: Option<AccountId>,
+        label: Option<String>,
+    ) -> String
+    where
+        M: ?Sized + Serialize,
+    {
+        let msg = MsgInstantiateContract {
+            sender,
+            admin,
+            code_id,
+            label,
+            msg: serde_json::to_vec(msg).expect("json serialization failed"),
+            funds,
+        };
+
+        let msg: wasm::v1::MsgInstantiateContract = msg.into();
+
+        let mut buf = Vec::new();
+        wasm::v1::MsgInstantiateContract::encode(&msg, &mut buf)
+            .expect("Message encoding must be infallible");
+
+        let base64_msg = base64::encode(buf);
+        let base64_msg_c = &CString::new(base64_msg).unwrap();
+
+        unsafe {
+            let addr = CwInstantiate(self.id, base64_msg_c.into());
+            CString::from_raw(addr)
+                .to_str()
+                .expect("bech32 address must be valid UTF-8")
+                .to_string()
+        }
+    }
+
     /// Get code_info by code_id
     pub fn get_code_info(&self, code_id: &u64) -> Option<CodeInfo> {
         unsafe {
@@ -134,6 +184,7 @@ mod tests {
     use osmosis_std::types::osmosis::tokenfactory::v1beta1::MsgCreateDenom;
     use prost::Message;
     use rayon::prelude::*;
+    use serde_json::json;
     use std::path::PathBuf;
 
     #[test]
@@ -163,7 +214,7 @@ mod tests {
     }
 
     #[test]
-    fn test_store_and_init_simple_contract() {
+    fn test_store_contract() {
         let app = App::new();
         let contract_owner = app.init_account(&[]);
 
@@ -185,6 +236,31 @@ mod tests {
 
         let code_info = app.get_code_info(&999);
         assert_eq!(code_info, None);
+    }
+    #[test]
+    fn test_store_and_init_contract() {
+        let app = App::new();
+        let contract_owner = app.init_account(&[]);
+
+        let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+
+        // TODO: use cw-plus/swap_router as dev deps instead and build as wasm in build.rs to OUT_DIR
+        let wasm_path = manifest_dir.join(
+            "../../examples/cosmwasm/target/wasm32-unknown-unknown/release/osmosis_stargate.wasm",
+        );
+
+        // TODO: refactor this to `fn store_code_from_path`
+        let wasm = std::fs::read(wasm_path).unwrap();
+        let code_id = app.store_code(&contract_owner.address(), &wasm);
+
+        app.instantiate(
+            contract_owner.account_id(),
+            code_id,
+            &json!({}),
+            vec![],
+            Some(contract_owner.account_id()),
+            None,
+        );
     }
 
     #[test]
