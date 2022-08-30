@@ -261,9 +261,9 @@ mod tests {
 
     #[test]
     fn test_parrallel_env_access_should_not_cause_concurrent_map_write_issue() {
-        (1..100).into_par_iter().for_each(|_| {
+        (1..25).into_par_iter().for_each(|_| {
             let app = App::new();
-            app.init_account(&coins(100_000_000_000, "uosmo"));
+            app.init_account(&[]);
         });
     }
 
