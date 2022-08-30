@@ -1,7 +1,7 @@
 use crate::{
     account::{Account, SigningAccount},
     bindings::{
-        CommitTx, CwExecute, CwGetCodeInfo, CwGetContractInfo, CwInstantiate, CwStoreCode,
+        CommitTx, CwExecute, CwGetCodeInfo, CwGetContractInfo, CwInstantiate, CwQuery, CwStoreCode,
         GetAllBalances, InitAccount, InitTestEnv,
     },
     redefine_as_go_string,
@@ -20,7 +20,7 @@ use cosmrs::{
 };
 use cosmwasm_std::Coin;
 use prost::Message;
-use serde::Serialize;
+use serde::{de::DeserializeOwned, Serialize};
 use std::{ffi::CString, io, path::PathBuf};
 
 pub struct App {
@@ -197,6 +197,24 @@ impl App {
         }
     }
 
+    /// Query contract
+    pub fn query_contract<Q, R>(&self, contract_address: &str, query_msg: &Q) -> R
+    where
+        Q: ?Sized + Serialize,
+        R: ?Sized + DeserializeOwned,
+    {
+        let query_msg = serde_json::to_string(query_msg).unwrap();
+        redefine_as_go_string!(contract_address, query_msg);
+        unsafe {
+            let query_response = CwQuery(self.id, contract_address, query_msg);
+
+            let query_response = CString::from_raw(query_response);
+            let query_response = query_response.to_str().unwrap_unchecked();
+
+            serde_json::from_str(query_response).unwrap()
+        }
+    }
+
     // (WIP)
     pub fn commit_tx(&self, req: RequestDeliverTx) {
         let mut buf = Vec::new();
@@ -324,7 +342,7 @@ mod tests {
             None,
         );
 
-        let _res = app.execute(
+        app.execute(
             &alice.address(),
             &contract_addr,
             &json!({
@@ -334,6 +352,18 @@ mod tests {
                 }
             }),
             &[Coin::new(10000000, "uosmo")],
+        );
+
+        let res: serde_json::Value = app.query_contract(
+            &contract_addr,
+            &json!({
+                "query_creator_denoms": {}
+            }),
+        );
+
+        assert_eq!(
+            res,
+            json!({ "denoms": [format!("factory/{contract_addr}/watsub")] })
         );
     }
 

@@ -242,7 +242,25 @@ func CwExecute(envId uint64, base64MsgExecuteContract string) *C.char {
 	return C.CString(base64.StdEncoding.EncodeToString(res))
 }
 
-//TODO: export CwQuery
+//export CwQuery
+func CwQuery(envId uint64, bech32ContractAddress, queryMsgJson string) *C.char {
+	env := loadEnv(envId)
+
+	queryMsgBytes := []byte(queryMsgJson)
+	contractAddress, err := sdk.AccAddressFromBech32(bech32ContractAddress)
+	if err != nil {
+		panic(err)
+	}
+
+	res, err := env.App.WasmKeeper.QuerySmart(env.Ctx, contractAddress, queryMsgBytes)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return C.CString(string(res))
+}
+
 //TODO: export CwRawQuery
 
 //export CommitTx

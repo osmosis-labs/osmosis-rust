@@ -244,5 +244,12 @@ extern "C" {
     ) -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
+    pub fn CwQuery(
+        envId: GoUint64,
+        bech32ContractAddress: GoString,
+        queryMsgJson: GoString,
+    ) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
     pub fn CommitTx(envId: GoUint64, base64ReqDeliverTx: GoString) -> *mut ::std::os::raw::c_char;
 }
