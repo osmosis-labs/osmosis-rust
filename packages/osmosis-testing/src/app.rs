@@ -83,7 +83,7 @@ impl App {
     }
 
     /// Instantiate contract
-    pub fn instantiate<M>(
+    pub fn instantiate_contract<M>(
         &self,
         sender: &impl Account,
         code_id: u64,
@@ -314,7 +314,7 @@ mod tests {
             .store_code_from_path(&contract_owner.address(), osmosis_stargate_wasm_path())
             .unwrap();
 
-        let contract_addr = app.instantiate(
+        let contract_addr = app.instantiate_contract(
             &contract_owner,
             code_id,
             &json!({}),
@@ -339,7 +339,7 @@ mod tests {
             .store_code_from_path(&contract_owner.address(), osmosis_stargate_wasm_path())
             .unwrap();
 
-        let contract_addr = app.instantiate(
+        let contract_addr = app.instantiate_contract(
             &contract_owner,
             code_id,
             &json!({}),
