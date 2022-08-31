@@ -96,11 +96,11 @@ impl App {
     /// Instantiate contract
     pub fn instantiate_contract<M>(
         &self,
-        sender: &impl Account,
+        sender: &dyn Account,
         code_id: u64,
         msg: &M,
         funds: &[Coin],
-        admin: Option<&impl Account>,
+        admin: Option<&dyn Account>,
         label: Option<String>,
     ) -> String
     where
