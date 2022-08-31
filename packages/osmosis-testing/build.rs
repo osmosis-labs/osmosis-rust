@@ -34,11 +34,11 @@ fn main() {
         .wait()
         .unwrap();
 
-    std::fs::copy(
-        format!("{}/{}", out_dir, "libosmosistesting.dylib"),
-        "/Users/supanatpotiwarakorn/osmosis/osmosis-rust/target/debug/libosmosistesting.dylib",
-    )
-    .unwrap();
+    // std::fs::copy(
+    //     format!("{}/{}", out_dir, "libosmosistesting.dylib"),
+    //     "/Users/supanatpotiwarakorn/osmosis/osmosis-rust/target/debug/libosmosistesting.dylib",
+    // )
+    // .unwrap();
 
     if !exit_status.success() {
         panic!("failed to build go code");
