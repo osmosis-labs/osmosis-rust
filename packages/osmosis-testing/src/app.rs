@@ -462,7 +462,7 @@ mod tests {
         let fee = Fee::from_amount_and_gas(
             cosmrs::Coin {
                 amount: "1000000000".parse().unwrap(),
-                denom: "stake".parse().unwrap(), // using "uosmo" causes invalid fee token
+                denom: "stake".parse().unwrap(), // NOTE: using "uosmo" causes invalid fee token
             },
             10000000,
         );
@@ -478,6 +478,18 @@ mod tests {
         let tx = tx_raw.to_bytes().unwrap();
 
         let res = app.commit_tx(RequestDeliverTx { tx });
+
         dbg!(res);
+        // NOTE: this resulted in:
+        // res = ResponseDeliverTx {
+        //     code: 4,
+        //     data: [],
+        //     log: "signature verification failed; please verify account number (8) and chain-id (): unauthorized",
+        //     info: "",
+        //     gas_wanted: 10000000,
+        //     gas_used: 58703,
+        //     events: [],
+        //     codespace: "sdk",
+        // }
     }
 }
