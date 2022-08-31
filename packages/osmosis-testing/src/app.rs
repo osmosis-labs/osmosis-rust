@@ -445,6 +445,8 @@ mod tests {
         let app = App::new();
         let acc = app.init_account(&[Coin::new(1000000000000000, "stake")]);
 
+        dbg!(acc.address());
+
         let mut buf = Vec::new();
         let msg = MsgCreateDenom {
             sender: acc.address(),
@@ -475,7 +477,7 @@ mod tests {
 
         // - sign
         let sign_doc =
-            tx::SignDoc::new(&tx_body, &auth_info, &("osmosis-1".parse().unwrap()), 8).unwrap();
+            tx::SignDoc::new(&tx_body, &auth_info, &("osmosis-1".parse().unwrap()), 9).unwrap();
         let tx_raw = sign_doc.sign(&acc.signing_key()).unwrap();
 
         let tx = tx_raw.to_bytes().unwrap();

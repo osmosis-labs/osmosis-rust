@@ -93,7 +93,7 @@ func (s *TestEnv) BeginNewBlockWithProposer(executeNextEpoch bool, proposer sdk.
 		newBlockTime = s.Ctx.BlockTime().Add(epoch.Duration).Add(time.Second)
 	}
 
-	header := tmtypes.Header{Height: s.Ctx.BlockHeight() + 1, Time: newBlockTime}
+	header := tmtypes.Header{ChainID: "osmosis-1", Height: s.Ctx.BlockHeight() + 1, Time: newBlockTime}
 	newCtx := s.Ctx.WithBlockTime(newBlockTime).WithBlockHeight(s.Ctx.BlockHeight() + 1)
 	s.Ctx = newCtx
 	lastCommitInfo := abci.LastCommitInfo{
@@ -104,8 +104,8 @@ func (s *TestEnv) BeginNewBlockWithProposer(executeNextEpoch bool, proposer sdk.
 	}
 	reqBeginBlock := abci.RequestBeginBlock{Header: header, LastCommitInfo: lastCommitInfo}
 
-	fmt.Println("beginning block ", s.Ctx.BlockHeight())
-	s.App.BeginBlocker(s.Ctx, reqBeginBlock)
+	// fmt.Println("beginning block ", s.Ctx.BlockHeight())
+	s.App.BeginBlock(reqBeginBlock)
 }
 
 func (s *TestEnv) SetupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAddress {
@@ -167,6 +167,10 @@ func InitTestEnv() uint64 {
 
 	env.BeginNewBlock(false)
 
+	reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
+	env.App.EndBlock(reqEndBlock)
+	env.App.Commit()
+
 	// env.QueryHelper = &baseapp.QueryServiceTestHelper{
 	// 	GRPCQueryRouter: env.App.GRPCQueryRouter(),
 	// 	Ctx:             env.Ctx,
@@ -176,9 +180,9 @@ func InitTestEnv() uint64 {
 	env.contractOpsKeeper = wasmkeeper.NewPermissionedKeeper(env.App.WasmKeeper, SudoAuthorizationPolicy{})
 
 	id := atomic.LoadUint64(&envCounter)
-
 	envRegister.Store(id, *env)
 	atomic.AddUint64(&envCounter, 1)
+
 	return id
 }
 
@@ -195,12 +199,19 @@ func InitAccount(envId uint64, coinsJson string) *C.char {
 	priv := secp256k1.GenPrivKey()
 	accAddr := sdk.AccAddress(priv.PubKey().Address())
 
+	env.BeginNewBlock(false)
 	err := simapp.FundAccount(env.App.BankKeeper, env.Ctx, accAddr, coins)
 	if err != nil {
 		panic(errors.Wrapf(err, "Failed to fund account"))
 	}
+	reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
+	env.App.EndBlock(reqEndBlock)
+
+	env.App.Commit()
 
 	base64Priv := base64.StdEncoding.EncodeToString(priv.Bytes())
+
+	envRegister.Store(envId, env)
 
 	return C.CString(base64Priv)
 }
@@ -287,7 +298,6 @@ func CwInstantiate(envId uint64, base64msgInstantiateContract string) *C.char {
 		panic(err)
 	}
 
-	fmt.Printf("creator: %s\n", creator)
 	admin, err := sdk.AccAddressFromBech32(msg.Admin)
 	if err != nil {
 		panic(err)
@@ -385,8 +395,6 @@ func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 	env := loadEnv(envId)
 	app := env.App
 
-	fmt.Printf("===============> %s", env.Ctx.ChainID())
-
 	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
 	if err != nil {
 		panic(err)
@@ -409,10 +417,7 @@ func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 
 	// EndBlock
 	reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
-	env.App.EndBlocker(env.Ctx, reqEndBlock)
-	// newHeight := env.Ctx.BlockHeight() + 1
-	// app.EndBlock(abci.RequestEndBlock{Height: newHeight})
-	// env.Ctx = env.Ctx.WithBlockHeight(newHeight)
+	env.App.EndBlock(reqEndBlock)
 
 	// Commit
 	app.Commit()
@@ -422,6 +427,8 @@ func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 	if err != nil {
 		panic(err)
 	}
+
+	envRegister.Store(envId, env)
 
 	return C.CString(string(bz))
 }
@@ -486,7 +493,8 @@ func (p SudoAuthorizationPolicy) CanModifyContract(admin, actor sdk.AccAddress) 
 // must define main for ffi build
 func main() {
 	// envId := InitTestEnv()
-	// priv := InitAccount(envId, "[{ \"denom\": \"uosmo\", \"amount\": \"10000000000000\"}, { \"denom\": \"uatom\", \"amount\": \"10000000000000\"}]")
+	// InitAccount(envId, "[{ \"denom\": \"uatom\", \"amount\": \"10000000000000\"}, { \"denom\": \"uosmo\", \"amount\": \"10000000000000\"}]")
+	// InitAccount(envId, "[{ \"denom\": \"uatom\", \"amount\": \"10000000000000\"}, { \"denom\": \"uosmo\", \"amount\": \"10000000000000\"}]")
 	// // - priv -> bytes -> address
 	// privBytes, _ := base64.StdEncoding.DecodeString(C.GoString(priv))
 
