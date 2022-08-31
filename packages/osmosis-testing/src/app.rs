@@ -94,16 +94,18 @@ impl App {
     }
 
     /// Instantiate contract
-    pub fn instantiate_contract<M>(
+    pub fn instantiate_contract<A1, A2, M>(
         &self,
-        sender: &dyn Account,
+        sender: &A1,
         code_id: u64,
         msg: &M,
         funds: &[Coin],
-        admin: Option<&dyn Account>,
+        admin: Option<&A2>,
         label: Option<String>,
     ) -> String
     where
+        A1: Account,
+        A2: Account,
         M: ?Sized + Serialize,
     {
         let msg = MsgInstantiateContract {
