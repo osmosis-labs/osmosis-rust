@@ -28,6 +28,7 @@ use prost::Message;
 use serde::{de::DeserializeOwned, Serialize};
 use std::{ffi::CString, io, path::PathBuf};
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct App {
     id: u64,
 }

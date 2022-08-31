@@ -42,6 +42,7 @@ impl SigningAccount {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NonSigningAccount {
     public_key: PublicKey,
 }
