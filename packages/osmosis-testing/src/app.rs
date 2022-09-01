@@ -152,7 +152,7 @@ impl App {
         contract: &str,
         msg: &M,
         funds: &[Coin],
-    ) -> String
+    ) -> Result<String, String>
     where
         M: ?Sized + Serialize,
     {
@@ -180,10 +180,26 @@ impl App {
 
         unsafe {
             let res = CwExecute(self.id, base64_msg);
-            CString::from_raw(res)
-                .to_str()
-                .expect("bech32 address must be valid UTF-8")
-                .to_string()
+            let c_string = CString::from_raw(res);
+            let base64_bytes = c_string.to_bytes();
+            let bytes = base64::decode(base64_bytes).unwrap();
+
+            if bytes[0] == 0 {
+                let e = CString::new(&bytes[1..])
+                    .unwrap()
+                    .to_str()
+                    .expect("Go code must encode valid UTF-8")
+                    .to_string();
+                Err(e)
+            } else {
+                let s = CString::new(&bytes[1..])
+                    .unwrap()
+                    .to_str()
+                    .expect("bech32 address must be valid UTF-8")
+                    .to_string();
+
+                Ok(String::from_utf8(base64::decode(s).unwrap()).unwrap())
+            }
         }
     }
 
@@ -384,6 +400,7 @@ mod tests {
         let contract_owner = app.init_account(&[]);
         let alice = app.init_account(&[Coin::new(100_000_000_000, "uosmo")]);
 
+        // Setting up contract
         let code_id = app
             .store_code_from_path(&contract_owner.address(), cw1_whitelist_wasm_path())
             .unwrap();
@@ -401,15 +418,33 @@ mod tests {
         );
 
         let admins = vec![alice.address()];
-        app.execute_contract(
-            &contract_owner.address(),
+
+        // Trying to execute_contract with invalid address should fail
+        let error = app
+            .execute_contract(
+                "____random_invalid_address__",
+                &contract_addr,
+                &cw1_whitelist::msg::ExecuteMsg::<cosmwasm_std::Empty>::UpdateAdmins {
+                    admins: admins.clone(),
+                },
+                &[],
+            )
+            .unwrap_err();
+
+        assert_eq!(error, "decoding bech32 failed: invalid separator index -1");
+
+        // Trying to execute_contract valid address should succeed
+        let res = app.execute_contract(
+            &alice.address(),
             &contract_addr,
             &cw1_whitelist::msg::ExecuteMsg::<cosmwasm_std::Empty>::UpdateAdmins {
                 admins: admins.clone(),
             },
             &[],
         );
+        assert!(res.is_ok());
 
+        // And should update the state properly
         let res: cw1_whitelist::msg::AdminListResponse = app.query_contract(
             &contract_addr,
             &cw1_whitelist::msg::QueryMsg::<cosmwasm_std::Empty>::AdminList {},

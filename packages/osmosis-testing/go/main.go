@@ -10,6 +10,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/osmosis-labs/osmosis/v11/cosmwasm-testing/result"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -341,32 +343,33 @@ func CwExecute(envId uint64, base64MsgExecuteContract string) *C.char {
 
 	msgExecuteContractBytes, err := base64.StdEncoding.DecodeString(base64MsgExecuteContract)
 	if err != nil {
-		panic(err)
+		return (*C.char)(result.EncodeResultFromError(err))
 	}
 
 	msg := wasmtypes.MsgExecuteContract{}
 	err = proto.Unmarshal(msgExecuteContractBytes, &msg)
 	if err != nil {
-		panic(err)
+		return (*C.char)(result.EncodeResultFromError(err))
 	}
 
 	contractAddress, err := sdk.AccAddressFromBech32(msg.Contract)
 	if err != nil {
-		panic(err)
+		return (*C.char)(result.EncodeResultFromError(err))
 	}
 
 	senderAddress, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		panic(err)
+		return (*C.char)(result.EncodeResultFromError(err))
 	}
 
 	res, err := env.contractOpsKeeper.Execute(env.Ctx, contractAddress, senderAddress, msg.Msg, msg.Funds)
 
 	if err != nil {
-		panic(err)
+		return (*C.char)(result.EncodeResultFromError(err))
 	}
 
-	return C.CString(base64.StdEncoding.EncodeToString(res))
+	return (*C.char)(result.EncodeResultFromOk(res))
+
 }
 
 //export CwQuery
