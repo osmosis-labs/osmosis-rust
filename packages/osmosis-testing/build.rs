@@ -34,7 +34,7 @@ fn main() {
         .wait()
         .unwrap();
 
-    // std::fs::copy(
+    //  std::fs::copy(
     //     format!("{}/{}", out_dir, "libosmosistesting.dylib"),
     //     "/Users/supanatpotiwarakorn/osmosis/osmosis-rust/target/debug/libosmosistesting.dylib",
     // )

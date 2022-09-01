@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"sync"
-	"sync/atomic"
 	"time"
 
 	"github.com/osmosis-labs/osmosis/v11/cosmwasm-testing/result"
@@ -38,6 +37,7 @@ import (
 var (
 	envCounter  uint64 = 0
 	envRegister        = sync.Map{}
+	mu          sync.Mutex
 )
 
 type TestEnv struct {
@@ -163,6 +163,9 @@ func loadEnv(envId uint64) TestEnv {
 
 //export InitTestEnv
 func InitTestEnv() uint64 {
+	// atomic.LoadUint64(&envCounter)
+	// id := atomic.AddUint64(&envCounter, 1)
+	mu.Lock()
 	env := new(TestEnv)
 	env.App = app.Setup(false)
 	env.Ctx = env.App.BaseApp.NewContext(false, tmproto.Header{Height: 0, ChainID: "osmosis-1", Time: time.Now().UTC()})
@@ -173,17 +176,19 @@ func InitTestEnv() uint64 {
 	env.App.EndBlock(reqEndBlock)
 	env.App.Commit()
 
-	// env.QueryHelper = &baseapp.QueryServiceTestHelper{
-	// 	GRPCQueryRouter: env.App.GRPCQueryRouter(),
-	// 	Ctx:             env.Ctx,
-	// }
+	env.QueryHelper = &baseapp.QueryServiceTestHelper{
+		GRPCQueryRouter: env.App.GRPCQueryRouter(),
+		Ctx:             env.Ctx,
+	}
 
 	// TODO: set limit to 1G
 	env.contractOpsKeeper = wasmkeeper.NewPermissionedKeeper(env.App.WasmKeeper, SudoAuthorizationPolicy{})
 
-	id := atomic.LoadUint64(&envCounter)
+	envCounter += 1
+	id := envCounter
+	mu.Unlock()
+
 	envRegister.Store(id, *env)
-	atomic.AddUint64(&envCounter, 1)
 
 	return id
 }
@@ -201,15 +206,15 @@ func InitAccount(envId uint64, coinsJson string) *C.char {
 	priv := secp256k1.GenPrivKey()
 	accAddr := sdk.AccAddress(priv.PubKey().Address())
 
-	env.BeginNewBlock(false)
+	// env.BeginNewBlock(false)
 	err := simapp.FundAccount(env.App.BankKeeper, env.Ctx, accAddr, coins)
 	if err != nil {
 		panic(errors.Wrapf(err, "Failed to fund account"))
 	}
-	reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
-	env.App.EndBlock(reqEndBlock)
+	// reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
+	// env.App.EndBlock(reqEndBlock)
 
-	env.App.Commit()
+	// env.App.Commit()
 
 	base64Priv := base64.StdEncoding.EncodeToString(priv.Bytes())
 
@@ -362,7 +367,12 @@ func CwExecute(envId uint64, base64MsgExecuteContract string) *C.char {
 		return encodeErrToResultBytes(err)
 	}
 
+	// env.BeginNewBlock(false)
 	res, err := env.contractOpsKeeper.Execute(env.Ctx, contractAddress, senderAddress, msg.Msg, msg.Funds)
+	// reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
+	// env.App.EndBlock(reqEndBlock)
+
+	// env.App.Commit()
 
 	if err != nil {
 		return encodeErrToResultBytes(err)

@@ -2,9 +2,12 @@
 /// due to limitations on its unstable behavior of its memory layout.
 /// So, apart from privimites, we need to:
 ///
-///   Go { struct -> bytes(proto) -> c_char }
+///   Go { T -> bytes(T) -> c_char }
 ///                      ↓
-///   Rust { c_char -> bytes(proto) -> struct }
+///   Rust { c_char -> bytes(T) -> T }
+///
+/// Where T is the type that resperenets the same high-level structure
+/// in the respective language.
 ///
 /// Correct proto encoding is expected, so it will panic in case of invalid encoding.
 ///
