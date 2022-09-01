@@ -343,33 +343,32 @@ func CwExecute(envId uint64, base64MsgExecuteContract string) *C.char {
 
 	msgExecuteContractBytes, err := base64.StdEncoding.DecodeString(base64MsgExecuteContract)
 	if err != nil {
-		return (*C.char)(result.EncodeResultFromError(err))
+		return encodeErrToResultBytes(err)
 	}
 
 	msg := wasmtypes.MsgExecuteContract{}
 	err = proto.Unmarshal(msgExecuteContractBytes, &msg)
 	if err != nil {
-		return (*C.char)(result.EncodeResultFromError(err))
+		return encodeErrToResultBytes(err)
 	}
 
 	contractAddress, err := sdk.AccAddressFromBech32(msg.Contract)
 	if err != nil {
-		return (*C.char)(result.EncodeResultFromError(err))
+		return encodeErrToResultBytes(err)
 	}
 
 	senderAddress, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
-		return (*C.char)(result.EncodeResultFromError(err))
+		return encodeErrToResultBytes(err)
 	}
 
 	res, err := env.contractOpsKeeper.Execute(env.Ctx, contractAddress, senderAddress, msg.Msg, msg.Funds)
 
 	if err != nil {
-		return (*C.char)(result.EncodeResultFromError(err))
+		return encodeErrToResultBytes(err)
 	}
 
-	return (*C.char)(result.EncodeResultFromOk(res))
-
+	return encodeBytesResultBytes(res)
 }
 
 //export CwQuery
@@ -491,6 +490,14 @@ func (p SudoAuthorizationPolicy) CanInstantiateContract(config wasmtypes.AccessC
 
 func (p SudoAuthorizationPolicy) CanModifyContract(admin, actor sdk.AccAddress) bool {
 	return true
+}
+
+func encodeErrToResultBytes(err error) *C.char {
+	return C.CString(result.EncodeResultFromError(err))
+}
+
+func encodeBytesResultBytes(bytes []byte) *C.char {
+	return C.CString(result.EncodeResultFromOk(bytes))
 }
 
 // must define main for ffi build

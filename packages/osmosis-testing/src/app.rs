@@ -1,5 +1,6 @@
 use crate::{
     account::{Account, SigningAccount},
+    app_result::AppResult,
     bindings::{
         CommitTx, CwExecute, CwGetCodeInfo, CwGetContractInfo, CwInstantiate, CwQuery, CwStoreCode,
         GAMMCreateBalancerPool, GAMMGetTotalPoolLiquidity, GetAllBalances, InitAccount,
@@ -180,26 +181,7 @@ impl App {
 
         unsafe {
             let res = CwExecute(self.id, base64_msg);
-            let c_string = CString::from_raw(res);
-            let base64_bytes = c_string.to_bytes();
-            let bytes = base64::decode(base64_bytes).unwrap();
-
-            if bytes[0] == 0 {
-                let e = CString::new(&bytes[1..])
-                    .unwrap()
-                    .to_str()
-                    .expect("Go code must encode valid UTF-8")
-                    .to_string();
-                Err(e)
-            } else {
-                let s = CString::new(&bytes[1..])
-                    .unwrap()
-                    .to_str()
-                    .expect("bech32 address must be valid UTF-8")
-                    .to_string();
-
-                Ok(String::from_utf8(base64::decode(s).unwrap()).unwrap())
-            }
+            AppResult::from_non_null_ptr(res).into_result()
         }
     }
 
@@ -397,32 +379,32 @@ mod tests {
     #[test]
     fn test_execute_contract_and_query_contract() {
         let app = App::new();
-        let contract_owner = app.init_account(&[]);
-        let alice = app.init_account(&[Coin::new(100_000_000_000, "uosmo")]);
+        let admin = app.init_account(&[]);
+        let random_account = app.init_account(&[Coin::new(100_000_000_000, "uosmo")]);
 
         // Setting up contract
         let code_id = app
-            .store_code_from_path(&contract_owner.address(), cw1_whitelist_wasm_path())
+            .store_code_from_path(&admin.address(), cw1_whitelist_wasm_path())
             .unwrap();
 
         let contract_addr = app.instantiate_contract(
-            &contract_owner,
+            &admin,
             code_id,
             &cw1_whitelist::msg::InstantiateMsg {
-                admins: vec![contract_owner.address()],
+                admins: vec![admin.address()],
                 mutable: true,
             },
             &[],
-            Some(&contract_owner),
+            Some(&admin),
             None,
         );
 
-        let admins = vec![alice.address()];
+        let admins = vec![random_account.address()];
 
-        // Trying to execute_contract with invalid address should fail
+        // Trying to execute_contract with unauthorized address should fail
         let error = app
             .execute_contract(
-                "____random_invalid_address__",
+                &random_account.address(),
                 &contract_addr,
                 &cw1_whitelist::msg::ExecuteMsg::<cosmwasm_std::Empty>::UpdateAdmins {
                     admins: admins.clone(),
@@ -431,11 +413,11 @@ mod tests {
             )
             .unwrap_err();
 
-        assert_eq!(error, "decoding bech32 failed: invalid separator index -1");
+        assert_eq!(error, "Unauthorized: execute wasm contract failed");
 
-        // Trying to execute_contract valid address should succeed
+        // Trying to execute_contract by an admin should succeed
         let res = app.execute_contract(
-            &alice.address(),
+            &admin.address(),
             &contract_addr,
             &cw1_whitelist::msg::ExecuteMsg::<cosmwasm_std::Empty>::UpdateAdmins {
                 admins: admins.clone(),
