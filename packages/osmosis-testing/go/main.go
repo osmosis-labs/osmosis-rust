@@ -97,15 +97,15 @@ func InitAccount(envId uint64, coinsJson string) *C.char {
 	priv := secp256k1.GenPrivKey()
 	accAddr := sdk.AccAddress(priv.PubKey().Address())
 
-	// env.BeginNewBlock(false)
+	env.BeginNewBlock(false)
 	err := simapp.FundAccount(env.App.BankKeeper, env.Ctx, accAddr, coins)
 	if err != nil {
 		panic(errors.Wrapf(err, "Failed to fund account"))
 	}
-	// reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
-	// env.App.EndBlock(reqEndBlock)
+	reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
+	env.App.EndBlock(reqEndBlock)
 
-	// env.App.Commit()
+	env.App.Commit()
 
 	base64Priv := base64.StdEncoding.EncodeToString(priv.Bytes())
 
@@ -433,6 +433,7 @@ func (s *TestEnv) BeginNewBlockWithProposer(executeNextEpoch bool, proposer sdk.
 
 	// fmt.Println("beginning block ", s.Ctx.BlockHeight())
 	s.App.BeginBlock(reqBeginBlock)
+	s.Ctx = s.App.NewContext(false, reqBeginBlock.Header)
 }
 
 func (s *TestEnv) SetupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAddress {
