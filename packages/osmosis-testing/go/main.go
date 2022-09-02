@@ -163,9 +163,13 @@ func loadEnv(envId uint64) TestEnv {
 
 //export InitTestEnv
 func InitTestEnv() uint64 {
-	// atomic.LoadUint64(&envCounter)
-	// id := atomic.AddUint64(&envCounter, 1)
+	// Allow testing unoptimized contract
+	wasmtypes.MaxWasmSize = 1024 * 1024 * 1024 * 1024 * 1024
+
+	// Temp fix for concurrency issue
 	mu.Lock()
+	defer mu.Unlock()
+
 	env := new(TestEnv)
 	env.App = app.Setup(false)
 	env.Ctx = env.App.BaseApp.NewContext(false, tmproto.Header{Height: 0, ChainID: "osmosis-1", Time: time.Now().UTC()})
@@ -186,7 +190,6 @@ func InitTestEnv() uint64 {
 
 	envCounter += 1
 	id := envCounter
-	mu.Unlock()
 
 	envRegister.Store(id, *env)
 
