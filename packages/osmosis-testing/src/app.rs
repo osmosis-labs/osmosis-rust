@@ -215,7 +215,7 @@ impl App {
     }
 
     /// Query contract
-    pub fn query_contract<Q, R>(&self, contract_address: &str, query_msg: &Q) -> R
+    pub fn query_contract<Q, R>(&self, contract_address: &str, query_msg: &Q) -> Result<R, String>
     where
         Q: ?Sized + Serialize,
         R: ?Sized + DeserializeOwned,
@@ -224,11 +224,9 @@ impl App {
         redefine_as_go_string!(contract_address, query_msg);
         unsafe {
             let query_response = CwQuery(self.id, contract_address, query_msg);
+            let query_response = AppResult::from_non_null_ptr(query_response).into_result()?;
 
-            let query_response = CString::from_raw(query_response);
-            let query_response = query_response.to_str().unwrap_unchecked();
-
-            serde_json::from_str(query_response).unwrap()
+            serde_json::from_str(&query_response).map_err(|e| e.to_string())
         }
     }
 
@@ -298,6 +296,7 @@ mod tests {
     use osmosis_std::types::osmosis::tokenfactory::v1beta1::MsgCreateDenom;
     use prost::Message;
     use rayon::prelude::*;
+    use serde_json::json;
     use std::path::PathBuf;
 
     fn cw1_whitelist_wasm_path() -> PathBuf {
@@ -427,10 +426,12 @@ mod tests {
         assert!(res.is_ok());
 
         // And should update the state properly
-        let res: cw1_whitelist::msg::AdminListResponse = app.query_contract(
-            &contract_addr,
-            &cw1_whitelist::msg::QueryMsg::<cosmwasm_std::Empty>::AdminList {},
-        );
+        let res: cw1_whitelist::msg::AdminListResponse = app
+            .query_contract(
+                &contract_addr,
+                &cw1_whitelist::msg::QueryMsg::<cosmwasm_std::Empty>::AdminList {},
+            )
+            .unwrap();
 
         assert_eq!(
             res,
@@ -439,6 +440,18 @@ mod tests {
                 mutable: true
             }
         );
+
+        // error when passing invalid query_msg
+        let err: String = app
+            .query_contract::<serde_json::Value, serde_json::Value>(
+                &contract_addr,
+                &json!({
+                    "unknown": {}
+                }),
+            )
+            .unwrap_err();
+
+        assert_eq!(err, "Error parsing into type cw1_whitelist::msg::QueryMsg: unknown variant `unknown`, expected `admin_list` or `can_execute`: query wasm contract failed");
     }
 
     #[test]

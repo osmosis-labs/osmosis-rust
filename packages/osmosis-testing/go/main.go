@@ -46,119 +46,7 @@ type TestEnv struct {
 
 	// cosmwasm related keepers
 	contractOpsKeeper wasmtypes.ContractOpsKeeper
-
-	QueryHelper *baseapp.QueryServiceTestHelper
-	// 	queryClient         types.QueryClient
-	// 	msgServer           types.MsgServer
-	// bankMsgServer banktypes.MsgServer
-}
-
-func (s *TestEnv) BeginNewBlock(executeNextEpoch bool) {
-	var valAddr []byte
-
-	validators := s.App.StakingKeeper.GetAllValidators(s.Ctx)
-	if len(validators) >= 1 {
-		valAddrFancy, err := validators[0].GetConsAddr()
-		if err != nil {
-			panic(err)
-		}
-		valAddr = valAddrFancy.Bytes()
-	} else {
-		valAddrFancy := s.SetupValidator(stakingtypes.Bonded)
-		validator, _ := s.App.StakingKeeper.GetValidator(s.Ctx, valAddrFancy)
-		valAddr2, _ := validator.GetConsAddr()
-		valAddr = valAddr2.Bytes()
-	}
-
-	s.BeginNewBlockWithProposer(executeNextEpoch, valAddr)
-}
-
-// BeginNewBlockWithProposer begins a new block with a proposer.
-func (s *TestEnv) BeginNewBlockWithProposer(executeNextEpoch bool, proposer sdk.ValAddress) {
-	validator, found := s.App.StakingKeeper.GetValidator(s.Ctx, proposer)
-
-	if !found {
-		panic("validator not found")
-	}
-
-	valConsAddr, err := validator.GetConsAddr()
-	if err != nil {
-		panic(err)
-	}
-
-	valAddr := valConsAddr.Bytes()
-
-	epochIdentifier := s.App.SuperfluidKeeper.GetEpochIdentifier(s.Ctx)
-	epoch := s.App.EpochsKeeper.GetEpochInfo(s.Ctx, epochIdentifier)
-	newBlockTime := s.Ctx.BlockTime().Add(5 * time.Second)
-	if executeNextEpoch {
-		newBlockTime = s.Ctx.BlockTime().Add(epoch.Duration).Add(time.Second)
-	}
-
-	header := tmtypes.Header{ChainID: "osmosis-1", Height: s.Ctx.BlockHeight() + 1, Time: newBlockTime}
-	newCtx := s.Ctx.WithBlockTime(newBlockTime).WithBlockHeight(s.Ctx.BlockHeight() + 1)
-	s.Ctx = newCtx
-	lastCommitInfo := abci.LastCommitInfo{
-		Votes: []abci.VoteInfo{{
-			Validator:       abci.Validator{Address: valAddr, Power: 1000},
-			SignedLastBlock: true,
-		}},
-	}
-	reqBeginBlock := abci.RequestBeginBlock{Header: header, LastCommitInfo: lastCommitInfo}
-
-	// fmt.Println("beginning block ", s.Ctx.BlockHeight())
-	s.App.BeginBlock(reqBeginBlock)
-}
-
-func (s *TestEnv) SetupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAddress {
-	valPub := secp256k1.GenPrivKey().PubKey()
-	valAddr := sdk.ValAddress(valPub.Address())
-	bondDenom := s.App.StakingKeeper.GetParams(s.Ctx).BondDenom
-	selfBond := sdk.NewCoins(sdk.Coin{Amount: sdk.NewInt(100), Denom: bondDenom})
-
-	err := simapp.FundAccount(s.App.BankKeeper, s.Ctx, sdk.AccAddress(valPub.Address()), selfBond)
-	if err != nil {
-		panic(errors.Wrapf(err, "Failed to fund account"))
-	}
-
-	stakingHandler := staking.NewHandler(*s.App.StakingKeeper)
-	stakingCoin := sdk.NewCoin(sdk.DefaultBondDenom, selfBond[0].Amount)
-	ZeroCommission := stakingtypes.NewCommissionRates(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec())
-	msg, err := stakingtypes.NewMsgCreateValidator(valAddr, valPub, stakingCoin, stakingtypes.Description{}, ZeroCommission, sdk.OneInt())
-	// s.Require().NoError(err)
-	_, err = stakingHandler(s.Ctx, msg)
-	// s.Require().NoError(err)
-	// s.Require().NotNil(res)
-
-	val, _ := s.App.StakingKeeper.GetValidator(s.Ctx, valAddr)
-	// s.Require().True(found)
-
-	val = val.UpdateStatus(bondStatus)
-	s.App.StakingKeeper.SetValidator(s.Ctx, val)
-
-	consAddr, err := val.GetConsAddr()
-	// s.Suite.Require().NoError(err)
-
-	signingInfo := slashingtypes.NewValidatorSigningInfo(
-		consAddr,
-		s.Ctx.BlockHeight(),
-		0,
-		time.Unix(0, 0),
-		false,
-		0,
-	)
-	s.App.SlashingKeeper.SetValidatorSigningInfo(s.Ctx, consAddr, signingInfo)
-
-	return valAddr
-}
-
-func loadEnv(envId uint64) TestEnv {
-	item, ok := envRegister.Load(envId)
-	env := TestEnv(item.(TestEnv))
-	if !ok {
-		panic(fmt.Sprintf("env not found: %d", envId))
-	}
-	return env
+	QueryHelper       *baseapp.QueryServiceTestHelper
 }
 
 //export InitTestEnv
@@ -391,16 +279,16 @@ func CwQuery(envId uint64, bech32ContractAddress, queryMsgJson string) *C.char {
 	queryMsgBytes := []byte(queryMsgJson)
 	contractAddress, err := sdk.AccAddressFromBech32(bech32ContractAddress)
 	if err != nil {
-		panic(err)
+		return encodeErrToResultBytes(err)
 	}
 
 	res, err := env.App.WasmKeeper.QuerySmart(env.Ctx, contractAddress, queryMsgBytes)
 
 	if err != nil {
-		panic(err)
+		return encodeErrToResultBytes(err)
 	}
 
-	return C.CString(string(res))
+	return encodeBytesResultBytes(res)
 }
 
 //TODO: export CwRawQuery
@@ -448,8 +336,6 @@ func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 	return C.CString(string(bz))
 }
 
-//TODO: export Query
-
 //export GAMMCreateBalancerPool
 func GAMMCreateBalancerPool(envId uint64, base64MsgCreateBalancerPool string) uint64 {
 	env := loadEnv(envId)
@@ -491,6 +377,115 @@ func GAMMGetTotalPoolLiquidity(envId uint64, poolId uint64) *C.char {
 	return C.CString(string(bz))
 }
 
+// ========= utils =========
+func (s *TestEnv) BeginNewBlock(executeNextEpoch bool) {
+	var valAddr []byte
+
+	validators := s.App.StakingKeeper.GetAllValidators(s.Ctx)
+	if len(validators) >= 1 {
+		valAddrFancy, err := validators[0].GetConsAddr()
+		if err != nil {
+			panic(err)
+		}
+		valAddr = valAddrFancy.Bytes()
+	} else {
+		valAddrFancy := s.SetupValidator(stakingtypes.Bonded)
+		validator, _ := s.App.StakingKeeper.GetValidator(s.Ctx, valAddrFancy)
+		valAddr2, _ := validator.GetConsAddr()
+		valAddr = valAddr2.Bytes()
+	}
+
+	s.BeginNewBlockWithProposer(executeNextEpoch, valAddr)
+}
+
+// BeginNewBlockWithProposer begins a new block with a proposer.
+func (s *TestEnv) BeginNewBlockWithProposer(executeNextEpoch bool, proposer sdk.ValAddress) {
+	validator, found := s.App.StakingKeeper.GetValidator(s.Ctx, proposer)
+
+	if !found {
+		panic("validator not found")
+	}
+
+	valConsAddr, err := validator.GetConsAddr()
+	if err != nil {
+		panic(err)
+	}
+
+	valAddr := valConsAddr.Bytes()
+
+	epochIdentifier := s.App.SuperfluidKeeper.GetEpochIdentifier(s.Ctx)
+	epoch := s.App.EpochsKeeper.GetEpochInfo(s.Ctx, epochIdentifier)
+	newBlockTime := s.Ctx.BlockTime().Add(5 * time.Second)
+	if executeNextEpoch {
+		newBlockTime = s.Ctx.BlockTime().Add(epoch.Duration).Add(time.Second)
+	}
+
+	header := tmtypes.Header{ChainID: "osmosis-1", Height: s.Ctx.BlockHeight() + 1, Time: newBlockTime}
+	newCtx := s.Ctx.WithBlockTime(newBlockTime).WithBlockHeight(s.Ctx.BlockHeight() + 1)
+	s.Ctx = newCtx
+	lastCommitInfo := abci.LastCommitInfo{
+		Votes: []abci.VoteInfo{{
+			Validator:       abci.Validator{Address: valAddr, Power: 1000},
+			SignedLastBlock: true,
+		}},
+	}
+	reqBeginBlock := abci.RequestBeginBlock{Header: header, LastCommitInfo: lastCommitInfo}
+
+	// fmt.Println("beginning block ", s.Ctx.BlockHeight())
+	s.App.BeginBlock(reqBeginBlock)
+}
+
+func (s *TestEnv) SetupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAddress {
+	valPub := secp256k1.GenPrivKey().PubKey()
+	valAddr := sdk.ValAddress(valPub.Address())
+	bondDenom := s.App.StakingKeeper.GetParams(s.Ctx).BondDenom
+	selfBond := sdk.NewCoins(sdk.Coin{Amount: sdk.NewInt(100), Denom: bondDenom})
+
+	err := simapp.FundAccount(s.App.BankKeeper, s.Ctx, sdk.AccAddress(valPub.Address()), selfBond)
+	if err != nil {
+		panic(errors.Wrapf(err, "Failed to fund account"))
+	}
+
+	stakingHandler := staking.NewHandler(*s.App.StakingKeeper)
+	stakingCoin := sdk.NewCoin(sdk.DefaultBondDenom, selfBond[0].Amount)
+	ZeroCommission := stakingtypes.NewCommissionRates(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec())
+	msg, err := stakingtypes.NewMsgCreateValidator(valAddr, valPub, stakingCoin, stakingtypes.Description{}, ZeroCommission, sdk.OneInt())
+	// s.Require().NoError(err)
+	_, err = stakingHandler(s.Ctx, msg)
+	// s.Require().NoError(err)
+	// s.Require().NotNil(res)
+
+	val, _ := s.App.StakingKeeper.GetValidator(s.Ctx, valAddr)
+	// s.Require().True(found)
+
+	val = val.UpdateStatus(bondStatus)
+	s.App.StakingKeeper.SetValidator(s.Ctx, val)
+
+	consAddr, err := val.GetConsAddr()
+	// s.Suite.Require().NoError(err)
+
+	signingInfo := slashingtypes.NewValidatorSigningInfo(
+		consAddr,
+		s.Ctx.BlockHeight(),
+		0,
+		time.Unix(0, 0),
+		false,
+		0,
+	)
+	s.App.SlashingKeeper.SetValidatorSigningInfo(s.Ctx, consAddr, signingInfo)
+
+	return valAddr
+}
+
+func loadEnv(envId uint64) TestEnv {
+	item, ok := envRegister.Load(envId)
+	env := TestEnv(item.(TestEnv))
+	if !ok {
+		panic(fmt.Sprintf("env not found: %d", envId))
+	}
+	return env
+}
+
 type SudoAuthorizationPolicy struct{}
 
 func (p SudoAuthorizationPolicy) CanCreateCode(config wasmtypes.AccessConfig, actor sdk.AccAddress) bool {
@@ -514,38 +509,4 @@ func encodeBytesResultBytes(bytes []byte) *C.char {
 }
 
 // must define main for ffi build
-func main() {
-	// envId := InitTestEnv()
-	// InitAccount(envId, "[{ \"denom\": \"uatom\", \"amount\": \"10000000000000\"}, { \"denom\": \"uosmo\", \"amount\": \"10000000000000\"}]")
-	// InitAccount(envId, "[{ \"denom\": \"uatom\", \"amount\": \"10000000000000\"}, { \"denom\": \"uosmo\", \"amount\": \"10000000000000\"}]")
-	// // - priv -> bytes -> address
-	// privBytes, _ := base64.StdEncoding.DecodeString(C.GoString(priv))
-
-	// addr := secp256k1.PrivKey(privBytes).PubKey().Address()
-
-	// initialLiquidity := sdk.NewCoins(sdk.NewInt64Coin("uosmo", 1_000), sdk.NewInt64Coin("uatom", 1_000))
-
-	// var poolAssets []balancer.PoolAsset
-
-	// for _, asset := range initialLiquidity {
-	// 	poolAssets = append(poolAssets, balancer.PoolAsset{
-	// 		Weight: sdk.NewInt(1),
-	// 		Token:  asset,
-	// 	})
-	// }
-
-	// poolParams := balancer.PoolParams{
-	// 	SwapFee: sdk.NewDecWithPrec(1, 2),
-	// 	ExitFee: sdk.NewDecWithPrec(1, 2),
-	// }
-
-	// acc, _ := sdk.AccAddressFromHex(addr.String())
-	// msg := balancer.NewMsgCreateBalancerPool(acc, poolParams, poolAssets, "")
-	// m, _ := msg.Marshal()
-
-	// mb64 := base64.StdEncoding.EncodeToString(m)
-
-	// GAMMCreateBalancerPool(envId, mb64)
-
-	// fmt.Printf("%v", C.GoString(priv))
-}
+func main() {}

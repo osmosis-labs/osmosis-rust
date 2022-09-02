@@ -2,14 +2,11 @@
 /// due to limitations on its unstable behavior of its memory layout.
 /// So, apart from privimites, we need to:
 ///
-///   Go { T -> bytes(T) -> c_char }
+///   Go { T -> bytes(T) -> base64 -> *c_char }
 ///                      ↓
-///   Rust { c_char -> bytes(T) -> T }
+///   Rust { *c_char -> base64 -> bytes(T') -> T' }
 ///
-/// Where T is the type that resperenets the same high-level structure
-/// in the respective language.
-///
-/// Correct proto encoding is expected, so it will panic in case of invalid encoding.
+/// Where T and T' are corresponding data structures in the respective language.
 ///
 use std::ffi::CString;
 
@@ -42,10 +39,7 @@ impl AppResult<String> {
                 .expect("Go code must encode valid UTF-8 string")
                 .to_string();
 
-            // TODO: remove the need to base64 encode
-            Some(Self(Ok(
-                String::from_utf8(base64::decode(res).unwrap()).unwrap()
-            )))
+            Some(Self(Ok(res)))
         }
     }
 
