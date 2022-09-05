@@ -289,7 +289,7 @@ impl App {
 mod tests {
     use crate::{account::Account, app::App};
     use cosmrs::{
-        proto::tendermint::abci::RequestDeliverTx,
+        proto::tendermint::abci::{EventAttribute, RequestDeliverTx},
         tx::{self, Fee, SignerInfo},
     };
     use cosmwasm_std::{coins, Coin};
@@ -473,9 +473,7 @@ mod tests {
     fn test_commit_tx() {
         let app = App::new();
         let acc = app.init_account(&[Coin::new(1000000000000000, "uosmo")]);
-
-        dbg!(acc.address());
-
+        let addr = acc.address();
         let mut buf = Vec::new();
         let msg = MsgCreateDenom {
             sender: acc.address(),
@@ -513,24 +511,28 @@ mod tests {
 
         let res = app.commit_tx(RequestDeliverTx { tx });
 
-        // res.events[0].attributes.iter().for_each(|e| {
-        //     println!(
-        //         "{}: {}",
-        //         std::str::from_utf8(&e.key).unwrap(),
-        //         std::str::from_utf8(&e.value).unwrap(),
-        //     );
-        // })
-        dbg!(res);
-        // NOTE: this resulted in:
-        // res = ResponseDeliverTx {
-        //     code: 4,
-        //     data: [],
-        //     log: "signature verification failed; please verify account number (8) and chain-id (): unauthorized",
-        //     info: "",
-        //     gas_wanted: 10000000,
-        //     gas_used: 58703,
-        //     events: [],
-        //     codespace: "sdk",
-        // }
+        let create_denom_attrs = &res
+            .events
+            .iter()
+            .find(|e| e.r#type == "create_denom")
+            .unwrap()
+            .attributes;
+
+        // TODO: make assertion based on string representation
+        assert_eq!(
+            create_denom_attrs,
+            &vec![
+                EventAttribute {
+                    key: "creator".into(),
+                    value: addr.clone().into(),
+                    index: true
+                },
+                EventAttribute {
+                    key: "new_token_denom".into(),
+                    value: format!("factory/{}/{}", addr, "newdenom").into(),
+                    index: true
+                },
+            ]
+        );
     }
 }

@@ -7,7 +7,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"strings"
 	"sync"
 	"time"
 
@@ -17,30 +16,25 @@ import (
 
 	// tendermint
 	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	tmtypes "github.com/tendermint/tendermint/proto/tendermint/types"
-	dbm "github.com/tendermint/tm-db"
 
 	// cosmos sdk
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-	"github.com/cosmos/cosmos-sdk/x/staking"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	// wasmd
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	// osmosis
-	"github.com/osmosis-labs/osmosis/v11/app"
+
 	"github.com/osmosis-labs/osmosis/v11/x/gamm/pool-models/balancer"
 
 	// cosmwasm-testing
 	"github.com/osmosis-labs/osmosis/v11/cosmwasm-testing/result"
+	"github.com/osmosis-labs/osmosis/v11/cosmwasm-testing/testenv"
 )
 
 var (
@@ -48,38 +42,6 @@ var (
 	envRegister        = sync.Map{}
 	mu          sync.Mutex
 )
-
-type TestEnv struct {
-	App *app.OsmosisApp
-	Ctx sdk.Context
-
-	// cosmwasm related keepers
-	contractOpsKeeper wasmtypes.ContractOpsKeeper
-	QueryHelper       *baseapp.QueryServiceTestHelper
-}
-
-func SetupOsmosisApp() *app.OsmosisApp {
-	db := dbm.NewMemDB()
-	appInstance := app.NewOsmosisApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, app.DefaultNodeHome, 5, app.MakeEncodingConfig(), simapp.EmptyAppOptions{}, app.GetWasmEnabledProposals(), app.EmptyWasmOpts)
-	genesisState := app.NewDefaultGenesisState()
-	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
-	if err != nil {
-		panic(err)
-	}
-
-	// replace sdk.DefaultDenom with "uosmo", a bit of a hack, needs improvement
-	stateBytes = []byte(strings.Replace(string(stateBytes), "\"stake\"", "\"uosmo\"", -1))
-
-	appInstance.InitChain(
-		abci.RequestInitChain{
-			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: simapp.DefaultConsensusParams,
-			AppStateBytes:   stateBytes,
-		},
-	)
-
-	return appInstance
-}
 
 //export InitTestEnv
 func InitTestEnv() uint64 {
@@ -89,8 +51,8 @@ func InitTestEnv() uint64 {
 	mu.Lock()
 	defer mu.Unlock()
 
-	env := new(TestEnv)
-	env.App = SetupOsmosisApp()
+	env := new(testenv.TestEnv)
+	env.App = testenv.SetupOsmosisApp()
 
 	env.Ctx = env.App.BaseApp.NewContext(false, tmproto.Header{Height: 0, ChainID: "osmosis-1", Time: time.Now().UTC()})
 
@@ -105,7 +67,7 @@ func InitTestEnv() uint64 {
 		Ctx:             env.Ctx,
 	}
 
-	env.contractOpsKeeper = wasmkeeper.NewPermissionedKeeper(env.App.WasmKeeper, SudoAuthorizationPolicy{})
+	env.ContractOpsKeeper = wasmkeeper.NewPermissionedKeeper(env.App.WasmKeeper, SudoAuthorizationPolicy{})
 
 	envCounter += 1
 	id := envCounter
@@ -180,7 +142,7 @@ func CwStoreCode(envId uint64, bech32Addr string, base64Wasm string) uint64 {
 	}
 
 	// TODO: expose access config
-	codeId, err := env.contractOpsKeeper.Create(env.Ctx, addr, wasm, nil)
+	codeId, err := env.ContractOpsKeeper.Create(env.Ctx, addr, wasm, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -232,7 +194,7 @@ func CwInstantiate(envId uint64, base64msgInstantiateContract string) *C.char {
 		panic(err)
 	}
 
-	contractAddr, _, err := env.contractOpsKeeper.Instantiate(env.Ctx, msg.CodeID, creator, admin, msg.Msg, msg.Label, msg.Funds)
+	contractAddr, _, err := env.ContractOpsKeeper.Instantiate(env.Ctx, msg.CodeID, creator, admin, msg.Msg, msg.Label, msg.Funds)
 	if err != nil {
 		panic(errors.Wrapf(err, "Failed to instantiate contract"))
 	}
@@ -290,7 +252,7 @@ func CwExecute(envId uint64, base64MsgExecuteContract string) *C.char {
 	}
 
 	// env.BeginNewBlock(false)
-	res, err := env.contractOpsKeeper.Execute(env.Ctx, contractAddress, senderAddress, msg.Msg, msg.Funds)
+	res, err := env.ContractOpsKeeper.Execute(env.Ctx, contractAddress, senderAddress, msg.Msg, msg.Funds)
 	// reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
 	// env.App.EndBlock(reqEndBlock)
 
@@ -409,109 +371,10 @@ func GAMMGetTotalPoolLiquidity(envId uint64, poolId uint64) *C.char {
 }
 
 // ========= utils =========
-func (s *TestEnv) BeginNewBlock(executeNextEpoch bool) {
-	var valAddr []byte
 
-	validators := s.App.StakingKeeper.GetAllValidators(s.Ctx)
-	if len(validators) >= 1 {
-		valAddrFancy, err := validators[0].GetConsAddr()
-		if err != nil {
-			panic(err)
-		}
-		valAddr = valAddrFancy.Bytes()
-	} else {
-		valAddrFancy := s.SetupValidator(stakingtypes.Bonded)
-		validator, _ := s.App.StakingKeeper.GetValidator(s.Ctx, valAddrFancy)
-		valAddr2, _ := validator.GetConsAddr()
-		valAddr = valAddr2.Bytes()
-	}
-
-	s.BeginNewBlockWithProposer(executeNextEpoch, valAddr)
-}
-
-// BeginNewBlockWithProposer begins a new block with a proposer.
-func (s *TestEnv) BeginNewBlockWithProposer(executeNextEpoch bool, proposer sdk.ValAddress) {
-	validator, found := s.App.StakingKeeper.GetValidator(s.Ctx, proposer)
-
-	if !found {
-		panic("validator not found")
-	}
-
-	valConsAddr, err := validator.GetConsAddr()
-	if err != nil {
-		panic(err)
-	}
-
-	valAddr := valConsAddr.Bytes()
-
-	epochIdentifier := s.App.SuperfluidKeeper.GetEpochIdentifier(s.Ctx)
-	epoch := s.App.EpochsKeeper.GetEpochInfo(s.Ctx, epochIdentifier)
-	newBlockTime := s.Ctx.BlockTime().Add(5 * time.Second)
-	if executeNextEpoch {
-		newBlockTime = s.Ctx.BlockTime().Add(epoch.Duration).Add(time.Second)
-	}
-
-	header := tmtypes.Header{ChainID: "osmosis-1", Height: s.Ctx.BlockHeight() + 1, Time: newBlockTime}
-	newCtx := s.Ctx.WithBlockTime(newBlockTime).WithBlockHeight(s.Ctx.BlockHeight() + 1)
-	s.Ctx = newCtx
-	lastCommitInfo := abci.LastCommitInfo{
-		Votes: []abci.VoteInfo{{
-			Validator:       abci.Validator{Address: valAddr, Power: 1000},
-			SignedLastBlock: true,
-		}},
-	}
-	reqBeginBlock := abci.RequestBeginBlock{Header: header, LastCommitInfo: lastCommitInfo}
-
-	// fmt.Println("beginning block ", s.Ctx.BlockHeight())
-	s.App.BeginBlock(reqBeginBlock)
-	s.Ctx = s.App.NewContext(false, reqBeginBlock.Header)
-}
-
-func (s *TestEnv) SetupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAddress {
-	valPub := secp256k1.GenPrivKey().PubKey()
-	valAddr := sdk.ValAddress(valPub.Address())
-	bondDenom := s.App.StakingKeeper.GetParams(s.Ctx).BondDenom
-	selfBond := sdk.NewCoins(sdk.Coin{Amount: sdk.NewInt(100), Denom: bondDenom})
-
-	err := simapp.FundAccount(s.App.BankKeeper, s.Ctx, sdk.AccAddress(valPub.Address()), selfBond)
-	if err != nil {
-		panic(errors.Wrapf(err, "Failed to fund account"))
-	}
-
-	stakingHandler := staking.NewHandler(*s.App.StakingKeeper)
-	stakingCoin := sdk.NewCoin(bondDenom, selfBond[0].Amount)
-	ZeroCommission := stakingtypes.NewCommissionRates(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec())
-	msg, err := stakingtypes.NewMsgCreateValidator(valAddr, valPub, stakingCoin, stakingtypes.Description{}, ZeroCommission, sdk.OneInt())
-	// s.Require().NoError(err)
-	_, err = stakingHandler(s.Ctx, msg)
-	// s.Require().NoError(err)
-	// s.Require().NotNil(res)
-
-	val, _ := s.App.StakingKeeper.GetValidator(s.Ctx, valAddr)
-	// s.Require().True(found)
-
-	val = val.UpdateStatus(bondStatus)
-	s.App.StakingKeeper.SetValidator(s.Ctx, val)
-
-	consAddr, err := val.GetConsAddr()
-	// s.Suite.Require().NoError(err)
-
-	signingInfo := slashingtypes.NewValidatorSigningInfo(
-		consAddr,
-		s.Ctx.BlockHeight(),
-		0,
-		time.Unix(0, 0),
-		false,
-		0,
-	)
-	s.App.SlashingKeeper.SetValidatorSigningInfo(s.Ctx, consAddr, signingInfo)
-
-	return valAddr
-}
-
-func loadEnv(envId uint64) TestEnv {
+func loadEnv(envId uint64) testenv.TestEnv {
 	item, ok := envRegister.Load(envId)
-	env := TestEnv(item.(TestEnv))
+	env := testenv.TestEnv(item.(testenv.TestEnv))
 	if !ok {
 		panic(fmt.Sprintf("env not found: %d", envId))
 	}
