@@ -131,44 +131,44 @@ func (env *TestEnv) beginNewBlockWithProposer(executeNextEpoch bool, proposer sd
 	env.Ctx = env.App.NewContext(false, reqBeginBlock.Header)
 }
 
-func (ta *TestEnv) setupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAddress {
+func (env *TestEnv) setupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAddress {
 	valPub := secp256k1.GenPrivKey().PubKey()
 	valAddr := sdk.ValAddress(valPub.Address())
-	bondDenom := ta.App.StakingKeeper.GetParams(ta.Ctx).BondDenom
+	bondDenom := env.App.StakingKeeper.GetParams(env.Ctx).BondDenom
 	selfBond := sdk.NewCoins(sdk.Coin{Amount: sdk.NewInt(100), Denom: bondDenom})
 
-	err := simapp.FundAccount(ta.App.BankKeeper, ta.Ctx, sdk.AccAddress(valPub.Address()), selfBond)
+	err := simapp.FundAccount(env.App.BankKeeper, env.Ctx, sdk.AccAddress(valPub.Address()), selfBond)
 	if err != nil {
 		panic(errors.Wrapf(err, "Failed to fund account"))
 	}
 
-	stakingHandler := staking.NewHandler(*ta.App.StakingKeeper)
+	stakingHandler := staking.NewHandler(*env.App.StakingKeeper)
 	stakingCoin := sdk.NewCoin(bondDenom, selfBond[0].Amount)
 	ZeroCommission := stakingtypes.NewCommissionRates(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec())
 	msg, err := stakingtypes.NewMsgCreateValidator(valAddr, valPub, stakingCoin, stakingtypes.Description{}, ZeroCommission, sdk.OneInt())
 	// s.Require().NoError(err)
-	_, err = stakingHandler(ta.Ctx, msg)
+	_, err = stakingHandler(env.Ctx, msg)
 	// s.Require().NoError(err)
 	// s.Require().NotNil(res)
 
-	val, _ := ta.App.StakingKeeper.GetValidator(ta.Ctx, valAddr)
+	val, _ := env.App.StakingKeeper.GetValidator(env.Ctx, valAddr)
 	// s.Require().True(found)
 
 	val = val.UpdateStatus(bondStatus)
-	ta.App.StakingKeeper.SetValidator(ta.Ctx, val)
+	env.App.StakingKeeper.SetValidator(env.Ctx, val)
 
 	consAddr, err := val.GetConsAddr()
 	// s.Suite.Require().NoError(err)
 
 	signingInfo := slashingtypes.NewValidatorSigningInfo(
 		consAddr,
-		ta.Ctx.BlockHeight(),
+		env.Ctx.BlockHeight(),
 		0,
 		time.Unix(0, 0),
 		false,
 		0,
 	)
-	ta.App.SlashingKeeper.SetValidatorSigningInfo(ta.Ctx, consAddr, signingInfo)
+	env.App.SlashingKeeper.SetValidatorSigningInfo(env.Ctx, consAddr, signingInfo)
 
 	return valAddr
 }

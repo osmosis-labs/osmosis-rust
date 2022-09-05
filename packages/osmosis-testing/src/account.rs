@@ -37,8 +37,8 @@ impl Account for SigningAccount {
 }
 
 impl SigningAccount {
-    pub fn signing_key(self) -> SigningKey {
-        self.signing_key
+    pub fn signing_key(&'_ self) -> &'_ SigningKey {
+        &self.signing_key
     }
 }
 

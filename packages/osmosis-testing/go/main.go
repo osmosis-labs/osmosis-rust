@@ -107,6 +107,131 @@ func InitAccount(envId uint64, coinsJson string) *C.char {
 	return C.CString(base64Priv)
 }
 
+//export BeginBlock
+func BeginBlock(envId uint64) {
+	env := loadEnv(envId)
+	env.BeginNewBlock(false)
+	envRegister.Store(envId, env)
+}
+
+//export EndBlock
+func EndBlock(envId uint64) {
+	env := loadEnv(envId)
+	reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
+	env.App.EndBlock(reqEndBlock)
+	env.App.Commit()
+	envRegister.Store(envId, env)
+}
+
+//export Execute
+func Execute(envId uint64, base64ReqDeliverTx string) *C.char {
+	env := loadEnv(envId)
+	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
+	if err != nil {
+		panic(err)
+	}
+
+	reqDeliverTx := abci.RequestDeliverTx{}
+	err = proto.Unmarshal(reqDeliverTxBytes, &reqDeliverTx)
+	if err != nil {
+		panic(err)
+	}
+
+	resDeliverTx := env.App.DeliverTx(reqDeliverTx)
+	bz, err := proto.Marshal(&resDeliverTx)
+
+	if err != nil {
+		panic(err)
+	}
+
+	envRegister.Store(envId, env)
+
+	return C.CString(string(bz))
+}
+
+//// export Query
+// func Query(envId uint64, path, base64ReqDeliverTx string) *C.char {
+// 	env := loadEnv(envId)
+// 	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	reqDeliverTx := abci.RequestDeliverTx{}
+// 	err = proto.Unmarshal(reqDeliverTxBytes, &reqDeliverTx)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	// env.App.GRPCQueryRouter().Route(path)()
+// 	resDeliverTx := env.App.DeliverTx(reqDeliverTx)
+// 	bz, err := proto.Marshal(&resDeliverTx)
+
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	envRegister.Store(envId, env)
+
+// 	return C.CString(string(bz))
+// }
+
+//export AccountSequence
+func AccountSequence(envId uint64, bech32Address string) uint64 {
+	env := loadEnv(envId)
+
+	addr, err := sdk.AccAddressFromBech32(bech32Address)
+
+	if err != nil {
+		panic(errors.Wrapf(err, "Must always be valid bech32"))
+	}
+
+	seq, err := env.App.AppKeepers.AccountKeeper.GetSequence(env.Ctx, addr)
+
+	if err != nil {
+		panic(errors.Wrapf(err, "Account must always be initialized"))
+	}
+
+	return seq
+}
+
+//export AccountNumber
+func AccountNumber(envId uint64, bech32Address string) uint64 {
+	env := loadEnv(envId)
+
+	addr, err := sdk.AccAddressFromBech32(bech32Address)
+
+	if err != nil {
+		panic(errors.Wrapf(err, "Must always be valid bech32"))
+	}
+
+	acc := env.App.AppKeepers.AccountKeeper.GetAccount(env.Ctx, addr)
+	return acc.GetAccountNumber()
+}
+
+//export Simulate
+func Simulate(envId uint64, base64TxBytes string) *C.char { // => base64GasInfo
+	env := loadEnv(envId)
+
+	txBytes, err := base64.StdEncoding.DecodeString(base64TxBytes)
+	if err != nil {
+		panic(err)
+	}
+
+	gasInfo, _, err := env.App.Simulate(txBytes)
+
+	if err != nil {
+		panic(errors.Wrapf(err, "Simulation failed"))
+	}
+
+	bz, err := proto.Marshal(&gasInfo)
+	if err != nil {
+		panic(err)
+	}
+
+	return C.CString(string(bz))
+}
+
 //export GetAllBalances
 func GetAllBalances(envId uint64, bech32Addr string) *C.char {
 	env := loadEnv(envId)
@@ -142,10 +267,16 @@ func CwStoreCode(envId uint64, bech32Addr string, base64Wasm string) uint64 {
 	}
 
 	// TODO: expose access config
+	env.BeginNewBlock(false)
+
 	codeId, err := env.ContractOpsKeeper.Create(env.Ctx, addr, wasm, nil)
 	if err != nil {
 		panic(err)
 	}
+	reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
+	env.App.EndBlock(reqEndBlock)
+	env.App.Commit()
+	envRegister.Store(envId, env)
 
 	return codeId
 }
@@ -173,6 +304,8 @@ func CwGetCodeInfo(envId uint64, codeId uint64) *C.char {
 func CwInstantiate(envId uint64, base64msgInstantiateContract string) *C.char {
 	env := loadEnv(envId)
 
+	env.BeginNewBlock(false)
+
 	msgInstantiateContractBytes, err := base64.StdEncoding.DecodeString(base64msgInstantiateContract)
 	if err != nil {
 		panic(err)
@@ -198,6 +331,10 @@ func CwInstantiate(envId uint64, base64msgInstantiateContract string) *C.char {
 	if err != nil {
 		panic(errors.Wrapf(err, "Failed to instantiate contract"))
 	}
+	reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
+	env.App.EndBlock(reqEndBlock)
+	env.App.Commit()
+	envRegister.Store(envId, env)
 
 	return C.CString(contractAddr.String())
 }
@@ -251,12 +388,13 @@ func CwExecute(envId uint64, base64MsgExecuteContract string) *C.char {
 		return encodeErrToResultBytes(err)
 	}
 
-	// env.BeginNewBlock(false)
+	env.BeginNewBlock(false)
 	res, err := env.ContractOpsKeeper.Execute(env.Ctx, contractAddress, senderAddress, msg.Msg, msg.Funds)
-	// reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
-	// env.App.EndBlock(reqEndBlock)
+	reqEndBlock := abci.RequestEndBlock{Height: env.Ctx.BlockHeight()}
+	env.App.EndBlock(reqEndBlock)
 
-	// env.App.Commit()
+	env.App.Commit()
+	envRegister.Store(envId, env)
 
 	if err != nil {
 		return encodeErrToResultBytes(err)
@@ -301,10 +439,6 @@ func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {
 	if err != nil {
 		panic(err)
 	}
-
-	// TODO: try using app.GetContextForDeliverTx
-	// ctx := app.GetContextForDeliverTx(reqDeliverTx.Tx)
-
 	// BeginBlock
 	env.BeginNewBlock(false)
 
