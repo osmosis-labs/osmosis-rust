@@ -3,14 +3,26 @@ package main
 import "C"
 
 import (
+	// std
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
-	"github.com/osmosis-labs/osmosis/v11/cosmwasm-testing/result"
+	// helpers
+	"github.com/golang/protobuf/proto"
+	"github.com/pkg/errors"
 
+	// tendermint
+	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/libs/log"
+	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	tmtypes "github.com/tendermint/tendermint/proto/tendermint/types"
+	dbm "github.com/tendermint/tm-db"
+
+	// cosmos sdk
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -18,20 +30,17 @@ import (
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmtypes "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/osmosis-labs/osmosis/v11/app"
-	"github.com/osmosis-labs/osmosis/v11/x/gamm/pool-models/balancer"
-
-	"github.com/pkg/errors"
-
-	"github.com/golang/protobuf/proto"
-
+	// wasmd
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	// osmosis
+	"github.com/osmosis-labs/osmosis/v11/app"
+	"github.com/osmosis-labs/osmosis/v11/x/gamm/pool-models/balancer"
+
+	// cosmwasm-testing
+	"github.com/osmosis-labs/osmosis/v11/cosmwasm-testing/result"
 )
 
 var (
@@ -49,17 +58,40 @@ type TestEnv struct {
 	QueryHelper       *baseapp.QueryServiceTestHelper
 }
 
+func SetupOsmosisApp() *app.OsmosisApp {
+	db := dbm.NewMemDB()
+	appInstance := app.NewOsmosisApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, app.DefaultNodeHome, 5, app.MakeEncodingConfig(), simapp.EmptyAppOptions{}, app.GetWasmEnabledProposals(), app.EmptyWasmOpts)
+	genesisState := app.NewDefaultGenesisState()
+	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
+	if err != nil {
+		panic(err)
+	}
+
+	// replace sdk.DefaultDenom with "uosmo", a bit of a hack, needs improvement
+	stateBytes = []byte(strings.Replace(string(stateBytes), "\"stake\"", "\"uosmo\"", -1))
+
+	appInstance.InitChain(
+		abci.RequestInitChain{
+			Validators:      []abci.ValidatorUpdate{},
+			ConsensusParams: simapp.DefaultConsensusParams,
+			AppStateBytes:   stateBytes,
+		},
+	)
+
+	return appInstance
+}
+
 //export InitTestEnv
 func InitTestEnv() uint64 {
 	// Allow testing unoptimized contract
 	wasmtypes.MaxWasmSize = 1024 * 1024 * 1024 * 1024 * 1024
-
 	// Temp fix for concurrency issue
 	mu.Lock()
 	defer mu.Unlock()
 
 	env := new(TestEnv)
-	env.App = app.Setup(false)
+	env.App = SetupOsmosisApp()
+
 	env.Ctx = env.App.BaseApp.NewContext(false, tmproto.Header{Height: 0, ChainID: "osmosis-1", Time: time.Now().UTC()})
 
 	env.BeginNewBlock(false)
@@ -73,7 +105,6 @@ func InitTestEnv() uint64 {
 		Ctx:             env.Ctx,
 	}
 
-	// TODO: set limit to 1G
 	env.contractOpsKeeper = wasmkeeper.NewPermissionedKeeper(env.App.WasmKeeper, SudoAuthorizationPolicy{})
 
 	envCounter += 1
@@ -448,7 +479,7 @@ func (s *TestEnv) SetupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAddr
 	}
 
 	stakingHandler := staking.NewHandler(*s.App.StakingKeeper)
-	stakingCoin := sdk.NewCoin(sdk.DefaultBondDenom, selfBond[0].Amount)
+	stakingCoin := sdk.NewCoin(bondDenom, selfBond[0].Amount)
 	ZeroCommission := stakingtypes.NewCommissionRates(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec())
 	msg, err := stakingtypes.NewMsgCreateValidator(valAddr, valPub, stakingCoin, stakingtypes.Description{}, ZeroCommission, sdk.OneInt())
 	// s.Require().NoError(err)

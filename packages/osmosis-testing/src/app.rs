@@ -470,10 +470,9 @@ mod tests {
     }
 
     #[test]
-    // (WIP) deliverState's context is not initialized properly
     fn test_commit_tx() {
         let app = App::new();
-        let acc = app.init_account(&[Coin::new(1000000000000000, "stake")]);
+        let acc = app.init_account(&[Coin::new(1000000000000000, "uosmo")]);
 
         dbg!(acc.address());
 
@@ -497,7 +496,7 @@ mod tests {
         let fee = Fee::from_amount_and_gas(
             cosmrs::Coin {
                 amount: "1000000000".parse().unwrap(),
-                denom: "stake".parse().unwrap(), // NOTE: using "uosmo" causes invalid fee token
+                denom: "uosmo".parse().unwrap(), // NOTE: using "uosmo" causes invalid fee token
             },
             10000000,
         );
@@ -514,6 +513,13 @@ mod tests {
 
         let res = app.commit_tx(RequestDeliverTx { tx });
 
+        // res.events[0].attributes.iter().for_each(|e| {
+        //     println!(
+        //         "{}: {}",
+        //         std::str::from_utf8(&e.key).unwrap(),
+        //         std::str::from_utf8(&e.value).unwrap(),
+        //     );
+        // })
         dbg!(res);
         // NOTE: this resulted in:
         // res = ResponseDeliverTx {
