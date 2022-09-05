@@ -51,7 +51,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
         };
 
         let cosmwasm_query = quote! {
-            pub fn query(self, querier: cosmwasm_std::QuerierWrapper<cosmwasm_std::Empty>) -> cosmwasm_std::StdResult<#res> {
+            pub fn query(self, querier: &cosmwasm_std::QuerierWrapper<cosmwasm_std::Empty>) -> cosmwasm_std::StdResult<#res> {
                 querier.query::<#res>(&self.into())
             }
         };

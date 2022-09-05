@@ -836,10 +836,10 @@ pub struct GenesisState {
     pub params: ::core::option::Option<Params>,
 }
 pub struct GammQuerier<'a> {
-    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
 }
 impl<'a> GammQuerier<'a> {
-    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
     pub fn pools(

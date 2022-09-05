@@ -194,7 +194,7 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
 }
 
 fn query_token_creation_fee(deps: Deps) -> StdResult<QueryTokenCreationFeeResponse> {
-    let res = TokenfactoryQuerier::new(deps.querier).params()?;
+    let res = TokenfactoryQuerier::new(&deps.querier).params()?;
     let params = res.params.ok_or(StdError::NotFound {
         kind: "osmosis_std::types::osmosis::tokenfactory::v1beta1::Params".to_string(),
     })?;
@@ -210,7 +210,7 @@ fn query_token_creation_fee(deps: Deps) -> StdResult<QueryTokenCreationFeeRespon
 
 fn query_creator_denoms(deps: Deps, env: Env) -> StdResult<QueryCreatorDenomsResponse> {
     let res =
-        TokenfactoryQuerier::new(deps.querier).denoms_from_creator(env.contract.address.into())?;
+        TokenfactoryQuerier::new(&deps.querier).denoms_from_creator(env.contract.address.into())?;
 
     Ok(QueryCreatorDenomsResponse { denoms: res.denoms })
 }
