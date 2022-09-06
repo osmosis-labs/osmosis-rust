@@ -48,17 +48,18 @@ impl App {
             gas_adjustment: 1.2,
         }
     }
-    pub fn set_gas_price(mut self, gas_price: Coin) -> Self {
+    pub fn gas_price(mut self, gas_price: Coin) -> Self {
         self.gas_price = gas_price;
         self
     }
 
-    pub fn set_gas_adjustment(mut self, gas_adjustment: f64) -> Self {
+    pub fn gas_adjustment(mut self, gas_adjustment: f64) -> Self {
         self.gas_adjustment = gas_adjustment;
         self
     }
 
-    /// This function initialize account with initial balance of any coins.
+    /// Initialize account with initial balance of any coins.
+    /// This function mints new coins and send to newly created account
     pub fn init_account(&self, coins: &[Coin]) -> SigningAccount {
         let mut coins = coins.to_vec();
 
@@ -80,6 +81,14 @@ impl App {
         SigningKey::from_bytes(&secp256k1_priv)
             .expect("invalid signing key")
             .into()
+    }
+    /// Convinience function to create multiple accounts with the same
+    /// Initial coins balance
+    pub fn init_accounts(&self, coins: &[Coin], count: u64) -> Vec<SigningAccount> {
+        (0..count)
+            .into_iter()
+            .map(|_| self.init_account(coins))
+            .collect()
     }
 
     fn create_signed_tx<I>(&self, msgs: I, signer: &SigningAccount, fee: Fee) -> Vec<u8>
@@ -202,6 +211,18 @@ mod tests {
 
     use crate::account::Account;
 
+    #[test]
+    fn test_init_accounts() {
+        let app = App::new();
+        let accounts = app.init_accounts(&coins(100_000_000_000, "uosmo"), 3);
+
+        assert!(accounts.get(0).is_some());
+        assert!(accounts.get(1).is_some());
+        assert!(accounts.get(2).is_some());
+        assert!(accounts.get(3).is_none());
+    }
+
+    #[test]
     fn test_execute() {
         let app = App::new();
 
@@ -270,15 +291,5 @@ mod tests {
                 },
             ]
         );
-    }
-
-    #[test]
-    fn test_execute_1() {
-        test_execute()
-    }
-
-    #[test]
-    fn test_execute_2() {
-        test_execute()
     }
 }
