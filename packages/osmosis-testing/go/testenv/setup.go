@@ -24,7 +24,9 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	// wasmd
+	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+
 	// osmosis
 	"github.com/osmosis-labs/osmosis/v11/app"
 )
@@ -54,9 +56,28 @@ func SetupOsmosisApp() *app.OsmosisApp {
 		app.EmptyWasmOpts,
 	)
 	genesisState := app.NewDefaultGenesisState()
+
+	encCfg := app.MakeEncodingConfig()
+	wasmGen := wasm.GenesisState{
+		Params: wasmtypes.Params{
+			// Allow store code without gov
+			CodeUploadAccess:             wasmtypes.AllowEverybody,
+			InstantiateDefaultPermission: wasmtypes.AccessTypeEverybody,
+		},
+	}
+
+	genesisState[wasm.ModuleName] = encCfg.Marshaler.MustMarshalJSON(&wasmGen)
+
 	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
+
 	if err != nil {
 		panic(err)
+	}
+
+	concensusParams := simapp.DefaultConsensusParams
+	concensusParams.Block = &abci.BlockParams{
+		MaxBytes: 22020096,
+		MaxGas:   -1,
 	}
 
 	// replace sdk.DefaultDenom with "uosmo", a bit of a hack, needs improvement
@@ -65,7 +86,7 @@ func SetupOsmosisApp() *app.OsmosisApp {
 	appInstance.InitChain(
 		abci.RequestInitChain{
 			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: simapp.DefaultConsensusParams,
+			ConsensusParams: concensusParams,
 			AppStateBytes:   stateBytes,
 		},
 	)

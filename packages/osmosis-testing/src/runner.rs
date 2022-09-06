@@ -231,6 +231,9 @@ mod tests {
     };
 
     use crate::account::Account;
+    use crate::x::gamm::Gamm;
+    use crate::x::wasm::Wasm;
+    use crate::x::AsModule;
 
     #[test]
     fn test_init_accounts() {
@@ -328,5 +331,38 @@ mod tests {
             .denom_creation_fee;
 
         assert_eq!(denom_creation_fee, [Coin::new(10000000, "uosmo").into()])
+    }
+
+    #[test]
+    fn test_multiple_as_module() {
+        let app = App::new();
+        let alice = app.init_account(&[
+            Coin::new(1_000_000_000_000, "uatom"),
+            Coin::new(1_000_000_000_000, "uosmo"),
+        ]);
+
+        let gamm: Gamm<_> = app.as_module();
+
+        let pool_liquidity = vec![Coin::new(1_000, "uatom"), Coin::new(1_000, "uosmo")];
+        gamm.create_basic_pool(&pool_liquidity, &alice);
+
+        let pool = gamm.query_pool(1);
+
+        assert_eq!(
+            pool_liquidity
+                .into_iter()
+                .map(|c| c.into())
+                .collect::<Vec<osmosis_std::types::cosmos::base::v1beta1::Coin>>(),
+            pool.pool_assets
+                .into_iter()
+                .map(|a| a.token.unwrap())
+                .collect::<Vec<osmosis_std::types::cosmos::base::v1beta1::Coin>>(),
+        );
+
+        let wasm: Wasm<_> = app.as_module();
+        let wasm_byte_code = std::fs::read("./test_artifacts/cw1_whitelist.wasm").unwrap();
+        let code_id = wasm.store_code(&wasm_byte_code, None, &alice);
+
+        assert_eq!(code_id, 1);
     }
 }

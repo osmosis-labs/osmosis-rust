@@ -214,6 +214,7 @@ func Simulate(envId uint64, base64TxBytes string) *C.char { // => base64GasInfo
 	gasInfo, _, err := env.App.Simulate(txBytes)
 
 	if err != nil {
+		fmt.Printf("%v\n", gasInfo)
 		panic(errors.Wrapf(err, "Simulation failed"))
 	}
 
@@ -259,7 +260,7 @@ func CwStoreCode(envId uint64, bech32Addr string, base64Wasm string) uint64 {
 		panic(err)
 	}
 
-	// TODO: expose access config
+	// TODO: expose access confi g
 	env.BeginNewBlock(false)
 
 	codeId, err := env.ContractOpsKeeper.Create(env.Ctx, addr, wasm, nil)

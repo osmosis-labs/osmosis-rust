@@ -46,8 +46,8 @@ fn main() {
 
     // rerun when go code is updated
     println!(
-        "cargo:rerun-if-changed={}",
-        manifest_dir.join("go").join("main.go").display()
+        "cargo:rerun-if-changed={}/*",
+        manifest_dir.join("go").display()
     );
     println!(
         "cargo:rerun-if-changed={}",
