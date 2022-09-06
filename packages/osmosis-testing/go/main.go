@@ -48,8 +48,8 @@ func InitTestEnv() uint64 {
 	// Allow testing unoptimized contract
 	wasmtypes.MaxWasmSize = 1024 * 1024 * 1024 * 1024 * 1024
 	// Temp fix for concurrency issue
-	mu.Lock()
-	defer mu.Unlock()
+	// mu.Lock()
+	// defer mu.Unlock()
 
 	env := new(testenv.TestEnv)
 	env.App = testenv.SetupOsmosisApp()
@@ -146,6 +146,7 @@ func Execute(envId uint64, base64ReqDeliverTx string) *C.char {
 
 	envRegister.Store(envId, env)
 
+	// cast string that might be non-utf8-encoded
 	return C.CString(string(bz))
 }
 
@@ -415,8 +416,6 @@ func CwQuery(envId uint64, bech32ContractAddress, queryMsgJson string) *C.char {
 
 	return encodeBytesResultBytes(res)
 }
-
-//TODO: export CwRawQuery
 
 //export CommitTx
 func CommitTx(envId uint64, base64ReqDeliverTx string) *C.char {

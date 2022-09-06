@@ -365,4 +365,61 @@ mod tests {
 
         assert_eq!(code_id, 1);
     }
+
+    #[test]
+    fn test_wasm_execute_and_query() {
+        use cw1_whitelist::msg::*;
+
+        let app = App::new();
+        let accs = app.init_accounts(
+            &[
+                Coin::new(1_000_000_000_000, "uatom"),
+                Coin::new(1_000_000_000_000, "uosmo"),
+            ],
+            2,
+        );
+        let admin = &accs[0];
+        let new_admin = &accs[1];
+
+        let wasm: Wasm<_> = app.as_module();
+        let wasm_byte_code = std::fs::read("./test_artifacts/cw1_whitelist.wasm").unwrap();
+        let code_id = wasm.store_code(&wasm_byte_code, None, &admin);
+        assert_eq!(code_id, 1);
+
+        // initialize admins and check if the state is correct
+        let init_admins = vec![admin.address()];
+        let contract_addr = wasm.instantiate(
+            code_id,
+            &InstantiateMsg {
+                admins: init_admins.clone(),
+                mutable: true,
+            },
+            &[],
+            admin,
+        );
+        let admin_list = wasm.query::<QueryMsg, AdminListResponse>(
+            &contract_addr,
+            &cw1_whitelist::msg::QueryMsg::AdminList {},
+        );
+        assert_eq!(admin_list.admins, init_admins);
+        assert!(admin_list.mutable);
+
+        // update admin and check again
+        let new_admins = vec![new_admin.address()];
+        wasm.execute::<ExecuteMsg>(
+            &contract_addr,
+            &ExecuteMsg::UpdateAdmins {
+                admins: new_admins.clone(),
+            },
+            &[],
+            admin,
+        );
+        let admin_list = wasm.query::<QueryMsg, AdminListResponse>(
+            &contract_addr,
+            &cw1_whitelist::msg::QueryMsg::AdminList {},
+        );
+
+        assert_eq!(admin_list.admins, new_admins);
+        assert!(admin_list.mutable);
+    }
 }

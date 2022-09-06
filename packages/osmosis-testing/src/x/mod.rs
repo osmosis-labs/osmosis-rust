@@ -13,3 +13,4 @@ where
 {
     fn as_module(&'a self) -> M;
 }
+

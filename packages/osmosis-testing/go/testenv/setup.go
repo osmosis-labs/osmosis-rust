@@ -169,6 +169,9 @@ func (env *TestEnv) setupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAd
 	msg, err := stakingtypes.NewMsgCreateValidator(valAddr, valPub, stakingCoin, stakingtypes.Description{}, ZeroCommission, sdk.OneInt())
 	// s.Require().NoError(err)
 	_, err = stakingHandler(env.Ctx, msg)
+
+	env.App.BankKeeper.SendCoinsFromModuleToModule(env.Ctx, stakingtypes.NotBondedPoolName, stakingtypes.BondedPoolName, sdk.NewCoins(stakingCoin))
+
 	// s.Require().NoError(err)
 	// s.Require().NotNil(res)
 
