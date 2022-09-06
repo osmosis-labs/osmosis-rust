@@ -226,6 +226,13 @@ extern "C" {
     pub fn Execute(envId: GoUint64, base64ReqDeliverTx: GoString) -> *mut ::std::os::raw::c_char;
 }
 extern "C" {
+    pub fn Query(
+        envId: GoUint64,
+        path: GoString,
+        base64QueryMsgBytes: GoString,
+    ) -> *mut ::std::os::raw::c_char;
+}
+extern "C" {
     pub fn AccountSequence(envId: GoUint64, bech32Address: GoString) -> GoUint64;
 }
 extern "C" {

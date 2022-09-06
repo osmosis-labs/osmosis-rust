@@ -2,7 +2,7 @@ use std::ffi::CString;
 
 use cosmrs::{
     crypto::secp256k1::SigningKey,
-    proto::tendermint::abci::{RequestDeliverTx, RequestQuery, ResponseDeliverTx, ResponseQuery},
+    proto::tendermint::abci::{RequestDeliverTx, ResponseDeliverTx},
     tx::{self, Fee, SignerInfo},
 };
 
@@ -13,7 +13,7 @@ use crate::{
     account::{Account, SigningAccount},
     bindings::{
         AccountNumber, AccountSequence, BeginBlock, EndBlock, Execute, InitAccount, InitTestEnv,
-        Simulate,
+        Query, Simulate,
     },
     redefine_as_go_string,
 };
@@ -26,7 +26,10 @@ pub trait Runner {
     fn execute<M>(&self, msg: M, type_url: &str, signer: &SigningAccount) -> ResponseDeliverTx
     where
         M: ::prost::Message;
-    fn query(&self, req: RequestQuery) -> ResponseQuery;
+    fn query<Q, R>(&self, path: &str, query: &Q) -> R
+    where
+        Q: ::prost::Message,
+        R: ::prost::Message + Default;
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -198,16 +201,34 @@ impl Runner for App {
         res
     }
 
-    fn query(&self, req: RequestQuery) -> ResponseQuery {
-        todo!()
+    fn query<Q, R>(&self, path: &str, q: &Q) -> R
+    where
+        Q: ::prost::Message,
+        R: ::prost::Message + Default,
+    {
+        let mut buf = Vec::new();
+        Q::encode(q, &mut buf).expect("Using vec as buffer has theoretically unlimited capacity");
+
+        let base64_query_msg_bytes = base64::encode(buf);
+        redefine_as_go_string!(path);
+        redefine_as_go_string!(base64_query_msg_bytes);
+
+        unsafe {
+            let res = Query(self.id, path, base64_query_msg_bytes);
+            let v = CString::from_raw(res);
+            R::decode(v.as_bytes()).unwrap()
+        }
     }
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
     use cosmrs::proto::tendermint::abci::EventAttribute;
     use cosmwasm_std::coins;
-    use osmosis_std::types::osmosis::tokenfactory::v1beta1::MsgCreateDenom;
+    use osmosis_std::types::osmosis::tokenfactory::v1beta1::{
+        MsgCreateDenom, QueryParamsRequest, QueryParamsResponse,
+    };
 
     use crate::account::Account;
 
@@ -291,5 +312,21 @@ mod tests {
                 },
             ]
         );
+    }
+
+    #[test]
+    fn test_query() {
+        let app = App::new();
+
+        let denom_creation_fee = app
+            .query::<QueryParamsRequest, QueryParamsResponse>(
+                "/osmosis.tokenfactory.v1beta1.Query/Params",
+                &QueryParamsRequest {},
+            )
+            .params
+            .unwrap()
+            .denom_creation_fee;
+
+        assert_eq!(denom_creation_fee, [Coin::new(10000000, "uosmo").into()])
     }
 }

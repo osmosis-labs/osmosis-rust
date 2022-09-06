@@ -149,32 +149,25 @@ func Execute(envId uint64, base64ReqDeliverTx string) *C.char {
 	return C.CString(string(bz))
 }
 
-//// export Query
-// func Query(envId uint64, path, base64ReqDeliverTx string) *C.char {
-// 	env := loadEnv(envId)
-// 	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
-// 	if err != nil {
-// 		panic(err)
-// 	}
+//export Query
+func Query(envId uint64, path, base64QueryMsgBytes string) *C.char {
+	env := loadEnv(envId)
+	queryMsgBytes, err := base64.StdEncoding.DecodeString(base64QueryMsgBytes)
+	if err != nil {
+		panic(err)
+	}
 
-// 	reqDeliverTx := abci.RequestDeliverTx{}
-// 	err = proto.Unmarshal(reqDeliverTxBytes, &reqDeliverTx)
-// 	if err != nil {
-// 		panic(err)
-// 	}
+	req := abci.RequestQuery{}
+	req.Data = queryMsgBytes
 
-// 	// env.App.GRPCQueryRouter().Route(path)()
-// 	resDeliverTx := env.App.DeliverTx(reqDeliverTx)
-// 	bz, err := proto.Marshal(&resDeliverTx)
+	res, err := env.App.GRPCQueryRouter().Route(path)(env.Ctx, req)
 
-// 	if err != nil {
-// 		panic(err)
-// 	}
+	if err != nil {
+		panic(err)
+	}
 
-// 	envRegister.Store(envId, env)
-
-// 	return C.CString(string(bz))
-// }
+	return C.CString(string(res.Value))
+}
 
 //export AccountSequence
 func AccountSequence(envId uint64, bech32Address string) uint64 {
