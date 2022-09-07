@@ -188,10 +188,10 @@ pub struct GenesisState {
     pub feetokens: ::prost::alloc::vec::Vec<FeeToken>,
 }
 pub struct TxfeesQuerier<'a> {
-    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
 }
 impl<'a> TxfeesQuerier<'a> {
-    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
     pub fn fee_tokens(&self) -> Result<QueryFeeTokensResponse, cosmwasm_std::StdError> {

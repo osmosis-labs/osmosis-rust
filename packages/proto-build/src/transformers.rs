@@ -225,12 +225,12 @@ pub fn append_querier(
             vec![
                 parse_quote! {
                   pub struct #querier_wrapper_ident<'a> {
-                    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>
+                    querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>
                   }
                 },
                 parse_quote! {
                   impl<'a> #querier_wrapper_ident<'a> {
-                    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+                    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
                       Self { querier }
                     }
                     #(#query_fns)*

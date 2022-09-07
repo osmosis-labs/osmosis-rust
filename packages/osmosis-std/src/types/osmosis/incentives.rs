@@ -500,10 +500,10 @@ pub struct GenesisState {
     pub last_gauge_id: u64,
 }
 pub struct IncentivesQuerier<'a> {
-    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
 }
 impl<'a> IncentivesQuerier<'a> {
-    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
     pub fn module_to_distribute_coins(

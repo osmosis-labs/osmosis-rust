@@ -352,10 +352,10 @@ pub struct GenesisState {
     pub distr_info: ::core::option::Option<DistrInfo>,
 }
 pub struct PoolincentivesQuerier<'a> {
-    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
 }
 impl<'a> PoolincentivesQuerier<'a> {
-    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
         Self { querier }
     }
     pub fn gauge_ids(&self, pool_id: u64) -> Result<QueryGaugeIdsResponse, cosmwasm_std::StdError> {
