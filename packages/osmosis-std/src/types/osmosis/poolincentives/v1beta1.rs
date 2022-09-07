@@ -351,11 +351,11 @@ pub struct GenesisState {
     #[prost(message, optional, tag = "3")]
     pub distr_info: ::core::option::Option<DistrInfo>,
 }
-pub struct PoolincentivesQuerier<'a> {
-    querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+pub struct PoolincentivesQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
-impl<'a> PoolincentivesQuerier<'a> {
-    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+impl<'a, Q: cosmwasm_std::CustomQuery> PoolincentivesQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
         Self { querier }
     }
     pub fn gauge_ids(&self, pool_id: u64) -> Result<QueryGaugeIdsResponse, cosmwasm_std::StdError> {
