@@ -766,11 +766,11 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "3")]
     pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
 }
-pub struct LockupQuerier<'a> {
-    querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+pub struct LockupQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
-impl<'a> LockupQuerier<'a> {
-    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+impl<'a, Q: cosmwasm_std::CustomQuery> LockupQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
         Self { querier }
     }
     pub fn module_balance(&self) -> Result<ModuleBalanceResponse, cosmwasm_std::StdError> {

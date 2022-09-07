@@ -292,11 +292,11 @@ pub struct GenesisDenom {
     #[prost(message, optional, tag = "2")]
     pub authority_metadata: ::core::option::Option<DenomAuthorityMetadata>,
 }
-pub struct TokenfactoryQuerier<'a> {
-    querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+pub struct TokenfactoryQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
-impl<'a> TokenfactoryQuerier<'a> {
-    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+impl<'a, Q: cosmwasm_std::CustomQuery> TokenfactoryQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
         Self { querier }
     }
     pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
