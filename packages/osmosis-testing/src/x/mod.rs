@@ -6,11 +6,12 @@ pub mod wasm;
 pub trait Module<'a, R: Runner> {
     fn new(runner: &'a R) -> Self;
 }
-pub trait AsModule<'a, M, R>
-where
-    M: Module<'a, R>,
-    R: Runner,
-{
-    fn as_module(&'a self) -> M;
-}
 
+pub trait AsModule<'a>: Runner + Sized {
+    fn as_module<M>(&'a self) -> M
+    where
+        M: Module<'a, Self>,
+    {
+        M::new(self)
+    }
+}

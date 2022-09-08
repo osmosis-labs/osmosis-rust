@@ -9,6 +9,7 @@ use cosmrs::{
 use cosmwasm_std::{Coin, Uint128};
 use prost::Message;
 
+use crate::x::AsModule;
 use crate::{
     account::{Account, SigningAccount},
     bindings::{
@@ -38,6 +39,8 @@ pub struct App {
     gas_price: Coin,
     gas_adjustment: f64,
 }
+
+impl<'a> AsModule<'a> for App {}
 
 impl App {
     #[allow(clippy::new_without_default)]
@@ -233,7 +236,6 @@ mod tests {
     use crate::account::Account;
     use crate::x::gamm::Gamm;
     use crate::x::wasm::Wasm;
-    use crate::x::AsModule;
 
     #[test]
     fn test_init_accounts() {
@@ -341,7 +343,7 @@ mod tests {
             Coin::new(1_000_000_000_000, "uosmo"),
         ]);
 
-        let gamm: Gamm<_> = app.as_module();
+        let gamm = app.as_module::<Gamm<_>>();
 
         let pool_liquidity = vec![Coin::new(1_000, "uatom"), Coin::new(1_000, "uosmo")];
         gamm.create_basic_pool(&pool_liquidity, &alice);
@@ -359,7 +361,7 @@ mod tests {
                 .collect::<Vec<osmosis_std::types::cosmos::base::v1beta1::Coin>>(),
         );
 
-        let wasm: Wasm<_> = app.as_module();
+        let wasm = app.as_module::<Wasm<_>>();
         let wasm_byte_code = std::fs::read("./test_artifacts/cw1_whitelist.wasm").unwrap();
         let code_id = wasm.store_code(&wasm_byte_code, None, &alice);
 
@@ -397,10 +399,8 @@ mod tests {
             &[],
             admin,
         );
-        let admin_list = wasm.query::<QueryMsg, AdminListResponse>(
-            &contract_addr,
-            &cw1_whitelist::msg::QueryMsg::AdminList {},
-        );
+        let admin_list =
+            wasm.query::<QueryMsg, AdminListResponse>(&contract_addr, &QueryMsg::AdminList {});
         assert_eq!(admin_list.admins, init_admins);
         assert!(admin_list.mutable);
 
@@ -414,10 +414,8 @@ mod tests {
             &[],
             admin,
         );
-        let admin_list = wasm.query::<QueryMsg, AdminListResponse>(
-            &contract_addr,
-            &cw1_whitelist::msg::QueryMsg::AdminList {},
-        );
+        let admin_list =
+            wasm.query::<QueryMsg, AdminListResponse>(&contract_addr, &QueryMsg::AdminList {});
 
         assert_eq!(admin_list.admins, new_admins);
         assert!(admin_list.mutable);

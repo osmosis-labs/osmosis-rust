@@ -23,15 +23,6 @@ impl<'a, R: Runner> super::Module<'a, R> for Wasm<'a, R> {
     }
 }
 
-impl<'a, R> super::AsModule<'a, Wasm<'a, R>, R> for R
-where
-    R: Runner,
-{
-    fn as_module(&'a self) -> Wasm<'a, R> {
-        Wasm { runner: self }
-    }
-}
-
 impl<'a, R> Wasm<'a, R>
 where
     R: Runner,

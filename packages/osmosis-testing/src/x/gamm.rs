@@ -5,6 +5,7 @@ use osmosis_std::types::osmosis::gamm::{
 };
 use prost::Message;
 
+use crate::x::Module;
 use crate::{
     account::{Account, SigningAccount},
     runner::Runner,
@@ -14,18 +15,9 @@ pub struct Gamm<'a, R: Runner> {
     runner: &'a R,
 }
 
-impl<'a, R: Runner> super::Module<'a, R> for Gamm<'a, R> {
+impl<'a, R: Runner> Module<'a, R> for Gamm<'a, R> {
     fn new(runner: &'a R) -> Self {
-        Gamm { runner }
-    }
-}
-
-impl<'a, R> super::AsModule<'a, Gamm<'a, R>, R> for R
-where
-    R: Runner,
-{
-    fn as_module(&'a self) -> Gamm<'a, R> {
-        Gamm { runner: self }
+        Self { runner }
     }
 }
 
