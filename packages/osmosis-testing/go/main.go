@@ -30,11 +30,11 @@ import (
 
 	// osmosis
 
-	"github.com/osmosis-labs/osmosis/v11/x/gamm/pool-models/balancer"
+	"github.com/osmosis-labs/osmosis/v12/x/gamm/pool-models/balancer"
 
 	// cosmwasm-testing
-	"github.com/osmosis-labs/osmosis/v11/cosmwasm-testing/result"
-	"github.com/osmosis-labs/osmosis/v11/cosmwasm-testing/testenv"
+	"github.com/osmosis-labs/osmosis/v12/cosmwasm-testing/result"
+	"github.com/osmosis-labs/osmosis/v12/cosmwasm-testing/testenv"
 )
 
 var (

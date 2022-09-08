@@ -28,7 +28,7 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	// osmosis
-	"github.com/osmosis-labs/osmosis/v11/app"
+	"github.com/osmosis-labs/osmosis/v12/app"
 )
 
 type TestEnv struct {
@@ -50,7 +50,6 @@ func SetupOsmosisApp() *app.OsmosisApp {
 		map[int64]bool{},
 		app.DefaultNodeHome,
 		5,
-		app.MakeEncodingConfig(),
 		simapp.EmptyAppOptions{},
 		app.GetWasmEnabledProposals(),
 		app.EmptyWasmOpts,
