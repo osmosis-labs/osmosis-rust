@@ -5,10 +5,12 @@ use cosmrs::{
     proto::tendermint::abci::{RequestDeliverTx, ResponseDeliverTx},
     tx::{self, Fee, SignerInfo},
 };
-
 use cosmwasm_std::{Coin, Uint128};
 use prost::Message;
 
+use crate::runner::result::{
+    DecodeError, EncodeError, RunnerError, RunnerExecuteResult, RunnerResult,
+};
 use crate::x::AsModule;
 use crate::{
     account::{Account, SigningAccount},
@@ -19,14 +21,22 @@ use crate::{
     redefine_as_go_string,
 };
 
+pub mod result;
+
 const FEE_DENOM: &str = "uosmo";
 const CHAIN_ID: &str = "osmosis-1";
 
 pub trait Runner {
     // TODO: use wraped response instead
-    fn execute<M>(&self, msg: M, type_url: &str, signer: &SigningAccount) -> ResponseDeliverTx
+    fn execute<M, R>(
+        &self,
+        msg: M,
+        type_url: &str,
+        signer: &SigningAccount,
+    ) -> RunnerExecuteResult<R>
     where
-        M: ::prost::Message;
+        M: ::prost::Message,
+        R: ::prost::Message + Default;
     fn query<Q, R>(&self, path: &str, query: &Q) -> R
     where
         Q: ::prost::Message,
@@ -66,13 +76,13 @@ impl App {
 
     /// Initialize account with initial balance of any coins.
     /// This function mints new coins and send to newly created account
-    pub fn init_account(&self, coins: &[Coin]) -> SigningAccount {
+    pub fn init_account(&self, coins: &[Coin]) -> RunnerResult<SigningAccount> {
         let mut coins = coins.to_vec();
 
         // invalid coins if denom are unsorted
         coins.sort_by(|a, b| a.denom.cmp(&b.denom));
 
-        let coins_json = serde_json::to_string(&coins).unwrap();
+        let coins_json = serde_json::to_string(&coins).map_err(EncodeError::JsonEncodeError)?;
         redefine_as_go_string!(coins_json);
 
         let base64_priv = unsafe {
@@ -80,24 +90,32 @@ impl App {
             CString::from_raw(addr)
         }
         .to_str()
-        .expect("invalid utf8")
+        .map_err(DecodeError::Utf8Error)?
         .to_string();
 
-        let secp256k1_priv = base64::decode(base64_priv).expect("base64 decode failed");
-        SigningKey::from_bytes(&secp256k1_priv)
-            .expect("invalid signing key")
-            .into()
+        let secp256k1_priv = base64::decode(base64_priv).map_err(DecodeError::Base64DecodeError)?;
+        Ok(SigningKey::from_bytes(&secp256k1_priv)
+            .map_err(|e| {
+                let msg = e.to_string();
+                DecodeError::SigningKeyDecodeError { msg }
+            })?
+            .into())
     }
     /// Convinience function to create multiple accounts with the same
     /// Initial coins balance
-    pub fn init_accounts(&self, coins: &[Coin], count: u64) -> Vec<SigningAccount> {
+    pub fn init_accounts(&self, coins: &[Coin], count: u64) -> RunnerResult<Vec<SigningAccount>> {
         (0..count)
             .into_iter()
             .map(|_| self.init_account(coins))
             .collect()
     }
 
-    fn create_signed_tx<I>(&self, msgs: I, signer: &SigningAccount, fee: Fee) -> Vec<u8>
+    fn create_signed_tx<I>(
+        &self,
+        msgs: I,
+        signer: &SigningAccount,
+        fee: Fee,
+    ) -> RunnerResult<Vec<u8>>
     where
         I: IntoIterator<Item = cosmrs::Any>,
     {
@@ -113,20 +131,32 @@ impl App {
         let sign_doc = tx::SignDoc::new(
             &tx_body,
             &auth_info,
-            &(CHAIN_ID.parse().unwrap()),
+            &(CHAIN_ID
+                .parse()
+                .expect("parse const str of chain id should never fail")),
             account_number,
         )
-        .unwrap();
+        .map_err(|e| match e.downcast::<prost::EncodeError>() {
+            Ok(encode_err) => EncodeError::ProtoEncodeError(encode_err),
+            Err(e) => panic!("expect `prost::EncodeError` but got {:?}", e),
+        })?;
+
         let tx_raw = sign_doc.sign(signer.signing_key()).unwrap();
 
-        tx_raw.to_bytes().unwrap()
+        tx_raw
+            .to_bytes()
+            .map_err(|e| match e.downcast::<prost::EncodeError>() {
+                Ok(encode_err) => EncodeError::ProtoEncodeError(encode_err),
+                Err(e) => panic!("expect `prost::EncodeError` but got {:?}", e),
+            })
+            .map_err(RunnerError::EncodeError)
     }
 
     fn simulate_tx<I>(
         &self,
         msgs: I,
         signer: &SigningAccount,
-    ) -> cosmrs::proto::cosmos::base::abci::v1beta1::GasInfo
+    ) -> RunnerResult<cosmrs::proto::cosmos::base::abci::v1beta1::GasInfo>
     where
         I: IntoIterator<Item = cosmrs::Any>,
     {
@@ -138,7 +168,7 @@ impl App {
             0u64,
         );
 
-        let tx = self.create_signed_tx(msgs, signer, zero_fee);
+        let tx = self.create_signed_tx(msgs, signer, zero_fee)?;
         let base64_tx_bytes = base64::encode(&tx);
         redefine_as_go_string!(base64_tx_bytes);
 
@@ -148,14 +178,15 @@ impl App {
             cosmrs::proto::cosmos::base::abci::v1beta1::GasInfo::decode(
                 CString::from_raw(res).as_bytes(),
             )
-            .unwrap()
+            .map_err(DecodeError::ProtoDecodeError)
+            .map_err(RunnerError::DecodeError)
         }
     }
-    fn estimate_fee<I>(&self, msgs: I, signer: &SigningAccount) -> Fee
+    fn estimate_fee<I>(&self, msgs: I, signer: &SigningAccount) -> RunnerResult<Fee>
     where
         I: IntoIterator<Item = cosmrs::Any>,
     {
-        let gas_info = self.simulate_tx(msgs, signer);
+        let gas_info = self.simulate_tx(msgs, signer)?;
         let gas_limit = ((gas_info.gas_used as f64) * (self.gas_adjustment)).ceil() as u64;
 
         let amount = cosmrs::Coin {
@@ -164,40 +195,47 @@ impl App {
                 .into(),
         };
 
-        Fee::from_amount_and_gas(amount, gas_limit)
+        Ok(Fee::from_amount_and_gas(amount, gas_limit))
     }
 }
 
 impl Runner for App {
-    fn execute<M>(&self, msg: M, type_url: &str, signer: &SigningAccount) -> ResponseDeliverTx
+    fn execute<M, R>(
+        &self,
+        msg: M,
+        type_url: &str,
+        signer: &SigningAccount,
+    ) -> RunnerExecuteResult<R>
     where
         M: ::prost::Message,
+        R: ::prost::Message + Default,
     {
         unsafe { BeginBlock(self.id) };
 
         let mut buf = Vec::new();
-        M::encode(&msg, &mut buf)
-            .expect("Using vec as buffer has theoretically unlimited capacity");
+        M::encode(&msg, &mut buf).map_err(EncodeError::ProtoEncodeError)?;
 
         let msg = cosmrs::Any {
             type_url: type_url.to_string(),
             value: buf,
         };
 
-        let fee = self.estimate_fee([msg.clone()], signer);
-        let tx = self.create_signed_tx([msg], signer, fee);
+        let fee = self.estimate_fee([msg.clone()], signer)?;
+        let tx = self.create_signed_tx([msg], signer, fee)?;
 
         let mut buf = Vec::new();
         RequestDeliverTx::encode(&RequestDeliverTx { tx }, &mut buf)
-            .expect("Message encoding must be infallible");
+            .map_err(EncodeError::ProtoEncodeError)?;
 
         let base64_req = base64::encode(buf);
         redefine_as_go_string!(base64_req);
         let res = unsafe {
             let res = Execute(self.id, base64_req);
             let res_c = CString::from_raw(res);
-            ResponseDeliverTx::decode(res_c.as_bytes()).unwrap()
-        };
+            ResponseDeliverTx::decode(res_c.as_bytes()).map_err(DecodeError::ProtoDecodeError)
+        }?
+        .try_into()
+        .map_err(RunnerError::DecodeError);
 
         unsafe { EndBlock(self.id) };
 
@@ -210,6 +248,8 @@ impl Runner for App {
         R: ::prost::Message + Default,
     {
         let mut buf = Vec::new();
+
+        // TODO: remove expect & unwrap from here
         Q::encode(q, &mut buf).expect("Using vec as buffer has theoretically unlimited capacity");
 
         let base64_query_msg_bytes = base64::encode(buf);
@@ -226,21 +266,27 @@ impl Runner for App {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use cosmrs::proto::tendermint::abci::EventAttribute;
-    use cosmwasm_std::coins;
+    use std::option::Option::None;
+
+    use cosmwasm_std::{attr, coins};
+
     use osmosis_std::types::osmosis::tokenfactory::v1beta1::{
-        MsgCreateDenom, QueryParamsRequest, QueryParamsResponse,
+        MsgCreateDenom, MsgCreateDenomResponse, QueryParamsRequest, QueryParamsResponse,
     };
 
     use crate::account::Account;
+    use crate::runner::result::ExecuteResponse;
     use crate::x::gamm::Gamm;
     use crate::x::wasm::Wasm;
+
+    use super::*;
 
     #[test]
     fn test_init_accounts() {
         let app = App::new();
-        let accounts = app.init_accounts(&coins(100_000_000_000, "uosmo"), 3);
+        let accounts = app
+            .init_accounts(&coins(100_000_000_000, "uosmo"), 3)
+            .unwrap();
 
         assert!(accounts.get(0).is_some());
         assert!(accounts.get(1).is_some());
@@ -252,7 +298,7 @@ mod tests {
     fn test_execute() {
         let app = App::new();
 
-        let acc = app.init_account(&coins(100_000_000_000, "uosmo"));
+        let acc = app.init_account(&coins(100_000_000_000, "uosmo")).unwrap();
         let addr = acc.address();
 
         let msg = MsgCreateDenom {
@@ -260,29 +306,24 @@ mod tests {
             subdenom: "newdenom".to_string(),
         };
 
-        let res = app.execute(msg, MsgCreateDenom::TYPE_URL, &acc);
+        let res: ExecuteResponse<MsgCreateDenomResponse> =
+            app.execute(msg, MsgCreateDenom::TYPE_URL, &acc).unwrap();
 
         let create_denom_attrs = &res
             .events
             .iter()
-            .find(|e| e.r#type == "create_denom")
+            .find(|e| e.ty == "create_denom")
             .unwrap()
             .attributes;
 
-        // TODO: make assertion based on string representation
         assert_eq!(
             create_denom_attrs,
             &vec![
-                EventAttribute {
-                    key: "creator".into(),
-                    value: addr.clone().into(),
-                    index: true
-                },
-                EventAttribute {
-                    key: "new_token_denom".into(),
-                    value: format!("factory/{}/{}", addr, "newdenom").into(),
-                    index: true
-                },
+                attr("creator", &addr),
+                attr(
+                    "new_token_denom",
+                    format!("factory/{}/{}", &addr, "newdenom")
+                )
             ]
         );
 
@@ -292,12 +333,13 @@ mod tests {
             subdenom: "newerdenom".to_string(),
         };
 
-        let res = app.execute(msg, MsgCreateDenom::TYPE_URL, &acc);
+        let res: ExecuteResponse<MsgCreateDenomResponse> =
+            app.execute(msg, MsgCreateDenom::TYPE_URL, &acc).unwrap();
 
         let create_denom_attrs = &res
             .events
             .iter()
-            .find(|e| e.r#type == "create_denom")
+            .find(|e| e.ty == "create_denom")
             .unwrap()
             .attributes;
 
@@ -305,16 +347,11 @@ mod tests {
         assert_eq!(
             create_denom_attrs,
             &vec![
-                EventAttribute {
-                    key: "creator".into(),
-                    value: addr.clone().into(),
-                    index: true
-                },
-                EventAttribute {
-                    key: "new_token_denom".into(),
-                    value: format!("factory/{}/{}", addr, "newerdenom").into(),
-                    index: true
-                },
+                attr("creator", &addr),
+                attr(
+                    "new_token_denom",
+                    format!("factory/{}/{}", &addr, "newerdenom")
+                )
             ]
         );
     }
@@ -338,17 +375,23 @@ mod tests {
     #[test]
     fn test_multiple_as_module() {
         let app = App::new();
-        let alice = app.init_account(&[
-            Coin::new(1_000_000_000_000, "uatom"),
-            Coin::new(1_000_000_000_000, "uosmo"),
-        ]);
+        let alice = app
+            .init_account(&[
+                Coin::new(1_000_000_000_000, "uatom"),
+                Coin::new(1_000_000_000_000, "uosmo"),
+            ])
+            .unwrap();
 
         let gamm = app.as_module::<Gamm<_>>();
 
         let pool_liquidity = vec![Coin::new(1_000, "uatom"), Coin::new(1_000, "uosmo")];
-        gamm.create_basic_pool(&pool_liquidity, &alice);
+        let pool_id = gamm
+            .create_basic_pool(&pool_liquidity, &alice)
+            .unwrap()
+            .data
+            .pool_id;
 
-        let pool = gamm.query_pool(1);
+        let pool = gamm.query_pool(pool_id);
 
         assert_eq!(
             pool_liquidity
@@ -363,7 +406,11 @@ mod tests {
 
         let wasm = app.as_module::<Wasm<_>>();
         let wasm_byte_code = std::fs::read("./test_artifacts/cw1_whitelist.wasm").unwrap();
-        let code_id = wasm.store_code(&wasm_byte_code, None, &alice);
+        let code_id = wasm
+            .store_code(&wasm_byte_code, None, &alice)
+            .unwrap()
+            .data
+            .code_id;
 
         assert_eq!(code_id, 1);
     }
@@ -373,32 +420,44 @@ mod tests {
         use cw1_whitelist::msg::*;
 
         let app = App::new();
-        let accs = app.init_accounts(
-            &[
-                Coin::new(1_000_000_000_000, "uatom"),
-                Coin::new(1_000_000_000_000, "uosmo"),
-            ],
-            2,
-        );
+        let accs = app
+            .init_accounts(
+                &[
+                    Coin::new(1_000_000_000_000, "uatom"),
+                    Coin::new(1_000_000_000_000, "uosmo"),
+                ],
+                2,
+            )
+            .unwrap();
         let admin = &accs[0];
         let new_admin = &accs[1];
 
         let wasm: Wasm<_> = app.as_module();
         let wasm_byte_code = std::fs::read("./test_artifacts/cw1_whitelist.wasm").unwrap();
-        let code_id = wasm.store_code(&wasm_byte_code, None, &admin);
+        let code_id = wasm
+            .store_code(&wasm_byte_code, None, &admin)
+            .unwrap()
+            .data
+            .code_id;
         assert_eq!(code_id, 1);
 
         // initialize admins and check if the state is correct
         let init_admins = vec![admin.address()];
-        let contract_addr = wasm.instantiate(
-            code_id,
-            &InstantiateMsg {
-                admins: init_admins.clone(),
-                mutable: true,
-            },
-            &[],
-            admin,
-        );
+        let contract_addr = wasm
+            .instantiate(
+                code_id,
+                &InstantiateMsg {
+                    admins: init_admins.clone(),
+                    mutable: true,
+                },
+                Some(&admin.address()),
+                None,
+                &[],
+                admin,
+            )
+            .unwrap()
+            .data
+            .address;
         let admin_list =
             wasm.query::<QueryMsg, AdminListResponse>(&contract_addr, &QueryMsg::AdminList {});
         assert_eq!(admin_list.admins, init_admins);
@@ -413,7 +472,9 @@ mod tests {
             },
             &[],
             admin,
-        );
+        )
+        .unwrap();
+
         let admin_list =
             wasm.query::<QueryMsg, AdminListResponse>(&contract_addr, &QueryMsg::AdminList {});
 

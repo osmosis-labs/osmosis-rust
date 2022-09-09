@@ -1,10 +1,12 @@
 use cosmwasm_std::Coin;
+use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::MsgCreateBalancerPoolResponse;
 use osmosis_std::types::osmosis::gamm::{
     poolmodels::balancer::v1beta1::MsgCreateBalancerPool,
     v1beta1::{Pool, PoolAsset, PoolParams, QueryPoolRequest, QueryPoolResponse},
 };
 use prost::Message;
 
+use crate::runner::result::RunnerExecuteResult;
 use crate::x::Module;
 use crate::{
     account::{Account, SigningAccount},
@@ -29,7 +31,7 @@ where
         &self,
         initial_liquidity: &[Coin],
         signer: &SigningAccount,
-    ) -> cosmrs::proto::tendermint::abci::ResponseDeliverTx {
+    ) -> RunnerExecuteResult<MsgCreateBalancerPoolResponse> {
         self.runner.execute(
             MsgCreateBalancerPool {
                 sender: signer.address(),

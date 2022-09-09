@@ -1,13 +1,12 @@
-use cosmrs::proto::{
-    cosmwasm::wasm::v1::{
-        AccessConfig, MsgExecuteContract, MsgInstantiateContract, MsgStoreCode,
-        QuerySmartContractStateRequest, QuerySmartContractStateResponse,
-    },
-    tendermint::abci::ResponseDeliverTx,
+use cosmrs::proto::cosmwasm::wasm::v1::{
+    AccessConfig, MsgExecuteContract, MsgExecuteContractResponse, MsgInstantiateContract,
+    MsgStoreCode, QuerySmartContractStateRequest, QuerySmartContractStateResponse,
 };
+use cosmrs::proto::cosmwasm::wasm::v1::{MsgInstantiateContractResponse, MsgStoreCodeResponse};
 use cosmwasm_std::Coin;
 use serde::{de::DeserializeOwned, Serialize};
 
+use crate::runner::result::{EncodeError, RunnerExecuteResult};
 use crate::{
     account::{Account, SigningAccount},
     runner::Runner,
@@ -32,8 +31,8 @@ where
         wasm_byte_code: &[u8],
         instantiate_permission: Option<AccessConfig>,
         signer: &SigningAccount,
-    ) -> u64 {
-        let res = self.runner.execute(
+    ) -> RunnerExecuteResult<MsgStoreCodeResponse> {
+        self.runner.execute(
             MsgStoreCode {
                 sender: signer.address(),
                 wasm_byte_code: wasm_byte_code.to_vec(),
@@ -41,32 +40,28 @@ where
             },
             "/cosmwasm.wasm.v1.MsgStoreCode",
             signer,
-        );
-
-        // TODO: create more robust mech to get the response
-        find_attr(res, "store_code", "code_id")
-            .unwrap()
-            .parse()
-            .unwrap()
+        )
     }
 
     pub fn instantiate<M>(
         &self,
         code_id: u64,
         msg: &M,
+        admin: Option<&str>,
+        label: Option<&str>,
         funds: &[Coin],
         signer: &SigningAccount,
-    ) -> String
+    ) -> RunnerExecuteResult<MsgInstantiateContractResponse>
     where
         M: ?Sized + Serialize,
     {
-        let res = self.runner.execute(
+        self.runner.execute(
             MsgInstantiateContract {
                 sender: signer.address(),
-                admin: "".to_string(),
+                admin: admin.unwrap_or_default().to_string(),
                 code_id,
-                label: "default".to_string(),
-                msg: serde_json::to_vec(msg).expect("json serialization failed"),
+                label: label.unwrap_or(" ").to_string(), // empty string causes panic
+                msg: serde_json::to_vec(msg).map_err(EncodeError::JsonEncodeError)?,
                 funds: funds
                     .iter()
                     .map(|c| cosmrs::proto::cosmos::base::v1beta1::Coin {
@@ -77,23 +72,23 @@ where
             },
             "/cosmwasm.wasm.v1.MsgInstantiateContract",
             signer,
-        );
-
-        // TODO: create more robust mech to get the response
-        find_attr(res, "instantiate", "_contract_address")
-            .unwrap()
-            .parse()
-            .unwrap()
+        )
     }
 
-    pub fn execute<M>(&self, contract: &str, msg: &M, funds: &[Coin], signer: &SigningAccount)
+    pub fn execute<M>(
+        &self,
+        contract: &str,
+        msg: &M,
+        funds: &[Coin],
+        signer: &SigningAccount,
+    ) -> RunnerExecuteResult<MsgExecuteContractResponse>
     where
         M: ?Sized + Serialize,
     {
         self.runner.execute(
             MsgExecuteContract {
                 sender: signer.address(),
-                msg: serde_json::to_vec(msg).expect("json serialization failed"),
+                msg: serde_json::to_vec(msg).map_err(EncodeError::JsonEncodeError)?,
                 funds: funds
                     .iter()
                     .map(|c| cosmrs::proto::cosmos::base::v1beta1::Coin {
@@ -105,7 +100,7 @@ where
             },
             "/cosmwasm.wasm.v1.MsgExecuteContract",
             signer,
-        );
+        )
     }
 
     pub fn query<M, Res>(&self, contract: &str, msg: &M) -> Res
@@ -125,16 +120,4 @@ where
 
         serde_json::from_slice(&res.data).unwrap()
     }
-}
-
-fn find_attr(res: ResponseDeliverTx, event: &str, attr: &str) -> Option<String> {
-    let e = res.events.into_iter().find(|e| e.r#type == event);
-
-    let attr_bytes = e?
-        .attributes
-        .into_iter()
-        .find(|a| a.key == attr.as_bytes())?
-        .value;
-
-    Some(std::str::from_utf8(&attr_bytes).unwrap().to_owned())
 }
