@@ -2,6 +2,7 @@ package testenv
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 
@@ -142,7 +143,6 @@ func (env *TestEnv) beginNewBlockWithProposer(executeNextEpoch bool, proposer sd
 	}
 	reqBeginBlock := abci.RequestBeginBlock{Header: header, LastCommitInfo: lastCommitInfo}
 
-	// fmt.Println("beginning block ", s.Ctx.BlockHeight())
 	env.App.BeginBlock(reqBeginBlock)
 	env.Ctx = env.App.NewContext(false, reqBeginBlock.Header)
 }
@@ -162,22 +162,21 @@ func (env *TestEnv) setupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAd
 	stakingCoin := sdk.NewCoin(bondDenom, selfBond[0].Amount)
 	ZeroCommission := stakingtypes.NewCommissionRates(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec())
 	msg, err := stakingtypes.NewMsgCreateValidator(valAddr, valPub, stakingCoin, stakingtypes.Description{}, ZeroCommission, sdk.OneInt())
-	// s.Require().NoError(err)
-	_, err = stakingHandler(env.Ctx, msg)
+	requireNoErr(err)
+	res, err := stakingHandler(env.Ctx, msg)
+	requireNoErr(err)
+	requireNoNil("staking handler", res)
 
 	env.App.BankKeeper.SendCoinsFromModuleToModule(env.Ctx, stakingtypes.NotBondedPoolName, stakingtypes.BondedPoolName, sdk.NewCoins(stakingCoin))
 
-	// s.Require().NoError(err)
-	// s.Require().NotNil(res)
-
-	val, _ := env.App.StakingKeeper.GetValidator(env.Ctx, valAddr)
-	// s.Require().True(found)
+	val, found := env.App.StakingKeeper.GetValidator(env.Ctx, valAddr)
+	requierTrue("validator found", found)
 
 	val = val.UpdateStatus(bondStatus)
 	env.App.StakingKeeper.SetValidator(env.Ctx, val)
 
 	consAddr, err := val.GetConsAddr()
-	// s.Suite.Require().NoError(err)
+	requireNoErr(err)
 
 	signingInfo := slashingtypes.NewValidatorSigningInfo(
 		consAddr,
@@ -190,4 +189,22 @@ func (env *TestEnv) setupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAd
 	env.App.SlashingKeeper.SetValidatorSigningInfo(env.Ctx, consAddr, signingInfo)
 
 	return valAddr
+}
+
+func requireNoErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+func requireNoNil(name string, nilable any) {
+	if nilable == nil {
+		panic(fmt.Sprintf("%s must not be nil", name))
+	}
+}
+
+func requierTrue(name string, b bool) {
+	if !b {
+		panic(fmt.Sprintf("%s must be true", name))
+	}
 }
