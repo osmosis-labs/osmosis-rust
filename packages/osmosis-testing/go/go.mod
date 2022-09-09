@@ -20,7 +20,7 @@ require (
 	github.com/CosmWasm/wasmd v0.27.0
 	github.com/cosmos/cosmos-sdk v0.46.1
 	github.com/golang/protobuf v1.5.2
-	github.com/osmosis-labs/osmosis/v12 v12.0.1
+	github.com/osmosis-labs/osmosis/v12 v12.0.0-rc0
 	github.com/pkg/errors v0.9.1
 	github.com/tendermint/tendermint v0.34.21
 	github.com/tendermint/tm-db v0.6.8-0.20220506192307-f628bb5dc95b
@@ -141,6 +141,3 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	nhooyr.io/websocket v1.8.6 // indirect
 )
-
-// TODO: point to main instead of local
-replace github.com/osmosis-labs/osmosis/v12 => /Users/supanatpotiwarakorn/osmosis/osmosis
