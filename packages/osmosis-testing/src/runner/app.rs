@@ -62,7 +62,9 @@ impl App {
         redefine_as_go_string!(coins_json);
 
         let base64_priv = unsafe {
+            BeginBlock(self.id);
             let addr = InitAccount(self.id, coins_json);
+            EndBlock(self.id);
             CString::from_raw(addr)
         }
         .to_str()
