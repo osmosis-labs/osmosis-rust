@@ -69,23 +69,26 @@ where
     }
 }
 
-/// For the communication flow between Go and Rust code. Go struct is not supported
-/// due to limitations on its unstable behavior of its memory layout.
-/// So, apart from primitives, we need to:
+/// `RawResult` facilitates type conversions between Go and Rust,
+///
+/// Since Go struct could not be exposed via cgo due to limitations on
+/// its unstable behavior of its memory layout.
+/// So, apart from passing primitive types, we need to:
 ///
 ///   Go { T -> bytes(T) -> base64 -> *c_char }
 ///                      ↓
 ///   Rust { *c_char -> base64 -> bytes(T') -> T' }
 ///
-/// Where T and T' are corresponding data structures in the respective language.
+/// Where T and T' are corresponding data structures, regardless of their encoding
+/// in their respective language plus error information.
 ///
-/// For passing error information, resulted bytes are tagged by prepending 1 byte to byte array
+/// Resulted bytes are tagged by prepending 1 byte to byte array
 /// before base64 encoded. The prepended byte represents: 0 = Err, 1 = Ok.
 pub struct RawResult(Result<Vec<u8>, String>);
 
 impl RawResult {
     /// Convert ptr to AppResult. Check the first byte tag before decoding the rest of the bytes into expected type
-    pub fn from_ptr(ptr: *mut std::os::raw::c_char) -> Option<Self> {
+    pub(crate) fn from_ptr(ptr: *mut std::os::raw::c_char) -> Option<Self> {
         if ptr.is_null() {
             return None;
         }
@@ -110,11 +113,15 @@ impl RawResult {
 
     /// Convert ptr to AppResult. Use this function only when it is sure that the
     /// pointer is not a null pointer.
-    pub unsafe fn from_non_null_ptr(ptr: *mut std::os::raw::c_char) -> Self {
+    ///
+    /// # Safety
+    /// There is a potential null pointer here, need to be extra careful before
+    /// calling this function
+    pub(crate) unsafe fn from_non_null_ptr(ptr: *mut std::os::raw::c_char) -> Self {
         Self::from_ptr(ptr).expect("Must ensure that the pointer is not null")
     }
 
-    pub fn into_result(self) -> Result<Vec<u8>, String> {
+    pub(crate) fn into_result(self) -> Result<Vec<u8>, String> {
         self.0
     }
 }

@@ -15,7 +15,7 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	// cosmos-sdk
-	"github.com/cosmos/cosmos-sdk/baseapp"
+
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -34,10 +34,6 @@ import (
 type TestEnv struct {
 	App *app.OsmosisApp
 	Ctx sdk.Context
-
-	// cosmwasm related keepers
-	ContractOpsKeeper wasmtypes.ContractOpsKeeper
-	QueryHelper       *baseapp.QueryServiceTestHelper
 }
 
 func SetupOsmosisApp() *app.OsmosisApp {

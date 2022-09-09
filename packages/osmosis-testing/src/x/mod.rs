@@ -1,5 +1,6 @@
 use crate::runner::Runner;
 
+pub mod bank;
 pub mod gamm;
 pub mod wasm;
 
