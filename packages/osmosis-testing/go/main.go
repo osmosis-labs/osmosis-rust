@@ -48,8 +48,8 @@ func InitTestEnv() uint64 {
 	// Allow testing unoptimized contract
 	wasmtypes.MaxWasmSize = 1024 * 1024 * 1024 * 1024 * 1024
 	// Temp fix for concurrency issue
-	// mu.Lock()
-	// defer mu.Unlock()
+	mu.Lock()
+	defer mu.Unlock()
 
 	env := new(testenv.TestEnv)
 	env.App = testenv.SetupOsmosisApp()
@@ -123,26 +123,25 @@ func Execute(envId uint64, base64ReqDeliverTx string) *C.char {
 	env := loadEnv(envId)
 	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
 	if err != nil {
-		panic(err)
+		encodeErrToResultBytes(err)
 	}
 
 	reqDeliverTx := abci.RequestDeliverTx{}
 	err = proto.Unmarshal(reqDeliverTxBytes, &reqDeliverTx)
 	if err != nil {
-		panic(err)
+		encodeErrToResultBytes(err)
 	}
 
 	resDeliverTx := env.App.DeliverTx(reqDeliverTx)
 	bz, err := proto.Marshal(&resDeliverTx)
 
 	if err != nil {
-		panic(err)
+		encodeErrToResultBytes(err)
 	}
 
 	envRegister.Store(envId, env)
 
-	// cast string that might be non-utf8-encoded
-	return C.CString(string(bz))
+	return encodeBytesResultBytes(bz)
 }
 
 //export Query
@@ -204,22 +203,21 @@ func Simulate(envId uint64, base64TxBytes string) *C.char { // => base64GasInfo
 
 	txBytes, err := base64.StdEncoding.DecodeString(base64TxBytes)
 	if err != nil {
-		panic(err)
+		encodeErrToResultBytes(err)
 	}
 
 	gasInfo, _, err := env.App.Simulate(txBytes)
 
 	if err != nil {
-		fmt.Printf("%v\n", gasInfo)
-		panic(errors.Wrapf(err, "Simulation failed"))
+		encodeErrToResultBytes(err)
 	}
 
 	bz, err := proto.Marshal(&gasInfo)
 	if err != nil {
-		panic(err)
+		encodeErrToResultBytes(err)
 	}
 
-	return C.CString(string(bz))
+	return encodeBytesResultBytes(bz)
 }
 
 //export GetAllBalances

@@ -8,6 +8,9 @@ pub enum RunnerError {
 
     #[error("unable to decode response")]
     DecodeError(#[from] DecodeError),
+
+    #[error("{}", .msg)]
+    AppError { msg: String },
 }
 
 #[derive(Error, Debug)]

@@ -1,3 +1,12 @@
+use std::ffi::CString;
+
+use cosmrs::crypto::secp256k1::SigningKey;
+use cosmrs::proto::tendermint::abci::{RequestDeliverTx, ResponseDeliverTx};
+use cosmrs::tx;
+use cosmrs::tx::{Fee, SignerInfo};
+use cosmwasm_std::{Coin, Uint128};
+use prost::Message;
+
 use crate::account::{Account, SigningAccount};
 use crate::bindings::{
     AccountNumber, AccountSequence, BeginBlock, EndBlock, Execute, InitAccount, InitTestEnv, Query,
@@ -5,16 +14,10 @@ use crate::bindings::{
 };
 use crate::redefine_as_go_string;
 use crate::runner::error::{DecodeError, EncodeError, RunnerError};
+use crate::runner::result::RawResult;
 use crate::runner::result::{RunnerExecuteResult, RunnerResult};
 use crate::runner::Runner;
 use crate::x::AsModule;
-use cosmrs::crypto::secp256k1::SigningKey;
-use cosmrs::proto::tendermint::abci::{RequestDeliverTx, ResponseDeliverTx};
-use cosmrs::tx;
-use cosmrs::tx::{Fee, SignerInfo};
-use cosmwasm_std::{Coin, Uint128};
-use prost::Message;
-use std::ffi::CString;
 
 const FEE_DENOM: &str = "uosmo";
 const CHAIN_ID: &str = "osmosis-1";
@@ -152,12 +155,13 @@ impl App {
 
         unsafe {
             let res = Simulate(self.id, base64_tx_bytes);
+            let res = RawResult::from_non_null_ptr(res)
+                .into_result()
+                .map_err(|msg| RunnerError::AppError { msg })?;
 
-            cosmrs::proto::cosmos::base::abci::v1beta1::GasInfo::decode(
-                CString::from_raw(res).as_bytes(),
-            )
-            .map_err(DecodeError::ProtoDecodeError)
-            .map_err(RunnerError::DecodeError)
+            cosmrs::proto::cosmos::base::abci::v1beta1::GasInfo::decode(res.as_slice())
+                .map_err(DecodeError::ProtoDecodeError)
+                .map_err(RunnerError::DecodeError)
         }
     }
     fn estimate_fee<I>(&self, msgs: I, signer: &SigningAccount) -> RunnerResult<Fee>
@@ -209,11 +213,13 @@ impl Runner for App {
         redefine_as_go_string!(base64_req);
         let res = unsafe {
             let res = Execute(self.id, base64_req);
-            let res_c = CString::from_raw(res);
-            ResponseDeliverTx::decode(res_c.as_bytes()).map_err(DecodeError::ProtoDecodeError)
+            let res = RawResult::from_non_null_ptr(res)
+                .into_result()
+                .map_err(|msg| RunnerError::AppError { msg })?;
+
+            ResponseDeliverTx::decode(res.as_slice()).map_err(DecodeError::ProtoDecodeError)
         }?
-        .try_into()
-        .map_err(RunnerError::DecodeError);
+        .try_into();
 
         unsafe { EndBlock(self.id) };
 
@@ -253,12 +259,11 @@ mod tests {
     };
 
     use crate::account::Account;
+    use crate::runner::app::App;
     use crate::runner::result::ExecuteResponse;
+    use crate::runner::*;
     use crate::x::gamm::Gamm;
     use crate::x::wasm::Wasm;
-
-    use crate::runner::app::App;
-    use crate::runner::*;
     use crate::x::AsModule;
 
     #[test]
