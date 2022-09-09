@@ -8,16 +8,12 @@ const ADDRESS_PREFIX: &str = "osmo";
 pub trait Account {
     fn public_key(&self) -> PublicKey;
     fn address(&self) -> String {
-        self.public_key()
-            .account_id(ADDRESS_PREFIX)
-            .expect("cryptographic error")
-            .as_ref()
-            .to_string()
+        self.account_id().to_string()
     }
     fn account_id(&self) -> AccountId {
         self.public_key()
             .account_id(ADDRESS_PREFIX)
-            .expect("cryptographic error")
+            .expect("ADDRESS_PREFIX is constant and must valid")
     }
 }
 pub struct SigningAccount {

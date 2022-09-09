@@ -6,7 +6,8 @@ use cosmrs::proto::cosmwasm::wasm::v1::{MsgInstantiateContractResponse, MsgStore
 use cosmwasm_std::Coin;
 use serde::{de::DeserializeOwned, Serialize};
 
-use crate::runner::result::{EncodeError, RunnerExecuteResult};
+use crate::runner::error::EncodeError;
+use crate::runner::result::RunnerExecuteResult;
 use crate::{
     account::{Account, SigningAccount},
     runner::Runner,
