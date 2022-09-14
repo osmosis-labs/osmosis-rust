@@ -109,20 +109,20 @@ func Execute(envId uint64, base64ReqDeliverTx string) *C.char {
 	env := loadEnv(envId)
 	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
 	if err != nil {
-		encodeErrToResultBytes(err)
+		panic(err)
 	}
 
 	reqDeliverTx := abci.RequestDeliverTx{}
 	err = proto.Unmarshal(reqDeliverTxBytes, &reqDeliverTx)
 	if err != nil {
-		encodeErrToResultBytes(err)
+		return encodeErrToResultBytes(result.ExecuteError, err)
 	}
 
 	resDeliverTx := env.App.DeliverTx(reqDeliverTx)
 	bz, err := proto.Marshal(&resDeliverTx)
 
 	if err != nil {
-		encodeErrToResultBytes(err)
+		panic(err)
 	}
 
 	envRegister.Store(envId, env)
@@ -141,13 +141,18 @@ func Query(envId uint64, path, base64QueryMsgBytes string) *C.char {
 	req := abci.RequestQuery{}
 	req.Data = queryMsgBytes
 
-	res, err := env.App.GRPCQueryRouter().Route(path)(env.Ctx, req)
+	route := env.App.GRPCQueryRouter().Route(path)
+	if route == nil {
+		err := errors.New("No route found for `" + path + "`")
+		return encodeErrToResultBytes(result.QueryError, err)
+	}
+	res, err := route(env.Ctx, req)
 
 	if err != nil {
-		panic(err)
+		return encodeErrToResultBytes(result.QueryError, err)
 	}
 
-	return C.CString(string(res.Value))
+	return encodeBytesResultBytes(res.Value)
 }
 
 //export AccountSequence
@@ -157,13 +162,13 @@ func AccountSequence(envId uint64, bech32Address string) uint64 {
 	addr, err := sdk.AccAddressFromBech32(bech32Address)
 
 	if err != nil {
-		panic(errors.Wrapf(err, "Must always be valid bech32"))
+		panic(err)
 	}
 
 	seq, err := env.App.AppKeepers.AccountKeeper.GetSequence(env.Ctx, addr)
 
 	if err != nil {
-		panic(errors.Wrapf(err, "Account must always be initialized"))
+		panic(err)
 	}
 
 	return seq
@@ -176,7 +181,7 @@ func AccountNumber(envId uint64, bech32Address string) uint64 {
 	addr, err := sdk.AccAddressFromBech32(bech32Address)
 
 	if err != nil {
-		panic(errors.Wrapf(err, "Must always be valid bech32"))
+		panic(err)
 	}
 
 	acc := env.App.AppKeepers.AccountKeeper.GetAccount(env.Ctx, addr)
@@ -189,18 +194,18 @@ func Simulate(envId uint64, base64TxBytes string) *C.char { // => base64GasInfo
 
 	txBytes, err := base64.StdEncoding.DecodeString(base64TxBytes)
 	if err != nil {
-		encodeErrToResultBytes(err)
+		panic(err)
 	}
 
 	gasInfo, _, err := env.App.Simulate(txBytes)
 
 	if err != nil {
-		encodeErrToResultBytes(err)
+		return encodeErrToResultBytes(result.ExecuteError, err)
 	}
 
 	bz, err := proto.Marshal(&gasInfo)
 	if err != nil {
-		encodeErrToResultBytes(err)
+		panic(err)
 	}
 
 	return encodeBytesResultBytes(bz)
@@ -217,8 +222,8 @@ func loadEnv(envId uint64) testenv.TestEnv {
 	return env
 }
 
-func encodeErrToResultBytes(err error) *C.char {
-	return C.CString(result.EncodeResultFromError(err))
+func encodeErrToResultBytes(code byte, err error) *C.char {
+	return C.CString(result.EncodeResultFromError(code, err))
 }
 
 func encodeBytesResultBytes(bytes []byte) *C.char {

@@ -6,8 +6,8 @@ use cosmrs::proto::cosmwasm::wasm::v1::{MsgInstantiateContractResponse, MsgStore
 use cosmwasm_std::Coin;
 use serde::{de::DeserializeOwned, Serialize};
 
-use crate::runner::error::EncodeError;
-use crate::runner::result::RunnerExecuteResult;
+use crate::runner::error::{DecodeError, EncodeError, RunnerError};
+use crate::runner::result::{RunnerExecuteResult, RunnerResult};
 use crate::{
     account::{Account, SigningAccount},
     runner::Runner,
@@ -104,7 +104,7 @@ where
         )
     }
 
-    pub fn query<M, Res>(&self, contract: &str, msg: &M) -> Res
+    pub fn query<M, Res>(&self, contract: &str, msg: &M) -> RunnerResult<Res>
     where
         M: ?Sized + Serialize,
         Res: ?Sized + DeserializeOwned,
@@ -115,10 +115,12 @@ where
                 "/cosmwasm.wasm.v1.Query/SmartContractState",
                 &QuerySmartContractStateRequest {
                     address: contract.to_owned(),
-                    query_data: serde_json::to_vec(msg).expect("json serialization failed"),
+                    query_data: serde_json::to_vec(msg).map_err(EncodeError::JsonEncodeError)?,
                 },
-            );
+            )?;
 
-        serde_json::from_slice(&res.data).unwrap()
+        serde_json::from_slice(&res.data)
+            .map_err(DecodeError::JsonDecodeError)
+            .map_err(RunnerError::DecodeError)
     }
 }

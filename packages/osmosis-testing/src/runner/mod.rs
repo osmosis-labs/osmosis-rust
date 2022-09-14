@@ -1,4 +1,4 @@
-use crate::runner::result::RunnerExecuteResult;
+use crate::runner::result::{RunnerExecuteResult, RunnerResult};
 
 use crate::account::SigningAccount;
 
@@ -16,7 +16,7 @@ pub trait Runner {
     where
         M: ::prost::Message,
         R: ::prost::Message + Default;
-    fn query<Q, R>(&self, path: &str, query: &Q) -> R
+    fn query<Q, R>(&self, path: &str, query: &Q) -> RunnerResult<R>
     where
         Q: ::prost::Message,
         R: ::prost::Message + Default;

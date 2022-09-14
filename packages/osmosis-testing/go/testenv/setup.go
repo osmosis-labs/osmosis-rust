@@ -7,7 +7,6 @@ import (
 	"time"
 
 	// helpers
-	"github.com/pkg/errors"
 
 	// tendermint
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -66,9 +65,7 @@ func SetupOsmosisApp() *app.OsmosisApp {
 
 	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
 
-	if err != nil {
-		panic(err)
-	}
+	requireNoErr(err)
 
 	concensusParams := simapp.DefaultConsensusParams
 	concensusParams.Block = &abci.BlockParams{
@@ -96,9 +93,7 @@ func (env *TestEnv) BeginNewBlock(executeNextEpoch bool) {
 	validators := env.App.StakingKeeper.GetAllValidators(env.Ctx)
 	if len(validators) >= 1 {
 		valAddrFancy, err := validators[0].GetConsAddr()
-		if err != nil {
-			panic(err)
-		}
+		requireNoErr(err)
 		valAddr = valAddrFancy.Bytes()
 	} else {
 		valAddrFancy := env.setupValidator(stakingtypes.Bonded)
@@ -119,9 +114,7 @@ func (env *TestEnv) beginNewBlockWithProposer(executeNextEpoch bool, proposer sd
 	}
 
 	valConsAddr, err := validator.GetConsAddr()
-	if err != nil {
-		panic(err)
-	}
+	requireNoErr(err)
 
 	valAddr := valConsAddr.Bytes()
 
@@ -154,9 +147,7 @@ func (env *TestEnv) setupValidator(bondStatus stakingtypes.BondStatus) sdk.ValAd
 	selfBond := sdk.NewCoins(sdk.Coin{Amount: sdk.NewInt(100), Denom: bondDenom})
 
 	err := simapp.FundAccount(env.App.BankKeeper, env.Ctx, sdk.AccAddress(valPub.Address()), selfBond)
-	if err != nil {
-		panic(errors.Wrapf(err, "Failed to fund account"))
-	}
+	requireNoErr(err)
 
 	stakingHandler := staking.NewHandler(*env.App.StakingKeeper)
 	stakingCoin := sdk.NewCoin(bondDenom, selfBond[0].Amount)

@@ -35,7 +35,7 @@ where
             // since this tx contains exactly 1 msg
             // when getting none of them, that means error
             .get(0)
-            .ok_or(RunnerError::AppError { msg: res.log })?;
+            .ok_or(RunnerError::ExecuteError { msg: res.log })?;
 
         let data = R::decode(msg_data.data.as_slice()).map_err(DecodeError::ProtoDecodeError)?;
 
@@ -82,9 +82,14 @@ where
 /// Where T and T' are corresponding data structures, regardless of their encoding
 /// in their respective language plus error information.
 ///
-/// Resulted bytes are tagged by prepending 1 byte to byte array
-/// before base64 encoded. The prepended byte represents: 0 = Err, 1 = Ok.
-pub struct RawResult(Result<Vec<u8>, String>);
+/// Resulted bytes are tagged by prepending 4 bytes to byte array
+/// before base64 encoded. The prepended byte represents
+///   0 -> Ok
+///   1 -> QueryError
+///   2 -> ExecuteError
+///
+/// The rest are undefined and remaining spaces are reserved for future use.
+pub struct RawResult(Result<Vec<u8>, RunnerError>);
 
 impl RawResult {
     /// Convert ptr to AppResult. Check the first byte tag before decoding the rest of the bytes into expected type
@@ -96,18 +101,30 @@ impl RawResult {
         let c_string = unsafe { CString::from_raw(ptr) };
         let base64_bytes = c_string.to_bytes();
         let bytes = base64::decode(base64_bytes).unwrap();
+        let code = bytes[0];
+        let content = &bytes[1..];
 
-        if bytes[0] == 0 {
-            let error = CString::new(&bytes[1..])
+        if code == 0 {
+            let res = CString::new(content).unwrap().into_bytes();
+
+            Some(Self(Ok(res)))
+        } else {
+            let content_string = CString::new(content)
                 .unwrap()
                 .to_str()
                 .expect("Go code must encode valid UTF-8 string")
                 .to_string();
-            Some(Self(Err(error)))
-        } else {
-            let res = CString::new(&bytes[1..]).unwrap().into_bytes();
 
-            Some(Self(Ok(res)))
+            let error = match code {
+                1 => RunnerError::QueryError {
+                    msg: content_string,
+                },
+                2 => RunnerError::ExecuteError {
+                    msg: content_string,
+                },
+                _ => panic!("undefined code: {}", code),
+            };
+            Some(Self(Err(error)))
         }
     }
 
@@ -121,7 +138,96 @@ impl RawResult {
         Self::from_ptr(ptr).expect("Must ensure that the pointer is not null")
     }
 
-    pub(crate) fn into_result(self) -> Result<Vec<u8>, String> {
+    pub(crate) fn into_result(self) -> Result<Vec<u8>, RunnerError> {
         self.0
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::account::Account;
+    use crate::runner::app::App;
+    use crate::runner::error::RunnerError::{ExecuteError, QueryError};
+    use crate::runner::Runner;
+    use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::{
+        MsgCreateBalancerPool, MsgCreateBalancerPoolResponse,
+    };
+    use osmosis_std::types::osmosis::gamm::v1beta1::{
+        PoolParams, QueryPoolRequest, QueryPoolResponse,
+    };
+
+    #[derive(::prost::Message)]
+    struct AdhocRandomQueryRequest {
+        #[prost(uint64, tag = "1")]
+        id: u64,
+    }
+
+    #[derive(::prost::Message)]
+    struct AdhocRandomQueryResponse {
+        #[prost(string, tag = "1")]
+        msg: String,
+    }
+
+    #[test]
+    fn test_query_error_no_route() {
+        let app = App::new();
+        let res = app.query::<AdhocRandomQueryRequest, AdhocRandomQueryResponse>(
+            "/osmosis.random.v1beta1.Query/AdhocRandom",
+            &AdhocRandomQueryRequest { id: 1 },
+        );
+
+        let err = res.unwrap_err();
+        assert_eq!(
+            err,
+            QueryError {
+                msg: "No route found for `/osmosis.random.v1beta1.Query/AdhocRandom`".to_string()
+            }
+        );
+    }
+
+    #[test]
+    fn test_query_error_failed_query() {
+        let app = App::new();
+        let res = app.query::<QueryPoolRequest, QueryPoolResponse>(
+            "/osmosis.gamm.v1beta1.Query/Pool",
+            &QueryPoolRequest { pool_id: 1 },
+        );
+
+        let err = res.unwrap_err();
+        assert_eq!(
+            err,
+            QueryError {
+                msg: "rpc error: code = Internal desc = pool with ID 1 does not exist".to_string()
+            }
+        );
+    }
+
+    #[test]
+    fn test_execute_error() {
+        let app = App::new();
+        let signer = app.init_account(&[]).unwrap();
+        let res: RunnerExecuteResult<MsgCreateBalancerPoolResponse> = app.execute(
+            MsgCreateBalancerPool {
+                sender: signer.address(),
+                pool_params: Some(PoolParams {
+                    swap_fee: "10000000000000000".to_string(),
+                    exit_fee: "10000000000000000".to_string(),
+                    smooth_weight_change_params: None,
+                }),
+                pool_assets: vec![],
+                future_pool_governor: "".to_string(),
+            },
+            MsgCreateBalancerPool::TYPE_URL,
+            &signer,
+        );
+
+        let err = res.unwrap_err();
+        assert_eq!(
+            err,
+            ExecuteError {
+                msg: String::from("pool should have at least 2 assets, as they must be swapping between at least two assets")
+            }
+        )
     }
 }

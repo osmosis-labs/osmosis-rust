@@ -1,12 +1,14 @@
 use cosmwasm_std::Coin;
+use osmosis_std::types::osmosis::gamm;
 use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::MsgCreateBalancerPoolResponse;
 use osmosis_std::types::osmosis::gamm::{
     poolmodels::balancer::v1beta1::MsgCreateBalancerPool,
-    v1beta1::{Pool, PoolAsset, PoolParams, QueryPoolRequest, QueryPoolResponse},
+    v1beta1::{PoolAsset, PoolParams, QueryPoolRequest, QueryPoolResponse},
 };
 use prost::Message;
 
-use crate::runner::result::RunnerExecuteResult;
+use crate::runner::error::{DecodeError, RunnerError};
+use crate::runner::result::{RunnerExecuteResult, RunnerResult};
 use crate::x::Module;
 use crate::{
     account::{Account, SigningAccount},
@@ -57,12 +59,14 @@ where
         )
     }
 
-    pub fn query_pool(&self, pool_id: u64) -> Pool {
+    pub fn query_pool(&self, pool_id: u64) -> RunnerResult<gamm::v1beta1::Pool> {
         let any = self.runner.query::<QueryPoolRequest, QueryPoolResponse>(
             "/osmosis.gamm.v1beta1.Query/Pool",
             &QueryPoolRequest { pool_id },
-        );
+        )?;
 
-        Pool::decode(any.pool.unwrap().value.as_slice()).unwrap()
+        gamm::v1beta1::Pool::decode(any.pool.unwrap().value.as_slice())
+            .map_err(DecodeError::ProtoDecodeError)
+            .map_err(RunnerError::DecodeError)
     }
 }

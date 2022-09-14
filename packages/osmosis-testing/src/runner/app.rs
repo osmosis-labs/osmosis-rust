@@ -155,9 +155,7 @@ impl App {
 
         unsafe {
             let res = Simulate(self.id, base64_tx_bytes);
-            let res = RawResult::from_non_null_ptr(res)
-                .into_result()
-                .map_err(|msg| RunnerError::AppError { msg })?;
+            let res = RawResult::from_non_null_ptr(res).into_result()?;
 
             cosmrs::proto::cosmos::base::abci::v1beta1::GasInfo::decode(res.as_slice())
                 .map_err(DecodeError::ProtoDecodeError)
@@ -213,9 +211,7 @@ impl Runner for App {
         redefine_as_go_string!(base64_req);
         let res = unsafe {
             let res = Execute(self.id, base64_req);
-            let res = RawResult::from_non_null_ptr(res)
-                .into_result()
-                .map_err(|msg| RunnerError::AppError { msg })?;
+            let res = RawResult::from_non_null_ptr(res).into_result()?;
 
             ResponseDeliverTx::decode(res.as_slice()).map_err(DecodeError::ProtoDecodeError)
         }?
@@ -226,15 +222,14 @@ impl Runner for App {
         res
     }
 
-    fn query<Q, R>(&self, path: &str, q: &Q) -> R
+    fn query<Q, R>(&self, path: &str, q: &Q) -> RunnerResult<R>
     where
         Q: ::prost::Message,
         R: ::prost::Message + Default,
     {
         let mut buf = Vec::new();
 
-        // TODO: remove expect & unwrap from here
-        Q::encode(q, &mut buf).expect("Using vec as buffer has theoretically unlimited capacity");
+        Q::encode(q, &mut buf).map_err(EncodeError::ProtoEncodeError)?;
 
         let base64_query_msg_bytes = base64::encode(buf);
         redefine_as_go_string!(path);
@@ -242,8 +237,10 @@ impl Runner for App {
 
         unsafe {
             let res = Query(self.id, path, base64_query_msg_bytes);
-            let v = CString::from_raw(res);
-            R::decode(v.as_bytes()).unwrap()
+            let res = RawResult::from_non_null_ptr(res).into_result()?;
+            R::decode(res.as_slice())
+                .map_err(DecodeError::ProtoDecodeError)
+                .map_err(RunnerError::DecodeError)
         }
     }
 }
@@ -350,6 +347,7 @@ mod tests {
                 "/osmosis.tokenfactory.v1beta1.Query/Params",
                 &QueryParamsRequest {},
             )
+            .unwrap()
             .params
             .unwrap()
             .denom_creation_fee;
@@ -376,7 +374,7 @@ mod tests {
             .data
             .pool_id;
 
-        let pool = gamm.query_pool(pool_id);
+        let pool = gamm.query_pool(pool_id).unwrap();
 
         assert_eq!(
             pool_liquidity
@@ -443,8 +441,9 @@ mod tests {
             .unwrap()
             .data
             .address;
-        let admin_list =
-            wasm.query::<QueryMsg, AdminListResponse>(&contract_addr, &QueryMsg::AdminList {});
+        let admin_list = wasm
+            .query::<QueryMsg, AdminListResponse>(&contract_addr, &QueryMsg::AdminList {})
+            .unwrap();
         assert_eq!(admin_list.admins, init_admins);
         assert!(admin_list.mutable);
 
@@ -460,8 +459,9 @@ mod tests {
         )
         .unwrap();
 
-        let admin_list =
-            wasm.query::<QueryMsg, AdminListResponse>(&contract_addr, &QueryMsg::AdminList {});
+        let admin_list = wasm
+            .query::<QueryMsg, AdminListResponse>(&contract_addr, &QueryMsg::AdminList {})
+            .unwrap();
 
         assert_eq!(admin_list.admins, new_admins);
         assert!(admin_list.mutable);

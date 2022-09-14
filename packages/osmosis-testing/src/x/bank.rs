@@ -1,3 +1,4 @@
+use crate::runner::result::RunnerResult;
 use cosmrs::proto::cosmos::bank::v1beta1::{QueryAllBalancesRequest, QueryAllBalancesResponse};
 use cosmrs::proto::cosmos::base::query::v1beta1::PageRequest;
 
@@ -22,7 +23,7 @@ where
         &self,
         address: &str,
         pagination: Option<PageRequest>,
-    ) -> QueryAllBalancesResponse {
+    ) -> RunnerResult<QueryAllBalancesResponse> {
         self.runner
             .query::<QueryAllBalancesRequest, QueryAllBalancesResponse>(
                 "/cosmos.bank.v1beta1.Query/AllBalances",
