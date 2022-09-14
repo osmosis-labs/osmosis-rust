@@ -107,6 +107,10 @@ func EndBlock(envId uint64) {
 //export Execute
 func Execute(envId uint64, base64ReqDeliverTx string) *C.char {
 	env := loadEnv(envId)
+	// Temp fix for concurrency issue
+	mu.Lock()
+	defer mu.Unlock()
+
 	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
 	if err != nil {
 		panic(err)
@@ -191,6 +195,9 @@ func AccountNumber(envId uint64, bech32Address string) uint64 {
 //export Simulate
 func Simulate(envId uint64, base64TxBytes string) *C.char { // => base64GasInfo
 	env := loadEnv(envId)
+	// Temp fix for concurrency issue
+	mu.Lock()
+	defer mu.Unlock()
 
 	txBytes, err := base64.StdEncoding.DecodeString(base64TxBytes)
 	if err != nil {

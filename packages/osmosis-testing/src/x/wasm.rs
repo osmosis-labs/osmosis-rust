@@ -1,8 +1,8 @@
 use cosmrs::proto::cosmwasm::wasm::v1::{
     AccessConfig, MsgExecuteContract, MsgExecuteContractResponse, MsgInstantiateContract,
-    MsgStoreCode, QuerySmartContractStateRequest, QuerySmartContractStateResponse,
+    MsgInstantiateContractResponse, MsgStoreCode, MsgStoreCodeResponse,
+    QuerySmartContractStateRequest, QuerySmartContractStateResponse,
 };
-use cosmrs::proto::cosmwasm::wasm::v1::{MsgInstantiateContractResponse, MsgStoreCodeResponse};
 use cosmwasm_std::Coin;
 use serde::{de::DeserializeOwned, Serialize};
 
