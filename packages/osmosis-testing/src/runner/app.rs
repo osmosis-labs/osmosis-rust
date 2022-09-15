@@ -4,10 +4,10 @@ use cosmrs::crypto::secp256k1::SigningKey;
 use cosmrs::proto::tendermint::abci::{RequestDeliverTx, ResponseDeliverTx};
 use cosmrs::tx;
 use cosmrs::tx::{Fee, SignerInfo};
-use cosmwasm_std::{Coin, Uint128};
+use cosmwasm_std::Coin;
 use prost::Message;
 
-use crate::account::{Account, SigningAccount};
+use crate::account::{Account, FeeSetting, SigningAccount};
 use crate::bindings::{
     AccountNumber, AccountSequence, BeginBlock, EndBlock, Execute, InitAccount, InitTestEnv, Query,
     Simulate,
@@ -20,34 +20,29 @@ use crate::runner::Runner;
 
 const FEE_DENOM: &str = "uosmo";
 const CHAIN_ID: &str = "osmosis-1";
+const DEFAULT_GAS_ADJUSTMENT: f64 = 1.2;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct OsmosisTestApp {
     id: u64,
-    gas_price: Coin,
-    gas_adjustment: f64,
+    fee_setting: FeeSetting,
+}
+
+impl Default for OsmosisTestApp {
+    fn default() -> Self {
+        OsmosisTestApp::new(FeeSetting::Auto {
+            gas_price: Coin::new(0, FEE_DENOM.to_string()),
+            gas_adjustment: 1.2,
+        })
+    }
 }
 
 impl OsmosisTestApp {
-    #[allow(clippy::new_without_default)]
-    pub fn new() -> Self {
+    pub fn new(fee_setting: FeeSetting) -> Self {
         Self {
             id: unsafe { InitTestEnv() },
-            gas_price: Coin {
-                denom: FEE_DENOM.to_string(),
-                amount: Uint128::new(0),
-            },
-            gas_adjustment: 1.2,
+            fee_setting,
         }
-    }
-    pub fn gas_price(mut self, gas_price: Coin) -> Self {
-        self.gas_price = gas_price;
-        self
-    }
-
-    pub fn gas_adjustment(mut self, gas_adjustment: f64) -> Self {
-        self.gas_adjustment = gas_adjustment;
-        self
     }
 
     /// Initialize account with initial balance of any coins.
@@ -72,12 +67,18 @@ impl OsmosisTestApp {
         .to_string();
 
         let secp256k1_priv = base64::decode(base64_priv).map_err(DecodeError::Base64DecodeError)?;
-        Ok(SigningKey::from_bytes(&secp256k1_priv)
-            .map_err(|e| {
-                let msg = e.to_string();
-                DecodeError::SigningKeyDecodeError { msg }
-            })?
-            .into())
+        let signging_key = SigningKey::from_bytes(&secp256k1_priv).map_err(|e| {
+            let msg = e.to_string();
+            DecodeError::SigningKeyDecodeError { msg }
+        })?;
+
+        Ok(SigningAccount::new(
+            signging_key,
+            FeeSetting::Auto {
+                gas_price: Coin::new(0, FEE_DENOM.to_string()),
+                gas_adjustment: DEFAULT_GAS_ADJUSTMENT,
+            },
+        ))
     }
     /// Convinience function to create multiple accounts with the same
     /// Initial coins balance
@@ -163,20 +164,30 @@ impl OsmosisTestApp {
     where
         I: IntoIterator<Item = cosmrs::Any>,
     {
-        let gas_info = self.simulate_tx(msgs, signer)?;
-        let gas_limit = ((gas_info.gas_used as f64) * (self.gas_adjustment)).ceil() as u64;
+        match &signer.fee_setting() {
+            FeeSetting::Auto {
+                gas_price,
+                gas_adjustment,
+            } => {
+                let gas_info = self.simulate_tx(msgs, signer)?;
+                let gas_limit = ((gas_info.gas_used as f64) * (gas_adjustment)).ceil() as u64;
 
-        let amount = cosmrs::Coin {
-            denom: FEE_DENOM.parse().unwrap(),
-            amount: (((gas_limit as f64) * (self.gas_price.amount.u128() as f64)).ceil() as u64)
-                .into(),
-        };
+                let amount = cosmrs::Coin {
+                    denom: FEE_DENOM.parse().unwrap(),
+                    amount: (((gas_limit as f64) * (gas_price.amount.u128() as f64)).ceil() as u64)
+                        .into(),
+                };
 
-        Ok(Fee::from_amount_and_gas(amount, gas_limit))
+                Ok(Fee::from_amount_and_gas(amount, gas_limit))
+            }
+            FeeSetting::Custom { .. } => {
+                panic!("estimate fee is a private function and should never be called when fee_setting is Custom");
+            }
+        }
     }
 }
 
-impl Runner for OsmosisTestApp {
+impl<'a> Runner<'a> for OsmosisTestApp {
     fn execute<M, R>(
         &self,
         msg: M,
@@ -197,7 +208,17 @@ impl Runner for OsmosisTestApp {
             value: buf,
         };
 
-        let fee = self.estimate_fee([msg.clone()], signer)?;
+        let fee = match &signer.fee_setting() {
+            FeeSetting::Auto { .. } => self.estimate_fee([msg.clone()], signer)?,
+            FeeSetting::Custom { amount, gas_limit } => Fee::from_amount_and_gas(
+                cosmrs::Coin {
+                    denom: amount.denom.parse().unwrap(),
+                    amount: amount.amount.to_string().parse().unwrap(),
+                },
+                *gas_limit,
+            ),
+        };
+
         let tx = self.create_signed_tx([msg], signer, fee)?;
 
         let mut buf = Vec::new();
@@ -252,17 +273,17 @@ mod tests {
         MsgCreateDenom, MsgCreateDenomResponse, QueryParamsRequest, QueryParamsResponse,
     };
 
-    use crate::account::Account;
+    use crate::account::{Account, FeeSetting};
     use crate::module::Gamm;
     use crate::module::Module;
     use crate::module::Wasm;
     use crate::runner::app::OsmosisTestApp;
     use crate::runner::*;
-    use crate::ExecuteResponse;
+    use crate::{Bank, ExecuteResponse};
 
     #[test]
     fn test_init_accounts() {
-        let app = OsmosisTestApp::new();
+        let app = OsmosisTestApp::default();
         let accounts = app
             .init_accounts(&coins(100_000_000_000, "uosmo"), 3)
             .unwrap();
@@ -275,7 +296,7 @@ mod tests {
 
     #[test]
     fn test_execute() {
-        let app = OsmosisTestApp::new();
+        let app = OsmosisTestApp::default();
 
         let acc = app.init_account(&coins(100_000_000_000, "uosmo")).unwrap();
         let addr = acc.address();
@@ -337,7 +358,7 @@ mod tests {
 
     #[test]
     fn test_query() {
-        let app = OsmosisTestApp::new();
+        let app = OsmosisTestApp::default();
 
         let denom_creation_fee = app
             .query::<QueryParamsRequest, QueryParamsResponse>(
@@ -354,7 +375,7 @@ mod tests {
 
     #[test]
     fn test_multiple_as_module() {
-        let app = OsmosisTestApp::new();
+        let app = OsmosisTestApp::default();
         let alice = app
             .init_account(&[
                 Coin::new(1_000_000_000_000, "uatom"),
@@ -399,7 +420,7 @@ mod tests {
     fn test_wasm_execute_and_query() {
         use cw1_whitelist::msg::*;
 
-        let app = OsmosisTestApp::new();
+        let app = OsmosisTestApp::default();
         let accs = app
             .init_accounts(
                 &[
@@ -462,5 +483,44 @@ mod tests {
 
         assert_eq!(admin_list.admins, new_admins);
         assert!(admin_list.mutable);
+    }
+
+    #[test]
+    fn test_custom_fee() {
+        let app = OsmosisTestApp::default();
+        let initial_balance = 1_000_000_000_000;
+        let alice = app.init_account(&coins(initial_balance, "uosmo")).unwrap();
+        let bob = app.init_account(&coins(initial_balance, "uosmo")).unwrap();
+
+        let amount = Coin::new(1_000_000, "uosmo");
+        let gas_limit = 100_000_000;
+
+        // use FeeSetting::Auto by default, so should not equal newly custom fee setting
+        let wasm = Wasm::new(&app);
+        let wasm_byte_code = std::fs::read("./test_artifacts/cw1_whitelist.wasm").unwrap();
+        let res = wasm.store_code(&wasm_byte_code, None, &alice).unwrap();
+
+        assert_ne!(res.gas_info.gas_wanted, gas_limit);
+
+        //update fee setting
+        let bob = bob.with_fee_setting(FeeSetting::Custom {
+            amount: amount.clone(),
+            gas_limit,
+        });
+        let res = wasm.store_code(&wasm_byte_code, None, &bob).unwrap();
+
+        let bob_balance = Bank::new(&app)
+            .query_all_balances(&bob.address(), None)
+            .unwrap()
+            .balances
+            .into_iter()
+            .find(|c| c.denom == "uosmo")
+            .unwrap()
+            .amount
+            .parse::<u128>()
+            .unwrap();
+
+        assert_eq!(res.gas_info.gas_wanted, gas_limit);
+        assert_eq!(bob_balance, initial_balance - amount.amount.u128());
     }
 }

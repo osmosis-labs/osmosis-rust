@@ -1,12 +1,11 @@
-use crate::runner::result::{RunnerExecuteResult, RunnerResult};
-
 use crate::account::SigningAccount;
+use crate::runner::result::{RunnerExecuteResult, RunnerResult};
 
 pub mod app;
 pub mod error;
 pub mod result;
 
-pub trait Runner {
+pub trait Runner<'a> {
     fn execute<M, R>(
         &self,
         msg: M,

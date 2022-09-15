@@ -8,6 +8,6 @@ pub use bank::Bank;
 pub use gamm::Gamm;
 pub use wasm::Wasm;
 
-pub trait Module<'a, R: Runner> {
+pub trait Module<'a, R: Runner<'a>> {
     fn new(runner: &'a R) -> Self;
 }

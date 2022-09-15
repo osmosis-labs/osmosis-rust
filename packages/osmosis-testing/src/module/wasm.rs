@@ -13,11 +13,11 @@ use crate::{
     runner::Runner,
 };
 
-pub struct Wasm<'a, R: Runner> {
+pub struct Wasm<'a, R: Runner<'a>> {
     runner: &'a R,
 }
 
-impl<'a, R: Runner> super::Module<'a, R> for Wasm<'a, R> {
+impl<'a, R: Runner<'a>> super::Module<'a, R> for Wasm<'a, R> {
     fn new(runner: &'a R) -> Self {
         Wasm { runner }
     }
@@ -25,7 +25,7 @@ impl<'a, R: Runner> super::Module<'a, R> for Wasm<'a, R> {
 
 impl<'a, R> Wasm<'a, R>
 where
-    R: Runner,
+    R: Runner<'a>,
 {
     pub fn store_code(
         &self,

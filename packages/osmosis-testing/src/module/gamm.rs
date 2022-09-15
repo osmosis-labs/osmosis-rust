@@ -15,11 +15,11 @@ use crate::{
     runner::Runner,
 };
 
-pub struct Gamm<'a, R: Runner> {
+pub struct Gamm<'a, R: Runner<'a>> {
     runner: &'a R,
 }
 
-impl<'a, R: Runner> Module<'a, R> for Gamm<'a, R> {
+impl<'a, R: Runner<'a>> Module<'a, R> for Gamm<'a, R> {
     fn new(runner: &'a R) -> Self {
         Self { runner }
     }
@@ -27,7 +27,7 @@ impl<'a, R: Runner> Module<'a, R> for Gamm<'a, R> {
 
 impl<'a, R> Gamm<'a, R>
 where
-    R: Runner,
+    R: Runner<'a>,
 {
     pub fn create_basic_pool(
         &self,

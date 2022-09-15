@@ -5,11 +5,11 @@ use cosmrs::proto::cosmos::base::query::v1beta1::PageRequest;
 use crate::module::Module;
 use crate::runner::Runner;
 
-pub struct Bank<'a, R: Runner> {
+pub struct Bank<'a, R: Runner<'a>> {
     runner: &'a R,
 }
 
-impl<'a, R: Runner> Module<'a, R> for Bank<'a, R> {
+impl<'a, R: Runner<'a>> Module<'a, R> for Bank<'a, R> {
     fn new(runner: &'a R) -> Self {
         Self { runner }
     }
@@ -17,7 +17,7 @@ impl<'a, R: Runner> Module<'a, R> for Bank<'a, R> {
 
 impl<'a, R> Bank<'a, R>
 where
-    R: Runner,
+    R: Runner<'a>,
 {
     pub fn query_all_balances(
         &self,

@@ -2,6 +2,7 @@ use cosmrs::{
     crypto::{secp256k1::SigningKey, PublicKey},
     AccountId,
 };
+use cosmwasm_std::Coin;
 
 const ADDRESS_PREFIX: &str = "osmo";
 
@@ -18,11 +19,26 @@ pub trait Account {
 }
 pub struct SigningAccount {
     signing_key: SigningKey,
+    fee_setting: FeeSetting,
 }
 
-impl From<SigningKey> for SigningAccount {
-    fn from(signing_key: SigningKey) -> Self {
-        SigningAccount { signing_key }
+impl SigningAccount {
+    pub fn new(signing_key: SigningKey, fee_setting: FeeSetting) -> Self {
+        SigningAccount {
+            signing_key,
+            fee_setting,
+        }
+    }
+
+    pub fn fee_setting(&self) -> &FeeSetting {
+        &self.fee_setting
+    }
+
+    pub fn with_fee_setting(self, fee_setting: FeeSetting) -> Self {
+        Self {
+            signing_key: self.signing_key,
+            fee_setting,
+        }
     }
 }
 
@@ -60,4 +76,16 @@ impl Account for NonSigningAccount {
     fn public_key(&self) -> PublicKey {
         self.public_key
     }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum FeeSetting {
+    Auto {
+        gas_price: Coin,
+        gas_adjustment: f64,
+    },
+    Custom {
+        amount: Coin,
+        gas_limit: u64,
+    },
 }
