@@ -9,11 +9,6 @@ pub enum RunnerError {
     #[error("unable to decode response")]
     DecodeError(#[from] DecodeError),
 
-    // TODO: remove once all replaced
-    #[deprecated]
-    #[error("{}", .msg)]
-    AppError { msg: String },
-
     #[error("query error: {}", .msg)]
     QueryError { msg: String },
 
