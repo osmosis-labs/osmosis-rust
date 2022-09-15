@@ -253,12 +253,12 @@ mod tests {
     };
 
     use crate::account::Account;
+    use crate::module::Gamm;
+    use crate::module::Module;
+    use crate::module::Wasm;
     use crate::runner::app::OsmosisTestApp;
-    use crate::runner::result::ExecuteResponse;
     use crate::runner::*;
-    use crate::x::gamm::Gamm;
-    use crate::x::wasm::Wasm;
-    use crate::x::Module;
+    use crate::ExecuteResponse;
 
     #[test]
     fn test_init_accounts() {

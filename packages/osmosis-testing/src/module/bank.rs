@@ -2,8 +2,8 @@ use crate::runner::result::RunnerResult;
 use cosmrs::proto::cosmos::bank::v1beta1::{QueryAllBalancesRequest, QueryAllBalancesResponse};
 use cosmrs::proto::cosmos::base::query::v1beta1::PageRequest;
 
+use crate::module::Module;
 use crate::runner::Runner;
-use crate::x::Module;
 
 pub struct Bank<'a, R: Runner> {
     runner: &'a R,

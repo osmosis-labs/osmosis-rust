@@ -7,9 +7,9 @@ use osmosis_std::types::osmosis::gamm::{
 };
 use prost::Message;
 
+use crate::module::Module;
 use crate::runner::error::{DecodeError, RunnerError};
 use crate::runner::result::{RunnerExecuteResult, RunnerResult};
-use crate::x::Module;
 use crate::{
     account::{Account, SigningAccount},
     runner::Runner,

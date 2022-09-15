@@ -1,8 +1,12 @@
 use crate::runner::Runner;
 
-pub mod bank;
-pub mod gamm;
-pub mod wasm;
+mod bank;
+mod gamm;
+mod wasm;
+
+pub use bank::Bank;
+pub use gamm::Gamm;
+pub use wasm::Wasm;
 
 pub trait Module<'a, R: Runner> {
     fn new(runner: &'a R) -> Self;
