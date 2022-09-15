@@ -147,7 +147,7 @@ impl RawResult {
 mod tests {
     use super::*;
     use crate::account::Account;
-    use crate::runner::app::App;
+    use crate::runner::app::OsmosisTestApp;
     use crate::runner::error::RunnerError::{ExecuteError, QueryError};
     use crate::runner::Runner;
     use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::{
@@ -171,7 +171,7 @@ mod tests {
 
     #[test]
     fn test_query_error_no_route() {
-        let app = App::new();
+        let app = OsmosisTestApp::new();
         let res = app.query::<AdhocRandomQueryRequest, AdhocRandomQueryResponse>(
             "/osmosis.random.v1beta1.Query/AdhocRandom",
             &AdhocRandomQueryRequest { id: 1 },
@@ -188,7 +188,7 @@ mod tests {
 
     #[test]
     fn test_query_error_failed_query() {
-        let app = App::new();
+        let app = OsmosisTestApp::new();
         let res = app.query::<QueryPoolRequest, QueryPoolResponse>(
             "/osmosis.gamm.v1beta1.Query/Pool",
             &QueryPoolRequest { pool_id: 1 },
@@ -205,7 +205,7 @@ mod tests {
 
     #[test]
     fn test_execute_error() {
-        let app = App::new();
+        let app = OsmosisTestApp::new();
         let signer = app.init_account(&[]).unwrap();
         let res: RunnerExecuteResult<MsgCreateBalancerPoolResponse> = app.execute(
             MsgCreateBalancerPool {

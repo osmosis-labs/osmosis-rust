@@ -23,15 +23,15 @@ const FEE_DENOM: &str = "uosmo";
 const CHAIN_ID: &str = "osmosis-1";
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct App {
+pub struct OsmosisTestApp {
     id: u64,
     gas_price: Coin,
     gas_adjustment: f64,
 }
 
-impl<'a> AsModule<'a> for App {}
+impl<'a> AsModule<'a> for OsmosisTestApp {}
 
-impl App {
+impl OsmosisTestApp {
     #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         Self {
@@ -179,7 +179,7 @@ impl App {
     }
 }
 
-impl Runner for App {
+impl Runner for OsmosisTestApp {
     fn execute<M, R>(
         &self,
         msg: M,
@@ -256,7 +256,7 @@ mod tests {
     };
 
     use crate::account::Account;
-    use crate::runner::app::App;
+    use crate::runner::app::OsmosisTestApp;
     use crate::runner::result::ExecuteResponse;
     use crate::runner::*;
     use crate::x::gamm::Gamm;
@@ -265,7 +265,7 @@ mod tests {
 
     #[test]
     fn test_init_accounts() {
-        let app = App::new();
+        let app = OsmosisTestApp::new();
         let accounts = app
             .init_accounts(&coins(100_000_000_000, "uosmo"), 3)
             .unwrap();
@@ -278,7 +278,7 @@ mod tests {
 
     #[test]
     fn test_execute() {
-        let app = App::new();
+        let app = OsmosisTestApp::new();
 
         let acc = app.init_account(&coins(100_000_000_000, "uosmo")).unwrap();
         let addr = acc.address();
@@ -340,7 +340,7 @@ mod tests {
 
     #[test]
     fn test_query() {
-        let app = App::new();
+        let app = OsmosisTestApp::new();
 
         let denom_creation_fee = app
             .query::<QueryParamsRequest, QueryParamsResponse>(
@@ -357,7 +357,7 @@ mod tests {
 
     #[test]
     fn test_multiple_as_module() {
-        let app = App::new();
+        let app = OsmosisTestApp::new();
         let alice = app
             .init_account(&[
                 Coin::new(1_000_000_000_000, "uatom"),
@@ -402,7 +402,7 @@ mod tests {
     fn test_wasm_execute_and_query() {
         use cw1_whitelist::msg::*;
 
-        let app = App::new();
+        let app = OsmosisTestApp::new();
         let accs = app
             .init_accounts(
                 &[
