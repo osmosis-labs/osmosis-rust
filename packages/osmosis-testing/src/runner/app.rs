@@ -133,7 +133,7 @@ impl OsmosisTestApp {
             .map_err(RunnerError::EncodeError)
     }
 
-    fn simulate_tx<I>(
+    pub fn simulate_tx<I>(
         &self,
         msgs: I,
         signer: &SigningAccount,
