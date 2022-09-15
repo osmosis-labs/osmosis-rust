@@ -25,23 +25,18 @@ const DEFAULT_GAS_ADJUSTMENT: f64 = 1.2;
 #[derive(Debug, PartialEq)]
 pub struct OsmosisTestApp {
     id: u64,
-    fee_setting: FeeSetting,
 }
 
 impl Default for OsmosisTestApp {
     fn default() -> Self {
-        OsmosisTestApp::new(FeeSetting::Auto {
-            gas_price: Coin::new(0, FEE_DENOM.to_string()),
-            gas_adjustment: 1.2,
-        })
+        OsmosisTestApp::new()
     }
 }
 
 impl OsmosisTestApp {
-    pub fn new(fee_setting: FeeSetting) -> Self {
+    pub fn new() -> Self {
         Self {
             id: unsafe { InitTestEnv() },
-            fee_setting,
         }
     }
 
