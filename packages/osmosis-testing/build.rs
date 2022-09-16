@@ -14,11 +14,7 @@ fn main() {
     // rerun when go code is updated
     println!(
         "cargo:rerun-if-changed={}/*",
-        manifest_dir.join("go").display()
-    );
-    println!(
-        "cargo:rerun-if-changed={}",
-        manifest_dir.join("go").join("go.mod").display()
+        manifest_dir.join("libosmosistesting").display()
     );
 
     let lib_filename = if cfg!(target_os = "macos") {
