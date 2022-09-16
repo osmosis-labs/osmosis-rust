@@ -1,49 +1,16 @@
 extern crate core;
 
-use std::{env, path::PathBuf, process::Command};
+use std::{env, fs, path::PathBuf, process::Command};
 
 fn main() {
     let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let prebuilt_lib_dir = manifest_dir.join("libosmosistesting").join("artifacts");
 
     let lib_name = "osmosistesting";
 
-    let out_dir = env::var("OUT_DIR").unwrap();
+    let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
-    let header = format!("{}/lib{}.h", out_dir, lib_name);
-
-    // TODO: remove only exist
-    // std::fs::remove_file(format!("{}/{}", out_dir, "libosmosistesting.dylib")).unwrap();
-    // std::fs::remove_file(format!("{}/{}", out_dir, "libosmosistesting.h")).unwrap();
-    // std::fs::remove_file(format!("{}/{}", out_dir, "libwasmvm_muslc.aarch64.a")).unwrap();
-
-    // std::fs::copy(
-    //     manifest_dir.join("lib").join("libwasmvm_muslc.aarch64.a"),
-    //     format!("{}/{}", out_dir, "libwasmvm_muslc.aarch64.a"),
-    // )
-    // .unwrap();
-    // build go code as shared library
-    let exit_status = Command::new("go")
-        .current_dir(manifest_dir.join("go"))
-        .arg("build")
-        .arg("-buildmode=c-shared")
-        .arg("-o")
-        .arg(format!("{}/{}", out_dir, "libosmosistesting.dylib"))
-        .arg("main.go")
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
-
-    //  std::fs::copy(
-    //     format!("{}/{}", out_dir, "libosmosistesting.dylib"),
-    //     "/Users/supanatpotiwarakorn/osmosis/osmosis-rust/target/debug/libosmosistesting.dylib",
-    // )
-    // .unwrap();
-
-    if !exit_status.success() {
-        panic!("failed to build go code");
-    }
-
+    let header = out_dir.join(format!("lib{}.h", lib_name));
     // rerun when go code is updated
     println!(
         "cargo:rerun-if-changed={}/*",
@@ -54,9 +21,22 @@ fn main() {
         manifest_dir.join("go").join("go.mod").display()
     );
 
+    // TODO: base on architecture
+    let lib_filename = format!("lib{}.dylib", lib_name);
+    let lib_filename = lib_filename.as_str();
+
+    if env::var("PREBUILD_LIB") == Ok("1".to_string()) {
+        build_libosmosistesting(prebuilt_lib_dir.join(lib_filename));
+    }
+
+    let out_dir_lib_path = out_dir.join(lib_filename);
+    build_libosmosistesting(out_dir_lib_path);
+
     // define lib name
-    // println!("cargo:rustc-link-search=dylib={}", out_dir);
-    println!("cargo:rustc-link-search=native={}", out_dir);
+    println!(
+        "cargo:rustc-link-search=native={}",
+        out_dir.to_str().unwrap()
+    );
     println!("cargo:rustc-link-lib=dylib={}", lib_name);
 
     // The bindgen::Builder is the main entry point
@@ -65,7 +45,7 @@ fn main() {
     let bindings = bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
-        .header(header)
+        .header(header.to_str().unwrap())
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
@@ -83,4 +63,23 @@ fn main() {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
+}
+
+fn build_libosmosistesting(out: PathBuf) {
+    let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let exit_status = Command::new("go")
+        .current_dir(manifest_dir.join("libosmosistesting"))
+        .arg("build")
+        .arg("-buildmode=c-shared")
+        .arg("-o")
+        .arg(out)
+        .arg("main.go")
+        .spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
+
+    if !exit_status.success() {
+        panic!("failed to build go code");
+    }
 }

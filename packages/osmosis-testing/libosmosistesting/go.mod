@@ -1,4 +1,4 @@
-module github.com/osmosis-labs/osmosis/v12/cosmwasm-testing
+module github.com/osmosis-labs/osmosis-rust/osmosis-testing
 
 go 1.19
 
