@@ -19,9 +19,16 @@ use osmosis_std::types::osmosis::tokenfactory::v1beta1::{
 
 use crate::error::ContractError;
 use crate::msg::{
-    ExecuteMsg, InitPoolCfg, InstantiateMsg, QueryCreatorDenomsResponse, QueryMsg,
+    ExecuteMsg, InitPoolCfg, InstantiateMsg, QueryCreatedDenomsResponse, QueryMsg,
     QueryTokenCreationFeeResponse,
 };
+
+/// Query all denoms created by this contract!
+fn query_created_denoms(deps: Deps, env: Env) -> StdResult<QueryCreatedDenomsResponse> {
+    let tq = TokenfactoryQuerier::new(deps.querier);
+    let res = tq.denoms_from_creator(env.contract.address.into_string())?;
+    Ok(QueryCreatedDenomsResponse { denoms: res.denoms })
+}
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:osmosis-stargate";
@@ -156,6 +163,7 @@ pub fn try_create_balancer_pool(env: Env, subdenom: String) -> Result<Response, 
         smooth_weight_change_params: None,
     }
     .into();
+
     let msg: CosmosMsg = MsgCreateBalancerPool {
         sender: contract_addr.clone(),
         pool_params,
@@ -196,7 +204,7 @@ pub fn query(
 ) -> StdResult<Binary> {
     match msg {
         QueryMsg::QueryTokenCreationFee {} => to_binary(&query_token_creation_fee(deps)?),
-        QueryMsg::QueryCreatorDenoms {} => to_binary(&query_creator_denoms(deps, env)?),
+        QueryMsg::QueryCreatorDenoms {} => to_binary(&query_created_denoms(deps, env)?),
     }
 }
 
@@ -213,14 +221,4 @@ fn query_token_creation_fee(deps: Deps<OsmosisQuery>) -> StdResult<QueryTokenCre
         .collect::<Result<Vec<_>, _>>()?;
 
     Ok(QueryTokenCreationFeeResponse { fee })
-}
-
-fn query_creator_denoms(
-    deps: Deps<OsmosisQuery>,
-    env: Env,
-) -> StdResult<QueryCreatorDenomsResponse> {
-    let res =
-        TokenfactoryQuerier::new(&deps.querier).denoms_from_creator(env.contract.address.into())?;
-
-    Ok(QueryCreatorDenomsResponse { denoms: res.denoms })
 }

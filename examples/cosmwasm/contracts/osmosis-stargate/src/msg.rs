@@ -48,6 +48,6 @@ pub struct QueryTokenCreationFeeResponse {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
-pub struct QueryCreatorDenomsResponse {
+pub struct QueryCreatedDenomsResponse {
     pub denoms: Vec<String>,
 }
