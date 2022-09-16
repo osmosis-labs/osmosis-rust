@@ -1,6 +1,6 @@
 extern crate core;
 
-use std::{env, fs, path::PathBuf, process::Command};
+use std::{env, path::PathBuf, process::Command};
 
 fn main() {
     let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
@@ -21,8 +21,17 @@ fn main() {
         manifest_dir.join("go").join("go.mod").display()
     );
 
-    // TODO: base on architecture
-    let lib_filename = format!("lib{}.dylib", lib_name);
+    let lib_filename = if cfg!(target_os = "macos") {
+        format!("lib{}.{}", lib_name, "dylib")
+    } else if cfg!(target_os = "linux") {
+        format!("lib{}.{}", lib_name, "so")
+    } else if cfg!(target_os = "windows") {
+        // untested
+        format!("{}.{}", lib_name, "dll")
+    } else {
+        panic!("Unsupported architecture");
+    };
+
     let lib_filename = lib_filename.as_str();
 
     if env::var("PREBUILD_LIB") == Ok("1".to_string()) {
