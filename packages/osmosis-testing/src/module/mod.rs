@@ -4,6 +4,9 @@ mod bank;
 mod gamm;
 mod wasm;
 
+#[macro_use]
+pub mod macros;
+
 pub use bank::Bank;
 pub use gamm::Gamm;
 pub use wasm::Wasm;
