@@ -42,8 +42,8 @@ func InitTestEnv() uint64 {
 	// Allow testing unoptimized contract
 	wasmtypes.MaxWasmSize = 1024 * 1024 * 1024 * 1024 * 1024
 	// Temp fix for concurrency issue
-	// mu.Lock()
-	// defer mu.Unlock()
+	mu.Lock()
+	defer mu.Unlock()
 
 	env := new(testenv.TestEnv)
 	env.App = testenv.SetupOsmosisApp()
@@ -108,8 +108,8 @@ func EndBlock(envId uint64) {
 func Execute(envId uint64, base64ReqDeliverTx string) *C.char {
 	env := loadEnv(envId)
 	// Temp fix for concurrency issue
-	// mu.Lock()
-	// defer mu.Unlock()
+	mu.Lock()
+	defer mu.Unlock()
 
 	reqDeliverTxBytes, err := base64.StdEncoding.DecodeString(base64ReqDeliverTx)
 	if err != nil {
@@ -196,8 +196,8 @@ func AccountNumber(envId uint64, bech32Address string) uint64 {
 func Simulate(envId uint64, base64TxBytes string) *C.char { // => base64GasInfo
 	env := loadEnv(envId)
 	// Temp fix for concurrency issue
-	// mu.Lock()
-	// defer mu.Unlock()
+	mu.Lock()
+	defer mu.Unlock()
 
 	txBytes, err := base64.StdEncoding.DecodeString(base64TxBytes)
 	if err != nil {
