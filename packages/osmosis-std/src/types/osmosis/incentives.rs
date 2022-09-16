@@ -499,11 +499,11 @@ pub struct GenesisState {
     #[prost(uint64, tag = "4")]
     pub last_gauge_id: u64,
 }
-pub struct IncentivesQuerier<'a> {
-    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>,
+pub struct IncentivesQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
-impl<'a> IncentivesQuerier<'a> {
-    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
+impl<'a, Q: cosmwasm_std::CustomQuery> IncentivesQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
         Self { querier }
     }
     pub fn module_to_distribute_coins(

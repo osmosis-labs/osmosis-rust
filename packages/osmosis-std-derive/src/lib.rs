@@ -40,9 +40,9 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
         let res = get_query_attrs(&input.attrs, match_kv_attr!("response_type", Ident));
 
         let query_request_conversion = quote! {
-            impl From<#ident> for cosmwasm_std::QueryRequest<cosmwasm_std::Empty> {
+            impl <Q: cosmwasm_std::CustomQuery> From<#ident> for cosmwasm_std::QueryRequest<Q> {
                 fn from(msg: #ident) -> Self {
-                    cosmwasm_std::QueryRequest::<cosmwasm_std::Empty>::Stargate {
+                    cosmwasm_std::QueryRequest::<Q>::Stargate {
                         path: #path.to_string(),
                         data: msg.into(),
                     }
@@ -51,7 +51,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
         };
 
         let cosmwasm_query = quote! {
-            pub fn query(self, querier: cosmwasm_std::QuerierWrapper<cosmwasm_std::Empty>) -> cosmwasm_std::StdResult<#res> {
+            pub fn query(self, querier: &cosmwasm_std::QuerierWrapper<impl cosmwasm_std::CustomQuery>) -> cosmwasm_std::StdResult<#res> {
                 querier.query::<#res>(&self.into())
             }
         };

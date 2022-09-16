@@ -224,14 +224,14 @@ pub fn append_querier(
         if !nested_mod {
             vec![
                 parse_quote! {
-                  pub struct #querier_wrapper_ident<'a> {
-                    querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>
+                  pub struct #querier_wrapper_ident<'a, Q: cosmwasm_std::CustomQuery> {
+                      querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
                   }
                 },
                 parse_quote! {
-                  impl<'a> #querier_wrapper_ident<'a> {
-                    pub fn new(querier: cosmwasm_std::QuerierWrapper<'a, cosmwasm_std::Empty>) -> Self {
-                      Self { querier }
+                  impl<'a, Q: cosmwasm_std::CustomQuery> #querier_wrapper_ident<'a, Q> {
+                      pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+                    Self { querier }
                     }
                     #(#query_fns)*
                   }

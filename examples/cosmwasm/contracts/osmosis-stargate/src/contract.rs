@@ -7,6 +7,7 @@ use cosmwasm_std::{
     StdResult, SubMsg, SubMsgResponse, SubMsgResult,
 };
 use cw2::set_contract_version;
+use osmo_bindings::OsmosisQuery;
 use osmosis_std::types::cosmos::base::v1beta1::Coin;
 use osmosis_std::types::osmosis::gamm::poolmodels::balancer::v1beta1::{
     MsgCreateBalancerPool, MsgCreateBalancerPoolResponse,
@@ -194,15 +195,21 @@ pub fn try_create_balancer_pool(env: Env, subdenom: String) -> Result<Response, 
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
+pub fn query(
+    // use Deps<OsmosisQuery> tp test if chain's native querier can wrap
+    // generic querier instead of restricted to `QuerierWrapper<Empty>`
+    deps: Deps<OsmosisQuery>,
+    env: Env,
+    msg: QueryMsg,
+) -> StdResult<Binary> {
     match msg {
         QueryMsg::QueryTokenCreationFee {} => to_binary(&query_token_creation_fee(deps)?),
         QueryMsg::QueryCreatorDenoms {} => to_binary(&query_created_denoms(deps, env)?),
     }
 }
 
-fn query_token_creation_fee(deps: Deps) -> StdResult<QueryTokenCreationFeeResponse> {
-    let res = TokenfactoryQuerier::new(deps.querier).params()?;
+fn query_token_creation_fee(deps: Deps<OsmosisQuery>) -> StdResult<QueryTokenCreationFeeResponse> {
+    let res = TokenfactoryQuerier::new(&deps.querier).params()?;
     let params = res.params.ok_or(StdError::NotFound {
         kind: "osmosis_std::types::osmosis::tokenfactory::v1beta1::Params".to_string(),
     })?;
