@@ -17,6 +17,7 @@ import (
 	// cosmos-sdk
 
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
@@ -36,6 +37,17 @@ type TestEnv struct {
 	Ctx sdk.Context
 }
 
+// DebugAppOptions is a stub implementing AppOptions
+type DebugAppOptions struct{}
+
+// Get implements AppOptions
+func (ao DebugAppOptions) Get(o string) interface{} {
+	if o == server.FlagTrace {
+		return true
+	}
+	return nil
+}
+
 func SetupOsmosisApp() *app.OsmosisApp {
 	db := dbm.NewMemDB()
 	appInstance := app.NewOsmosisApp(
@@ -46,7 +58,7 @@ func SetupOsmosisApp() *app.OsmosisApp {
 		map[int64]bool{},
 		app.DefaultNodeHome,
 		5,
-		simapp.EmptyAppOptions{},
+		DebugAppOptions{},
 		app.GetWasmEnabledProposals(),
 		app.EmptyWasmOpts,
 	)
