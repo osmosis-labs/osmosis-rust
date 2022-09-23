@@ -5,8 +5,8 @@ go 1.19
 replace (
 	// branch: v0.28.0x-osmo-v12, current tag: v0.28.0-osmo-v12.1
 	github.com/CosmWasm/wasmd => github.com/osmosis-labs/wasmd v0.28.0-osmo-v12.1
-	// Our cosmos-sdk branch is:  https://github.com/osmosis-labs/cosmos-sdk/tree/v0.45.0x-osmo-v12, Tag: https://github.com/osmosis-labs/cosmos-sdk/releases/tag/v0.45.0-osmo-v12
-	github.com/cosmos/cosmos-sdk => github.com/osmosis-labs/cosmos-sdk v0.45.0-osmo-v12
+	// Our cosmos-sdk branch is:  https://github.com/osmosis-labs/cosmos-sdk, current branch: osmosis-main. Direct commit link: https://github.com/osmosis-labs/cosmos-sdk/commit/5c9a51c277d067e0ec5cf48df30a85fae95bcd14
+	github.com/cosmos/cosmos-sdk => github.com/osmosis-labs/cosmos-sdk v0.45.1-0.20220921135931-3c4d30596acc
 	// Use Osmosis fast iavl
 	github.com/cosmos/iavl => github.com/osmosis-labs/iavl v0.17.3-osmo-v7
 	// use cosmos-compatible protobufs
@@ -19,7 +19,7 @@ require (
 	github.com/CosmWasm/wasmd v0.28.0-osmo-v12
 	github.com/cosmos/cosmos-sdk v0.46.1
 	github.com/golang/protobuf v1.5.2
-	github.com/osmosis-labs/osmosis/v12 v12.0.0-rc2
+	github.com/osmosis-labs/osmosis/v12 v12.0.0-rc5
 	github.com/pkg/errors v0.9.1
 	github.com/tendermint/tendermint v0.34.21
 	github.com/tendermint/tm-db v0.6.8-0.20220506192307-f628bb5dc95b
@@ -45,8 +45,8 @@ require (
 	github.com/cosmos/cosmos-proto v1.0.0-alpha7 // indirect
 	github.com/cosmos/go-bip39 v1.0.0 // indirect
 	github.com/cosmos/gorocksdb v1.2.0 // indirect
-	github.com/cosmos/iavl v0.19.0 // indirect
-	github.com/cosmos/ibc-go/v3 v3.2.0 // indirect
+	github.com/cosmos/iavl v0.19.1 // indirect
+	github.com/cosmos/ibc-go/v3 v3.3.0 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.11.1 // indirect
 	github.com/cosmos/ledger-go v0.9.3 // indirect
 	github.com/creachadair/taskgroup v0.3.2 // indirect
