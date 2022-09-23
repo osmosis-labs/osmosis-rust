@@ -12,9 +12,11 @@ You can find all types and querier generated from osmosis's protobuf in their re
 
 ### Publishing Osmosis' message from CosmWasm Contract
 
-```rs
+```rust
+use cosmwasm_std::{CosmosMsg, Response, Env};
 use osmosis_std::types::osmosis::tokenfactory::v1beta1::MsgCreateDenom;
 
+# type ContractError = cosmwasm_std::StdError;
 // ..
 
 pub fn try_create_denom(env: Env, subdenom: String) -> Result<Response, ContractError> {
@@ -45,19 +47,20 @@ git checkout remotes/origin/hackatom-seoul
 make localnet-build && make localnet-start
 ```
 
-```rs
-use osmosis_std::types::osmosis::tokenfactory::v1beta1::TokenfactoryQuerier;
+```rust
+use cosmwasm_std::{Deps, Env, StdResult};
+use osmosis_std::types::osmosis::tokenfactory::v1beta1::{TokenfactoryQuerier, QueryDenomsFromCreatorResponse};
 
 // ..
 
-fn query_creator_denoms(deps: Deps, env: Env) -> StdResult<QueryCreatorDenomsResponse> {
+fn query_creator_denoms(deps: Deps, env: Env) -> StdResult<QueryDenomsFromCreatorResponse> {
     // create `TokenfactoryQuerier`
-    let tokenfactory = TokenfactoryQuerier::new(deps.querier);
+    let tokenfactory = TokenfactoryQuerier::new(&deps.querier);
 
     // `TokenfactoryQuerier` has all the fns for querying the module
     let res = tokenfactory.denoms_from_creator(env.contract.address.into())?;
 
-    Ok(QueryCreatorDenomsResponse { denoms: res.denoms })
+    Ok(QueryDenomsFromCreatorResponse { denoms: res.denoms })
 }
 ```
 
