@@ -1,5 +1,7 @@
 # osmosis-std
 
+[![osmosis-std on crates.io](https://img.shields.io/crates/v/osmosis-std.svg)](https://crates.io/crates/osmosis-std) [![Docs](https://docs.rs/osmosis-std/badge.svg)](https://docs.rs/osmosis-std)
+
 Rust library for interacting with osmosis. CosmWasm compatible.
 
 ## CosmWasm stargate message and stargate query
@@ -31,7 +33,7 @@ pub fn try_create_denom(env: Env, subdenom: String) -> Result<Response, Contract
 
 ## Querying Osmosis' module
 
-[This will not currently work on mainnet until osmosis v12.](https://github.com/osmosis-labs/osmosis/issues/2433). 
+[This will not currently work on mainnet until osmosis v12.](https://github.com/osmosis-labs/osmosis/issues/2433).
 But meanwhile, if you want to test this out, you can by using [osmosis hackatom-seoul branch](https://github.com/osmosis-labs/osmosis/tree/hackatom-seoul) which we enabled all stargate query for hacking purpose!
 
 ```sh
@@ -43,11 +45,10 @@ git checkout remotes/origin/hackatom-seoul
 make localnet-build && make localnet-start
 ```
 
-
 ```rs
 use osmosis_std::types::osmosis::tokenfactory::v1beta1::TokenfactoryQuerier;
 
-// .. 
+// ..
 
 fn query_creator_denoms(deps: Deps, env: Env) -> StdResult<QueryCreatorDenomsResponse> {
     // create `TokenfactoryQuerier`
@@ -60,7 +61,6 @@ fn query_creator_denoms(deps: Deps, env: Env) -> StdResult<QueryCreatorDenomsRes
 }
 ```
 
-
-
 ## Non-CosmWasm Client
+
 (WIP)
