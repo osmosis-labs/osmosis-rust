@@ -8,7 +8,7 @@ Rust library for interacting with osmosis. CosmWasm compatible.
 
 You can find all types and querier generated from osmosis's protobuf in their respective module in `osmosis_std`.
 
-[Full working example contract can be found here.](/examples/cosmwasm/contracts/osmosis-stargate)
+[Full working example contract can be found here.](https://github.com/osmosis-labs/osmosis-rust/tree/main/examples/cosmwasm/contracts/osmosis-stargate)
 
 ### Publishing Osmosis' message from CosmWasm Contract
 
