@@ -12,10 +12,7 @@ fn main() {
 
     let header = out_dir.join(format!("lib{}.h", lib_name));
     // rerun when go code is updated
-    println!(
-        "cargo:rerun-if-changed={}/*",
-        manifest_dir.join("libosmosistesting").display()
-    );
+    println!("cargo:rerun-if-changed=./libosmosistesting");
 
     let lib_filename = if cfg!(target_os = "macos") {
         format!("lib{}.{}", lib_name, "dylib")
