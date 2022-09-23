@@ -10,7 +10,14 @@ fn main() {
 
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
-    let header = out_dir.join(format!("lib{}.h", lib_name));
+    let header = if std::env::var("DOCS_RS").is_ok() {
+        manifest_dir
+            .join("libosmosistesting")
+            .join("artifacts")
+            .join("libosmosistesting.docrs.h")
+    } else {
+        out_dir.join(format!("lib{}.h", lib_name))
+    };
     // rerun when go code is updated
     println!("cargo:rerun-if-changed=./libosmosistesting");
 
@@ -39,7 +46,11 @@ fn main() {
         "cargo:rustc-link-search=native={}",
         out_dir.to_str().unwrap()
     );
-    println!("cargo:rustc-link-lib=dylib={}", lib_name);
+
+    // disable linking if docrs
+    if std::env::var("DOCS_RS").is_err() {
+        println!("cargo:rustc-link-lib=dylib={}", lib_name);
+    }
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
@@ -64,6 +75,10 @@ fn main() {
 }
 
 fn build_libosmosistesting(out: PathBuf) {
+    // skip if doc_rs build
+    if std::env::var("DOCS_RS").is_ok() {
+        return;
+    }
     let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let exit_status = Command::new("go")
         .current_dir(manifest_dir.join("libosmosistesting"))
