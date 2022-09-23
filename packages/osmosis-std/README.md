@@ -2,7 +2,7 @@
 
 [![osmosis-std on crates.io](https://img.shields.io/crates/v/osmosis-std.svg)](https://crates.io/crates/osmosis-std) [![Docs](https://docs.rs/osmosis-std/badge.svg)](https://docs.rs/osmosis-std)
 
-Rust library for interacting with osmosis. CosmWasm compatible.
+Osmosis's proto-generated types and helpers for interacting with the appchain. Compatible with CosmWasm contract.
 
 ## CosmWasm stargate message and stargate query
 
