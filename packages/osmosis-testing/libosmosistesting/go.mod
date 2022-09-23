@@ -9,6 +9,9 @@ replace (
 	github.com/cosmos/cosmos-sdk => github.com/osmosis-labs/cosmos-sdk v0.45.1-0.20220921135931-3c4d30596acc
 	// Use Osmosis fast iavl
 	github.com/cosmos/iavl => github.com/osmosis-labs/iavl v0.17.3-osmo-v7
+
+	// fix dependabot alert: https://github.com/osmosis-labs/osmosis-rust/security/dependabot/1
+	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 	// use cosmos-compatible protobufs
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	// use grpc compatible with cosmos protobufs
