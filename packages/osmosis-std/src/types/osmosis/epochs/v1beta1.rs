@@ -31,6 +31,7 @@ pub struct EpochInfo {
     /// The first tick (current_epoch=1) is defined as
     /// the first block whose blocktime is greater than the EpochInfo start_time.
     #[prost(int64, tag = "4")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub current_epoch: i64,
     /// current_epoch_start_time describes the start time of the current timer
     /// interval. The interval is (current_epoch_start_time,
@@ -54,10 +55,12 @@ pub struct EpochInfo {
     /// epoch_counting_started is a boolean, that indicates whether this
     /// epoch timer has began yet.
     #[prost(bool, tag = "6")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub epoch_counting_started: bool,
     /// current_epoch_start_height is the block height at which the current epoch
     /// started. (The block height at which the timer last ticked)
     #[prost(int64, tag = "8")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub current_epoch_start_height: i64,
 }
 /// GenesisState defines the epochs module's genesis state.
@@ -134,6 +137,7 @@ pub struct QueryCurrentEpochRequest {
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochResponse")]
 pub struct QueryCurrentEpochResponse {
     #[prost(int64, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub current_epoch: i64,
 }
 pub struct EpochsQuerier<'a, Q: cosmwasm_std::CustomQuery> {

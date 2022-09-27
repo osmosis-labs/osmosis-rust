@@ -6,5 +6,6 @@
 /// The version (commit hash) of the Cosmos SDK used when generating this library.
 pub const OSMOSISD_VERSION: &str = include_str!("types/OSMOSIS_COMMIT");
 
+mod helpers;
 pub mod shim;
 pub mod types;

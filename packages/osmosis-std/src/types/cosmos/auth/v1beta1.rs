@@ -18,8 +18,10 @@ pub struct BaseAccount {
     #[prost(message, optional, tag = "2")]
     pub pub_key: ::core::option::Option<crate::shim::Any>,
     #[prost(uint64, tag = "3")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub account_number: u64,
     #[prost(uint64, tag = "4")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub sequence: u64,
 }
 /// ModuleAccount defines an account for modules that holds coins on a pool.
@@ -54,13 +56,18 @@ pub struct ModuleAccount {
 #[proto_message(type_url = "/cosmos.auth.v1beta1.Params")]
 pub struct Params {
     #[prost(uint64, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub max_memo_characters: u64,
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub tx_sig_limit: u64,
     #[prost(uint64, tag = "3")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub tx_size_cost_per_byte: u64,
     #[prost(uint64, tag = "4")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub sig_verify_cost_ed25519: u64,
     #[prost(uint64, tag = "5")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub sig_verify_cost_secp256k1: u64,
 }

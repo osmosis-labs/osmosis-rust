@@ -54,8 +54,8 @@ pub fn run() {
     };
 
     let osmosis_code_generator = CodeGenerator::new(
-        out_dir.clone(),
-        tmp_build_dir.clone(),
+        out_dir,
+        tmp_build_dir,
         osmosis_project,
         vec![cosmos_project],
     );

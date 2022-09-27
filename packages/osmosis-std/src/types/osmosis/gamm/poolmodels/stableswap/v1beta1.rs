@@ -34,6 +34,7 @@ pub struct Pool {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub id: u64,
     #[prost(message, optional, tag = "3")]
     pub pool_params: ::core::option::Option<PoolParams>,
@@ -97,6 +98,7 @@ pub struct MsgCreateStableswapPool {
 )]
 pub struct MsgCreateStableswapPoolResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub pool_id: u64,
 }
 #[derive(
@@ -117,6 +119,7 @@ pub struct MsgStableSwapAdjustScalingFactors {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub pool_id: u64,
     #[prost(uint64, repeated, packed = "false", tag = "3")]
     pub scaling_factors: ::prost::alloc::vec::Vec<u64>,

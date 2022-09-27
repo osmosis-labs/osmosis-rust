@@ -26,21 +26,25 @@ pub struct PageRequest {
     /// It is less efficient than using key. Only one of offset or key should
     /// be set.
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub offset: u64,
     /// limit is the total number of results to be returned in the result page.
     /// If left empty it will default to a value to be set by each app.
     #[prost(uint64, tag = "3")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub limit: u64,
     /// count_total is set to true  to indicate that the result set should include
     /// a count of the total number of items available for pagination in UIs.
     /// count_total is only respected when offset is used. It is ignored when key
     /// is set.
     #[prost(bool, tag = "4")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub count_total: bool,
     /// reverse is set to true if results are to be returned in the descending order.
     ///
     /// Since: cosmos-sdk 0.43
     #[prost(bool, tag = "5")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub reverse: bool,
 }
 /// PageResponse is to be embedded in gRPC response messages where the
@@ -68,5 +72,6 @@ pub struct PageResponse {
     /// total is total number of results available if PageRequest.count_total
     /// was set, its value is undefined otherwise
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub total: u64,
 }

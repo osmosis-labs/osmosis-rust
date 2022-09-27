@@ -12,10 +12,12 @@ use osmosis_std_derive::CosmwasmExt;
 pub struct Gauge {
     /// unique ID of a Gauge
     #[prost(uint64, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub id: u64,
     /// flag to show if it's perpetual or multi-epoch
     /// distribution incentives by third party
     #[prost(bool, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub is_perpetual: bool,
     /// Rewards are distributed to lockups that are are returned by at least one of
     /// these queries
@@ -30,9 +32,11 @@ pub struct Gauge {
     pub start_time: ::core::option::Option<crate::shim::Timestamp>,
     /// number of epochs distribution will be done
     #[prost(uint64, tag = "6")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub num_epochs_paid_over: u64,
     /// number of epochs distributed already
     #[prost(uint64, tag = "7")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub filled_epochs: u64,
     /// already distributed coins
     #[prost(message, repeated, tag = "8")]
@@ -66,6 +70,7 @@ pub struct MsgCreateGauge {
     /// flag to show if it's perpetual or multi-epoch
     /// distribution incentives by third party
     #[prost(bool, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub is_perpetual: bool,
     #[prost(string, tag = "2")]
     pub owner: ::prost::alloc::string::String,
@@ -80,6 +85,7 @@ pub struct MsgCreateGauge {
     pub start_time: ::core::option::Option<crate::shim::Timestamp>,
     /// number of epochs distribution will be done
     #[prost(uint64, tag = "6")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub num_epochs_paid_over: u64,
 }
 #[derive(
@@ -107,6 +113,7 @@ pub struct MsgAddToGauge {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub gauge_id: u64,
     #[prost(message, repeated, tag = "3")]
     pub rewards: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -196,6 +203,7 @@ pub struct ModuleDistributedCoinsResponse {
 )]
 pub struct GaugeByIdRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub id: u64,
 }
 #[derive(
@@ -416,6 +424,7 @@ pub struct RewardsEstRequest {
     #[prost(uint64, repeated, tag = "2")]
     pub lock_ids: ::prost::alloc::vec::Vec<u64>,
     #[prost(int64, tag = "3")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub end_epoch: i64,
 }
 #[derive(
@@ -497,6 +506,7 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "3")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
     #[prost(uint64, tag = "4")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub last_gauge_id: u64,
 }
 pub struct IncentivesQuerier<'a, Q: cosmwasm_std::CustomQuery> {

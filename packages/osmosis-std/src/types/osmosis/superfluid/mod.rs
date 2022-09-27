@@ -15,6 +15,7 @@ pub struct SuperfluidAsset {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     #[prost(enumeration = "SuperfluidAssetType", tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub asset_type: i32,
 }
 /// SuperfluidIntermediaryAccount takes the role of intermediary between LP token
@@ -36,6 +37,7 @@ pub struct SuperfluidIntermediaryAccount {
     pub val_addr: ::prost::alloc::string::String,
     /// perpetual gauge for rewards distribution
     #[prost(uint64, tag = "3")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub gauge_id: u64,
 }
 /// The Osmo-Equivalent-Multiplier Record for epoch N refers to the osmo worth we
@@ -57,6 +59,7 @@ pub struct SuperfluidIntermediaryAccount {
 #[proto_message(type_url = "/osmosis.superfluid.OsmoEquivalentMultiplierRecord")]
 pub struct OsmoEquivalentMultiplierRecord {
     #[prost(int64, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub epoch_number: i64,
     /// superfluid asset denom, can be LP token or native token
     #[prost(string, tag = "2")]
@@ -98,6 +101,7 @@ pub struct SuperfluidDelegationRecord {
 #[proto_message(type_url = "/osmosis.superfluid.LockIdIntermediaryAccountConnection")]
 pub struct LockIdIntermediaryAccountConnection {
     #[prost(uint64, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub lock_id: u64,
     #[prost(string, tag = "2")]
     pub intermediary_account: ::prost::alloc::string::String,
@@ -137,6 +141,7 @@ pub struct MsgSuperfluidDelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub lock_id: u64,
     #[prost(string, tag = "3")]
     pub val_addr: ::prost::alloc::string::String,
@@ -166,6 +171,7 @@ pub struct MsgSuperfluidUndelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub lock_id: u64,
 }
 #[derive(
@@ -193,6 +199,7 @@ pub struct MsgSuperfluidUnbondLock {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub lock_id: u64,
 }
 #[derive(
@@ -239,6 +246,7 @@ pub struct MsgLockAndSuperfluidDelegate {
 #[proto_message(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse")]
 pub struct MsgLockAndSuperfluidDelegateResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub id: u64,
 }
 /// MsgUnPoolWhitelistedPool Unpools every lock the sender has, that is
@@ -263,6 +271,7 @@ pub struct MsgUnPoolWhitelistedPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub pool_id: u64,
 }
 #[derive(
@@ -356,6 +365,7 @@ pub struct AssetTypeRequest {
 #[proto_message(type_url = "/osmosis.superfluid.AssetTypeResponse")]
 pub struct AssetTypeResponse {
     #[prost(enumeration = "SuperfluidAssetType", tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub asset_type: i32,
 }
 #[derive(
@@ -435,6 +445,7 @@ pub struct SuperfluidIntermediaryAccountInfo {
     #[prost(string, tag = "2")]
     pub val_addr: ::prost::alloc::string::String,
     #[prost(uint64, tag = "3")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub gauge_id: u64,
     #[prost(string, tag = "4")]
     pub address: ::prost::alloc::string::String,
@@ -490,6 +501,7 @@ pub struct AllIntermediaryAccountsResponse {
 )]
 pub struct ConnectedIntermediaryAccountRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub lock_id: u64,
 }
 #[derive(

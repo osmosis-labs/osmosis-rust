@@ -1,14 +1,12 @@
-use std::ffi::OsStr;
-use std::fs::{create_dir_all, remove_dir_all};
-use std::path::{Path, PathBuf};
-use std::{fs, io};
-
 use heck::ToUpperCamelCase;
 use log::debug;
 use prost_types::FileDescriptorSet;
 use regex::Regex;
-
-use syn::{File, Item, ItemMod};
+use std::ffi::OsStr;
+use std::fs::{create_dir_all, remove_dir_all};
+use std::path::{Path, PathBuf};
+use std::{fs, io};
+use syn::{parse_quote, FieldsNamed, File, Item, ItemMod};
 use walkdir::WalkDir;
 
 use crate::transformers;
@@ -133,15 +131,61 @@ fn transform_items(
     ancestors: &[String],
     descriptor: &FileDescriptorSet,
 ) -> Vec<Item> {
-    let items = items
+    items
         .into_iter()
         .map(|i| match i.clone() {
-            Item::Struct(s) => Item::Struct(transformers::append_attrs(src, &s, descriptor)),
+            Item::Struct(s) => Item::Struct({
+                let s = transformers::append_attrs(src, &s, descriptor);
+
+                let fields_vec = s
+                    .fields
+                    .clone()
+                    .into_iter()
+                    .map(|mut field| {
+                        let signed_ints = vec![
+                            parse_quote!(i8),
+                            parse_quote!(i16),
+                            parse_quote!(i32),
+                            parse_quote!(i64),
+                            parse_quote!(i128),
+                            parse_quote!(isize),
+                        ];
+                        let unsigned_ints = vec![
+                            parse_quote!(u8),
+                            parse_quote!(u16),
+                            parse_quote!(u32),
+                            parse_quote!(u64),
+                            parse_quote!(u128),
+                            parse_quote!(usize),
+                        ];
+
+                        let bools = vec![parse_quote!(bool)];
+                        if vec![signed_ints, unsigned_ints, bools]
+                            .concat()
+                            .contains(&field.ty)
+                        {
+                            let from_str: syn::Attribute = parse_quote! {
+                                #[serde(deserialize_with = "crate::helpers::from_str")]
+                            };
+                            field.attrs.append(&mut vec![from_str]);
+                            field
+                        } else {
+                            field
+                        }
+                    })
+                    .collect::<Vec<syn::Field>>();
+
+                let fields_named: FieldsNamed = parse_quote! {
+                    { #(#fields_vec,)* }
+                };
+                let fields = syn::Fields::Named(fields_named);
+
+                syn::ItemStruct { fields, ..s }
+            }),
             _ => i,
         })
         .map(|i: Item| transform_nested_mod(i, src, ancestors, descriptor))
-        .collect::<Vec<Item>>();
-    items
+        .collect::<Vec<Item>>()
 }
 
 fn transform_nested_mod(
@@ -158,9 +202,9 @@ fn transform_nested_mod(
                     brace,
                     transform_module(
                         items,
-                        &src,
+                        src,
                         &[ancestors, &[parent.to_string()]].concat(),
-                        &descriptor,
+                        descriptor,
                         true,
                     ),
                 )
