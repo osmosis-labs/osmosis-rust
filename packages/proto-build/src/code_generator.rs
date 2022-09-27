@@ -10,7 +10,7 @@ use walkdir::WalkDir;
 
 use crate::{mod_gen, transform};
 
-const DESCRIPTOR_FILE: &'static str = "descriptor.bin";
+const DESCRIPTOR_FILE: &str = "descriptor.bin";
 
 pub struct CosmosProject {
     pub name: String,

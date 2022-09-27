@@ -6,7 +6,7 @@ use std::ffi::OsStr;
 use std::fs::{create_dir_all, remove_dir_all};
 use std::path::{Path, PathBuf};
 use std::{fs, io};
-use syn::{parse_quote, FieldsNamed, File, Item, ItemMod};
+use syn::{File, Item, ItemMod};
 use walkdir::WalkDir;
 
 use crate::transformers;
@@ -100,9 +100,8 @@ fn transform_module(
 ) -> Vec<Item> {
     let items = transform_items(items, src, ancestors, descriptor);
     let items = prepend(items);
-    let items = append(items, src, descriptor, nested_mod);
 
-    items
+    append(items, src, descriptor, nested_mod)
 }
 
 fn prepend(items: Vec<Item>) -> Vec<Item> {
@@ -136,51 +135,7 @@ fn transform_items(
         .map(|i| match i.clone() {
             Item::Struct(s) => Item::Struct({
                 let s = transformers::append_attrs(src, &s, descriptor);
-
-                let fields_vec = s
-                    .fields
-                    .clone()
-                    .into_iter()
-                    .map(|mut field| {
-                        let signed_ints = vec![
-                            parse_quote!(i8),
-                            parse_quote!(i16),
-                            parse_quote!(i32),
-                            parse_quote!(i64),
-                            parse_quote!(i128),
-                            parse_quote!(isize),
-                        ];
-                        let unsigned_ints = vec![
-                            parse_quote!(u8),
-                            parse_quote!(u16),
-                            parse_quote!(u32),
-                            parse_quote!(u64),
-                            parse_quote!(u128),
-                            parse_quote!(usize),
-                        ];
-
-                        let bools = vec![parse_quote!(bool)];
-                        if vec![signed_ints, unsigned_ints, bools]
-                            .concat()
-                            .contains(&field.ty)
-                        {
-                            let from_str: syn::Attribute = parse_quote! {
-                                #[serde(deserialize_with = "crate::helpers::from_str")]
-                            };
-                            field.attrs.append(&mut vec![from_str]);
-                            field
-                        } else {
-                            field
-                        }
-                    })
-                    .collect::<Vec<syn::Field>>();
-
-                let fields_named: FieldsNamed = parse_quote! {
-                    { #(#fields_vec,)* }
-                };
-                let fields = syn::Fields::Named(fields_named);
-
-                syn::ItemStruct { fields, ..s }
+                transformers::allow_deser_int_and_bool_from_str(s)
             }),
             _ => i,
         })
