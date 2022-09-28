@@ -1,6 +1,6 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
 pub use osmosis_std::types::osmosis::epochs::v1beta1::QueryEpochsInfoResponse;
-pub use osmosis_std::types::osmosis::gamm::v1beta1::QueryNumPoolsResponse;
+pub use osmosis_std::types::osmosis::gamm::v1beta1::{QueryNumPoolsResponse, QueryPoolResponse};
 
 /// Message type for `instantiate` entry_point
 #[cw_serde]
@@ -23,4 +23,7 @@ pub enum QueryMsg {
 
     #[returns(QueryEpochsInfoResponse)]
     QueryEpochsInfo {},
+
+    #[returns(QueryPoolResponse)]
+    QueryPool { pool_id: u64 },
 }

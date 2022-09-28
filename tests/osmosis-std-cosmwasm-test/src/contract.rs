@@ -10,7 +10,9 @@ use cw2::set_contract_version;
 use osmosis_std::types::osmosis::epochs::v1beta1::{
     QueryEpochsInfoRequest, QueryEpochsInfoResponse,
 };
-use osmosis_std::types::osmosis::gamm::v1beta1::{QueryNumPoolsRequest, QueryNumPoolsResponse};
+use osmosis_std::types::osmosis::gamm::v1beta1::{
+    QueryNumPoolsRequest, QueryNumPoolsResponse, QueryPoolRequest, QueryPoolResponse,
+};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
@@ -78,6 +80,9 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         }
         QueryMsg::QueryEpochsInfo {} => {
             query_and_debug::<QueryEpochsInfoResponse>(&deps, QueryEpochsInfoRequest {})
+        }
+        QueryMsg::QueryPool { pool_id } => {
+            query_and_debug::<QueryPoolResponse>(&deps, QueryPoolRequest { pool_id })
         } // Find matched incoming message variant and query them your custom logic
           // and then construct your query response with the type usually defined
           // `msg.rs` alongside with the query message itself.
@@ -107,8 +112,8 @@ where
                 format!("Querier contract error: {}", contract_err),
             )),
             SystemResult::Ok(ContractResult::Ok(value)) => {
-                // deps.api
-                //     .debug(std::str::from_utf8(value.as_slice()).unwrap());
+                deps.api
+                    .debug(std::str::from_utf8(value.as_slice()).unwrap());
                 cosmwasm_std::from_binary(&value)
             }
         }?;

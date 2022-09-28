@@ -178,7 +178,7 @@ impl CodeGenerator {
     }
 }
 
-fn output_version_file(project_name: &str, versions: &str, out_dir: &PathBuf) {
+fn output_version_file(project_name: &str, versions: &str, out_dir: &Path) {
     let path = out_dir.join(format!("{}_COMMIT", project_name.to_uppercase()));
     fs::write(path, versions).unwrap();
 }

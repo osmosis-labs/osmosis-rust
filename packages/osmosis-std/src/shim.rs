@@ -1,9 +1,12 @@
-use ::serde::{Deserialize, Deserializer, Serialize, Serializer};
+use ::serde::{ser, Deserialize, Deserializer, Serialize, Serializer};
 use chrono::{DateTime, NaiveDateTime, Utc};
-use serde::de;
 use serde::de::Visitor;
+use serde::de::{self};
+
 use std::fmt;
 use std::str::FromStr;
+
+use prost::Message;
 
 #[derive(Clone, PartialEq, Eq, ::prost::Message, schemars::JsonSchema)]
 pub struct Timestamp {
@@ -133,9 +136,7 @@ impl<'de> Deserialize<'de> for Duration {
     }
 }
 
-#[derive(
-    Clone, PartialEq, ::prost::Message, schemars::JsonSchema, serde::Serialize, serde::Deserialize,
-)]
+#[derive(Clone, PartialEq, ::prost::Message, schemars::JsonSchema)]
 pub struct Any {
     /// A URL/resource name that uniquely identifies the type of the serialized
     /// protocol buffer message. This string must contain at least
@@ -170,6 +171,85 @@ pub struct Any {
     /// Must be a valid serialized protocol buffer of the above specified type.
     #[prost(bytes = "vec", tag = "2")]
     pub value: ::prost::alloc::vec::Vec<u8>,
+}
+
+// [HACK] Register all types that can serde as Any manually for now.
+// TODO: make serialized data contains `@type` (https://github.com/osmosis-labs/osmosis-rust/issues/43)
+impl Serialize for Any {
+    fn serialize<S>(
+        &self,
+        serializer: S,
+    ) -> Result<<S as ::serde::Serializer>::Ok, <S as ::serde::Serializer>::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        // balancer pool
+        let value: Result<
+            crate::types::osmosis::gamm::v1beta1::Pool,
+            <S as ::serde::Serializer>::Error,
+        > = prost::Message::decode(self.value.as_slice()).map_err(ser::Error::custom);
+
+        if let Ok(value) = value {
+            return value.serialize(serializer);
+        }
+
+        let value: Result<
+            crate::types::osmosis::gamm::v1beta1::PoolParams,
+            <S as ::serde::Serializer>::Error,
+        > = prost::Message::decode(self.value.as_slice()).map_err(ser::Error::custom);
+
+        if let Ok(value) = value {
+            return value.serialize(serializer);
+        }
+
+        // stableswap pool
+        let value: Result<
+            crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::Pool,
+            <S as ::serde::Serializer>::Error,
+        > = prost::Message::decode(self.value.as_slice()).map_err(ser::Error::custom);
+
+        if let Ok(value) = value {
+            return value.serialize(serializer);
+        }
+
+        let value: Result<
+            crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::PoolParams,
+            <S as ::serde::Serializer>::Error,
+        > = prost::Message::decode(self.value.as_slice()).map_err(ser::Error::custom);
+
+        if let Ok(value) = value {
+            return value.serialize(serializer);
+        }
+
+        unimplemented!()
+    }
+}
+
+impl<'de> Deserialize<'de> for Any {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let res: Result<crate::types::osmosis::gamm::v1beta1::Pool, D::Error> =
+            Deserialize::deserialize(deserializer);
+
+        if let Ok(value) = res {
+            return Ok(Any {
+                type_url: crate::types::osmosis::gamm::v1beta1::Pool::TYPE_URL.to_string(),
+                value: value.encode_to_vec(),
+            });
+        }
+
+        unimplemented!()
+    }
+}
+
+impl TryFrom<Any> for crate::types::osmosis::gamm::v1beta1::Pool {
+    type Error = prost::DecodeError;
+
+    fn try_from(value: Any) -> Result<Self, Self::Error> {
+        prost::Message::decode(value.value.as_slice())
+    }
 }
 
 macro_rules! impl_prost_types_exact_conversion {
@@ -216,7 +296,7 @@ impl TryFrom<crate::types::cosmos::base::v1beta1::Coin> for cosmwasm_std::Coin {
         crate::types::cosmos::base::v1beta1::Coin { denom, amount }: crate::types::cosmos::base::v1beta1::Coin,
     ) -> cosmwasm_std::StdResult<Self> {
         Ok(cosmwasm_std::Coin {
-            denom: denom.into(),
+            denom,
             amount: amount.parse()?,
         })
     }

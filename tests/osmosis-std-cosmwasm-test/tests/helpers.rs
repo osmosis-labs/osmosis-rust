@@ -1,4 +1,4 @@
-use cosmwasm_std::coins;
+use cosmwasm_std::Coin;
 use osmosis_std_cosmwasm_test::msg::InstantiateMsg;
 use osmosis_testing::{Module, OsmosisTestApp, SigningAccount, Wasm};
 use std::path::PathBuf;
@@ -8,7 +8,12 @@ pub fn with_env_setup(
 ) {
     let app = OsmosisTestApp::new();
     let wasm = Wasm::new(&app);
-    let signer = app.init_account(&coins(100_000_000_000, "uosmo")).unwrap();
+    let signer = app
+        .init_account(&[
+            Coin::new(100_000_000_000, "uosmo"),
+            Coin::new(100_000_000_000, "uion"),
+        ])
+        .unwrap();
 
     let code_id = wasm
         .store_code(&get_wasm_byte_code(), None, &signer)

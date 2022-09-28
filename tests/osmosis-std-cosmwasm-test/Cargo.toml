@@ -53,4 +53,5 @@ thiserror = {version = "1.0.31"}
 [dev-dependencies]
 cw-multi-test = "0.13.2"
 osmosis-testing = {path = "../../packages/osmosis-testing"}
+prost = "0.11.0"
 serde_json = "1.0.85"
