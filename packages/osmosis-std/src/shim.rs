@@ -5,7 +5,7 @@ use serde::de::Visitor;
 use std::fmt;
 use std::str::FromStr;
 
-#[derive(Clone, PartialEq, ::prost::Message, schemars::JsonSchema)]
+#[derive(Clone, PartialEq, Eq, ::prost::Message, schemars::JsonSchema)]
 pub struct Timestamp {
     /// Represents seconds of UTC time since Unix epoch
     /// 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
@@ -76,9 +76,7 @@ impl From<DateTime<Utc>> for Timestamp {
         }
     }
 }
-#[derive(
-    Clone, PartialEq, ::prost::Message, schemars::JsonSchema, serde::Serialize, serde::Deserialize,
-)]
+#[derive(Clone, PartialEq, Eq, ::prost::Message, schemars::JsonSchema)]
 pub struct Duration {
     /// Signed seconds of the span of time. Must be from -315,576,000,000
     /// to +315,576,000,000 inclusive. Note: these bounds are computed from:
@@ -93,6 +91,46 @@ pub struct Duration {
     /// to +999,999,999 inclusive.
     #[prost(int32, tag = "2")]
     pub nanos: i32,
+}
+
+impl Serialize for Duration {
+    fn serialize<S>(&self, serializer: S) -> Result<<S as Serializer>::Ok, <S as Serializer>::Error>
+    where
+        S: Serializer,
+    {
+        let mut d = prost_types::Duration::from(self.to_owned());
+        d.normalize();
+
+        serializer.serialize_str(d.to_string().as_str())
+    }
+}
+
+impl<'de> Deserialize<'de> for Duration {
+    fn deserialize<D>(deserializer: D) -> Result<Self, <D as Deserializer<'de>>::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct DurationVisitor;
+
+        impl<'de> Visitor<'de> for DurationVisitor {
+            type Value = Duration;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("Timestamp in RFC3339 format")
+            }
+
+            fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
+            where
+                E: de::Error,
+            {
+                value
+                    .parse::<prost_types::Duration>()
+                    .map(Into::into)
+                    .map_err(de::Error::custom)
+            }
+        }
+        deserializer.deserialize_str(DurationVisitor)
+    }
 }
 
 #[derive(

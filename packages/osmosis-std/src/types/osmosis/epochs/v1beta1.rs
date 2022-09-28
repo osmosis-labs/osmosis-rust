@@ -24,7 +24,6 @@ pub struct EpochInfo {
     /// In order for intended behavior to be met, duration should
     /// be greater than the chains expected block time.
     /// Duration must be non-zero.
-    #[serde(skip)]
     #[prost(message, optional, tag = "3")]
     pub duration: ::core::option::Option<crate::shim::Duration>,
     /// current_epoch is the current epoch number, or in other words,
