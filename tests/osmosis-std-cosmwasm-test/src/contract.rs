@@ -106,7 +106,11 @@ where
             SystemResult::Ok(ContractResult::Err(contract_err)) => Err(StdError::generic_err(
                 format!("Querier contract error: {}", contract_err),
             )),
-            SystemResult::Ok(ContractResult::Ok(value)) => cosmwasm_std::from_binary(&value),
+            SystemResult::Ok(ContractResult::Ok(value)) => {
+                // deps.api
+                //     .debug(std::str::from_utf8(value.as_slice()).unwrap());
+                cosmwasm_std::from_binary(&value)
+            }
         }?;
         res
     })

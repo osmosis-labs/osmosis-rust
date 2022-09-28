@@ -18,7 +18,6 @@ pub struct EpochInfo {
     /// start_time is the time at which the timer first ever ticks.
     /// If start_time is in the future, the epoch will not begin until the start
     /// time.
-    #[serde(skip)]
     #[prost(message, optional, tag = "2")]
     pub start_time: ::core::option::Option<crate::shim::Timestamp>,
     /// duration is the time in between epoch ticks.
@@ -55,7 +54,6 @@ pub struct EpochInfo {
     /// * The t=33 block will start the epoch for (25, 30]
     /// * The t=34 block will start the epoch for (30, 35]
     /// * The **t=36** block will start the epoch for (35, 40]
-    #[serde(skip)]
     #[prost(message, optional, tag = "5")]
     pub current_epoch_start_time: ::core::option::Option<crate::shim::Timestamp>,
     /// epoch_counting_started is a boolean, that indicates whether this

@@ -1,6 +1,11 @@
-#[derive(
-    Clone, PartialEq, ::prost::Message, schemars::JsonSchema, serde::Serialize, serde::Deserialize,
-)]
+use ::serde::{Deserialize, Deserializer, Serialize, Serializer};
+use chrono::{DateTime, NaiveDateTime, Utc};
+use serde::de;
+use serde::de::Visitor;
+use std::fmt;
+use std::str::FromStr;
+
+#[derive(Clone, PartialEq, ::prost::Message, schemars::JsonSchema)]
 pub struct Timestamp {
     /// Represents seconds of UTC time since Unix epoch
     /// 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
@@ -15,6 +20,62 @@ pub struct Timestamp {
     pub nanos: i32,
 }
 
+impl Serialize for Timestamp {
+    fn serialize<S>(&self, serializer: S) -> Result<<S as Serializer>::Ok, <S as Serializer>::Error>
+    where
+        S: Serializer,
+    {
+        let mut ts = prost_types::Timestamp {
+            seconds: self.seconds,
+            nanos: self.nanos,
+        };
+        ts.normalize();
+        let dt = NaiveDateTime::from_timestamp(ts.seconds, ts.nanos as u32);
+        let dt: DateTime<Utc> = DateTime::from_utc(dt, Utc);
+        serializer.serialize_str(format!("{:?}", dt).as_str())
+    }
+}
+
+impl<'de> Deserialize<'de> for Timestamp {
+    fn deserialize<D>(deserializer: D) -> Result<Self, <D as Deserializer<'de>>::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct TimestampVisitor;
+
+        impl<'de> Visitor<'de> for TimestampVisitor {
+            type Value = Timestamp;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("Timestamp in RFC3339 format")
+            }
+
+            fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
+            where
+                E: de::Error,
+            {
+                let utc: DateTime<Utc> = chrono::DateTime::from_str(value).map_err(|err| {
+                    serde::de::Error::custom(format!(
+                        "Failed to parse {} as datetime: {:?}",
+                        value, err
+                    ))
+                })?;
+                let ts = Timestamp::from(utc);
+                Ok(ts)
+            }
+        }
+        deserializer.deserialize_str(TimestampVisitor)
+    }
+}
+
+impl From<DateTime<Utc>> for Timestamp {
+    fn from(dt: DateTime<Utc>) -> Self {
+        Timestamp {
+            seconds: dt.timestamp(),
+            nanos: dt.timestamp_subsec_nanos() as i32,
+        }
+    }
+}
 #[derive(
     Clone, PartialEq, ::prost::Message, schemars::JsonSchema, serde::Serialize, serde::Deserialize,
 )]
