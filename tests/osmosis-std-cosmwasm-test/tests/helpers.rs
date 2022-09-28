@@ -27,7 +27,12 @@ pub fn get_wasm_byte_code() -> Vec<u8> {
     let manifest_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     std::fs::read(
         manifest_path
-            .join("../../target/wasm32-unknown-unknown/release/osmosis_std_cosmwasm_test.wasm"),
+            .join("..")
+            .join("..")
+            .join("target")
+            .join("wasm32-unknown-unknown")
+            .join("release")
+            .join("osmosis_std_cosmwasm_test.wasm"),
     )
     .unwrap()
 }
