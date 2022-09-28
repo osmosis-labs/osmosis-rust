@@ -136,7 +136,7 @@ impl<'de> Deserialize<'de> for Duration {
     }
 }
 
-#[derive(Clone, PartialEq, ::prost::Message, schemars::JsonSchema)]
+#[derive(Clone, PartialEq, Eq, ::prost::Message, schemars::JsonSchema)]
 pub struct Any {
     /// A URL/resource name that uniquely identifies the type of the serialized
     /// protocol buffer message. This string must contain at least
@@ -243,6 +243,15 @@ impl<'de> Deserialize<'de> for Any {
         unimplemented!()
     }
 }
+
+// TODO:
+// - macro for genereateting Serialize, Deserialize, TryFrom for Any
+// - add test for
+//   - balancer pool params
+//   - stableswap
+//   - stableswap pool params
+// - upgrade to v12
+// - publish
 
 impl TryFrom<Any> for crate::types::osmosis::gamm::v1beta1::Pool {
     type Error = prost::DecodeError;

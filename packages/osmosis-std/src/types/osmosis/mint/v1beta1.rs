@@ -2,7 +2,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// Minter represents the minting state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -17,7 +17,7 @@ pub struct Minter {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -33,7 +33,7 @@ pub struct WeightedAddress {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -62,7 +62,7 @@ pub struct DistributionProportions {
 /// Params holds parameters for the mint module.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -107,7 +107,7 @@ pub struct Params {
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -123,7 +123,7 @@ pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -140,7 +140,7 @@ pub struct QueryParamsResponse {
 /// Query/EpochProvisions RPC method.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -157,7 +157,7 @@ pub struct QueryEpochProvisionsRequest {}
 /// Query/EpochProvisions RPC method.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -173,7 +173,7 @@ pub struct QueryEpochProvisionsResponse {
 /// GenesisState defines the mint module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

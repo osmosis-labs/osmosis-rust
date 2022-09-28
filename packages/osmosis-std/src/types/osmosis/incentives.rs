@@ -1,7 +1,7 @@
 use osmosis_std_derive::CosmwasmExt;
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -52,7 +52,7 @@ pub struct Gauge {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -66,7 +66,7 @@ pub struct LockableDurationsInfo {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -100,7 +100,7 @@ pub struct MsgCreateGauge {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -111,7 +111,7 @@ pub struct MsgCreateGauge {
 pub struct MsgCreateGaugeResponse {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -133,7 +133,7 @@ pub struct MsgAddToGauge {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -144,7 +144,7 @@ pub struct MsgAddToGauge {
 pub struct MsgAddToGaugeResponse {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -159,7 +159,7 @@ pub struct MsgAddToGaugeResponse {}
 pub struct ModuleToDistributeCoinsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -173,7 +173,7 @@ pub struct ModuleToDistributeCoinsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -188,7 +188,7 @@ pub struct ModuleToDistributeCoinsResponse {
 pub struct ModuleDistributedCoinsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -202,7 +202,7 @@ pub struct ModuleDistributedCoinsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -224,7 +224,7 @@ pub struct GaugeByIdRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -238,7 +238,7 @@ pub struct GaugeByIdResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -254,7 +254,7 @@ pub struct GaugesRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -272,7 +272,7 @@ pub struct GaugesResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -291,7 +291,7 @@ pub struct ActiveGaugesRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -309,7 +309,7 @@ pub struct ActiveGaugesResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -330,7 +330,7 @@ pub struct ActiveGaugesPerDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -348,7 +348,7 @@ pub struct ActiveGaugesPerDenomResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -367,7 +367,7 @@ pub struct UpcomingGaugesRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -385,7 +385,7 @@ pub struct UpcomingGaugesResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -405,7 +405,7 @@ pub struct UpcomingGaugesPerDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -422,7 +422,7 @@ pub struct UpcomingGaugesPerDenomResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -448,7 +448,7 @@ pub struct RewardsEstRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -462,7 +462,7 @@ pub struct RewardsEstResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -477,7 +477,7 @@ pub struct RewardsEstResponse {
 pub struct QueryLockableDurationsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -492,7 +492,7 @@ pub struct QueryLockableDurationsResponse {
 /// Params holds parameters for the incentives module
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -508,7 +508,7 @@ pub struct Params {
 /// GenesisState defines the incentives module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

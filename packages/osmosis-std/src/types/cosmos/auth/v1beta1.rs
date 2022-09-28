@@ -4,7 +4,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// type for additional functionality (e.g. vesting).
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -33,7 +33,7 @@ pub struct BaseAccount {
 /// ModuleAccount defines an account for modules that holds coins on a pool.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -52,7 +52,7 @@ pub struct ModuleAccount {
 /// Params defines the parameters for the auth module.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

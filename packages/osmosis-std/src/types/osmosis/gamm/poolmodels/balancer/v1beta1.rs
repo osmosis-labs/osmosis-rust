@@ -2,7 +2,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// ===================== MsgCreatePool
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -22,7 +22,7 @@ pub struct MsgCreateBalancerPool {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

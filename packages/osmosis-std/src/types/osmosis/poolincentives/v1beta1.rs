@@ -1,7 +1,7 @@
 use osmosis_std_derive::CosmwasmExt;
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -19,7 +19,7 @@ pub struct Params {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -33,7 +33,7 @@ pub struct LockableDurationsInfo {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -49,7 +49,7 @@ pub struct DistrInfo {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -76,7 +76,7 @@ pub struct DistrRecord {
 /// configuration. Note that gaugeId=0 represents the community pool.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -101,7 +101,7 @@ pub struct ReplacePoolIncentivesProposal {
 /// [(Gauge 0, 5), (Gauge 2, 4), (Gauge 3, 10)]
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -119,7 +119,7 @@ pub struct UpdatePoolIncentivesProposal {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -141,7 +141,7 @@ pub struct QueryGaugeIdsRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -159,7 +159,7 @@ pub mod query_gauge_ids_response {
     use osmosis_std_derive::CosmwasmExt;
     #[derive(
         Clone,
-        PartialEq,
+        PartialEq, Eq,
         ::prost::Message,
         serde::Serialize,
         serde::Deserialize,
@@ -182,7 +182,7 @@ pub mod query_gauge_ids_response {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -197,7 +197,7 @@ pub mod query_gauge_ids_response {
 pub struct QueryDistrInfoRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -211,7 +211,7 @@ pub struct QueryDistrInfoResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -226,7 +226,7 @@ pub struct QueryDistrInfoResponse {
 pub struct QueryParamsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -240,7 +240,7 @@ pub struct QueryParamsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -255,7 +255,7 @@ pub struct QueryParamsResponse {
 pub struct QueryLockableDurationsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -269,7 +269,7 @@ pub struct QueryLockableDurationsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -284,7 +284,7 @@ pub struct QueryLockableDurationsResponse {
 pub struct QueryIncentivizedPoolsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -310,7 +310,7 @@ pub struct IncentivizedPool {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -324,7 +324,7 @@ pub struct QueryIncentivizedPoolsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -339,7 +339,7 @@ pub struct QueryIncentivizedPoolsResponse {
 pub struct QueryExternalIncentiveGaugesRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -354,7 +354,7 @@ pub struct QueryExternalIncentiveGaugesResponse {
 /// GenesisState defines the pool incentives module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

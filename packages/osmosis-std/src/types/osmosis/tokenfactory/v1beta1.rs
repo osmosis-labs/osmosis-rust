@@ -8,7 +8,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// current admin.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -27,7 +27,7 @@ pub struct MsgCreateDenom {
 /// It returns the full string of the newly created denom
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -43,7 +43,7 @@ pub struct MsgCreateDenomResponse {
 /// more of a token.  For now, we only support minting to the sender account
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -59,7 +59,7 @@ pub struct MsgMint {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -72,7 +72,7 @@ pub struct MsgMintResponse {}
 /// a token.  For now, we only support burning from the sender account.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -88,7 +88,7 @@ pub struct MsgBurn {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -101,7 +101,7 @@ pub struct MsgBurnResponse {}
 /// adminship of a denom to a new account
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -119,7 +119,7 @@ pub struct MsgChangeAdmin {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -133,7 +133,7 @@ pub struct MsgChangeAdminResponse {}
 /// permission, but is planned to be extended to the future.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -149,7 +149,7 @@ pub struct DenomAuthorityMetadata {
 /// Params holds parameters for the tokenfactory module
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -165,7 +165,7 @@ pub struct Params {
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -181,7 +181,7 @@ pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -196,7 +196,7 @@ pub struct QueryParamsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -214,7 +214,7 @@ pub struct QueryDenomAuthorityMetadataRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -228,7 +228,7 @@ pub struct QueryDenomAuthorityMetadataResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -246,7 +246,7 @@ pub struct QueryDenomsFromCreatorRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -261,7 +261,7 @@ pub struct QueryDenomsFromCreatorResponse {
 /// GenesisState defines the tokenfactory module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -278,7 +278,7 @@ pub struct GenesisState {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

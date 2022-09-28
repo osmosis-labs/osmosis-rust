@@ -4,7 +4,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// coins locked.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -30,7 +30,7 @@ pub struct PeriodLock {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -72,7 +72,7 @@ pub struct QueryCondition {
 /// allowing partial unlocks of synthetic lockups.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -107,7 +107,7 @@ pub enum LockQueryType {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -125,7 +125,7 @@ pub struct MsgLockTokens {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -143,7 +143,7 @@ pub struct MsgLockTokensResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -157,7 +157,7 @@ pub struct MsgBeginUnlockingAll {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -171,7 +171,7 @@ pub struct MsgBeginUnlockingAllResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -194,7 +194,7 @@ pub struct MsgBeginUnlocking {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -210,7 +210,7 @@ pub struct MsgBeginUnlockingResponse {
 /// The new duration is longer than the original.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -234,7 +234,7 @@ pub struct MsgExtendLockup {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -248,7 +248,7 @@ pub struct MsgExtendLockupResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -263,7 +263,7 @@ pub struct MsgExtendLockupResponse {
 pub struct ModuleBalanceRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -277,7 +277,7 @@ pub struct ModuleBalanceResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -292,7 +292,7 @@ pub struct ModuleBalanceResponse {
 pub struct ModuleLockedAmountRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -306,7 +306,7 @@ pub struct ModuleLockedAmountResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -324,7 +324,7 @@ pub struct AccountUnlockableCoinsRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -338,7 +338,7 @@ pub struct AccountUnlockableCoinsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -356,7 +356,7 @@ pub struct AccountUnlockingCoinsRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -370,7 +370,7 @@ pub struct AccountUnlockingCoinsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -388,7 +388,7 @@ pub struct AccountLockedCoinsRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -402,7 +402,7 @@ pub struct AccountLockedCoinsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -422,7 +422,7 @@ pub struct AccountLockedPastTimeRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -436,7 +436,7 @@ pub struct AccountLockedPastTimeResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -456,7 +456,7 @@ pub struct AccountLockedPastTimeNotUnlockingOnlyRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -470,7 +470,7 @@ pub struct AccountLockedPastTimeNotUnlockingOnlyResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -490,7 +490,7 @@ pub struct AccountUnlockedBeforeTimeRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -504,7 +504,7 @@ pub struct AccountUnlockedBeforeTimeResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -526,7 +526,7 @@ pub struct AccountLockedPastTimeDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -540,7 +540,7 @@ pub struct AccountLockedPastTimeDenomResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -560,7 +560,7 @@ pub struct LockedDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -574,7 +574,7 @@ pub struct LockedDenomResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -593,7 +593,7 @@ pub struct LockedRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -607,7 +607,7 @@ pub struct LockedResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -629,7 +629,7 @@ pub struct SyntheticLockupsByLockupIdRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -643,7 +643,7 @@ pub struct SyntheticLockupsByLockupIdResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -663,7 +663,7 @@ pub struct AccountLockedLongerDurationRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -677,7 +677,7 @@ pub struct AccountLockedLongerDurationResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -697,7 +697,7 @@ pub struct AccountLockedDurationRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -711,7 +711,7 @@ pub struct AccountLockedDurationResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -731,7 +731,7 @@ pub struct AccountLockedLongerDurationNotUnlockingOnlyRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -745,7 +745,7 @@ pub struct AccountLockedLongerDurationNotUnlockingOnlyResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -767,7 +767,7 @@ pub struct AccountLockedLongerDurationDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -782,7 +782,7 @@ pub struct AccountLockedLongerDurationDenomResponse {
 /// GenesisState defines the lockup module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
