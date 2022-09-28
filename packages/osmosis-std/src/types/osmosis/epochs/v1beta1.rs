@@ -18,12 +18,14 @@ pub struct EpochInfo {
     /// start_time is the time at which the timer first ever ticks.
     /// If start_time is in the future, the epoch will not begin until the start
     /// time.
+    #[serde(skip)]
     #[prost(message, optional, tag = "2")]
     pub start_time: ::core::option::Option<crate::shim::Timestamp>,
     /// duration is the time in between epoch ticks.
     /// In order for intended behavior to be met, duration should
     /// be greater than the chains expected block time.
     /// Duration must be non-zero.
+    #[serde(skip)]
     #[prost(message, optional, tag = "3")]
     pub duration: ::core::option::Option<crate::shim::Duration>,
     /// current_epoch is the current epoch number, or in other words,
@@ -31,7 +33,10 @@ pub struct EpochInfo {
     /// The first tick (current_epoch=1) is defined as
     /// the first block whose blocktime is greater than the EpochInfo start_time.
     #[prost(int64, tag = "4")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub current_epoch: i64,
     /// current_epoch_start_time describes the start time of the current timer
     /// interval. The interval is (current_epoch_start_time,
@@ -50,17 +55,20 @@ pub struct EpochInfo {
     /// * The t=33 block will start the epoch for (25, 30]
     /// * The t=34 block will start the epoch for (30, 35]
     /// * The **t=36** block will start the epoch for (35, 40]
+    #[serde(skip)]
     #[prost(message, optional, tag = "5")]
     pub current_epoch_start_time: ::core::option::Option<crate::shim::Timestamp>,
     /// epoch_counting_started is a boolean, that indicates whether this
     /// epoch timer has began yet.
     #[prost(bool, tag = "6")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub epoch_counting_started: bool,
     /// current_epoch_start_height is the block height at which the current epoch
     /// started. (The block height at which the timer last ticked)
     #[prost(int64, tag = "8")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub current_epoch_start_height: i64,
 }
 /// GenesisState defines the epochs module's genesis state.
@@ -137,7 +145,10 @@ pub struct QueryCurrentEpochRequest {
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochResponse")]
 pub struct QueryCurrentEpochResponse {
     #[prost(int64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub current_epoch: i64,
 }
 pub struct EpochsQuerier<'a, Q: cosmwasm_std::CustomQuery> {

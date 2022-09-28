@@ -14,7 +14,10 @@ use osmosis_std_derive::CosmwasmExt;
 #[proto_message(type_url = "/osmosis.lockup.PeriodLock")]
 pub struct PeriodLock {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
     #[prost(string, tag = "2")]
     pub owner: ::prost::alloc::string::String,
@@ -38,7 +41,10 @@ pub struct PeriodLock {
 pub struct QueryCondition {
     /// type of lock query, ByLockDuration | ByLockTime
     #[prost(enumeration = "LockQueryType", tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_query_type: i32,
     /// What token denomination are we looking for lockups of
     #[prost(string, tag = "2")]
@@ -77,7 +83,10 @@ pub struct QueryCondition {
 pub struct SyntheticLock {
     /// underlying native lockup id for this synthetic lockup
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub underlying_lock_id: u64,
     #[prost(string, tag = "2")]
     pub synth_denom: ::prost::alloc::string::String,
@@ -126,7 +135,10 @@ pub struct MsgLockTokens {
 #[proto_message(type_url = "/osmosis.lockup.MsgLockTokensResponse")]
 pub struct MsgLockTokensResponse {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
 }
 #[derive(
@@ -171,7 +183,10 @@ pub struct MsgBeginUnlocking {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
     /// Amount of unlocking coins. Unlock all if not set.
     #[prost(message, repeated, tag = "3")]
@@ -189,7 +204,6 @@ pub struct MsgBeginUnlocking {
 #[proto_message(type_url = "/osmosis.lockup.MsgBeginUnlockingResponse")]
 pub struct MsgBeginUnlockingResponse {
     #[prost(bool, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub success: bool,
 }
 /// MsgExtendLockup extends the existing lockup's duration.
@@ -208,7 +222,10 @@ pub struct MsgExtendLockup {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
     /// duration to be set. fails if lower than the current duration, or is
     /// unlocking
@@ -227,7 +244,6 @@ pub struct MsgExtendLockup {
 #[proto_message(type_url = "/osmosis.lockup.MsgExtendLockupResponse")]
 pub struct MsgExtendLockupResponse {
     #[prost(bool, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
     pub success: bool,
 }
 #[derive(
@@ -569,7 +585,10 @@ pub struct LockedDenomResponse {
 #[proto_query(path = "/osmosis.lockup.Query/LockedByID", response_type = LockedResponse)]
 pub struct LockedRequest {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_id: u64,
 }
 #[derive(
@@ -602,7 +621,10 @@ pub struct LockedResponse {
 )]
 pub struct SyntheticLockupsByLockupIdRequest {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_id: u64,
 }
 #[derive(
@@ -770,7 +792,10 @@ pub struct AccountLockedLongerDurationDenomResponse {
 #[proto_message(type_url = "/osmosis.lockup.GenesisState")]
 pub struct GenesisState {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub last_lock_id: u64,
     #[prost(message, repeated, tag = "2")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,

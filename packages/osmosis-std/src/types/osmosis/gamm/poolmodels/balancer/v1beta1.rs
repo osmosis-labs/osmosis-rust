@@ -34,6 +34,9 @@ pub struct MsgCreateBalancerPool {
 )]
 pub struct MsgCreateBalancerPoolResponse {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }

@@ -49,21 +49,19 @@ pub fn append_attrs(src: &Path, s: &ItemStruct, descriptor: &FileDescriptorSet) 
     s
 }
 
-pub fn allow_deser_int_and_bool_from_str(s: ItemStruct) -> ItemStruct {
+pub fn allow_serde_int_as_str(s: ItemStruct) -> ItemStruct {
     let fields_vec = s
         .fields
         .clone()
         .into_iter()
         .map(|mut field| {
-            let signed_ints = vec![
+            let int_types = vec![
                 parse_quote!(i8),
                 parse_quote!(i16),
                 parse_quote!(i32),
                 parse_quote!(i64),
                 parse_quote!(i128),
                 parse_quote!(isize),
-            ];
-            let unsigned_ints = vec![
                 parse_quote!(u8),
                 parse_quote!(u16),
                 parse_quote!(u32),
@@ -72,13 +70,12 @@ pub fn allow_deser_int_and_bool_from_str(s: ItemStruct) -> ItemStruct {
                 parse_quote!(usize),
             ];
 
-            let bools = vec![parse_quote!(bool)];
-            if vec![signed_ints, unsigned_ints, bools]
-                .concat()
-                .contains(&field.ty)
-            {
+            if int_types.contains(&field.ty) {
                 let from_str: syn::Attribute = parse_quote! {
-                    #[serde(deserialize_with = "crate::helpers::from_str")]
+                    #[serde(
+                        serialize_with = "crate::serde::as_str::serialize",
+                        deserialize_with = "crate::serde::as_str::deserialize"
+                    )]
                 };
                 field.attrs.append(&mut vec![from_str]);
                 field

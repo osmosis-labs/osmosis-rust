@@ -135,7 +135,7 @@ fn transform_items(
         .map(|i| match i.clone() {
             Item::Struct(s) => Item::Struct({
                 let s = transformers::append_attrs(src, &s, descriptor);
-                transformers::allow_deser_int_and_bool_from_str(s)
+                transformers::allow_serde_int_as_str(s)
             }),
             _ => i,
         })

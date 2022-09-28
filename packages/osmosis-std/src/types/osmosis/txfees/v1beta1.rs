@@ -17,7 +17,10 @@ pub struct FeeToken {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 /// UpdateFeeTokenProposal is a gov Content type for adding a new whitelisted fee
@@ -106,7 +109,10 @@ pub struct QueryDenomSpotPriceRequest {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceResponse")]
 pub struct QueryDenomSpotPriceResponse {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub spot_price: ::prost::alloc::string::String,
@@ -141,7 +147,10 @@ pub struct QueryDenomPoolIdRequest {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdResponse")]
 pub struct QueryDenomPoolIdResponse {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(

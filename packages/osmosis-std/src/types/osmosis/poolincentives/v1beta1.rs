@@ -59,7 +59,10 @@ pub struct DistrInfo {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.DistrRecord")]
 pub struct DistrRecord {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub gauge_id: u64,
     #[prost(string, tag = "2")]
     pub weight: ::prost::alloc::string::String,
@@ -130,7 +133,10 @@ pub struct UpdatePoolIncentivesProposal {
 )]
 pub struct QueryGaugeIdsRequest {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
@@ -165,7 +171,10 @@ pub mod query_gauge_ids_response {
     )]
     pub struct GaugeIdWithDuration {
         #[prost(uint64, tag = "1")]
-        #[serde(deserialize_with = "crate::helpers::from_str")]
+        #[serde(
+            serialize_with = "crate::serde::as_str::serialize",
+            deserialize_with = "crate::serde::as_str::deserialize"
+        )]
         pub gauge_id: u64,
         #[prost(message, optional, tag = "2")]
         pub duration: ::core::option::Option<crate::shim::Duration>,
@@ -285,12 +294,18 @@ pub struct QueryIncentivizedPoolsRequest {}
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.IncentivizedPool")]
 pub struct IncentivizedPool {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(message, optional, tag = "2")]
     pub lockable_duration: ::core::option::Option<crate::shim::Duration>,
     #[prost(uint64, tag = "3")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub gauge_id: u64,
 }
 #[derive(

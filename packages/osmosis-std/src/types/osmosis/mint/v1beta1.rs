@@ -82,7 +82,10 @@ pub struct Params {
     pub epoch_identifier: ::prost::alloc::string::String,
     /// number of epochs take to reduce rewards
     #[prost(int64, tag = "4")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub reduction_period_in_epochs: i64,
     /// reduction multiplier to execute on each period
     #[prost(string, tag = "5")]
@@ -95,7 +98,10 @@ pub struct Params {
     pub weighted_developer_rewards_receivers: ::prost::alloc::vec::Vec<WeightedAddress>,
     /// start epoch to distribute minting rewards
     #[prost(int64, tag = "8")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub minting_rewards_distribution_start_epoch: i64,
 }
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
@@ -184,7 +190,10 @@ pub struct GenesisState {
     pub params: ::core::option::Option<Params>,
     /// current halven period start epoch
     #[prost(int64, tag = "3")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub halven_started_epoch: i64,
 }
 pub struct MintQuerier<'a, Q: cosmwasm_std::CustomQuery> {

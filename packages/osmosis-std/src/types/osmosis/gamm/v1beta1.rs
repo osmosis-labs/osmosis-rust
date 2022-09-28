@@ -110,7 +110,10 @@ pub struct Pool {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
     #[prost(message, optional, tag = "3")]
     pub pool_params: ::core::option::Option<PoolParams>,
@@ -152,7 +155,10 @@ pub struct MsgJoinPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub share_out_amount: ::prost::alloc::string::String,
@@ -185,7 +191,10 @@ pub struct MsgExitPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub share_in_amount: ::prost::alloc::string::String,
@@ -216,7 +225,10 @@ pub struct MsgExitPoolResponse {}
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.SwapAmountInRoute")]
 pub struct SwapAmountInRoute {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub token_out_denom: ::prost::alloc::string::String,
@@ -268,7 +280,10 @@ pub struct MsgSwapExactAmountInResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.SwapAmountOutRoute")]
 pub struct SwapAmountOutRoute {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub token_in_denom: ::prost::alloc::string::String,
@@ -323,7 +338,10 @@ pub struct MsgJoinSwapExternAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(message, optional, tag = "3")]
     pub token_in: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
@@ -363,7 +381,10 @@ pub struct MsgJoinSwapShareAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub token_in_denom: ::prost::alloc::string::String,
@@ -401,7 +422,10 @@ pub struct MsgExitSwapShareAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub token_out_denom: ::prost::alloc::string::String,
@@ -439,7 +463,10 @@ pub struct MsgExitSwapExternAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(message, optional, tag = "3")]
     pub token_out: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
@@ -477,7 +504,10 @@ pub struct MsgExitSwapExternAmountOutResponse {
 )]
 pub struct QueryPoolRequest {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
@@ -561,7 +591,10 @@ pub struct QueryNumPoolsRequest {}
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryNumPoolsResponse")]
 pub struct QueryNumPoolsResponse {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub num_pools: u64,
 }
 ///=============================== PoolParams
@@ -581,7 +614,10 @@ pub struct QueryNumPoolsResponse {
 )]
 pub struct QueryPoolParamsRequest {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
@@ -615,7 +651,10 @@ pub struct QueryPoolParamsResponse {
 )]
 pub struct QueryTotalPoolLiquidityRequest {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
@@ -649,7 +688,10 @@ pub struct QueryTotalPoolLiquidityResponse {
 )]
 pub struct QueryTotalSharesRequest {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
@@ -684,7 +726,10 @@ pub struct QueryTotalSharesResponse {
 )]
 pub struct QuerySpotPriceRequest {
     #[prost(uint64, tag = "1")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub base_asset_denom: ::prost::alloc::string::String,
@@ -727,7 +772,10 @@ pub struct QuerySwapExactAmountInRequest {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub token_in: ::prost::alloc::string::String,
@@ -767,7 +815,10 @@ pub struct QuerySwapExactAmountOutRequest {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(message, repeated, tag = "3")]
     pub routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
@@ -848,7 +899,10 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "1")]
     pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
     #[prost(uint64, tag = "2")]
-    #[serde(deserialize_with = "crate::helpers::from_str")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub next_pool_number: u64,
     #[prost(message, optional, tag = "3")]
     pub params: ::core::option::Option<Params>,
