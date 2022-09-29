@@ -1,17 +1,14 @@
 mod helpers;
-use cosmwasm_std::Coin;
 use helpers::with_env_setup;
 use osmosis_std::{
     shim::{Duration, Timestamp},
-    types::osmosis::{epochs::v1beta1::EpochInfo, gamm::v1beta1::Pool},
+    types::osmosis::epochs::v1beta1::EpochInfo,
 };
 use osmosis_std_cosmwasm_test::msg::{
-    QueryEpochsInfoResponse, QueryMsg, QueryNumPoolsResponse, QueryPoolResponse,
+    QueryEpochsInfoResponse, QueryMsg, QueryNumPoolsResponse, QueryPoolParamsResponse,
+    QueryPoolResponse,
 };
-use osmosis_testing::{
-    osmosis_std::types::osmosis::gamm::v1beta1::{PoolAsset, PoolParams},
-    Gamm, Module,
-};
+use osmosis_testing::osmosis_std::types::osmosis::gamm::v1beta1::{Pool, PoolAsset, PoolParams};
 
 #[test]
 fn test_u64_response_deser() {
@@ -116,17 +113,10 @@ fn test_duration_response_deser() {
 }
 
 #[test]
-fn test_any_response_deser() {
+fn test_any_balancer_pool_response_deser() {
     with_env_setup(|app, wasm, signer, _code_id, contract_addr| {
-        let gamm = Gamm::new(app);
-        let pool_id = gamm
-            .create_basic_pool(
-                &[Coin::new(1_000, "uosmo"), Coin::new(1_000, "uion")],
-                &signer,
-            )
-            .unwrap()
-            .data
-            .pool_id;
+        let pools = helpers::setup_pools(app, &signer);
+        let pool_id = pools[0];
 
         let res: QueryPoolResponse = wasm
             .query(&contract_addr, &QueryMsg::QueryPool { pool_id })
@@ -168,5 +158,29 @@ fn test_any_response_deser() {
                 total_weight: "2147483648000000".to_string(),
             }
         );
-    })
+    });
 }
+
+#[test]
+fn test_any_balancer_pool_params_response_deser() {
+    with_env_setup(|app, wasm, signer, _code_id, contract_addr| {
+        let pools = helpers::setup_pools(app, &signer);
+        let pool_id = pools[0];
+
+        let res: QueryPoolParamsResponse = wasm
+            .query(&contract_addr, &QueryMsg::QueryPoolParams { pool_id })
+            .unwrap();
+
+        let pool: PoolParams = res.params.unwrap().try_into().unwrap();
+
+        assert_eq!(
+            pool,
+            PoolParams {
+                swap_fee: "0.010000000000000000".to_string(),
+                exit_fee: "0.010000000000000000".to_string(),
+                smooth_weight_change_params: None,
+            }
+        );
+    });
+}
+// TODO: add tests for stableswap and query pools

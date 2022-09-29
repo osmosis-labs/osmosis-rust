@@ -1,7 +1,7 @@
 use ::serde::{ser, Deserialize, Deserializer, Serialize, Serializer};
 use chrono::{DateTime, NaiveDateTime, Utc};
+use serde::de;
 use serde::de::Visitor;
-use serde::de::{self};
 
 use std::fmt;
 use std::str::FromStr;
@@ -173,93 +173,124 @@ pub struct Any {
     pub value: ::prost::alloc::vec::Vec<u8>,
 }
 
+macro_rules! expand_as_any {
+    ($($ty:path,)*) => {
+
+        // TODO: make serialized data contains `@type` (https://github.com/osmosis-labs/osmosis-rust/issues/43)
+        impl Serialize for Any {
+            fn serialize<S>(
+                &self,
+                serializer: S,
+            ) -> Result<<S as ::serde::Serializer>::Ok, <S as ::serde::Serializer>::Error>
+            where
+                S: ::serde::Serializer,
+            {
+                $(
+                    if self.type_url == <$ty>::TYPE_URL {
+                        let value: Result<$ty, <S as ::serde::Serializer>::Error> =
+                            prost::Message::decode(self.value.as_slice()).map_err(ser::Error::custom);
+
+                        if let Ok(value) = value {
+                            return value.serialize(serializer);
+                        }
+                    }
+                )*
+
+                Err(serde::ser::Error::custom(
+                    "data did not match any type that supports serialization as `Any`",
+                ))
+            }
+        }
+
+        impl<'de> Deserialize<'de> for Any {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: serde::Deserializer<'de>,
+            {
+                let value = match serde_cw_value::Value::deserialize(deserializer) {
+                    Ok(value) => value,
+                    Err(err) => {
+                        return Err(err);
+                    }
+                };
+
+                // must be map er else error
+                let type_url = if let serde_cw_value::Value::Map(m) = value.clone() {
+                    m.get(&serde_cw_value::Value::String("@type".to_string()))
+                        .map(|t| match t.to_owned() {
+                            serde_cw_value::Value::String(s) => Ok(s),
+                            _ => Err(serde::de::Error::custom("type_url must be String")),
+                        })
+                        .transpose()
+                } else {
+                    Err(serde::de::Error::custom("data must have map structure"))
+                }?;
+
+                match type_url {
+                    // @type found
+                    Some(t) => {
+                        $(
+                            if t == <$ty>::TYPE_URL {
+                                return <$ty>::deserialize(
+                                    serde_cw_value::ValueDeserializer::<serde_cw_value::DeserializerError>::new(
+                                        value.clone(),
+                                    ),
+                                )
+                                .map(|v| Any {
+                                    type_url: <$ty>::TYPE_URL.to_string(),
+                                    value: v.encode_to_vec(),
+                                })
+                                .map_err(serde::de::Error::custom);
+                            }
+                        )*
+                    }
+                    // @type not found, try match the type structure
+                    None => {
+                        $(
+                            if let Ok(v) = <$ty>::deserialize(
+                                serde_cw_value::ValueDeserializer::<serde_cw_value::DeserializerError>::new(
+                                    value.clone(),
+                                ),
+                            ) {
+                                return Ok(Any {
+                                    type_url: <$ty>::TYPE_URL.to_string(),
+                                    value: v.encode_to_vec(),
+                                });
+                            }
+                        )*
+                    }
+                };
+
+                Err(serde::de::Error::custom(
+                    "data did not match any type that supports deserialization as `Any`",
+                ))
+            }
+        }
+
+        $(
+            impl TryFrom<Any> for $ty {
+                type Error = prost::DecodeError;
+
+                fn try_from(value: Any) -> Result<Self, Self::Error> {
+                    prost::Message::decode(value.value.as_slice())
+                }
+            }
+        )*
+    };
+}
+
 // [HACK] Register all types that can serde as Any manually for now.
-// TODO: make serialized data contains `@type` (https://github.com/osmosis-labs/osmosis-rust/issues/43)
-impl Serialize for Any {
-    fn serialize<S>(
-        &self,
-        serializer: S,
-    ) -> Result<<S as ::serde::Serializer>::Ok, <S as ::serde::Serializer>::Error>
-    where
-        S: ::serde::Serializer,
-    {
-        // balancer pool
-        let value: Result<
-            crate::types::osmosis::gamm::v1beta1::Pool,
-            <S as ::serde::Serializer>::Error,
-        > = prost::Message::decode(self.value.as_slice()).map_err(ser::Error::custom);
-
-        if let Ok(value) = value {
-            return value.serialize(serializer);
-        }
-
-        let value: Result<
-            crate::types::osmosis::gamm::v1beta1::PoolParams,
-            <S as ::serde::Serializer>::Error,
-        > = prost::Message::decode(self.value.as_slice()).map_err(ser::Error::custom);
-
-        if let Ok(value) = value {
-            return value.serialize(serializer);
-        }
-
-        // stableswap pool
-        let value: Result<
-            crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::Pool,
-            <S as ::serde::Serializer>::Error,
-        > = prost::Message::decode(self.value.as_slice()).map_err(ser::Error::custom);
-
-        if let Ok(value) = value {
-            return value.serialize(serializer);
-        }
-
-        let value: Result<
-            crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::PoolParams,
-            <S as ::serde::Serializer>::Error,
-        > = prost::Message::decode(self.value.as_slice()).map_err(ser::Error::custom);
-
-        if let Ok(value) = value {
-            return value.serialize(serializer);
-        }
-
-        unimplemented!()
-    }
-}
-
-impl<'de> Deserialize<'de> for Any {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let res: Result<crate::types::osmosis::gamm::v1beta1::Pool, D::Error> =
-            Deserialize::deserialize(deserializer);
-
-        if let Ok(value) = res {
-            return Ok(Any {
-                type_url: crate::types::osmosis::gamm::v1beta1::Pool::TYPE_URL.to_string(),
-                value: value.encode_to_vec(),
-            });
-        }
-
-        unimplemented!()
-    }
-}
-
-// TODO:
-// - macro for genereateting Serialize, Deserialize, TryFrom for Any
-// - add test for
-//   - balancer pool params
-//   - stableswap
-//   - stableswap pool params
-// - upgrade to v12
-// - publish
-
-impl TryFrom<Any> for crate::types::osmosis::gamm::v1beta1::Pool {
-    type Error = prost::DecodeError;
-
-    fn try_from(value: Any) -> Result<Self, Self::Error> {
-        prost::Message::decode(value.value.as_slice())
-    }
-}
+// must order by type that has more information for Any deserialization to
+// work correctly since after serialization, it currently loses @type tag
+// and deserialization works by trying to match the structure
+expand_as_any!(
+    // pools have distincted structure
+    crate::types::osmosis::gamm::v1beta1::Pool,
+    crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::Pool,
+    // balancer pool param has more fields
+    crate::types::osmosis::gamm::v1beta1::PoolParams,
+    crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::PoolParams,
+);
 
 macro_rules! impl_prost_types_exact_conversion {
     ($t:ident | $($arg:ident),*) => {

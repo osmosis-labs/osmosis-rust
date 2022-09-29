@@ -11,7 +11,8 @@ use osmosis_std::types::osmosis::epochs::v1beta1::{
     QueryEpochsInfoRequest, QueryEpochsInfoResponse,
 };
 use osmosis_std::types::osmosis::gamm::v1beta1::{
-    QueryNumPoolsRequest, QueryNumPoolsResponse, QueryPoolRequest, QueryPoolResponse,
+    QueryNumPoolsRequest, QueryNumPoolsResponse, QueryPoolParamsRequest, QueryPoolParamsResponse,
+    QueryPoolRequest, QueryPoolResponse,
 };
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -83,6 +84,9 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         }
         QueryMsg::QueryPool { pool_id } => {
             query_and_debug::<QueryPoolResponse>(&deps, QueryPoolRequest { pool_id })
+        }
+        QueryMsg::QueryPoolParams { pool_id } => {
+            query_and_debug::<QueryPoolParamsResponse>(&deps, QueryPoolParamsRequest { pool_id })
         } // Find matched incoming message variant and query them your custom logic
           // and then construct your query response with the type usually defined
           // `msg.rs` alongside with the query message itself.
