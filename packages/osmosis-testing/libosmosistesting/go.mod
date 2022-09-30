@@ -23,7 +23,7 @@ require (
 	github.com/CosmWasm/wasmd v0.28.0-osmo-v12
 	github.com/cosmos/cosmos-sdk v0.46.1
 	github.com/golang/protobuf v1.5.2
-	github.com/osmosis-labs/osmosis/v12 v12.0.0-rc5
+	github.com/osmosis-labs/osmosis/v12 v12.0.0
 	github.com/pkg/errors v0.9.1
 	github.com/tendermint/tendermint v0.34.21
 	github.com/tendermint/tm-db v0.6.8-0.20220506192307-f628bb5dc95b

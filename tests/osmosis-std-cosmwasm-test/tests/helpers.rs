@@ -1,8 +1,7 @@
 use cosmwasm_std::Coin;
 
-
 use osmosis_std_cosmwasm_test::msg::InstantiateMsg;
-use osmosis_testing::{Account, Gamm, Module, OsmosisTestApp, SigningAccount, Wasm};
+use osmosis_testing::{Gamm, Module, OsmosisTestApp, SigningAccount, Wasm};
 use std::path::PathBuf;
 
 pub fn with_env_setup(
