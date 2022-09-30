@@ -22,7 +22,7 @@ const FEE_DENOM: &str = "uosmo";
 const CHAIN_ID: &str = "osmosis-1";
 const DEFAULT_GAS_ADJUSTMENT: f64 = 1.2;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct OsmosisTestApp {
     id: u64,
 }

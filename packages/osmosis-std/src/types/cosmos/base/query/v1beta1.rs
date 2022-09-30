@@ -8,7 +8,7 @@ use osmosis_std_derive::CosmwasmExt;
 ///  }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -26,10 +26,18 @@ pub struct PageRequest {
     /// It is less efficient than using key. Only one of offset or key should
     /// be set.
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub offset: u64,
     /// limit is the total number of results to be returned in the result page.
     /// If left empty it will default to a value to be set by each app.
     #[prost(uint64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub limit: u64,
     /// count_total is set to true  to indicate that the result set should include
     /// a count of the total number of items available for pagination in UIs.
@@ -52,7 +60,7 @@ pub struct PageRequest {
 ///  }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -68,5 +76,9 @@ pub struct PageResponse {
     /// total is total number of results available if PageRequest.count_total
     /// was set, its value is undefined otherwise
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub total: u64,
 }

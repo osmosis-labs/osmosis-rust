@@ -1,10 +1,12 @@
 use osmosis_std_derive::CosmwasmExt;
-/// PeriodLock is a single unit of lock by period. It's a record of locked coin
-/// at a specific time. It stores owner, duration, unlock time and the amount of
-/// coins locked.
+/// PeriodLock is a single lock unit by period defined by the x/lockup module.
+/// It's a record of a locked coin at a specific time. It stores owner, duration,
+/// unlock time and the number of coins locked. A state of a period lock is
+/// created upon lock creation, and deleted once the lock has been matured after
+/// the `duration` has passed since unbonding started.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -13,20 +15,38 @@ use osmosis_std_derive::CosmwasmExt;
 )]
 #[proto_message(type_url = "/osmosis.lockup.PeriodLock")]
 pub struct PeriodLock {
+    /// ID is the unique id of the lock.
+    /// The ID of the lock is decided upon lock creation, incrementing by 1 for
+    /// every lock.
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
+    /// Owner is the account address of the lock owner.
+    /// Only the owner can modify the state of the lock.
     #[prost(string, tag = "2")]
     pub owner: ::prost::alloc::string::String,
+    /// Duration is the time needed for a lock to mature after unlocking has
+    /// started.
     #[prost(message, optional, tag = "3")]
     pub duration: ::core::option::Option<crate::shim::Duration>,
+    /// EndTime refers to the time at which the lock would mature and get deleted.
+    /// This value is first initialized when an unlock has started for the lock,
+    /// end time being block time + duration.
     #[prost(message, optional, tag = "4")]
     pub end_time: ::core::option::Option<crate::shim::Timestamp>,
+    /// Coins are the tokens locked within the lock, kept in the module account.
     #[prost(message, repeated, tag = "5")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
+/// QueryCondition is a struct used for querying locks upon different conditions.
+/// Duration field and timestamp fields could be optional, depending on the
+/// LockQueryType.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -35,36 +55,34 @@ pub struct PeriodLock {
 )]
 #[proto_message(type_url = "/osmosis.lockup.QueryCondition")]
 pub struct QueryCondition {
-    /// type of lock query, ByLockDuration | ByLockTime
+    /// LockQueryType is a type of lock query, ByLockDuration | ByLockTime
     #[prost(enumeration = "LockQueryType", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_query_type: i32,
-    /// What token denomination are we looking for lockups of
+    /// Denom represents the token denomination we are looking to lock up
     #[prost(string, tag = "2")]
     pub denom: ::prost::alloc::string::String,
-    /// valid when query condition is ByDuration
+    /// Duration is used to query locks with longer duration than the specified
+    /// duration. Duration field must not be nil when the lock query type is
+    /// `ByLockDuration`.
     #[prost(message, optional, tag = "3")]
     pub duration: ::core::option::Option<crate::shim::Duration>,
-    /// valid when query condition is ByTime
+    /// Timestamp is used by locks started before the specified duration.
+    /// Timestamp field must not be nil when the lock query type is `ByLockTime`.
+    /// Querying locks with timestamp is currently not implemented.
     #[prost(message, optional, tag = "4")]
     pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
 }
-/// SyntheticLock is a single unit of synthetic lockup
-/// TODO: Change this to have
-/// * underlying_lock_id
-/// * synthetic_coin
-/// * end_time
-/// * duration
-/// * owner
-/// We then index synthetic locks by the denom, just like we do with normal
-/// locks. Ideally we even get an interface, so we can re-use that same logic.
-/// I currently have no idea how reward distribution is supposed to be working...
-/// EVENTUALLY
-/// we make a "constrained_coin" field, which is what the current "coins" field
-/// is. Constrained coin field can be a #post-v7 feature, since we aren't
-/// allowing partial unlocks of synthetic lockups.
+/// SyntheticLock is creating virtual lockup where new denom is combination of
+/// original denom and synthetic suffix. At the time of synthetic lockup creation
+/// and deletion, accumulation store is also being updated and on querier side,
+/// they can query as freely as native lockup.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -73,29 +91,38 @@ pub struct QueryCondition {
 )]
 #[proto_message(type_url = "/osmosis.lockup.SyntheticLock")]
 pub struct SyntheticLock {
-    /// underlying native lockup id for this synthetic lockup
+    /// Underlying Lock ID is the underlying native lock's id for this synthetic
+    /// lockup. A synthetic lock MUST have an underlying lock.
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub underlying_lock_id: u64,
+    /// SynthDenom is the synthetic denom that is a combination of
+    /// gamm share + bonding status + validator address.
     #[prost(string, tag = "2")]
     pub synth_denom: ::prost::alloc::string::String,
     /// used for unbonding synthetic lockups, for active synthetic lockups, this
     /// value is set to uninitialized value
     #[prost(message, optional, tag = "3")]
     pub end_time: ::core::option::Option<crate::shim::Timestamp>,
+    /// Duration is the duration for a synthetic lock to mature
+    /// at the point of unbonding has started.
     #[prost(message, optional, tag = "4")]
     pub duration: ::core::option::Option<crate::shim::Duration>,
 }
+/// LockQueryType defines the type of the lock query that can
+/// either be by duration or start time of the lock.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum LockQueryType {
-    /// Queries for locks that are longer than a certain duration
     ByDuration = 0,
-    /// Queries for lockups that started before a specific time
     ByTime = 1,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -113,7 +140,7 @@ pub struct MsgLockTokens {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -123,11 +150,15 @@ pub struct MsgLockTokens {
 #[proto_message(type_url = "/osmosis.lockup.MsgLockTokensResponse")]
 pub struct MsgLockTokensResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -141,7 +172,7 @@ pub struct MsgBeginUnlockingAll {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -155,7 +186,7 @@ pub struct MsgBeginUnlockingAllResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -167,6 +198,10 @@ pub struct MsgBeginUnlocking {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
     /// Amount of unlocking coins. Unlock all if not set.
     #[prost(message, repeated, tag = "3")]
@@ -174,7 +209,7 @@ pub struct MsgBeginUnlocking {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -190,7 +225,7 @@ pub struct MsgBeginUnlockingResponse {
 /// The new duration is longer than the original.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -202,6 +237,10 @@ pub struct MsgExtendLockup {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
     /// duration to be set. fails if lower than the current duration, or is
     /// unlocking
@@ -210,7 +249,7 @@ pub struct MsgExtendLockup {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -224,7 +263,7 @@ pub struct MsgExtendLockupResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -239,7 +278,7 @@ pub struct MsgExtendLockupResponse {
 pub struct ModuleBalanceRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -253,7 +292,7 @@ pub struct ModuleBalanceResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -268,7 +307,7 @@ pub struct ModuleBalanceResponse {
 pub struct ModuleLockedAmountRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -282,7 +321,7 @@ pub struct ModuleLockedAmountResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -300,7 +339,7 @@ pub struct AccountUnlockableCoinsRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -314,7 +353,7 @@ pub struct AccountUnlockableCoinsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -332,7 +371,7 @@ pub struct AccountUnlockingCoinsRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -346,7 +385,7 @@ pub struct AccountUnlockingCoinsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -364,7 +403,7 @@ pub struct AccountLockedCoinsRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -378,7 +417,7 @@ pub struct AccountLockedCoinsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -398,7 +437,7 @@ pub struct AccountLockedPastTimeRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -412,7 +451,7 @@ pub struct AccountLockedPastTimeResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -432,7 +471,7 @@ pub struct AccountLockedPastTimeNotUnlockingOnlyRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -446,7 +485,7 @@ pub struct AccountLockedPastTimeNotUnlockingOnlyResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -466,7 +505,7 @@ pub struct AccountUnlockedBeforeTimeRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -480,7 +519,7 @@ pub struct AccountUnlockedBeforeTimeResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -502,7 +541,7 @@ pub struct AccountLockedPastTimeDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -516,7 +555,7 @@ pub struct AccountLockedPastTimeDenomResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -536,7 +575,7 @@ pub struct LockedDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -550,7 +589,7 @@ pub struct LockedDenomResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -561,11 +600,15 @@ pub struct LockedDenomResponse {
 #[proto_query(path = "/osmosis.lockup.Query/LockedByID", response_type = LockedResponse)]
 pub struct LockedRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -579,7 +622,7 @@ pub struct LockedResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -593,11 +636,15 @@ pub struct LockedResponse {
 )]
 pub struct SyntheticLockupsByLockupIdRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -611,7 +658,7 @@ pub struct SyntheticLockupsByLockupIdResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -631,7 +678,7 @@ pub struct AccountLockedLongerDurationRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -645,7 +692,7 @@ pub struct AccountLockedLongerDurationResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -665,7 +712,7 @@ pub struct AccountLockedDurationRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -679,7 +726,7 @@ pub struct AccountLockedDurationResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -699,7 +746,7 @@ pub struct AccountLockedLongerDurationNotUnlockingOnlyRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -713,7 +760,7 @@ pub struct AccountLockedLongerDurationNotUnlockingOnlyResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -735,7 +782,7 @@ pub struct AccountLockedLongerDurationDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -750,7 +797,7 @@ pub struct AccountLockedLongerDurationDenomResponse {
 /// GenesisState defines the lockup module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -760,6 +807,10 @@ pub struct AccountLockedLongerDurationDenomResponse {
 #[proto_message(type_url = "/osmosis.lockup.GenesisState")]
 pub struct GenesisState {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub last_lock_id: u64,
     #[prost(message, repeated, tag = "2")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,

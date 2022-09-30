@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
 ///   t > start_time + duration: w(t) = target_pool_weights
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -57,7 +57,7 @@ pub struct SmoothWeightChangeParams {
 /// The pool's token holders are specified in future_pool_governor.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -79,7 +79,7 @@ pub struct PoolParams {
 /// and should be revisited in a future state migration.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -98,7 +98,7 @@ pub struct PoolAsset {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -110,6 +110,10 @@ pub struct Pool {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
     #[prost(message, optional, tag = "3")]
     pub pool_params: ::core::option::Option<PoolParams>,
@@ -139,7 +143,7 @@ pub struct Pool {
 /// This is really MsgJoinPoolNoSwap
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -151,6 +155,10 @@ pub struct MsgJoinPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub share_out_amount: ::prost::alloc::string::String,
@@ -159,7 +167,7 @@ pub struct MsgJoinPool {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -167,11 +175,16 @@ pub struct MsgJoinPool {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgJoinPoolResponse")]
-pub struct MsgJoinPoolResponse {}
+pub struct MsgJoinPoolResponse {
+    #[prost(string, tag = "1")]
+    pub share_out_amount: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub token_in: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
 /// ===================== MsgExitPool
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -183,6 +196,10 @@ pub struct MsgExitPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub share_in_amount: ::prost::alloc::string::String,
@@ -191,7 +208,7 @@ pub struct MsgExitPool {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -199,11 +216,14 @@ pub struct MsgExitPool {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgExitPoolResponse")]
-pub struct MsgExitPoolResponse {}
+pub struct MsgExitPoolResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub token_out: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
 /// ===================== MsgSwapExactAmountIn
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -213,13 +233,17 @@ pub struct MsgExitPoolResponse {}
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.SwapAmountInRoute")]
 pub struct SwapAmountInRoute {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub token_out_denom: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -239,7 +263,7 @@ pub struct MsgSwapExactAmountIn {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -254,7 +278,7 @@ pub struct MsgSwapExactAmountInResponse {
 /// ===================== MsgSwapExactAmountOut
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -264,13 +288,17 @@ pub struct MsgSwapExactAmountInResponse {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.SwapAmountOutRoute")]
 pub struct SwapAmountOutRoute {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub token_in_denom: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -290,7 +318,7 @@ pub struct MsgSwapExactAmountOut {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -306,7 +334,7 @@ pub struct MsgSwapExactAmountOutResponse {
 /// TODO: Rename to MsgJoinSwapExactAmountIn
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -318,6 +346,10 @@ pub struct MsgJoinSwapExternAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(message, optional, tag = "3")]
     pub token_in: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
@@ -330,7 +362,7 @@ pub struct MsgJoinSwapExternAmountIn {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -345,7 +377,7 @@ pub struct MsgJoinSwapExternAmountInResponse {
 /// ===================== MsgJoinSwapShareAmountOut
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -357,6 +389,10 @@ pub struct MsgJoinSwapShareAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub token_in_denom: ::prost::alloc::string::String,
@@ -367,7 +403,7 @@ pub struct MsgJoinSwapShareAmountOut {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -382,7 +418,7 @@ pub struct MsgJoinSwapShareAmountOutResponse {
 /// ===================== MsgExitSwapShareAmountIn
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -394,6 +430,10 @@ pub struct MsgExitSwapShareAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub token_out_denom: ::prost::alloc::string::String,
@@ -404,7 +444,7 @@ pub struct MsgExitSwapShareAmountIn {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -419,7 +459,7 @@ pub struct MsgExitSwapShareAmountInResponse {
 /// ===================== MsgExitSwapExternAmountOut
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -431,6 +471,10 @@ pub struct MsgExitSwapExternAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(message, optional, tag = "3")]
     pub token_out: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
@@ -439,7 +483,7 @@ pub struct MsgExitSwapExternAmountOut {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -454,7 +498,7 @@ pub struct MsgExitSwapExternAmountOutResponse {
 ///=============================== Pool
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -468,11 +512,15 @@ pub struct MsgExitSwapExternAmountOutResponse {
 )]
 pub struct QueryPoolRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -487,7 +535,7 @@ pub struct QueryPoolResponse {
 ///=============================== Pools
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -507,7 +555,7 @@ pub struct QueryPoolsRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -526,7 +574,7 @@ pub struct QueryPoolsResponse {
 ///=============================== NumPools
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -541,7 +589,7 @@ pub struct QueryPoolsResponse {
 pub struct QueryNumPoolsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -551,12 +599,16 @@ pub struct QueryNumPoolsRequest {}
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryNumPoolsResponse")]
 pub struct QueryNumPoolsResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub num_pools: u64,
 }
 ///=============================== PoolParams
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -570,11 +622,15 @@ pub struct QueryNumPoolsResponse {
 )]
 pub struct QueryPoolParamsRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -589,7 +645,7 @@ pub struct QueryPoolParamsResponse {
 ///=============================== PoolLiquidity
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -603,11 +659,15 @@ pub struct QueryPoolParamsResponse {
 )]
 pub struct QueryTotalPoolLiquidityRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -622,7 +682,7 @@ pub struct QueryTotalPoolLiquidityResponse {
 ///=============================== TotalShares
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -636,11 +696,15 @@ pub struct QueryTotalPoolLiquidityResponse {
 )]
 pub struct QueryTotalSharesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -656,7 +720,7 @@ pub struct QueryTotalSharesResponse {
 /// query.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -670,6 +734,10 @@ pub struct QueryTotalSharesResponse {
 )]
 pub struct QuerySpotPriceRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub base_asset_denom: ::prost::alloc::string::String,
@@ -680,7 +748,7 @@ pub struct QuerySpotPriceRequest {
 /// query.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -696,7 +764,7 @@ pub struct QuerySpotPriceResponse {
 ///=============================== EstimateSwapExactAmountIn
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -712,6 +780,10 @@ pub struct QuerySwapExactAmountInRequest {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "3")]
     pub token_in: ::prost::alloc::string::String,
@@ -720,7 +792,7 @@ pub struct QuerySwapExactAmountInRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -735,7 +807,7 @@ pub struct QuerySwapExactAmountInResponse {
 ///=============================== EstimateSwapExactAmountOut
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -751,6 +823,10 @@ pub struct QuerySwapExactAmountOutRequest {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(message, repeated, tag = "3")]
     pub routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
@@ -759,7 +835,7 @@ pub struct QuerySwapExactAmountOutRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -773,7 +849,7 @@ pub struct QuerySwapExactAmountOutResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -788,7 +864,7 @@ pub struct QuerySwapExactAmountOutResponse {
 pub struct QueryTotalLiquidityRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -803,7 +879,7 @@ pub struct QueryTotalLiquidityResponse {
 /// Params holds parameters for the incentives module
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -819,7 +895,7 @@ pub struct Params {
 /// GenesisState defines the gamm module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -830,7 +906,12 @@ pub struct Params {
 pub struct GenesisState {
     #[prost(message, repeated, tag = "1")]
     pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
+    /// will be renamed to next_pool_id in an upcoming version
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub next_pool_number: u64,
     #[prost(message, optional, tag = "3")]
     pub params: ::core::option::Option<Params>,

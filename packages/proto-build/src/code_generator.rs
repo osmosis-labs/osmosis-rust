@@ -10,7 +10,7 @@ use walkdir::WalkDir;
 
 use crate::{mod_gen, transform};
 
-const DESCRIPTOR_FILE: &'static str = "descriptor.bin";
+const DESCRIPTOR_FILE: &str = "descriptor.bin";
 
 pub struct CosmosProject {
     pub name: String,
@@ -178,7 +178,7 @@ impl CodeGenerator {
     }
 }
 
-fn output_version_file(project_name: &str, versions: &str, out_dir: &PathBuf) {
+fn output_version_file(project_name: &str, versions: &str, out_dir: &Path) {
     let path = out_dir.join(format!("{}_COMMIT", project_name.to_uppercase()));
     fs::write(path, versions).unwrap();
 }

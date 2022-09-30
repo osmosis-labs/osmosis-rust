@@ -5,7 +5,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// The pool's token holders are specified in future_pool_governor.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -22,7 +22,7 @@ pub struct PoolParams {
 /// Pool is the stableswap Pool struct
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -34,6 +34,10 @@ pub struct Pool {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
     #[prost(message, optional, tag = "3")]
     pub pool_params: ::core::option::Option<PoolParams>,
@@ -62,9 +66,10 @@ pub struct Pool {
     #[prost(string, tag = "8")]
     pub scaling_factor_governor: ::prost::alloc::string::String,
 }
+/// ===================== MsgCreatePool
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -80,12 +85,15 @@ pub struct MsgCreateStableswapPool {
     #[prost(message, repeated, tag = "3")]
     pub initial_pool_liquidity:
         ::prost::alloc::vec::Vec<super::super::super::super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(string, tag = "4")]
+    #[prost(uint64, repeated, packed = "false", tag = "4")]
+    pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
+    #[prost(string, tag = "5")]
     pub future_pool_governor: ::prost::alloc::string::String,
 }
+/// Returns a poolID with custom poolName.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -97,11 +105,17 @@ pub struct MsgCreateStableswapPool {
 )]
 pub struct MsgCreateStableswapPoolResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
+/// Sender must be the pool's scaling_factor_governor in order for the tx to
+/// succeed. Adjusts stableswap scaling factors.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -112,18 +126,20 @@ pub struct MsgCreateStableswapPoolResponse {
     type_url = "/osmosis.gamm.poolmodels.stableswap.v1beta1.MsgStableSwapAdjustScalingFactors"
 )]
 pub struct MsgStableSwapAdjustScalingFactors {
-    /// Sender must be the pool's scaling_factor_governor in order for the tx to
-    /// succeed
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(uint64, repeated, packed = "false", tag = "3")]
     pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

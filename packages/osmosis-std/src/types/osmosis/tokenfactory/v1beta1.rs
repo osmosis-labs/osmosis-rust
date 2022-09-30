@@ -1,14 +1,16 @@
 use osmosis_std_derive::CosmwasmExt;
-/// MsgCreateDenom is the sdk.Msg type for allowing an account to create
-/// a new denom. It requires a sender address and a subdenomination.
-/// The (sender_address, sub_denomination) pair must be unique and cannot be
-/// re-used. The resulting denom created is `factory/{creator
-/// address}/{subdenom}`. The resultant denom's admin is originally set to be the
-/// creator, but this can be changed later. The token denom does not indicate the
-/// current admin.
+/// MsgCreateDenom defines the message structure for the CreateDenom gRPC service
+/// method. It allows an account to create a new denom. It requires a sender
+/// address and a sub denomination. The (sender_address, sub_denomination) tuple
+/// must be unique and cannot be re-used.
+///
+/// The resulting denom created is defined as
+/// <factory/{creatorAddress}/{subdenom}>. The resulting denom's admin is
+/// originally set to be the creator, but this can be changed later. The token
+/// denom does not indicate the current admin.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -27,7 +29,7 @@ pub struct MsgCreateDenom {
 /// It returns the full string of the newly created denom
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -43,7 +45,7 @@ pub struct MsgCreateDenomResponse {
 /// more of a token.  For now, we only support minting to the sender account
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -59,7 +61,7 @@ pub struct MsgMint {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -72,7 +74,7 @@ pub struct MsgMintResponse {}
 /// a token.  For now, we only support burning from the sender account.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -88,7 +90,7 @@ pub struct MsgBurn {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -101,7 +103,7 @@ pub struct MsgBurnResponse {}
 /// adminship of a denom to a new account
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -117,9 +119,11 @@ pub struct MsgChangeAdmin {
     #[prost(string, tag = "3")]
     pub new_admin: ::prost::alloc::string::String,
 }
+/// MsgChangeAdminResponse defines the response structure for an executed
+/// MsgChangeAdmin message.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -128,12 +132,43 @@ pub struct MsgChangeAdmin {
 )]
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgChangeAdminResponse")]
 pub struct MsgChangeAdminResponse {}
+/// MsgSetDenomMetadata is the sdk.Msg type for allowing an admin account to set
+/// the denom's bank metadata
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgSetDenomMetadata")]
+pub struct MsgSetDenomMetadata {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub metadata: ::core::option::Option<super::super::super::cosmos::bank::v1beta1::Metadata>,
+}
+/// MsgSetDenomMetadataResponse defines the response structure for an executed
+/// MsgSetDenomMetadata message.
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgSetDenomMetadataResponse")]
+pub struct MsgSetDenomMetadataResponse {}
 /// DenomAuthorityMetadata specifies metadata for addresses that have specific
 /// capabilities over a token factory denom. Right now there is only one Admin
 /// permission, but is planned to be extended to the future.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -146,10 +181,10 @@ pub struct DenomAuthorityMetadata {
     #[prost(string, tag = "1")]
     pub admin: ::prost::alloc::string::String,
 }
-/// Params holds parameters for the tokenfactory module
+/// Params defines the parameters for the tokenfactory module.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -165,7 +200,7 @@ pub struct Params {
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -181,7 +216,7 @@ pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -194,9 +229,11 @@ pub struct QueryParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
 }
+/// QueryDenomAuthorityMetadataRequest defines the request structure for the
+/// DenomAuthorityMetadata gRPC query.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -212,9 +249,11 @@ pub struct QueryDenomAuthorityMetadataRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
 }
+/// QueryDenomAuthorityMetadataResponse defines the response structure for the
+/// DenomAuthorityMetadata gRPC query.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -226,9 +265,11 @@ pub struct QueryDenomAuthorityMetadataResponse {
     #[prost(message, optional, tag = "1")]
     pub authority_metadata: ::core::option::Option<DenomAuthorityMetadata>,
 }
+/// QueryDenomsFromCreatorRequest defines the request structure for the
+/// DenomsFromCreator gRPC query.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -244,9 +285,11 @@ pub struct QueryDenomsFromCreatorRequest {
     #[prost(string, tag = "1")]
     pub creator: ::prost::alloc::string::String,
 }
+/// QueryDenomsFromCreatorRequest defines the response structure for the
+/// DenomsFromCreator gRPC query.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -261,7 +304,7 @@ pub struct QueryDenomsFromCreatorResponse {
 /// GenesisState defines the tokenfactory module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -276,9 +319,12 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "2")]
     pub factory_denoms: ::prost::alloc::vec::Vec<GenesisDenom>,
 }
+/// GenesisDenom defines a tokenfactory denom that is defined within genesis
+/// state. The structure contains DenomAuthorityMetadata which defines the
+/// denom's admin.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

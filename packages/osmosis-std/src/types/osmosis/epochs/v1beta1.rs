@@ -3,7 +3,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// a timer defined by the x/epochs module.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -31,6 +31,10 @@ pub struct EpochInfo {
     /// The first tick (current_epoch=1) is defined as
     /// the first block whose blocktime is greater than the EpochInfo start_time.
     #[prost(int64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub current_epoch: i64,
     /// current_epoch_start_time describes the start time of the current timer
     /// interval. The interval is (current_epoch_start_time,
@@ -58,12 +62,16 @@ pub struct EpochInfo {
     /// current_epoch_start_height is the block height at which the current epoch
     /// started. (The block height at which the timer last ticked)
     #[prost(int64, tag = "8")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub current_epoch_start_height: i64,
 }
 /// GenesisState defines the epochs module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -77,7 +85,7 @@ pub struct GenesisState {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -92,7 +100,7 @@ pub struct GenesisState {
 pub struct QueryEpochsInfoRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -106,7 +114,7 @@ pub struct QueryEpochsInfoResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -124,7 +132,7 @@ pub struct QueryCurrentEpochRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -134,6 +142,10 @@ pub struct QueryCurrentEpochRequest {
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochResponse")]
 pub struct QueryCurrentEpochResponse {
     #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub current_epoch: i64,
 }
 pub struct EpochsQuerier<'a, Q: cosmwasm_std::CustomQuery> {

@@ -5,7 +5,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// The pool ID must have osmo as one of its assets.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -17,6 +17,10 @@ pub struct FeeToken {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 /// UpdateFeeTokenProposal is a gov Content type for adding a new whitelisted fee
@@ -26,7 +30,7 @@ pub struct FeeToken {
 /// it will remove the denom from the whitelisted set.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -44,7 +48,7 @@ pub struct UpdateFeeTokenProposal {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -59,7 +63,7 @@ pub struct UpdateFeeTokenProposal {
 pub struct QueryFeeTokensRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -75,7 +79,7 @@ pub struct QueryFeeTokensResponse {
 /// price for the specified tx fee denom
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -95,7 +99,7 @@ pub struct QueryDenomSpotPriceRequest {
 /// price for the specified tx fee denom
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -105,13 +109,17 @@ pub struct QueryDenomSpotPriceRequest {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceResponse")]
 pub struct QueryDenomSpotPriceResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub spot_price: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -129,7 +137,7 @@ pub struct QueryDenomPoolIdRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -139,11 +147,15 @@ pub struct QueryDenomPoolIdRequest {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdResponse")]
 pub struct QueryDenomPoolIdResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -158,7 +170,7 @@ pub struct QueryDenomPoolIdResponse {
 pub struct QueryBaseDenomRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -173,7 +185,7 @@ pub struct QueryBaseDenomResponse {
 /// GenesisState defines the txfees module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

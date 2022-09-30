@@ -15,10 +15,10 @@ mod transform;
 mod transformers;
 
 /// The Cosmos SDK commit or tag to be cloned and used to build the proto files
-const COSMOS_SDK_REV: &str = "v0.45.4";
+const COSMOS_SDK_REV: &str = "v0.45.0-osmo-v12";
 
 /// The osmosis commit or tag to be cloned and used to build the proto files
-const OSMOSIS_REV: &str = "v11.0.0";
+const OSMOSIS_REV: &str = "v12.0.0";
 
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.
@@ -54,8 +54,8 @@ pub fn run() {
     };
 
     let osmosis_code_generator = CodeGenerator::new(
-        out_dir.clone(),
-        tmp_build_dir.clone(),
+        out_dir,
+        tmp_build_dir,
         osmosis_project,
         vec![cosmos_project],
     );

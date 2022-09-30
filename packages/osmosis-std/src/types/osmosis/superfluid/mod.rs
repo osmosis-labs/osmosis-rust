@@ -3,7 +3,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// SuperfluidAsset stores the pair of superfluid asset type and denom pair
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -14,14 +14,21 @@ use osmosis_std_derive::CosmwasmExt;
 pub struct SuperfluidAsset {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
+    /// AssetType indicates whether the superfluid asset is a native token or an lp
+    /// share
     #[prost(enumeration = "SuperfluidAssetType", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub asset_type: i32,
 }
 /// SuperfluidIntermediaryAccount takes the role of intermediary between LP token
-/// and OSMO tokens for superfluid staking
+/// and OSMO tokens for superfluid staking. The intermediary account is the
+/// actual account responsible for delegation, not the validator account itself.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -30,12 +37,17 @@ pub struct SuperfluidAsset {
 )]
 #[proto_message(type_url = "/osmosis.superfluid.SuperfluidIntermediaryAccount")]
 pub struct SuperfluidIntermediaryAccount {
+    /// Denom indicates the denom of the superfluid asset.
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub val_addr: ::prost::alloc::string::String,
     /// perpetual gauge for rewards distribution
     #[prost(uint64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub gauge_id: u64,
 }
 /// The Osmo-Equivalent-Multiplier Record for epoch N refers to the osmo worth we
@@ -43,11 +55,11 @@ pub struct SuperfluidIntermediaryAccount {
 /// to be set as the Time-weighted-average-osmo-backing for the entire duration
 /// of epoch N-1. (Thereby locking whats in use for epoch N as based on the prior
 /// epochs rewards) However for now, this is not the TWAP but instead the spot
-/// price at the boundary.  For different types of assets in the future, it could
+/// price at the boundary. For different types of assets in the future, it could
 /// change.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -57,6 +69,10 @@ pub struct SuperfluidIntermediaryAccount {
 #[proto_message(type_url = "/osmosis.superfluid.OsmoEquivalentMultiplierRecord")]
 pub struct OsmoEquivalentMultiplierRecord {
     #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub epoch_number: i64,
     /// superfluid asset denom, can be LP token or native token
     #[prost(string, tag = "2")]
@@ -64,11 +80,11 @@ pub struct OsmoEquivalentMultiplierRecord {
     #[prost(string, tag = "3")]
     pub multiplier: ::prost::alloc::string::String,
 }
-/// SuperfluidDelegationRecord takes the role of intermediary between LP token
-/// and OSMO tokens for superfluid staking
+/// SuperfluidDelegationRecord is a struct used to indicate superfluid
+/// delegations of an account in the state machine in a user friendly form.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -86,9 +102,12 @@ pub struct SuperfluidDelegationRecord {
     #[prost(message, optional, tag = "4")]
     pub equivalent_staked_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
 }
+/// LockIdIntermediaryAccountConnection is a struct used to indicate the
+/// relationship between the underlying lock id and superfluid delegation done
+/// via lp shares.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -98,13 +117,17 @@ pub struct SuperfluidDelegationRecord {
 #[proto_message(type_url = "/osmosis.superfluid.LockIdIntermediaryAccountConnection")]
 pub struct LockIdIntermediaryAccountConnection {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_id: u64,
     #[prost(string, tag = "2")]
     pub intermediary_account: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -116,6 +139,8 @@ pub struct UnpoolWhitelistedPools {
     #[prost(uint64, repeated, tag = "1")]
     pub ids: ::prost::alloc::vec::Vec<u64>,
 }
+/// SuperfluidAssetType indicates whether the superfluid asset is
+/// a native token itself or the lp share of a pool.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum SuperfluidAssetType {
@@ -125,7 +150,7 @@ pub enum SuperfluidAssetType {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -137,13 +162,17 @@ pub struct MsgSuperfluidDelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_id: u64,
     #[prost(string, tag = "3")]
     pub val_addr: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -154,7 +183,7 @@ pub struct MsgSuperfluidDelegate {
 pub struct MsgSuperfluidDelegateResponse {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -166,11 +195,15 @@ pub struct MsgSuperfluidUndelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -181,7 +214,7 @@ pub struct MsgSuperfluidUndelegate {
 pub struct MsgSuperfluidUndelegateResponse {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -193,11 +226,15 @@ pub struct MsgSuperfluidUnbondLock {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -211,7 +248,7 @@ pub struct MsgSuperfluidUnbondLockResponse {}
 /// specified validator addr.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -229,7 +266,7 @@ pub struct MsgLockAndSuperfluidDelegate {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -239,6 +276,10 @@ pub struct MsgLockAndSuperfluidDelegate {
 #[proto_message(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse")]
 pub struct MsgLockAndSuperfluidDelegateResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub id: u64,
 }
 /// MsgUnPoolWhitelistedPool Unpools every lock the sender has, that is
@@ -251,7 +292,7 @@ pub struct MsgLockAndSuperfluidDelegateResponse {
 /// until unbond completion.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -263,11 +304,15 @@ pub struct MsgUnPoolWhitelistedPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub pool_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -282,7 +327,7 @@ pub struct MsgUnPoolWhitelistedPoolResponse {
 /// Params holds parameters for the superfluid module
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -291,14 +336,16 @@ pub struct MsgUnPoolWhitelistedPoolResponse {
 )]
 #[proto_message(type_url = "/osmosis.superfluid.Params")]
 pub struct Params {
-    /// the risk_factor is to be cut on OSMO equivalent value of lp tokens for
-    /// superfluid staking, default: 5%
+    /// minimum_risk_factor is to be cut on OSMO equivalent value of lp tokens for
+    /// superfluid staking, default: 5%. The minimum risk factor works
+    /// to counter-balance the staked amount on chain's exposure to various asset
+    /// volatilities, and have base staking be 'resistant' to volatility.
     #[prost(string, tag = "1")]
     pub minimum_risk_factor: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -313,7 +360,7 @@ pub struct Params {
 pub struct QueryParamsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -328,7 +375,7 @@ pub struct QueryParamsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -346,7 +393,7 @@ pub struct AssetTypeRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -356,11 +403,15 @@ pub struct AssetTypeRequest {
 #[proto_message(type_url = "/osmosis.superfluid.AssetTypeResponse")]
 pub struct AssetTypeResponse {
     #[prost(enumeration = "SuperfluidAssetType", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub asset_type: i32,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -375,7 +426,7 @@ pub struct AssetTypeResponse {
 pub struct AllAssetsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -389,7 +440,7 @@ pub struct AllAssetsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -407,7 +458,7 @@ pub struct AssetMultiplierRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -421,7 +472,7 @@ pub struct AssetMultiplierResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -435,13 +486,17 @@ pub struct SuperfluidIntermediaryAccountInfo {
     #[prost(string, tag = "2")]
     pub val_addr: ::prost::alloc::string::String,
     #[prost(uint64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub gauge_id: u64,
     #[prost(string, tag = "4")]
     pub address: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -459,7 +514,7 @@ pub struct AllIntermediaryAccountsRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -476,7 +531,7 @@ pub struct AllIntermediaryAccountsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -490,11 +545,15 @@ pub struct AllIntermediaryAccountsResponse {
 )]
 pub struct ConnectedIntermediaryAccountRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub lock_id: u64,
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -508,7 +567,7 @@ pub struct ConnectedIntermediaryAccountResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -523,7 +582,7 @@ pub struct ConnectedIntermediaryAccountResponse {
 pub struct TotalSuperfluidDelegationsRequest {}
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -537,7 +596,7 @@ pub struct TotalSuperfluidDelegationsResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -559,7 +618,7 @@ pub struct SuperfluidDelegationAmountRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -573,7 +632,7 @@ pub struct SuperfluidDelegationAmountResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -591,7 +650,7 @@ pub struct SuperfluidDelegationsByDelegatorRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -610,7 +669,7 @@ pub struct SuperfluidDelegationsByDelegatorResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -630,7 +689,7 @@ pub struct SuperfluidUndelegationsByDelegatorRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -649,7 +708,7 @@ pub struct SuperfluidUndelegationsByDelegatorResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -669,7 +728,7 @@ pub struct SuperfluidDelegationsByValidatorDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -683,7 +742,7 @@ pub struct SuperfluidDelegationsByValidatorDenomResponse {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -705,7 +764,7 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
 }
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -719,10 +778,50 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub total_delegated_coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.QueryTotalDelegationByDelegatorRequest")]
+#[proto_query(
+    path = "/osmosis.superfluid.Query/TotalDelegationByDelegator",
+    response_type = QueryTotalDelegationByDelegatorResponse
+)]
+pub struct QueryTotalDelegationByDelegatorRequest {
+    #[prost(string, tag = "1")]
+    pub delegator_address: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.QueryTotalDelegationByDelegatorResponse")]
+pub struct QueryTotalDelegationByDelegatorResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub superfluid_delegation_records: ::prost::alloc::vec::Vec<SuperfluidDelegationRecord>,
+    #[prost(message, repeated, tag = "2")]
+    pub delegation_response:
+        ::prost::alloc::vec::Vec<super::super::cosmos::staking::v1beta1::DelegationResponse>,
+    #[prost(message, repeated, tag = "3")]
+    pub total_delegated_coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "4")]
+    pub total_equivalent_staked_amount:
+        ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+}
 /// GenesisState defines the module's genesis state.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -733,10 +832,16 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
 pub struct GenesisState {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
+    /// superfluid_assets defines the registered superfluid assets that have been
+    /// registered via governance.
     #[prost(message, repeated, tag = "2")]
     pub superfluid_assets: ::prost::alloc::vec::Vec<SuperfluidAsset>,
+    /// osmo_equivalent_multipliers is the records of osmo equivalent amount of
+    /// each superfluid registered pool, updated every epoch.
     #[prost(message, repeated, tag = "3")]
     pub osmo_equivalent_multipliers: ::prost::alloc::vec::Vec<OsmoEquivalentMultiplierRecord>,
+    /// intermediary_accounts is a secondary account for superfluid staking that
+    /// plays an intermediary role between validators and the delegators.
     #[prost(message, repeated, tag = "4")]
     pub intermediary_accounts: ::prost::alloc::vec::Vec<SuperfluidIntermediaryAccount>,
     #[prost(message, repeated, tag = "5")]
@@ -837,5 +942,11 @@ impl<'a, Q: cosmwasm_std::CustomQuery> SuperfluidQuerier<'a, Q> {
             denom,
         }
         .query(self.querier)
+    }
+    pub fn total_delegation_by_delegator(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryTotalDelegationByDelegatorResponse, cosmwasm_std::StdError> {
+        QueryTotalDelegationByDelegatorRequest { delegator_address }.query(self.querier)
     }
 }

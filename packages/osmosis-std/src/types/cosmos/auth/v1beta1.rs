@@ -4,7 +4,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// type for additional functionality (e.g. vesting).
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -18,14 +18,22 @@ pub struct BaseAccount {
     #[prost(message, optional, tag = "2")]
     pub pub_key: ::core::option::Option<crate::shim::Any>,
     #[prost(uint64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub account_number: u64,
     #[prost(uint64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub sequence: u64,
 }
 /// ModuleAccount defines an account for modules that holds coins on a pool.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -44,7 +52,7 @@ pub struct ModuleAccount {
 /// Params defines the parameters for the auth module.
 #[derive(
     Clone,
-    PartialEq,
+    PartialEq, Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -54,13 +62,33 @@ pub struct ModuleAccount {
 #[proto_message(type_url = "/cosmos.auth.v1beta1.Params")]
 pub struct Params {
     #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub max_memo_characters: u64,
     #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub tx_sig_limit: u64,
     #[prost(uint64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub tx_size_cost_per_byte: u64,
     #[prost(uint64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub sig_verify_cost_ed25519: u64,
     #[prost(uint64, tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
     pub sig_verify_cost_secp256k1: u64,
 }

@@ -1,7 +1,7 @@
 use cosmwasm_std::CosmosMsg;
 use osmosis_std_derive::CosmwasmExt;
 
-#[derive(Clone, PartialEq, ::prost::Message, CosmwasmExt)]
+#[derive(Clone, PartialEq, Eq, ::prost::Message, CosmwasmExt)]
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgCreateDenom")]
 pub struct MsgCreateDenom {
     #[prost(string, tag = "1")]

@@ -67,9 +67,8 @@ where
     }
 
     pub fn query_pool(&self, pool_id: u64) -> RunnerResult<gamm::v1beta1::Pool> {
-        let any = self._query_pool(&QueryPoolRequest { pool_id })?;
-
-        gamm::v1beta1::Pool::decode(any.pool.unwrap().value.as_slice())
+        let res = self._query_pool(&QueryPoolRequest { pool_id })?;
+        gamm::v1beta1::Pool::decode(res.pool.unwrap().value.as_slice())
             .map_err(DecodeError::ProtoDecodeError)
             .map_err(RunnerError::DecodeError)
     }

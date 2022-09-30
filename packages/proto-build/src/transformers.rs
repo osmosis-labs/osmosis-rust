@@ -49,6 +49,49 @@ pub fn append_attrs(src: &Path, s: &ItemStruct, descriptor: &FileDescriptorSet) 
     s
 }
 
+pub fn allow_serde_int_as_str(s: ItemStruct) -> ItemStruct {
+    let fields_vec = s
+        .fields
+        .clone()
+        .into_iter()
+        .map(|mut field| {
+            let int_types = vec![
+                parse_quote!(i8),
+                parse_quote!(i16),
+                parse_quote!(i32),
+                parse_quote!(i64),
+                parse_quote!(i128),
+                parse_quote!(isize),
+                parse_quote!(u8),
+                parse_quote!(u16),
+                parse_quote!(u32),
+                parse_quote!(u64),
+                parse_quote!(u128),
+                parse_quote!(usize),
+            ];
+
+            if int_types.contains(&field.ty) {
+                let from_str: syn::Attribute = parse_quote! {
+                    #[serde(
+                        serialize_with = "crate::serde::as_str::serialize",
+                        deserialize_with = "crate::serde::as_str::deserialize"
+                    )]
+                };
+                field.attrs.append(&mut vec![from_str]);
+                field
+            } else {
+                field
+            }
+        })
+        .collect::<Vec<syn::Field>>();
+
+    let fields_named: syn::FieldsNamed = parse_quote! {
+        { #(#fields_vec,)* }
+    };
+    let fields = syn::Fields::Named(fields_named);
+
+    syn::ItemStruct { fields, ..s }
+}
 // ====== helpers ======
 
 fn get_query_attr(
@@ -98,7 +141,7 @@ fn get_type_url(src: &Path, ident: &Ident, descriptor: &FileDescriptorSet) -> St
 
 fn extract_type_path_from_descriptor(
     target: &str,
-    message_type: &Vec<DescriptorProto>,
+    message_type: &[DescriptorProto],
     path: &str,
 ) -> Option<String> {
     message_type.iter().find_map(|descriptor| {
@@ -112,21 +155,19 @@ fn extract_type_path_from_descriptor(
             &append_type_path(path, &message_name),
         ) {
             Some(message_name)
-        } else if let Some(message_name) = extract_type_path_from_enum(
-            target,
-            &descriptor.enum_type,
-            &append_type_path(path, &message_name),
-        ) {
-            Some(message_name)
         } else {
-            None
+            extract_type_path_from_enum(
+                target,
+                &descriptor.enum_type,
+                &append_type_path(path, &message_name),
+            )
         }
     })
 }
 
 fn extract_type_path_from_enum(
     target: &str,
-    enum_type: &Vec<EnumDescriptorProto>,
+    enum_type: &[EnumDescriptorProto],
     path: &str,
 ) -> Option<String> {
     enum_type
@@ -177,7 +218,7 @@ pub fn append_querier(
     let package = src.file_stem().unwrap().to_str().unwrap();
     let re = Regex::new(r"([^.]*)(\.v\d+(beta\d+)?)?$").unwrap();
 
-    let package_stem = re.captures(&package).unwrap().get(1).unwrap().as_str();
+    let package_stem = re.captures(package).unwrap().get(1).unwrap().as_str();
 
     let querier_wrapper_ident = format_ident!("{}Querier", &package_stem.to_upper_camel_case());
 
@@ -211,7 +252,7 @@ pub fn append_querier(
             });
 
         let arg_idents = req_args.clone().unwrap().into_iter().map(|arg| arg.ident.unwrap()).collect::<Vec<Ident>>();
-        let arg_ty = req_args.clone().unwrap().into_iter().map(|arg| arg.ty).collect::<Vec<Type>>();
+        let arg_ty = req_args.unwrap().into_iter().map(|arg| arg.ty).collect::<Vec<Type>>();
 
         quote! {
           pub fn #name( &self, #(#arg_idents : #arg_ty),* ) -> Result<#res_type, cosmwasm_std::StdError> {
