@@ -281,8 +281,8 @@ macro_rules! expand_as_any {
 
 // [HACK] Register all types that can serde as Any manually for now.
 // must order by type that has more information for Any deserialization to
-// work correctly since after serialization, it currently loses @type tag
-// and deserialization works by trying to match the structure
+// work correctly. Since after serialization, it currently loses @type tag.
+// And deserialization works by trying to iteratively match the structure.
 expand_as_any!(
     // pools have distincted structure
     crate::types::osmosis::gamm::v1beta1::Pool,
