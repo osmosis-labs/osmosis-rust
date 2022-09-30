@@ -175,7 +175,12 @@ pub struct MsgJoinPool {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgJoinPoolResponse")]
-pub struct MsgJoinPoolResponse {}
+pub struct MsgJoinPoolResponse {
+    #[prost(string, tag = "1")]
+    pub share_out_amount: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub token_in: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
 /// ===================== MsgExitPool
 #[derive(
     Clone,
@@ -211,7 +216,10 @@ pub struct MsgExitPool {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgExitPoolResponse")]
-pub struct MsgExitPoolResponse {}
+pub struct MsgExitPoolResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub token_out: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
 /// ===================== MsgSwapExactAmountIn
 #[derive(
     Clone,
@@ -898,6 +906,7 @@ pub struct Params {
 pub struct GenesisState {
     #[prost(message, repeated, tag = "1")]
     pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
+    /// will be renamed to next_pool_id in an upcoming version
     #[prost(uint64, tag = "2")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",

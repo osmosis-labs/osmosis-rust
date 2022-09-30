@@ -19,6 +19,7 @@ use serde::Serialize;
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg};
+use crate::state::DEBUG;
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:osmosis-std-cosmwasm-test";
@@ -30,9 +31,11 @@ pub fn instantiate(
     deps: DepsMut,
     _env: Env,
     info: MessageInfo,
-    _msg: InstantiateMsg,
+    msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
+
+    DEBUG.save(deps.storage, &msg.debug)?;
 
     // With `Response` type, it is possible to dispatch message to invoke external logic.
     // See: https://github.com/CosmWasm/cosmwasm/blob/main/SEMANTICS.md#dispatching-messages
@@ -116,8 +119,27 @@ where
                 format!("Querier contract error: {}", contract_err),
             )),
             SystemResult::Ok(ContractResult::Ok(value)) => {
-                deps.api
-                    .debug(std::str::from_utf8(value.as_slice()).unwrap());
+                if DEBUG.load(deps.storage)? {
+                    let json_str = std::str::from_utf8(value.as_slice()).unwrap();
+                    let json_str = jsonformat::format(json_str, jsonformat::Indentation::TwoSpace);
+
+                    deps.api.debug("========================");
+                    match request {
+                        cosmwasm_std::QueryRequest::Stargate { path, data: _ } => {
+                            deps.api
+                                .debug(format!("Stargate Query :: {}", path).as_str());
+                        }
+                        request => {
+                            deps.api.debug(format!("{:?}", request).as_str());
+                        }
+                    };
+
+                    deps.api.debug("");
+                    deps.api.debug("```");
+                    deps.api.debug(&json_str);
+                    deps.api.debug("```");
+                    deps.api.debug("========================");
+                }
                 cosmwasm_std::from_binary(&value)
             }
         }?;

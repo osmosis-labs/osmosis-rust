@@ -6,7 +6,9 @@ pub use osmosis_std::types::osmosis::gamm::v1beta1::{
 
 /// Message type for `instantiate` entry_point
 #[cw_serde]
-pub struct InstantiateMsg {}
+pub struct InstantiateMsg {
+    pub debug: bool,
+}
 
 /// Message type for `execute` entry_point
 #[cw_serde]
