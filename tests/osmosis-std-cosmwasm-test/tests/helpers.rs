@@ -1,10 +1,8 @@
 use cosmwasm_std::Coin;
 
-use osmosis_std::types::osmosis::gamm::poolmodels::stableswap::v1beta1::{
-    MsgCreateStableswapPool, MsgCreateStableswapPoolResponse,
-};
+
 use osmosis_std_cosmwasm_test::msg::InstantiateMsg;
-use osmosis_testing::{Account, Gamm, Module, OsmosisTestApp, Runner, SigningAccount, Wasm};
+use osmosis_testing::{Account, Gamm, Module, OsmosisTestApp, SigningAccount, Wasm};
 use std::path::PathBuf;
 
 pub fn with_env_setup(
