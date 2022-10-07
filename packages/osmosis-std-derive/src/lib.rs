@@ -79,9 +79,9 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
             }
         }
 
-        impl From<#ident> for cosmwasm_std::CosmosMsg {
+        impl<T> From<#ident> for cosmwasm_std::CosmosMsg<T> {
             fn from(msg: #ident) -> Self {
-                cosmwasm_std::CosmosMsg::<cosmwasm_std::Empty>::Stargate {
+                cosmwasm_std::CosmosMsg::<T>::Stargate {
                     type_url: #type_url.to_string(),
                     value: msg.into(),
                 }
