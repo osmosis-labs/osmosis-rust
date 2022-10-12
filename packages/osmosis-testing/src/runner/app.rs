@@ -183,10 +183,9 @@ impl OsmosisTestApp {
 }
 
 impl<'a> Runner<'a> for OsmosisTestApp {
-    fn execute<M, R>(
+    fn execute_multiple<M, R>(
         &self,
-        msg: M,
-        type_url: &str,
+        msgs: &[(M, &str)],
         signer: &SigningAccount,
     ) -> RunnerExecuteResult<R>
     where
@@ -195,16 +194,21 @@ impl<'a> Runner<'a> for OsmosisTestApp {
     {
         unsafe { BeginBlock(self.id) };
 
-        let mut buf = Vec::new();
-        M::encode(&msg, &mut buf).map_err(EncodeError::ProtoEncodeError)?;
+        let msgs = msgs
+            .iter()
+            .map(|(msg, type_url)| {
+                let mut buf = Vec::new();
+                M::encode(msg, &mut buf).map_err(EncodeError::ProtoEncodeError)?;
 
-        let msg = cosmrs::Any {
-            type_url: type_url.to_string(),
-            value: buf,
-        };
+                Ok(cosmrs::Any {
+                    type_url: type_url.to_string(),
+                    value: buf,
+                })
+            })
+            .collect::<Result<Vec<cosmrs::Any>, RunnerError>>()?;
 
         let fee = match &signer.fee_setting() {
-            FeeSetting::Auto { .. } => self.estimate_fee([msg.clone()], signer)?,
+            FeeSetting::Auto { .. } => self.estimate_fee(msgs.clone(), signer)?,
             FeeSetting::Custom { amount, gas_limit } => Fee::from_amount_and_gas(
                 cosmrs::Coin {
                     denom: amount.denom.parse().unwrap(),
@@ -214,7 +218,7 @@ impl<'a> Runner<'a> for OsmosisTestApp {
             ),
         };
 
-        let tx = self.create_signed_tx([msg], signer, fee)?;
+        let tx = self.create_signed_tx(msgs, signer, fee)?;
 
         let mut buf = Vec::new();
         RequestDeliverTx::encode(&RequestDeliverTx { tx }, &mut buf)
@@ -262,6 +266,7 @@ impl<'a> Runner<'a> for OsmosisTestApp {
 mod tests {
     use std::option::Option::None;
 
+    use cosmrs::proto::cosmos::bank::v1beta1::QueryAllBalancesRequest;
     use cosmwasm_std::{attr, coins, Coin};
 
     use osmosis_std::types::osmosis::tokenfactory::v1beta1::{
@@ -505,7 +510,10 @@ mod tests {
         let res = wasm.store_code(&wasm_byte_code, None, &bob).unwrap();
 
         let bob_balance = Bank::new(&app)
-            .query_all_balances(&bob.address(), None)
+            .query_all_balances(&QueryAllBalancesRequest {
+                address: bob.address(),
+                pagination: None,
+            })
             .unwrap()
             .balances
             .into_iter()

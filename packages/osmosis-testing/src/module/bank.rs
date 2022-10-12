@@ -1,6 +1,8 @@
-use crate::runner::result::RunnerResult;
-use cosmrs::proto::cosmos::bank::v1beta1::{QueryAllBalancesRequest, QueryAllBalancesResponse};
-use cosmrs::proto::cosmos::base::query::v1beta1::PageRequest;
+use crate::fn_query;
+use cosmrs::proto::cosmos::bank::v1beta1::{
+    QueryAllBalancesRequest, QueryAllBalancesResponse, QueryBalanceRequest, QueryBalanceResponse,
+    QueryTotalSupplyRequest, QueryTotalSupplyResponse,
+};
 
 use crate::module::Module;
 use crate::runner::Runner;
@@ -19,18 +21,15 @@ impl<'a, R> Bank<'a, R>
 where
     R: Runner<'a>,
 {
-    pub fn query_all_balances(
-        &self,
-        address: &str,
-        pagination: Option<PageRequest>,
-    ) -> RunnerResult<QueryAllBalancesResponse> {
-        self.runner
-            .query::<QueryAllBalancesRequest, QueryAllBalancesResponse>(
-                "/cosmos.bank.v1beta1.Query/AllBalances",
-                &QueryAllBalancesRequest {
-                    address: address.to_string(),
-                    pagination,
-                },
-            )
+    fn_query! {
+        pub query_balance ["/cosmos.bank.v1beta1.Query/Balance"]: QueryBalanceRequest => QueryBalanceResponse
+    }
+
+    fn_query! {
+        pub query_all_balances ["/cosmos.bank.v1beta1.Query/AllBalances"]: QueryAllBalancesRequest => QueryAllBalancesResponse
+    }
+
+    fn_query! {
+        pub query_total_supply ["/cosmos.bank.v1beta1.Query/TotalSupply"]: QueryTotalSupplyRequest => QueryTotalSupplyResponse
     }
 }

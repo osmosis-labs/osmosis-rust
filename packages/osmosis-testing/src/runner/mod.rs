@@ -14,7 +14,20 @@ pub trait Runner<'a> {
     ) -> RunnerExecuteResult<R>
     where
         M: ::prost::Message,
+        R: ::prost::Message + Default,
+    {
+        self.execute_multiple(&[(msg, type_url)], signer)
+    }
+
+    fn execute_multiple<M, R>(
+        &self,
+        msgs: &[(M, &str)],
+        signer: &SigningAccount,
+    ) -> RunnerExecuteResult<R>
+    where
+        M: ::prost::Message,
         R: ::prost::Message + Default;
+
     fn query<Q, R>(&self, path: &str, query: &Q) -> RunnerResult<R>
     where
         Q: ::prost::Message,
