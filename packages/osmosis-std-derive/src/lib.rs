@@ -106,6 +106,21 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
                 })
             }
         }
+
+        impl TryFrom<cosmwasm_std::SubMsgResult> for #ident {
+            type Error = cosmwasm_std::StdError;
+
+            fn try_from(result: cosmwasm_std::SubMsgResult) -> Result<Self, Self::Error> {
+                result
+                    .into_result()
+                    .map_err(|e| cosmwasm_std::StdError::GenericErr { msg: e })?
+                    .data
+                    .ok_or_else(|| cosmwasm_std::StdError::NotFound {
+                        kind: "cosmwasm_std::SubMsgResult::<T>".to_string(),
+                    })?
+                    .try_into()
+            }
+        }
     }).into()
 }
 
