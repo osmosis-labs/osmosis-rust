@@ -270,6 +270,43 @@ pub struct MsgExtendLockupResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
+#[proto_message(type_url = "/osmosis.lockup.MsgForceUnlock")]
+pub struct MsgForceUnlock {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub id: u64,
+    // Amount of unlocking coins. Unlock all if not set.
+    #[prost(message, repeated, tag = "3")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.MsgForceUnlockResponse")]
+pub struct MsgForceUnlockResponse {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
+}
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto_message(type_url = "/osmosis.lockup.ModuleBalanceRequest")]
 #[proto_query(
     path = "/osmosis.lockup.Query/ModuleBalance",
