@@ -261,6 +261,8 @@ pub struct MsgExtendLockupResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
 }
+/// MsgForceUnlock unlocks locks immediately for
+/// addresses registered via governance.
 #[derive(
     Clone,
     PartialEq, Eq,
@@ -280,7 +282,7 @@ pub struct MsgForceUnlock {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub id: u64,
-    // Amount of unlocking coins. Unlock all if not set.
+    /// Amount of unlocking coins. Unlock all if not set.
     #[prost(message, repeated, tag = "3")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
@@ -297,6 +299,20 @@ pub struct MsgForceUnlock {
 pub struct MsgForceUnlockResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
+}
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.Params")]
+pub struct Params {
+    #[prost(string, repeated, tag = "1")]
+    pub force_unlock_allowed_addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(
     Clone,
@@ -831,6 +847,35 @@ pub struct AccountLockedLongerDurationDenomResponse {
     #[prost(message, repeated, tag = "1")]
     pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
 }
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.QueryParamsRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/Params",
+    response_type = QueryParamsResponse
+)]
+pub struct QueryParamsRequest {}
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.QueryParamsResponse")]
+pub struct QueryParamsResponse {
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+}
 /// GenesisState defines the lockup module's genesis state.
 #[derive(
     Clone,
@@ -970,5 +1015,8 @@ impl<'a, Q: cosmwasm_std::CustomQuery> LockupQuerier<'a, Q> {
             denom,
         }
         .query(self.querier)
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
     }
 }

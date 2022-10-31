@@ -605,6 +605,43 @@ pub struct QueryNumPoolsResponse {
     )]
     pub num_pools: u64,
 }
+///=============================== PoolType
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolTypeRequest")]
+#[proto_query(
+    path = "/osmosis.gamm.v1beta1.Query/PoolType",
+    response_type = QueryPoolTypeResponse
+)]
+pub struct QueryPoolTypeRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
+#[derive(
+    Clone,
+    PartialEq, Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolTypeResponse")]
+pub struct QueryPoolTypeResponse {
+    #[prost(string, tag = "1")]
+    pub pool_type: ::prost::alloc::string::String,
+}
 ///=============================== PoolParams
 #[derive(
     Clone,
@@ -939,6 +976,9 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
     }
     pub fn pool(&self, pool_id: u64) -> Result<QueryPoolResponse, cosmwasm_std::StdError> {
         QueryPoolRequest { pool_id }.query(self.querier)
+    }
+    pub fn pool_type(&self, pool_id: u64) -> Result<QueryPoolTypeResponse, cosmwasm_std::StdError> {
+        QueryPoolTypeRequest { pool_id }.query(self.querier)
     }
     pub fn pool_params(
         &self,
