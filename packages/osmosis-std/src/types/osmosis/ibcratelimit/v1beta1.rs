@@ -2,7 +2,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// Params defines the parameters for the ibc-rate-limiting module.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

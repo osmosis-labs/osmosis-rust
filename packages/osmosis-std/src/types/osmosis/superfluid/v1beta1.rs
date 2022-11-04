@@ -3,7 +3,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// assets
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -23,7 +23,7 @@ pub struct SetSuperfluidAssetsProposal {
 /// assets by denom
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

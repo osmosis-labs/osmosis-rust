@@ -5,7 +5,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// The pool ID must have osmo as one of its assets.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -30,7 +30,7 @@ pub struct FeeToken {
 /// it will remove the denom from the whitelisted set.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -48,7 +48,7 @@ pub struct UpdateFeeTokenProposal {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -63,7 +63,7 @@ pub struct UpdateFeeTokenProposal {
 pub struct QueryFeeTokensRequest {}
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -79,7 +79,7 @@ pub struct QueryFeeTokensResponse {
 /// price for the specified tx fee denom
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -99,7 +99,7 @@ pub struct QueryDenomSpotPriceRequest {
 /// price for the specified tx fee denom
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -119,7 +119,7 @@ pub struct QueryDenomSpotPriceResponse {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -137,7 +137,7 @@ pub struct QueryDenomPoolIdRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -155,7 +155,7 @@ pub struct QueryDenomPoolIdResponse {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -170,7 +170,7 @@ pub struct QueryDenomPoolIdResponse {
 pub struct QueryBaseDenomRequest {}
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -185,7 +185,7 @@ pub struct QueryBaseDenomResponse {
 /// GenesisState defines the txfees module's genesis state.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

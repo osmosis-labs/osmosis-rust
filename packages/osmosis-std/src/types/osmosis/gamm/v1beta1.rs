@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
 ///   t > start_time + duration: w(t) = target_pool_weights
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -57,7 +57,7 @@ pub struct SmoothWeightChangeParams {
 /// The pool's token holders are specified in future_pool_governor.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -79,7 +79,7 @@ pub struct PoolParams {
 /// and should be revisited in a future state migration.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -98,7 +98,7 @@ pub struct PoolAsset {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -143,7 +143,7 @@ pub struct Pool {
 /// This is really MsgJoinPoolNoSwap
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -167,7 +167,7 @@ pub struct MsgJoinPool {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -184,7 +184,7 @@ pub struct MsgJoinPoolResponse {
 /// ===================== MsgExitPool
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -208,7 +208,7 @@ pub struct MsgExitPool {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -223,7 +223,7 @@ pub struct MsgExitPoolResponse {
 /// ===================== MsgSwapExactAmountIn
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -243,7 +243,7 @@ pub struct SwapAmountInRoute {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -263,7 +263,7 @@ pub struct MsgSwapExactAmountIn {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -278,7 +278,7 @@ pub struct MsgSwapExactAmountInResponse {
 /// ===================== MsgSwapExactAmountOut
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -298,7 +298,7 @@ pub struct SwapAmountOutRoute {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -318,7 +318,7 @@ pub struct MsgSwapExactAmountOut {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -334,7 +334,7 @@ pub struct MsgSwapExactAmountOutResponse {
 /// TODO: Rename to MsgJoinSwapExactAmountIn
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -362,7 +362,7 @@ pub struct MsgJoinSwapExternAmountIn {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -377,7 +377,7 @@ pub struct MsgJoinSwapExternAmountInResponse {
 /// ===================== MsgJoinSwapShareAmountOut
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -403,7 +403,7 @@ pub struct MsgJoinSwapShareAmountOut {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -418,7 +418,7 @@ pub struct MsgJoinSwapShareAmountOutResponse {
 /// ===================== MsgExitSwapShareAmountIn
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -444,7 +444,7 @@ pub struct MsgExitSwapShareAmountIn {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -459,7 +459,7 @@ pub struct MsgExitSwapShareAmountInResponse {
 /// ===================== MsgExitSwapExternAmountOut
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -483,7 +483,7 @@ pub struct MsgExitSwapExternAmountOut {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -498,7 +498,7 @@ pub struct MsgExitSwapExternAmountOutResponse {
 ///=============================== Pool
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -520,7 +520,7 @@ pub struct QueryPoolRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -535,7 +535,7 @@ pub struct QueryPoolResponse {
 ///=============================== Pools
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -555,7 +555,7 @@ pub struct QueryPoolsRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -574,7 +574,7 @@ pub struct QueryPoolsResponse {
 ///=============================== NumPools
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -589,7 +589,7 @@ pub struct QueryPoolsResponse {
 pub struct QueryNumPoolsRequest {}
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -608,7 +608,7 @@ pub struct QueryNumPoolsResponse {
 ///=============================== PoolType
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -630,7 +630,7 @@ pub struct QueryPoolTypeRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -642,10 +642,90 @@ pub struct QueryPoolTypeResponse {
     #[prost(string, tag = "1")]
     pub pool_type: ::prost::alloc::string::String,
 }
+///=============================== CalcJoinPoolShares
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryCalcJoinPoolSharesRequest")]
+#[proto_query(
+    path = "/osmosis.gamm.v1beta1.Query/CalcJoinPoolShares",
+    response_type = QueryCalcJoinPoolSharesResponse
+)]
+pub struct QueryCalcJoinPoolSharesRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(message, repeated, tag = "2")]
+    pub tokens_in: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryCalcJoinPoolSharesResponse")]
+pub struct QueryCalcJoinPoolSharesResponse {
+    #[prost(string, tag = "1")]
+    pub share_out_amount: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub tokens_out: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+///=============================== CalcExitPoolCoinsFromShares
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryCalcExitPoolCoinsFromSharesRequest")]
+#[proto_query(
+    path = "/osmosis.gamm.v1beta1.Query/CalcExitPoolCoinsFromShares",
+    response_type = QueryCalcExitPoolCoinsFromSharesResponse
+)]
+pub struct QueryCalcExitPoolCoinsFromSharesRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(string, tag = "2")]
+    pub share_in_amount: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryCalcExitPoolCoinsFromSharesResponse")]
+pub struct QueryCalcExitPoolCoinsFromSharesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub tokens_out: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
 ///=============================== PoolParams
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -667,7 +747,7 @@ pub struct QueryPoolParamsRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -682,7 +762,7 @@ pub struct QueryPoolParamsResponse {
 ///=============================== PoolLiquidity
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -704,7 +784,7 @@ pub struct QueryTotalPoolLiquidityRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -719,7 +799,7 @@ pub struct QueryTotalPoolLiquidityResponse {
 ///=============================== TotalShares
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -741,7 +821,7 @@ pub struct QueryTotalSharesRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -757,7 +837,7 @@ pub struct QueryTotalSharesResponse {
 /// query.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -785,7 +865,7 @@ pub struct QuerySpotPriceRequest {
 /// query.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -801,7 +881,7 @@ pub struct QuerySpotPriceResponse {
 ///=============================== EstimateSwapExactAmountIn
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -829,7 +909,7 @@ pub struct QuerySwapExactAmountInRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -844,7 +924,7 @@ pub struct QuerySwapExactAmountInResponse {
 ///=============================== EstimateSwapExactAmountOut
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -872,7 +952,7 @@ pub struct QuerySwapExactAmountOutRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -886,7 +966,7 @@ pub struct QuerySwapExactAmountOutResponse {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -901,7 +981,7 @@ pub struct QuerySwapExactAmountOutResponse {
 pub struct QueryTotalLiquidityRequest {}
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -916,7 +996,7 @@ pub struct QueryTotalLiquidityResponse {
 /// Params holds parameters for the incentives module
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -932,7 +1012,7 @@ pub struct Params {
 /// GenesisState defines the gamm module's genesis state.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -979,6 +1059,24 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
     }
     pub fn pool_type(&self, pool_id: u64) -> Result<QueryPoolTypeResponse, cosmwasm_std::StdError> {
         QueryPoolTypeRequest { pool_id }.query(self.querier)
+    }
+    pub fn calc_join_pool_shares(
+        &self,
+        pool_id: u64,
+        tokens_in: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    ) -> Result<QueryCalcJoinPoolSharesResponse, cosmwasm_std::StdError> {
+        QueryCalcJoinPoolSharesRequest { pool_id, tokens_in }.query(self.querier)
+    }
+    pub fn calc_exit_pool_coins_from_shares(
+        &self,
+        pool_id: u64,
+        share_in_amount: ::prost::alloc::string::String,
+    ) -> Result<QueryCalcExitPoolCoinsFromSharesResponse, cosmwasm_std::StdError> {
+        QueryCalcExitPoolCoinsFromSharesRequest {
+            pool_id,
+            share_in_amount,
+        }
+        .query(self.querier)
     }
     pub fn pool_params(
         &self,

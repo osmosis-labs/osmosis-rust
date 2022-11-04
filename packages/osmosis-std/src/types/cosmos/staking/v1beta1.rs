@@ -8,7 +8,7 @@ struct HistoricalInfo {}
 /// a validator.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -30,7 +30,7 @@ pub struct CommissionRates {
 /// Commission defines commission parameters for a given validator.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -49,7 +49,7 @@ pub struct Commission {
 /// Description defines a validator description.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -84,7 +84,7 @@ pub struct Description {
 /// multiplied by exchange rate.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -138,7 +138,7 @@ pub struct Validator {
 /// ValAddresses defines a repeated set of validator addresses.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -155,7 +155,7 @@ pub struct ValAddresses {
 /// be used to construct the key to getting an UnbondingDelegation from state.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -172,7 +172,7 @@ pub struct DvPair {
 /// DVPairs defines an array of DVPair objects.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -190,7 +190,7 @@ pub struct DvPairs {
 /// Redelegation from state.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -209,7 +209,7 @@ pub struct DvvTriplet {
 /// DVVTriplets defines an array of DVVTriplet objects.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -226,7 +226,7 @@ pub struct DvvTriplets {
 /// validator.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -249,7 +249,7 @@ pub struct Delegation {
 /// for a single validator in an time-ordered list.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -273,7 +273,7 @@ pub struct UnbondingDelegation {
 /// UnbondingDelegationEntry defines an unbonding object with relevant metadata.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -302,7 +302,7 @@ pub struct UnbondingDelegationEntry {
 /// RedelegationEntry defines a redelegation object with relevant metadata.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -332,7 +332,7 @@ pub struct RedelegationEntry {
 /// from a particular source validator to a particular destination validator.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -359,7 +359,7 @@ pub struct Redelegation {
 /// Params defines the parameters for the staking module.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -406,7 +406,7 @@ pub struct Params {
 /// balance in addition to shares which is more suitable for client responses.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -425,7 +425,7 @@ pub struct DelegationResponse {
 /// responses.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -444,7 +444,7 @@ pub struct RedelegationEntryResponse {
 /// responses.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -462,7 +462,7 @@ pub struct RedelegationResponse {
 /// denomination.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

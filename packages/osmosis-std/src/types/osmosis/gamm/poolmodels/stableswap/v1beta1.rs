@@ -5,7 +5,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// The pool's token holders are specified in future_pool_governor.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -22,7 +22,7 @@ pub struct PoolParams {
 /// Pool is the stableswap Pool struct
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -61,7 +61,7 @@ pub struct Pool {
         ::prost::alloc::vec::Vec<super::super::super::super::super::cosmos::base::v1beta1::Coin>,
     /// for calculation amognst assets with different precisions
     #[prost(uint64, repeated, packed = "false", tag = "7")]
-    pub scaling_factor: ::prost::alloc::vec::Vec<u64>,
+    pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
     /// scaling_factor_controller is the address can adjust pool scaling factors
     #[prost(string, tag = "8")]
     pub scaling_factor_controller: ::prost::alloc::string::String,
@@ -69,7 +69,7 @@ pub struct Pool {
 /// ===================== MsgCreatePool
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -95,7 +95,7 @@ pub struct MsgCreateStableswapPool {
 /// Returns a poolID with custom poolName.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -117,7 +117,7 @@ pub struct MsgCreateStableswapPoolResponse {
 /// succeed. Adjusts stableswap scaling factors.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -141,7 +141,7 @@ pub struct MsgStableSwapAdjustScalingFactors {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

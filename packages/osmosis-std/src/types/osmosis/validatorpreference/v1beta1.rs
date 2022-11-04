@@ -6,7 +6,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// distribution.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -29,7 +29,7 @@ pub struct ValidatorPreference {
 /// add up to 1.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -45,7 +45,7 @@ pub struct ValidatorSetPreferences {
 /// MsgCreateValidatorSetPreference is a list that holds validator-set.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -63,7 +63,7 @@ pub struct MsgSetValidatorSetPreference {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -78,7 +78,7 @@ pub struct MsgSetValidatorSetPreferenceResponse {}
 /// validator-set
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -99,7 +99,7 @@ pub struct MsgDelegateToValidatorSet {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -112,7 +112,7 @@ pub struct MsgDelegateToValidatorSet {
 pub struct MsgDelegateToValidatorSetResponse {}
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -134,7 +134,7 @@ pub struct MsgUndelegateFromValidatorSet {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -149,7 +149,7 @@ pub struct MsgUndelegateFromValidatorSetResponse {}
 /// validator set.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -164,7 +164,7 @@ pub struct MsgWithdrawDelegationRewards {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -178,7 +178,7 @@ pub struct MsgWithdrawDelegationRewardsResponse {}
 /// Request type for UserValidatorPreferences.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -198,7 +198,7 @@ pub struct QueryUserValidatorPreferences {
 /// Response type the QueryUserValidatorPreferences query request
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

@@ -2,7 +2,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// Params defines the parameters for the bank module.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -20,7 +20,7 @@ pub struct Params {
 /// sendable).
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -39,7 +39,7 @@ pub struct SendEnabled {
 /// This message is deprecated now that supply is indexed by denom.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -55,7 +55,7 @@ pub struct Supply {
 /// denomination unit of the basic token.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -86,7 +86,7 @@ pub struct DenomUnit {
 /// a basic token.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

@@ -8,7 +8,7 @@ use osmosis_std_derive::CosmwasmExt;
 /// now.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -62,7 +62,7 @@ pub struct TwapRecord {
 /// Params holds parameters for the twap module
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -79,7 +79,7 @@ pub struct Params {
 /// GenesisState defines the twap module's genesis state.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -97,7 +97,7 @@ pub struct GenesisState {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -127,7 +127,7 @@ pub struct ArithmeticTwapRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -141,7 +141,7 @@ pub struct ArithmeticTwapResponse {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -169,7 +169,7 @@ pub struct ArithmeticTwapToNowRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -183,7 +183,7 @@ pub struct ArithmeticTwapToNowResponse {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -198,7 +198,7 @@ pub struct ArithmeticTwapToNowResponse {
 pub struct ParamsRequest {}
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
