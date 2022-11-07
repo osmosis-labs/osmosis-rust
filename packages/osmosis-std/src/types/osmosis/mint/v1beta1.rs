@@ -2,7 +2,8 @@ use osmosis_std_derive::CosmwasmExt;
 /// Minter represents the minting state.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -20,7 +21,8 @@ pub struct Minter {
 /// tokens to be minted to the address.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -39,7 +41,8 @@ pub struct WeightedAddress {
 /// denoms and how much.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -68,7 +71,8 @@ pub struct DistributionProportions {
 /// Params holds parameters for the x/mint module.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -121,7 +125,8 @@ pub struct Params {
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -137,7 +142,8 @@ pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -154,7 +160,8 @@ pub struct QueryParamsResponse {
 /// Query/EpochProvisions RPC method.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -171,7 +178,8 @@ pub struct QueryEpochProvisionsRequest {}
 /// Query/EpochProvisions RPC method.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -187,7 +195,8 @@ pub struct QueryEpochProvisionsResponse {
 /// GenesisState defines the mint module's genesis state.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

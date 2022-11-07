@@ -5,7 +5,8 @@ use osmosis_std_derive::CosmwasmExt;
 /// signatures required by gogoproto.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -25,7 +26,8 @@ pub struct Coin {
 /// signatures required by gogoproto.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -42,7 +44,8 @@ pub struct DecCoin {
 /// IntProto defines a Protobuf wrapper around an Int object.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -57,7 +60,8 @@ pub struct IntProto {
 /// DecProto defines a Protobuf wrapper around a Dec object.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
