@@ -6,6 +6,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -23,6 +24,7 @@ pub struct PoolParams {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -70,6 +72,7 @@ pub struct Pool {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -96,6 +99,7 @@ pub struct MsgCreateStableswapPool {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -118,6 +122,7 @@ pub struct MsgCreateStableswapPoolResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -142,6 +147,7 @@ pub struct MsgStableSwapAdjustScalingFactors {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

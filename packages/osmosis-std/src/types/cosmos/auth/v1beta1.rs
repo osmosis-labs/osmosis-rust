@@ -5,6 +5,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -34,6 +35,7 @@ pub struct BaseAccount {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -53,6 +55,7 @@ pub struct ModuleAccount {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

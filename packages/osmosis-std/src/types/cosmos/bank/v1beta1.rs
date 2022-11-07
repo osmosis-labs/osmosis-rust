@@ -3,6 +3,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -21,6 +22,7 @@ pub struct Params {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -40,6 +42,7 @@ pub struct SendEnabled {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -56,6 +59,7 @@ pub struct Supply {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -87,6 +91,7 @@ pub struct DenomUnit {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

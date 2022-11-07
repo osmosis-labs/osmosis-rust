@@ -2,6 +2,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -20,6 +21,7 @@ pub struct Params {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -34,6 +36,7 @@ pub struct LockableDurationsInfo {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -50,6 +53,7 @@ pub struct DistrInfo {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -70,6 +74,7 @@ pub struct DistrRecord {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -96,6 +101,7 @@ pub struct PoolToGauge {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -117,6 +123,7 @@ pub struct PoolToGauges {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -142,6 +149,7 @@ pub struct ReplacePoolIncentivesProposal {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -160,6 +168,7 @@ pub struct UpdatePoolIncentivesProposal {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -182,6 +191,7 @@ pub struct QueryGaugeIdsRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -200,6 +210,7 @@ pub mod query_gauge_ids_response {
     #[derive(
         Clone,
         PartialEq,
+        Eq,
         ::prost::Message,
         serde::Serialize,
         serde::Deserialize,
@@ -225,6 +236,7 @@ pub mod query_gauge_ids_response {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -240,6 +252,7 @@ pub struct QueryDistrInfoRequest {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -254,6 +267,7 @@ pub struct QueryDistrInfoResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -269,6 +283,7 @@ pub struct QueryParamsRequest {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -283,6 +298,7 @@ pub struct QueryParamsResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -298,6 +314,7 @@ pub struct QueryLockableDurationsRequest {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -312,6 +329,7 @@ pub struct QueryLockableDurationsResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -327,6 +345,7 @@ pub struct QueryIncentivizedPoolsRequest {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -353,6 +372,7 @@ pub struct IncentivizedPool {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -367,6 +387,7 @@ pub struct QueryIncentivizedPoolsResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -382,6 +403,7 @@ pub struct QueryExternalIncentiveGaugesRequest {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -397,6 +419,7 @@ pub struct QueryExternalIncentiveGaugesResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

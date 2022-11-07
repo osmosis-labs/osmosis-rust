@@ -158,6 +158,7 @@ fn transform_items(
         .into_iter()
         .map(|i| match i.clone() {
             Item::Struct(s) => Item::Struct({
+                let s = transformers::add_derive_eq(&s);
                 let s = transformers::append_attrs(src, &s, descriptor);
                 transformers::allow_serde_int_as_str(s)
             }),

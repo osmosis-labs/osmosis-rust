@@ -6,6 +6,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -26,6 +27,7 @@ pub struct Coin {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -43,6 +45,7 @@ pub struct DecCoin {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -58,6 +61,7 @@ pub struct IntProto {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

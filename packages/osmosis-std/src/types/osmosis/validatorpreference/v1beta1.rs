@@ -7,6 +7,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -30,6 +31,7 @@ pub struct ValidatorPreference {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -46,6 +48,7 @@ pub struct ValidatorSetPreferences {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -64,6 +67,7 @@ pub struct MsgSetValidatorSetPreference {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -79,6 +83,7 @@ pub struct MsgSetValidatorSetPreferenceResponse {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -100,6 +105,7 @@ pub struct MsgDelegateToValidatorSet {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -113,6 +119,7 @@ pub struct MsgDelegateToValidatorSetResponse {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -135,6 +142,7 @@ pub struct MsgUndelegateFromValidatorSet {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -150,6 +158,7 @@ pub struct MsgUndelegateFromValidatorSetResponse {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -165,6 +174,7 @@ pub struct MsgWithdrawDelegationRewards {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -179,6 +189,7 @@ pub struct MsgWithdrawDelegationRewardsResponse {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -199,6 +210,7 @@ pub struct QueryUserValidatorPreferences {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

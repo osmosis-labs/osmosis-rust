@@ -4,6 +4,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -29,6 +30,7 @@ pub struct SuperfluidAsset {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -60,6 +62,7 @@ pub struct SuperfluidIntermediaryAccount {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -85,6 +88,7 @@ pub struct OsmoEquivalentMultiplierRecord {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -108,6 +112,7 @@ pub struct SuperfluidDelegationRecord {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -128,6 +133,7 @@ pub struct LockIdIntermediaryAccountConnection {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -151,6 +157,7 @@ pub enum SuperfluidAssetType {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -173,6 +180,7 @@ pub struct MsgSuperfluidDelegate {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -184,6 +192,7 @@ pub struct MsgSuperfluidDelegateResponse {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -204,6 +213,7 @@ pub struct MsgSuperfluidUndelegate {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -215,6 +225,7 @@ pub struct MsgSuperfluidUndelegateResponse {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -235,6 +246,7 @@ pub struct MsgSuperfluidUnbondLock {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -249,6 +261,7 @@ pub struct MsgSuperfluidUnbondLockResponse {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -267,6 +280,7 @@ pub struct MsgLockAndSuperfluidDelegate {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -293,6 +307,7 @@ pub struct MsgLockAndSuperfluidDelegateResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -313,6 +328,7 @@ pub struct MsgUnPoolWhitelistedPool {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -328,6 +344,7 @@ pub struct MsgUnPoolWhitelistedPoolResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -346,6 +363,7 @@ pub struct Params {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -361,6 +379,7 @@ pub struct QueryParamsRequest {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -376,6 +395,7 @@ pub struct QueryParamsResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -394,6 +414,7 @@ pub struct AssetTypeRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -412,6 +433,7 @@ pub struct AssetTypeResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -427,6 +449,7 @@ pub struct AllAssetsRequest {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -441,6 +464,7 @@ pub struct AllAssetsResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -459,6 +483,7 @@ pub struct AssetMultiplierRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -473,6 +498,7 @@ pub struct AssetMultiplierResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -497,6 +523,7 @@ pub struct SuperfluidIntermediaryAccountInfo {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -515,6 +542,7 @@ pub struct AllIntermediaryAccountsRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -532,6 +560,7 @@ pub struct AllIntermediaryAccountsResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -554,6 +583,7 @@ pub struct ConnectedIntermediaryAccountRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -568,6 +598,7 @@ pub struct ConnectedIntermediaryAccountResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -586,6 +617,7 @@ pub struct QueryTotalDelegationByValidatorForDenomRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -600,6 +632,7 @@ pub struct QueryTotalDelegationByValidatorForDenomResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -618,6 +651,7 @@ pub struct Delegations {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -633,6 +667,7 @@ pub struct TotalSuperfluidDelegationsRequest {}
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -647,6 +682,7 @@ pub struct TotalSuperfluidDelegationsResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -669,6 +705,7 @@ pub struct SuperfluidDelegationAmountRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -683,6 +720,7 @@ pub struct SuperfluidDelegationAmountResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -701,6 +739,7 @@ pub struct SuperfluidDelegationsByDelegatorRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -720,6 +759,7 @@ pub struct SuperfluidDelegationsByDelegatorResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -740,6 +780,7 @@ pub struct SuperfluidUndelegationsByDelegatorRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -759,6 +800,7 @@ pub struct SuperfluidUndelegationsByDelegatorResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -779,6 +821,7 @@ pub struct SuperfluidDelegationsByValidatorDenomRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -793,6 +836,7 @@ pub struct SuperfluidDelegationsByValidatorDenomResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -815,6 +859,7 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -831,6 +876,7 @@ pub struct EstimateSuperfluidDelegatedAmountByValidatorDenomResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -849,6 +895,7 @@ pub struct QueryTotalDelegationByDelegatorRequest {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -872,6 +919,7 @@ pub struct QueryTotalDelegationByDelegatorResponse {
 #[derive(
     Clone,
     PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

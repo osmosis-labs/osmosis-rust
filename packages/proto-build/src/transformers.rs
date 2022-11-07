@@ -7,7 +7,9 @@ use prost_types::{
     DescriptorProto, EnumDescriptorProto, FileDescriptorSet, ServiceDescriptorProto,
 };
 use regex::Regex;
+use syn::__private::quote::__private::Group;
 use syn::__private::quote::__private::TokenStream as TokenStream2;
+use syn::__private::quote::__private::TokenTree;
 use syn::{parse_quote, Attribute, Fields, Ident, Item, ItemStruct, Type};
 
 use crate::{format_ident, quote};
@@ -31,6 +33,73 @@ pub const REPLACEMENTS: &[(&str, &str)] = &[
              impl ${1}Client<tonic::transport::Channel>",
     ),
 ];
+
+pub fn add_derive_eq(s: &ItemStruct) -> ItemStruct {
+    let mut item_struct = s.clone();
+    item_struct.attrs = item_struct
+        .attrs
+        .into_iter()
+        .map(|mut attr| {
+            // find derive attribute
+            if attr.path.is_ident("derive") {
+                attr.tokens = attr
+                    .tokens
+                    .into_iter()
+                    .map(|token_tree| {
+                        match token_tree {
+                            // with group token stream, which is `#[derive( ... )]`
+                            TokenTree::Group(group) => {
+                                let has_ident = |ident_str: &str| {
+                                    group.stream().into_iter().any(|token| match token {
+                                        TokenTree::Ident(ident) => {
+                                            ident == format_ident!("{}", ident_str)
+                                        }
+                                        _ => false,
+                                    })
+                                };
+
+                                // if does not have both PartialEq and Eq
+                                let stream = if !(has_ident("PartialEq") && has_ident("Eq")) {
+                                    // construct new token stream
+                                    group
+                                        .stream()
+                                        .into_iter()
+                                        .flat_map(|token| {
+                                            match token {
+                                                // if there exist `PartialEq` in derive attr
+                                                TokenTree::Ident(ident) => {
+                                                    if ident == format_ident!("PartialEq") {
+                                                        // expand token stream in group with `#[derive( ..., PartialEq, ... )]` to ``#[derive( ..., PartialEq, Eq, ... )]``
+                                                        let expanded_token_stream: TokenStream2 =
+                                                            syn::parse_quote!(PartialEq, Eq);
+                                                        expanded_token_stream.into_iter().collect()
+                                                    } else {
+                                                        vec![TokenTree::Ident(ident)]
+                                                    }
+                                                }
+                                                tt => vec![tt],
+                                            }
+                                        })
+                                        .collect()
+                                } else {
+                                    group.stream()
+                                };
+
+                                TokenTree::Group(Group::new(group.delimiter(), stream))
+                            }
+                            _ => token_tree,
+                        }
+                    })
+                    .collect();
+                attr
+            } else {
+                attr
+            }
+        })
+        .collect();
+
+    item_struct
+}
 
 pub fn append_attrs(src: &Path, s: &ItemStruct, descriptor: &FileDescriptorSet) -> ItemStruct {
     let mut s = s.clone();
@@ -103,7 +172,7 @@ fn get_query_attr(
     let service = query_services.get(package);
 
     let method = service?.method.iter().find(|m| {
-        let input_type = (*m).input_type.clone().unwrap();
+        let input_type = m.input_type.clone().unwrap();
         let input_type = input_type.split('.').last().unwrap();
         *ident == input_type.to_upper_camel_case()
     });
@@ -286,4 +355,81 @@ pub fn append_querier(
     };
 
     vec![items, querier].concat()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use syn::ItemStruct;
+
+    macro_rules! assert_ast_eq {
+        ($left:ident, $right:ident) => {
+            let left_fmt =
+                prettyplease::unparse(&syn::parse_file(&quote! { #$left }.to_string()).unwrap());
+            let right_fmt =
+                prettyplease::unparse(&syn::parse_file(&quote! { #$right}.to_string()).unwrap());
+
+            assert!(
+                $left == $right,
+                "Left is: \n\n{} \n\n but right is: \n\n{} \n\n",
+                left_fmt,
+                right_fmt
+            );
+        };
+    }
+
+    #[test]
+    fn test_add_derive_eq_if_there_is_partial_eq() {
+        let item_struct: ItemStruct = syn::parse_quote! {
+            #[derive(PartialEq, Debug)]
+            struct Hello {
+                name: String
+            }
+        };
+
+        let result = add_derive_eq(&item_struct);
+        let expected: ItemStruct = syn::parse_quote! {
+            #[derive(PartialEq, Eq, Debug)]
+            struct Hello {
+                name: String
+            }
+        };
+
+        assert_ast_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_add_derive_eq_does_not_add_if_there_is_no_partial_eq() {
+        let item_struct: ItemStruct = syn::parse_quote! {
+            #[derive(Debug)]
+            struct Hello {
+                name: String
+            }
+        };
+
+        let result = add_derive_eq(&item_struct);
+
+        assert_ast_eq!(item_struct, result);
+    }
+
+    #[test]
+    fn test_add_derive_eq_does_not_add_if_there_is_partial_eq_and_eq() {
+        let item_struct: ItemStruct = syn::parse_quote! {
+            #[derive(PartialEq, Eq, Debug)]
+            struct Hello {
+                name: String
+            }
+        };
+
+        let result = add_derive_eq(&item_struct);
+
+        let expected: ItemStruct = syn::parse_quote! {
+            #[derive(PartialEq, Eq, Debug)]
+            struct Hello {
+                name: String
+            }
+        };
+
+        assert_ast_eq!(result, expected);
+    }
 }

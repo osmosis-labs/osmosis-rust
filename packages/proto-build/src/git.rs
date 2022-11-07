@@ -22,9 +22,9 @@ pub fn update_submodules() {
     let full_path = |p: &str| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(p);
 
     info!("Updating cosmos/cosmos-sdk submodule...");
-    run_git(&["submodule", "update", "--init"]);
-    run_git(&["-C", full_path(COSMOS_SDK_DIR).to_str().unwrap(), "fetch"]);
-    run_git(&[
+    run_git(["submodule", "update", "--init"]);
+    run_git(["-C", full_path(COSMOS_SDK_DIR).to_str().unwrap(), "fetch"]);
+    run_git([
         "-C",
         full_path(COSMOS_SDK_DIR).to_str().unwrap(),
         "reset",
@@ -33,9 +33,9 @@ pub fn update_submodules() {
     ]);
 
     info!("Updating osmosis submodule...");
-    run_git(&["submodule", "update", "--init"]);
-    run_git(&["-C", full_path(OSMOSIS_DIR).to_str().unwrap(), "fetch"]);
-    run_git(&[
+    run_git(["submodule", "update", "--init"]);
+    run_git(["-C", full_path(OSMOSIS_DIR).to_str().unwrap(), "fetch"]);
+    run_git([
         "-C",
         full_path(OSMOSIS_DIR).to_str().unwrap(),
         "reset",
