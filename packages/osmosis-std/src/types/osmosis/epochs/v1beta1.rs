@@ -3,7 +3,8 @@ use osmosis_std_derive::CosmwasmExt;
 /// a timer defined by the x/epochs module.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -71,7 +72,8 @@ pub struct EpochInfo {
 /// GenesisState defines the epochs module's genesis state.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -85,7 +87,8 @@ pub struct GenesisState {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -100,7 +103,8 @@ pub struct GenesisState {
 pub struct QueryEpochsInfoRequest {}
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -114,7 +118,8 @@ pub struct QueryEpochsInfoResponse {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -132,7 +137,8 @@ pub struct QueryCurrentEpochRequest {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,

@@ -5,7 +5,8 @@ use osmosis_std_derive::CosmwasmExt;
 /// The pool's token holders are specified in future_pool_governor.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -22,7 +23,8 @@ pub struct PoolParams {
 /// Pool is the stableswap Pool struct
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -69,7 +71,8 @@ pub struct Pool {
 /// ===================== MsgCreatePool
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -95,7 +98,8 @@ pub struct MsgCreateStableswapPool {
 /// Returns a poolID with custom poolName.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -117,7 +121,8 @@ pub struct MsgCreateStableswapPoolResponse {
 /// succeed. Adjusts stableswap scaling factors.
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
@@ -141,7 +146,8 @@ pub struct MsgStableSwapAdjustScalingFactors {
 }
 #[derive(
     Clone,
-    PartialEq, Eq,
+    PartialEq,
+    Eq,
     ::prost::Message,
     serde::Serialize,
     serde::Deserialize,
