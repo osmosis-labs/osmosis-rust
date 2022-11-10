@@ -16,6 +16,7 @@ pub struct CosmosProject {
     pub name: String,
     pub version: String,
     pub project_dir: String,
+    pub include_mods: Option<Vec<String>>,
 }
 
 pub struct CodeGenerator {
@@ -124,22 +125,46 @@ impl CodeGenerator {
         let deps_dirs = self
             .deps
             .iter()
-            .map(|dep| self.root.join(&dep.project_dir))
+            .map(|dep| {
+                (
+                    dep.name.to_string(),
+                    self.root.join(&dep.project_dir),
+                    dep.include_mods.clone(),
+                )
+            })
             .collect();
-        let project_dir = self.root.join(&self.project.project_dir);
+        let project_dir = (
+            self.project.name.to_string(),
+            self.root.join(&self.project.project_dir),
+            self.project.include_mods.clone(),
+        );
 
         let proto_includes_path = vec![deps_dirs, vec![project_dir.clone()]].concat();
         let proto_includes_paths = proto_includes_path
             .iter()
-            .flat_map(|dir| include_paths.iter().map(|path| dir.join(path)));
+            .flat_map(|dir| include_paths.iter().map(|path| dir.1.join(path)));
 
         // List available paths for dependencies
         let includes: Vec<PathBuf> = proto_includes_paths.map(PathBuf::from).collect();
 
-        let proto_paths = fs::read_dir(project_dir.join(format!("proto/{}", self.project.name)))
-            .unwrap()
-            .map(|d| d.unwrap().path().to_string_lossy().to_string())
-            .collect::<Vec<String>>();
+        let proto_paths = proto_includes_path
+            .iter()
+            .map(|p| {
+                let paths = fs::read_dir(p.1.join(format!("proto/{}", p.0)))
+                    .unwrap()
+                    .map(|d| d.unwrap().path().to_string_lossy().to_string())
+                    .collect::<Vec<String>>();
+                if let Some(include_mods) = &p.2 {
+                    paths
+                        .into_iter()
+                        .filter(|p| include_mods.iter().any(|m| p.contains(m)))
+                        .collect()
+                } else {
+                    paths
+                }
+            })
+            .collect::<Vec<Vec<String>>>()
+            .concat();
 
         // List available proto files
         let mut protos: Vec<PathBuf> = vec![];

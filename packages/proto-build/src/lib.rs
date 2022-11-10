@@ -31,7 +31,7 @@ const COSMOS_SDK_DIR: &str = "../../dependencies/cosmos-sdk/";
 const OSMOSIS_DIR: &str = "../../dependencies/osmosis/";
 
 /// A temporary directory for proto building
-const TMP_BUILD_DIR: &str = "/tmp/tmp-protobuf/";
+const TMP_BUILD_DIR: &str = "./tmp/tmp-protobuf/";
 
 pub fn run() {
     let args: Vec<String> = env::args().collect();
@@ -46,11 +46,13 @@ pub fn run() {
         name: "osmosis".to_string(),
         version: OSMOSIS_REV.to_string(),
         project_dir: OSMOSIS_DIR.to_string(),
+        include_mods: None,
     };
     let cosmos_project = CosmosProject {
         name: "cosmos".to_string(),
         version: COSMOS_SDK_REV.to_string(),
         project_dir: COSMOS_SDK_DIR.to_string(),
+        include_mods: Some(vec!["bank".to_string()]),
     };
 
     let osmosis_code_generator = CodeGenerator::new(
