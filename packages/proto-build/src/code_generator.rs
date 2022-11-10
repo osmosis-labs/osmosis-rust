@@ -12,6 +12,7 @@ use crate::{mod_gen, transform};
 
 const DESCRIPTOR_FILE: &str = "descriptor.bin";
 
+#[derive(Clone)]
 pub struct CosmosProject {
     pub name: String,
     pub version: String,
@@ -125,24 +126,17 @@ impl CodeGenerator {
         let deps_dirs = self
             .deps
             .iter()
-            .map(|dep| {
-                (
-                    dep.name.to_string(),
-                    self.root.join(&dep.project_dir),
-                    dep.include_mods.clone(),
-                )
-            })
+            .map(|dep| (self.root.join(&dep.project_dir), dep.clone()))
             .collect();
         let project_dir = (
-            self.project.name.to_string(),
             self.root.join(&self.project.project_dir),
-            self.project.include_mods.clone(),
+            self.project.clone(),
         );
 
         let proto_includes_path = vec![deps_dirs, vec![project_dir.clone()]].concat();
         let proto_includes_paths = proto_includes_path
             .iter()
-            .flat_map(|dir| include_paths.iter().map(|path| dir.1.join(path)));
+            .flat_map(|dir| include_paths.iter().map(|path| dir.0.join(path)));
 
         // List available paths for dependencies
         let includes: Vec<PathBuf> = proto_includes_paths.map(PathBuf::from).collect();
@@ -150,11 +144,11 @@ impl CodeGenerator {
         let proto_paths = proto_includes_path
             .iter()
             .map(|p| {
-                let paths = fs::read_dir(p.1.join(format!("proto/{}", p.0)))
+                let paths = fs::read_dir(p.0.join(format!("proto/{}", p.1.name)))
                     .unwrap()
                     .map(|d| d.unwrap().path().to_string_lossy().to_string())
                     .collect::<Vec<String>>();
-                if let Some(include_mods) = &p.2 {
+                if let Some(include_mods) = &p.1.include_mods {
                     paths
                         .into_iter()
                         .filter(|p| include_mods.iter().any(|m| p.contains(m)))
