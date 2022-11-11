@@ -36,6 +36,42 @@ pub struct SendEnabled {
     #[prost(bool, tag = "2")]
     pub enabled: bool,
 }
+/// Input models transaction input.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.Input")]
+pub struct Input {
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+}
+/// Output models transaction outputs.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.Output")]
+pub struct Output {
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+}
 /// Supply represents a struct that passively keeps track of the total supply
 /// amounts in the network.
 /// This message is deprecated now that supply is indexed by denom.
@@ -157,6 +193,37 @@ pub struct MsgSend {
 )]
 #[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSendResponse")]
 pub struct MsgSendResponse {}
+/// MsgMultiSend represents an arbitrary multi-in, multi-out send message.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSend")]
+pub struct MsgMultiSend {
+    #[prost(message, repeated, tag = "1")]
+    pub inputs: ::prost::alloc::vec::Vec<Input>,
+    #[prost(message, repeated, tag = "2")]
+    pub outputs: ::prost::alloc::vec::Vec<Output>,
+}
+/// MsgMultiSendResponse defines the Msg/MultiSend response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSendResponse")]
+pub struct MsgMultiSendResponse {}
 /// QueryBalanceRequest is the request type for the Query/Balance RPC method.
 #[derive(
     Clone,
