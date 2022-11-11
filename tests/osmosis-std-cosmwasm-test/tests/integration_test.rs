@@ -1,13 +1,24 @@
 mod helpers;
+use core::time;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+use cosmwasm_std::Coin;
 use helpers::with_env_setup;
 use osmosis_std::{
     shim::{Duration, Timestamp},
-    types::osmosis::epochs::v1beta1::EpochInfo,
+    types::osmosis::{
+        epochs::v1beta1::EpochInfo,
+        gamm::{
+            self,
+            v1beta1::{MsgSwapExactAmountInResponse, SwapAmountInRoute},
+        },
+    },
 };
 use osmosis_std_cosmwasm_test::msg::{
-    QueryEpochsInfoResponse, QueryMsg, QueryNumPoolsResponse, QueryPoolParamsResponse,
-    QueryPoolResponse,
+    ArithmeticTwapToNowRequest, ArithmeticTwapToNowResponse, QueryEpochsInfoResponse, QueryMsg,
+    QueryNumPoolsResponse, QueryPoolParamsResponse, QueryPoolResponse,
 };
+use osmosis_testing::{Account, Runner};
 
 #[test]
 fn test_u64_response_deser() {
@@ -159,5 +170,59 @@ fn test_any_balancer_pool_params_response_deser() {
             assert_eq!(pool, helpers::mock_balancner_pool().pool_params.unwrap());
         },
         false,
+    );
+}
+
+#[test]
+fn test_twap_query() {
+    with_env_setup(
+        |app, wasm, signer, _code_id, contract_addr| {
+            let pools = helpers::setup_pools(app, &signer);
+            let pool_id = pools[0];
+
+            let swap = || {
+                app.execute::<_, MsgSwapExactAmountInResponse>(
+                    gamm::v1beta1::MsgSwapExactAmountIn {
+                        sender: signer.address(),
+                        routes: vec![SwapAmountInRoute {
+                            pool_id,
+                            token_out_denom: "uion".to_string(),
+                        }],
+                        token_in: Some(Coin::new(30, "uosmo").into()),
+                        token_out_min_amount: "1".to_string(),
+                    },
+                    gamm::v1beta1::MsgSwapExactAmountIn::TYPE_URL,
+                    &signer,
+                )
+                .unwrap()
+            };
+
+            swap();
+            swap();
+
+            let time = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .checked_add(time::Duration::from_secs(30))
+                .unwrap();
+
+            let res: ArithmeticTwapToNowResponse = wasm
+                .query(
+                    &contract_addr,
+                    &QueryMsg::QueryArithmeticTwapToNow(ArithmeticTwapToNowRequest {
+                        pool_id,
+                        base_asset: "uosmo".to_string(),
+                        quote_asset: "uion".to_string(),
+                        start_time: Some(Timestamp {
+                            seconds: time.as_secs() as i64,
+                            nanos: 0,
+                        }),
+                    }),
+                )
+                .unwrap();
+
+            dbg!(res);
+        },
+        true,
     );
 }

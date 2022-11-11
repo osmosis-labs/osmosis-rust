@@ -14,6 +14,7 @@ use osmosis_std::types::osmosis::gamm::v1beta1::{
     QueryNumPoolsRequest, QueryNumPoolsResponse, QueryPoolParamsRequest, QueryPoolParamsResponse,
     QueryPoolRequest, QueryPoolResponse,
 };
+use osmosis_std::types::osmosis::twap::v1beta1::ArithmeticTwapToNowResponse;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
@@ -90,11 +91,10 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         }
         QueryMsg::QueryPoolParams { pool_id } => {
             query_and_debug::<QueryPoolParamsResponse>(&deps, QueryPoolParamsRequest { pool_id })
-        } // Find matched incoming message variant and query them your custom logic
-          // and then construct your query response with the type usually defined
-          // `msg.rs` alongside with the query message itself.
-          //
-          // use `cosmwasm_std::to_binary` to serialize query response to json binary.
+        }
+        QueryMsg::QueryArithmeticTwapToNow(arithmetic_twap_request) => {
+            query_and_debug::<ArithmeticTwapToNowResponse>(&deps, arithmetic_twap_request)
+        },
     }
 }
 
