@@ -46,13 +46,13 @@ pub fn run() {
         name: "osmosis".to_string(),
         version: OSMOSIS_REV.to_string(),
         project_dir: OSMOSIS_DIR.to_string(),
-        include_mods: None,
+        include_mods: vec![],
     };
     let cosmos_project = CosmosProject {
         name: "cosmos".to_string(),
         version: COSMOS_SDK_REV.to_string(),
         project_dir: COSMOS_SDK_DIR.to_string(),
-        include_mods: Some(vec!["bank".to_string()]),
+        include_mods: vec!["bank".to_string()],
     };
 
     let osmosis_code_generator = CodeGenerator::new(

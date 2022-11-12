@@ -17,7 +17,13 @@ pub struct CosmosProject {
     pub name: String,
     pub version: String,
     pub project_dir: String,
-    pub include_mods: Option<Vec<String>>,
+    pub include_mods: Vec<String>,
+}
+
+#[derive(Clone)]
+pub struct CosmosProjectParsed {
+    pub path: PathBuf,
+    pub project: CosmosProject,
 }
 
 pub struct CodeGenerator {
@@ -126,17 +132,20 @@ impl CodeGenerator {
         let deps_dirs = self
             .deps
             .iter()
-            .map(|dep| (self.root.join(&dep.project_dir), dep.clone()))
+            .map(|dep| CosmosProjectParsed {
+                path: self.root.join(&dep.project_dir),
+                project: dep.clone(),
+            })
             .collect();
-        let project_dir = (
-            self.root.join(&self.project.project_dir),
-            self.project.clone(),
-        );
+        let project_dir = CosmosProjectParsed {
+            path: self.root.join(&self.project.project_dir),
+            project: self.project.clone(),
+        };
 
         let proto_includes_path = vec![deps_dirs, vec![project_dir.clone()]].concat();
         let proto_includes_paths = proto_includes_path
             .iter()
-            .flat_map(|dir| include_paths.iter().map(|path| dir.0.join(path)));
+            .flat_map(|dir| include_paths.iter().map(|path| dir.path.join(path)));
 
         // List available paths for dependencies
         let includes: Vec<PathBuf> = proto_includes_paths.map(PathBuf::from).collect();
@@ -144,11 +153,12 @@ impl CodeGenerator {
         let proto_paths = proto_includes_path
             .iter()
             .map(|p| {
-                let paths = fs::read_dir(p.0.join(format!("proto/{}", p.1.name)))
+                let paths = fs::read_dir(p.path.join(format!("proto/{}", p.project.name)))
                     .unwrap()
                     .map(|d| d.unwrap().path().to_string_lossy().to_string())
                     .collect::<Vec<String>>();
-                if let Some(include_mods) = &p.1.include_mods {
+                if p.project.include_mods.len() > 0 {
+                    let include_mods = p.project.include_mods.to_vec();
                     paths
                         .into_iter()
                         .filter(|p| include_mods.iter().any(|m| p.contains(m)))
