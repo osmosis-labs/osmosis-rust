@@ -1,3 +1,8 @@
+#![deprecated(
+    since = "0.13.0",
+    note = "`use `osmosis_std::types::osmosis::gamm::v2` instead."
+)]
+
 use osmosis_std_derive::CosmwasmExt;
 /// Parameters for changing the weights in a balancer pool smoothly from
 /// a start weight and end weight over a period of time.
