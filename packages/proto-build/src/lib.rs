@@ -31,7 +31,7 @@ const COSMOS_SDK_DIR: &str = "../../dependencies/cosmos-sdk/";
 const OSMOSIS_DIR: &str = "../../dependencies/osmosis/";
 
 /// A temporary directory for proto building
-const TMP_BUILD_DIR: &str = "./tmp/tmp-protobuf/";
+const TMP_BUILD_DIR: &str = "/tmp/tmp-protobuf/";
 
 pub fn run() {
     let args: Vec<String> = env::args().collect();
