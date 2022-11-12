@@ -1,3 +1,8 @@
+#![deprecated(
+    since = "0.13.0",
+    note = "`use `osmosis_std::types::osmosis::twap::v2` instead."
+)]
+
 use osmosis_std_derive::CosmwasmExt;
 /// A TWAP record should be indexed in state by pool_id, (asset pair), timestamp
 /// The asset pair assets should be lexicographically sorted.
