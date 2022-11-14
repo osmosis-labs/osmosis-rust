@@ -875,6 +875,7 @@ pub struct QueryTotalSharesResponse {
 }
 /// QuerySpotPriceRequest defines the gRPC request structure for a SpotPrice
 /// query.
+#[deprecated(since = "0.13.0", note = "use v2 instead")]
 #[derive(
     Clone,
     PartialEq,
@@ -940,6 +941,7 @@ pub struct QueryPoolsWithFilterResponse {
 }
 /// QuerySpotPriceResponse defines the gRPC response structure for a SpotPrice
 /// query.
+#[deprecated(since = "0.13.0", note = "use v2 instead")]
 #[derive(
     Clone,
     PartialEq,
@@ -1193,6 +1195,8 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
     ) -> Result<QueryTotalSharesResponse, cosmwasm_std::StdError> {
         QueryTotalSharesRequest { pool_id }.query(self.querier)
     }
+
+    #[deprecated(since = "0.13.0", note = "use v2 instead")]
     pub fn spot_price(
         &self,
         pool_id: u64,
