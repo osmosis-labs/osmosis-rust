@@ -1,4 +1,3 @@
-use crate::{COSMOS_SDK_DIR, COSMOS_SDK_REV, OSMOSIS_DIR, OSMOSIS_REV};
 use log::info;
 use std::ffi::OsStr;
 use std::path::PathBuf;
@@ -18,28 +17,17 @@ fn run_git(args: impl IntoIterator<Item = impl AsRef<OsStr>>) {
     }
 }
 
-pub fn update_submodules() {
+pub fn update_submodule(dir: &str, rev: &str) {
     let full_path = |p: &str| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(p);
 
-    info!("Updating cosmos/cosmos-sdk submodule...");
+    info!("Updating {} submodule...", dir);
     run_git(["submodule", "update", "--init"]);
-    run_git(["-C", full_path(COSMOS_SDK_DIR).to_str().unwrap(), "fetch"]);
+    run_git(["-C", full_path(dir).to_str().unwrap(), "fetch"]);
     run_git([
         "-C",
-        full_path(COSMOS_SDK_DIR).to_str().unwrap(),
+        full_path(dir).to_str().unwrap(),
         "reset",
         "--hard",
-        COSMOS_SDK_REV,
-    ]);
-
-    info!("Updating osmosis submodule...");
-    run_git(["submodule", "update", "--init"]);
-    run_git(["-C", full_path(OSMOSIS_DIR).to_str().unwrap(), "fetch"]);
-    run_git([
-        "-C",
-        full_path(OSMOSIS_DIR).to_str().unwrap(),
-        "reset",
-        "--hard",
-        OSMOSIS_REV,
+        rev,
     ]);
 }

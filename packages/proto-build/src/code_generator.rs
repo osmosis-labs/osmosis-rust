@@ -12,18 +12,15 @@ use crate::{mod_gen, transform};
 
 const DESCRIPTOR_FILE: &str = "descriptor.bin";
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct CosmosProject {
     pub name: String,
     pub version: String,
     pub project_dir: String,
-    pub include_mods: Vec<String>,
-}
 
-#[derive(Clone)]
-pub struct CosmosProjectParsed {
-    pub path: PathBuf,
-    pub project: CosmosProject,
+    /// determines which modules to include from the project
+    /// empty vector means include all modules
+    pub include_mods: Vec<String>,
 }
 
 pub struct CodeGenerator {
@@ -129,36 +126,36 @@ impl CodeGenerator {
     fn compile_proto(&self) {
         let include_paths = ["proto", "third_party/proto"];
 
-        let deps_dirs = self
-            .deps
+        let all_related_projects = vec![self.deps.clone(), vec![self.project.clone()]].concat();
+
+        // construct absolute paths to be included from all related projects
+        let proto_includes_paths: Vec<PathBuf> = all_related_projects
             .iter()
-            .map(|dep| CosmosProjectParsed {
-                path: self.root.join(&dep.project_dir),
-                project: dep.clone(),
+            .flat_map(|project| {
+                {
+                    include_paths
+                        .iter()
+                        .map(|path| self.root.join(&project.project_dir).join(path))
+                }
             })
+            .map(PathBuf::from)
             .collect();
-        let project_dir = CosmosProjectParsed {
-            path: self.root.join(&self.project.project_dir),
-            project: self.project.clone(),
-        };
 
-        let proto_includes_path = vec![deps_dirs, vec![project_dir.clone()]].concat();
-        let proto_includes_paths = proto_includes_path
-            .iter()
-            .flat_map(|dir| include_paths.iter().map(|path| dir.path.join(path)));
-
-        // List available paths for dependencies
-        let includes: Vec<PathBuf> = proto_includes_paths.map(PathBuf::from).collect();
-
-        let proto_paths = proto_includes_path
+        let proto_paths = all_related_projects
             .iter()
             .map(|p| {
-                let paths = fs::read_dir(p.path.join(format!("proto/{}", p.project.name)))
-                    .unwrap()
-                    .map(|d| d.unwrap().path().to_string_lossy().to_string())
-                    .collect::<Vec<String>>();
-                if p.project.include_mods.len() > 0 {
-                    let include_mods = p.project.include_mods.to_vec();
+                let paths = fs::read_dir(
+                    self.root
+                        .join(&p.project_dir)
+                        .join(format!("proto/{}", p.name)),
+                )
+                .unwrap()
+                .map(|d| d.unwrap().path().to_string_lossy().to_string())
+                .collect::<Vec<String>>();
+
+                // if include_mods is not empty, include only those, else include everything
+                if !p.include_mods.is_empty() {
+                    let include_mods = p.include_mods.to_vec();
                     paths
                         .into_iter()
                         .filter(|p| include_mods.iter().any(|m| p.contains(m)))
@@ -184,7 +181,7 @@ impl CodeGenerator {
             .clone()
             .out_dir(self.tmp_namespaced_dir())
             .file_descriptor_set_path(&descriptor_file)
-            .compile(&protos, &includes)
+            .compile(&protos, &proto_includes_paths)
             .unwrap();
 
         info!(
