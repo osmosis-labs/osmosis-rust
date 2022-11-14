@@ -1,8 +1,8 @@
 [submodule "dependencies/cosmos-sdk"]
 	path = dependencies/cosmos-sdk
 	url = https://github.com/osmosis-labs/cosmos-sdk.git
-	branch = osmosis-main
+	branch = v13.x
 [submodule "dependencies/osmosis"]
 	path = dependencies/osmosis
 	url = https://github.com/osmosis-labs/osmosis.git
-	branch = main
+	branch = v13.x

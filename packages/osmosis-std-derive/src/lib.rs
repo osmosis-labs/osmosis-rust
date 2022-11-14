@@ -186,12 +186,7 @@ where
 }
 
 fn get_attr<'a>(attr_ident: &str, attrs: &'a Vec<syn::Attribute>) -> Option<&'a syn::Attribute> {
-    for attr in attrs {
-        if attr.path.segments.len() == 1 && attr.path.segments[0].ident == attr_ident {
-            return Some(attr);
-        }
-    }
-    None
+    attrs.iter().find(|&attr| attr.path.segments.len() == 1 && attr.path.segments[0].ident == attr_ident)
 }
 
 fn proto_message_attr_error<T: quote::ToTokens>(tokens: T) -> proc_macro2::TokenStream {
