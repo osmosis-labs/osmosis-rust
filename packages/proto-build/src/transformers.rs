@@ -106,6 +106,8 @@ pub fn append_attrs(src: &Path, s: &ItemStruct, descriptor: &FileDescriptorSet) 
     let query_services = extract_query_services(descriptor);
     let type_url = get_type_url(src, &s.ident, descriptor);
 
+    let deprecated = get_deprecation(src, &s.ident, descriptor);
+
     s.attrs.append(&mut vec![
         syn::parse_quote! { #[derive(serde::Serialize, serde::Deserialize, schemars::JsonSchema, CosmwasmExt)] },
         syn::parse_quote! { #[proto_message(type_url = #type_url)] },
@@ -113,6 +115,11 @@ pub fn append_attrs(src: &Path, s: &ItemStruct, descriptor: &FileDescriptorSet) 
 
     if let Some(attr) = get_query_attr(src, &s.ident, &query_services) {
         s.attrs.append(&mut vec![attr])
+    }
+
+    if deprecated {
+        s.attrs
+            .append(&mut vec![syn::parse_quote! { #[deprecated] }]);
     }
 
     s
@@ -208,6 +215,53 @@ fn get_type_url(src: &Path, ident: &Ident, descriptor: &FileDescriptorSet) -> St
     format!("/{}.{}", type_path, name.unwrap())
 }
 
+fn get_deprecation(src: &Path, ident: &Ident, descriptor: &FileDescriptorSet) -> bool {
+    let type_path = src.file_stem().unwrap().to_str().unwrap();
+
+    let deprecation: Option<bool> = descriptor
+        .file
+        .clone()
+        .into_iter()
+        .filter(|f| f.package.to_owned().unwrap() == type_path)
+        .flat_map(|f| {
+            let target = ident.to_string();
+            vec![
+                extract_deprecation_from_enum(&target, &f.enum_type),
+                extract_deprecation_from_descriptor(&target, &f.message_type),
+            ]
+        })
+        .find(|r| r.is_some())
+        .flatten();
+
+    deprecation.unwrap_or(false)
+}
+
+fn extract_deprecation_from_descriptor(
+    target: &str,
+    message_type: &[DescriptorProto],
+) -> Option<bool> {
+    message_type.iter().find_map(|descriptor| {
+        let message_name = descriptor.name.to_owned().unwrap();
+
+        if message_name.to_upper_camel_case() == target {
+            descriptor.clone().options?.deprecated
+        } else if let Some(deprecated) =
+            extract_deprecation_from_descriptor(target, &descriptor.nested_type)
+        {
+            Some(deprecated)
+        } else {
+            extract_deprecation_from_enum(target, &descriptor.enum_type)
+        }
+    })
+}
+
+fn extract_deprecation_from_enum(target: &str, enum_type: &[EnumDescriptorProto]) -> Option<bool> {
+    enum_type
+        .iter()
+        .find(|e| e.name.to_owned().unwrap().to_upper_camel_case() == target)
+        .and_then(|e| e.clone().options?.deprecated)
+}
+
 fn extract_type_path_from_descriptor(
     target: &str,
     message_type: &[DescriptorProto],
@@ -297,6 +351,13 @@ pub fn append_querier(
             return quote! {};
         }
 
+        let deprecated = method_desc.clone().options.map(|opt| opt.deprecated.unwrap_or(false) ).unwrap_or(false);
+        let deprecated_macro = if deprecated {
+            quote!(#[deprecated])
+        } else {
+            quote!()
+        };
+
         let method_desc = method_desc.clone();
 
         let name = format_ident!("{}", method_desc.name.unwrap().as_str().to_snake_case());
@@ -324,6 +385,7 @@ pub fn append_querier(
         let arg_ty = req_args.unwrap().into_iter().map(|arg| arg.ty).collect::<Vec<Type>>();
 
         quote! {
+          #deprecated_macro
           pub fn #name( &self, #(#arg_idents : #arg_ty),* ) -> Result<#res_type, cosmwasm_std::StdError> {
             #req_type { #(#arg_idents),* }.query(self.querier)
           }
