@@ -14,7 +14,7 @@ use osmosis_std_derive::CosmwasmExt;
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.validatorpreference.v1beta1.ValidatorPreference")]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.ValidatorPreference")]
 pub struct ValidatorPreference {
     /// val_oper_address holds the validator address the user wants to delegate
     /// funds to.
@@ -38,7 +38,7 @@ pub struct ValidatorPreference {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.validatorpreference.v1beta1.ValidatorSetPreferences")]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.ValidatorSetPreferences")]
 pub struct ValidatorSetPreferences {
     /// preference holds {valAddr, weight} for the user who created it.
     #[prost(message, repeated, tag = "2")]
@@ -55,7 +55,7 @@ pub struct ValidatorSetPreferences {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.validatorpreference.v1beta1.MsgSetValidatorSetPreference")]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgSetValidatorSetPreference")]
 pub struct MsgSetValidatorSetPreference {
     /// delegator is the user who is trying to create a validator-set.
     #[prost(string, tag = "1")]
@@ -74,9 +74,7 @@ pub struct MsgSetValidatorSetPreference {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(
-    type_url = "/osmosis.validatorpreference.v1beta1.MsgSetValidatorSetPreferenceResponse"
-)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgSetValidatorSetPreferenceResponse")]
 pub struct MsgSetValidatorSetPreferenceResponse {}
 /// MsgDelegateToValidatorSet allows users to delegate to an existing
 /// validator-set
@@ -90,7 +88,7 @@ pub struct MsgSetValidatorSetPreferenceResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.validatorpreference.v1beta1.MsgDelegateToValidatorSet")]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgDelegateToValidatorSet")]
 pub struct MsgDelegateToValidatorSet {
     /// delegator is the user who is trying to delegate.
     #[prost(string, tag = "1")]
@@ -112,9 +110,7 @@ pub struct MsgDelegateToValidatorSet {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(
-    type_url = "/osmosis.validatorpreference.v1beta1.MsgDelegateToValidatorSetResponse"
-)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgDelegateToValidatorSetResponse")]
 pub struct MsgDelegateToValidatorSetResponse {}
 #[derive(
     Clone,
@@ -126,7 +122,7 @@ pub struct MsgDelegateToValidatorSetResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.validatorpreference.v1beta1.MsgUndelegateFromValidatorSet")]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgUndelegateFromValidatorSet")]
 pub struct MsgUndelegateFromValidatorSet {
     /// delegator is the user who is trying to undelegate.
     #[prost(string, tag = "1")]
@@ -149,9 +145,7 @@ pub struct MsgUndelegateFromValidatorSet {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(
-    type_url = "/osmosis.validatorpreference.v1beta1.MsgUndelegateFromValidatorSetResponse"
-)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgUndelegateFromValidatorSetResponse")]
 pub struct MsgUndelegateFromValidatorSetResponse {}
 /// MsgWithdrawDelegationRewards allows user to claim staking rewards from the
 /// validator set.
@@ -165,7 +159,7 @@ pub struct MsgUndelegateFromValidatorSetResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.validatorpreference.v1beta1.MsgWithdrawDelegationRewards")]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgWithdrawDelegationRewards")]
 pub struct MsgWithdrawDelegationRewards {
     /// delegator is the user who is trying to claim staking rewards.
     #[prost(string, tag = "1")]
@@ -181,9 +175,7 @@ pub struct MsgWithdrawDelegationRewards {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(
-    type_url = "/osmosis.validatorpreference.v1beta1.MsgWithdrawDelegationRewardsResponse"
-)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgWithdrawDelegationRewardsResponse")]
 pub struct MsgWithdrawDelegationRewardsResponse {}
 /// Request type for UserValidatorPreferences.
 #[derive(
@@ -196,15 +188,15 @@ pub struct MsgWithdrawDelegationRewardsResponse {}
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.validatorpreference.v1beta1.QueryUserValidatorPreferences")]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.QueryUserValidatorPreferences")]
 #[proto_query(
-    path = "/osmosis.validatorpreference.v1beta1.Query/UserValidatorPreferences",
+    path = "/osmosis.valsetpref.v1beta1.Query/UserValidatorPreferences",
     response_type = QueryUserValidatorPreferenceResponse
 )]
 pub struct QueryUserValidatorPreferences {
     /// user account address
     #[prost(string, tag = "1")]
-    pub user: ::prost::alloc::string::String,
+    pub address: ::prost::alloc::string::String,
 }
 /// Response type the QueryUserValidatorPreferences query request
 #[derive(
@@ -217,24 +209,22 @@ pub struct QueryUserValidatorPreferences {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(
-    type_url = "/osmosis.validatorpreference.v1beta1.QueryUserValidatorPreferenceResponse"
-)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.QueryUserValidatorPreferenceResponse")]
 pub struct QueryUserValidatorPreferenceResponse {
     #[prost(message, repeated, tag = "1")]
     pub preferences: ::prost::alloc::vec::Vec<ValidatorPreference>,
 }
-pub struct ValidatorpreferenceQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+pub struct ValsetprefQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
-impl<'a, Q: cosmwasm_std::CustomQuery> ValidatorpreferenceQuerier<'a, Q> {
+impl<'a, Q: cosmwasm_std::CustomQuery> ValsetprefQuerier<'a, Q> {
     pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
         Self { querier }
     }
     pub fn user_validator_preferences(
         &self,
-        user: ::prost::alloc::string::String,
+        address: ::prost::alloc::string::String,
     ) -> Result<QueryUserValidatorPreferenceResponse, cosmwasm_std::StdError> {
-        QueryUserValidatorPreferences { user }.query(self.querier)
+        QueryUserValidatorPreferences { address }.query(self.querier)
     }
 }

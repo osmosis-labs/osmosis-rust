@@ -873,6 +873,49 @@ pub struct QueryTotalSharesResponse {
     #[prost(message, optional, tag = "1")]
     pub total_shares: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
 }
+///=============================== CalcJoinPoolNoSwapShares
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryCalcJoinPoolNoSwapSharesRequest")]
+#[proto_query(
+    path = "/osmosis.gamm.v1beta1.Query/CalcJoinPoolNoSwapShares",
+    response_type = QueryCalcJoinPoolNoSwapSharesResponse
+)]
+pub struct QueryCalcJoinPoolNoSwapSharesRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(message, repeated, tag = "2")]
+    pub tokens_in: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryCalcJoinPoolNoSwapSharesResponse")]
+pub struct QueryCalcJoinPoolNoSwapSharesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub tokens_out: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "2")]
+    pub shares_out: ::prost::alloc::string::String,
+}
 /// QuerySpotPriceRequest defines the gRPC request structure for a SpotPrice
 /// query.
 #[derive(
@@ -1156,6 +1199,13 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
     }
     pub fn pool_type(&self, pool_id: u64) -> Result<QueryPoolTypeResponse, cosmwasm_std::StdError> {
         QueryPoolTypeRequest { pool_id }.query(self.querier)
+    }
+    pub fn calc_join_pool_no_swap_shares(
+        &self,
+        pool_id: u64,
+        tokens_in: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    ) -> Result<QueryCalcJoinPoolNoSwapSharesResponse, cosmwasm_std::StdError> {
+        QueryCalcJoinPoolNoSwapSharesRequest { pool_id, tokens_in }.query(self.querier)
     }
     pub fn calc_join_pool_shares(
         &self,
