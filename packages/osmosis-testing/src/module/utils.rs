@@ -10,7 +10,7 @@ use prost::Message;
 
 use crate::{runner::Runner, Account, RunnerError, RunnerExecuteResult, SigningAccount};
 
-fn coins_to_proto(coins: &[Coin]) -> Vec<cosmrs::proto::cosmos::base::v1beta1::Coin> {
+pub fn coins_to_proto(coins: &[Coin]) -> Vec<cosmrs::proto::cosmos::base::v1beta1::Coin> {
     coins
         .iter()
         .map(|c| cosmrs::proto::cosmos::base::v1beta1::Coin {
@@ -20,9 +20,32 @@ fn coins_to_proto(coins: &[Coin]) -> Vec<cosmrs::proto::cosmos::base::v1beta1::C
         .collect()
 }
 
+pub fn proto_coins_to_coins(coins: &[cosmrs::proto::cosmos::base::v1beta1::Coin]) -> Vec<Coin> {
+    coins
+        .iter()
+        .map(|c| Coin {
+            denom: c.denom.to_string(),
+            amount: c.amount.parse().unwrap(),
+        })
+        .collect()
+}
+
+pub fn osmosis_coins_to_coins(
+    coins: &[osmosis_std::types::cosmos::base::v1beta1::Coin],
+) -> Vec<Coin> {
+    coins
+        .iter()
+        .map(|c| Coin {
+            denom: c.denom.to_string(),
+            amount: c.amount.parse().unwrap(),
+        })
+        .collect()
+}
+
 pub fn execute_cosmos_msg<R, S>(
     runner: &R,
     msg: &CosmosMsg,
+
     signer: &SigningAccount,
 ) -> RunnerExecuteResult<S>
 where
