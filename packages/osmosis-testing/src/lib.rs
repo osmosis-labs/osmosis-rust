@@ -10,7 +10,7 @@ mod runner;
 pub use cosmrs;
 pub use osmosis_std;
 
-pub use account::{Account, NonSigningAccount, SigningAccount};
+pub use account::{Account, FeeSetting, NonSigningAccount, SigningAccount};
 pub use module::*;
 pub use runner::app::OsmosisTestApp;
 pub use runner::error::{DecodeError, EncodeError, RunnerError};
