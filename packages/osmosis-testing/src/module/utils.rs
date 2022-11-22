@@ -68,8 +68,6 @@ where
             }
         },
         CosmosMsg::Custom(_) => todo!(),
-        CosmosMsg::Staking(_) => todo!(),
-        CosmosMsg::Distribution(_) => todo!(),
         CosmosMsg::Stargate { type_url, value } => runner.execute_multiple_raw(
             vec![cosmrs::Any {
                 type_url: type_url.clone(),
