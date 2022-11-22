@@ -54,7 +54,6 @@ where
             }],
             &signer,
         ),
-        // runner.execute(value, type_url.as_str(), &signer),
         CosmosMsg::Ibc(_) => todo!(),
         CosmosMsg::Wasm(msg) => execute_wasm_msg::<R, S>(runner, &msg, signer),
         CosmosMsg::Gov(_) => todo!(),
