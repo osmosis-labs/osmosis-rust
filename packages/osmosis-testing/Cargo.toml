@@ -9,7 +9,7 @@ version = "0.12.0"
 
 [dependencies]
 base64 = "0.13.0"
-cosmrs = {version = "0.9.0", features = ["cosmwasm"]}
+cosmrs = {version = "0.9.0", features = ["rpc", "cosmwasm"]}
 cosmwasm-std = "1.1.2"
 osmosis-std = {version = "0.12.0", path = "../osmosis-std"}
 prost = "0.11.0"
