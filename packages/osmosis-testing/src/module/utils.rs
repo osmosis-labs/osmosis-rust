@@ -37,7 +37,7 @@ where
                     from_address: signer.address(),
                     to_address,
                 },
-                "type_url",
+                "/cosmos.bank.v1beta1.MsgSend",
                 &signer,
             ),
             _ => {
