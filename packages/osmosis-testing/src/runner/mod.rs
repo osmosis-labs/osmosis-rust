@@ -6,6 +6,14 @@ pub mod error;
 pub mod result;
 
 pub trait Runner<'a> {
+    fn execute_multiple_raw<R>(
+        &self,
+        msgs: Vec<cosmrs::Any>,
+        signer: &SigningAccount,
+    ) -> RunnerExecuteResult<R>
+    where
+        R: ::prost::Message + Default;
+
     fn execute<M, R>(
         &self,
         msg: M,
