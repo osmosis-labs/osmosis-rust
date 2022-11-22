@@ -1,7 +1,7 @@
-use crate::fn_query;
+use crate::{fn_execute, fn_query};
 use cosmrs::proto::cosmos::bank::v1beta1::{
-    QueryAllBalancesRequest, QueryAllBalancesResponse, QueryBalanceRequest, QueryBalanceResponse,
-    QueryTotalSupplyRequest, QueryTotalSupplyResponse,
+    MsgSend, MsgSendResponse, QueryAllBalancesRequest, QueryAllBalancesResponse,
+    QueryBalanceRequest, QueryBalanceResponse, QueryTotalSupplyRequest, QueryTotalSupplyResponse,
 };
 
 use crate::module::Module;
@@ -21,6 +21,10 @@ impl<'a, R> Bank<'a, R>
 where
     R: Runner<'a>,
 {
+    fn_execute! {
+        pub send: MsgSend["/cosmos.bank.v1beta1.Msg/Send"] => MsgSendResponse
+    }
+
     fn_query! {
         pub query_balance ["/cosmos.bank.v1beta1.Query/Balance"]: QueryBalanceRequest => QueryBalanceResponse
     }
