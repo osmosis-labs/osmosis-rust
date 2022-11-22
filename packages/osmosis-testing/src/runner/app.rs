@@ -192,8 +192,6 @@ impl<'a> Runner<'a> for OsmosisTestApp {
         M: ::prost::Message,
         R: ::prost::Message + Default,
     {
-        unsafe { BeginBlock(self.id) };
-
         let msgs = msgs
             .iter()
             .map(|(msg, type_url)| {
@@ -206,6 +204,19 @@ impl<'a> Runner<'a> for OsmosisTestApp {
                 })
             })
             .collect::<Result<Vec<cosmrs::Any>, RunnerError>>()?;
+
+        self.execute_multiple_raw(msgs, signer)
+    }
+
+    fn execute_multiple_raw<R>(
+        &self,
+        msgs: Vec<cosmrs::Any>,
+        signer: &SigningAccount,
+    ) -> RunnerExecuteResult<R>
+    where
+        R: ::prost::Message + Default,
+    {
+        unsafe { BeginBlock(self.id) };
 
         let fee = match &signer.fee_setting() {
             FeeSetting::Auto { .. } => self.estimate_fee(msgs.clone(), signer)?,

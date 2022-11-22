@@ -3,6 +3,7 @@ use crate::runner::Runner;
 mod bank;
 mod gamm;
 mod tokenfactory;
+pub mod utils;
 mod wasm;
 
 #[macro_use]
