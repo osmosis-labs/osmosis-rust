@@ -5,7 +5,7 @@ use cosmrs::proto::{
         MsgUpdateAdmin,
     },
 };
-use cosmwasm_std::{BankMsg, Coin, CosmosMsg, WasmMsg};
+use cosmwasm_std::{BankMsg, Coin, CosmosMsg, StdResult, WasmMsg};
 use prost::Message;
 
 use crate::{runner::Runner, Account, RunnerError, RunnerExecuteResult, SigningAccount};
@@ -34,12 +34,10 @@ pub fn osmosis_coins_to_coins(
     coins: &[osmosis_std::types::cosmos::base::v1beta1::Coin],
 ) -> Vec<Coin> {
     coins
-        .iter()
-        .map(|c| Coin {
-            denom: c.denom.to_string(),
-            amount: c.amount.parse().unwrap(),
-        })
-        .collect()
+        .into_iter()
+        .map(|c| c.clone().try_into())
+        .collect::<StdResult<_>>()
+        .unwrap()
 }
 
 pub fn execute_cosmos_msg<R, S>(
@@ -96,16 +94,16 @@ where
             contract_addr,
             msg,
             funds,
-        } => {
-            let msg = MsgExecuteContract {
+        } => runner.execute(
+            MsgExecuteContract {
                 contract: contract_addr.clone(),
                 funds: coins_to_proto(&funds),
                 sender: signer.address(),
                 msg: msg.to_vec(),
-            };
-            let type_url = "/cosmwasm.wasm.v1.MsgExecuteContract";
-            runner.execute(msg, type_url, &signer)
-        }
+            },
+            "/cosmwasm.wasm.v1.MsgExecuteContract",
+            &signer,
+        ),
         WasmMsg::Instantiate {
             admin,
             code_id,

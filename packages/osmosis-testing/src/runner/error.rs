@@ -1,3 +1,4 @@
+use cosmwasm_std::StdError;
 use std::str::Utf8Error;
 use thiserror::Error;
 
@@ -14,6 +15,9 @@ pub enum RunnerError {
 
     #[error("execute error: {}", .msg)]
     ExecuteError { msg: String },
+
+    #[error("{0}")]
+    StdError(#[from] StdError),
 }
 
 #[derive(Error, Debug)]

@@ -1,8 +1,5 @@
-use cosmwasm_std::Coin;
+use cosmwasm_std::{Coin, StdResult};
 use osmosis_std::types::osmosis::gamm;
-use osmosis_std::types::osmosis::gamm::v1beta1::{
-    QueryTotalPoolLiquidityRequest, QueryTotalPoolLiquidityResponse,
-};
 use osmosis_std::types::osmosis::gamm::{
     poolmodels::balancer::v1beta1::{MsgCreateBalancerPool, MsgCreateBalancerPoolResponse},
     v1beta1::{PoolAsset, PoolParams, QueryPoolRequest, QueryPoolResponse},
@@ -12,7 +9,6 @@ use prost::Message;
 use crate::module::Module;
 use crate::runner::error::{DecodeError, RunnerError};
 use crate::runner::result::{RunnerExecuteResult, RunnerResult};
-use crate::utils::osmosis_coins_to_coins;
 use crate::{
     account::{Account, SigningAccount},
     runner::Runner,
@@ -41,14 +37,15 @@ where
         _query_pool ["/osmosis.gamm.v1beta1.Query/Pool"]: QueryPoolRequest => QueryPoolResponse
     }
 
-    fn_query! {
-        pub _query_total_pool_liquidity ["/osmosis.gamm.v1beta1.Query/Pool"]: QueryTotalPoolLiquidityRequest => QueryTotalPoolLiquidityResponse
-    }
+    pub fn query_pool_reserves(&self, pool_id: u64) -> RunnerResult<Vec<Coin>> {
+        let pool = self.query_pool(pool_id)?;
 
-    pub fn query_total_pool_liquidity(&self, pool_id: u64) -> RunnerResult<Vec<Coin>> {
-        let request = QueryTotalPoolLiquidityRequest { pool_id };
-        let res = self._query_total_pool_liquidity(&request)?;
-        Ok(osmosis_coins_to_coins(&res.liquidity))
+        let result = pool
+            .pool_assets
+            .into_iter()
+            .filter_map(|asset| asset.token.map(|coin| coin.try_into()))
+            .collect::<StdResult<Vec<Coin>>>()?;
+        Ok(result)
     }
 
     pub fn create_basic_pool(
