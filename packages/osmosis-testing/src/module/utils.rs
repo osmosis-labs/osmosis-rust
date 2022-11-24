@@ -8,7 +8,9 @@ use cosmrs::proto::{
 use cosmwasm_std::{BankMsg, Coin, CosmosMsg, StdResult, WasmMsg};
 use prost::Message;
 
-use crate::{runner::Runner, Account, RunnerError, RunnerExecuteResult, SigningAccount};
+use crate::{
+    runner::Runner, Account, EncodeError, RunnerError, RunnerExecuteResult, SigningAccount,
+};
 
 pub fn coins_to_proto(coins: &[Coin]) -> Vec<cosmrs::proto::cosmos::base::v1beta1::Coin> {
     coins
@@ -40,44 +42,124 @@ pub fn osmosis_coins_to_coins(
         .unwrap()
 }
 
-pub fn execute_cosmos_msg<R, S>(
-    runner: &R,
-    msg: &CosmosMsg,
+fn msg_to_any<T: Message>(type_url: &str, msg: &T) -> Result<cosmrs::Any, RunnerError> {
+    let mut buf = Vec::new();
+    msg.encode(&mut buf)
+        .map_err(EncodeError::ProtoEncodeError)?;
 
+    Ok(cosmrs::Any {
+        type_url: type_url.to_owned(),
+        value: buf,
+    })
+}
+
+pub fn execute_cosmos_msgs<R, S>(
+    runner: &R,
+    msgs: &[CosmosMsg],
     signer: &SigningAccount,
 ) -> RunnerExecuteResult<S>
 where
     R: for<'a> Runner<'a>,
     S: Message + Default,
 {
-    match msg {
-        CosmosMsg::Bank(msg) => match msg {
-            BankMsg::Send { to_address, amount } => runner.execute(
-                MsgSend {
-                    amount: coins_to_proto(&amount),
-                    from_address: signer.address(),
-                    to_address: to_address.clone(),
+    let msgs = msgs
+        .iter()
+        .map(|msg| {
+            match msg {
+                CosmosMsg::Bank(msg) => match msg {
+                    BankMsg::Send { to_address, amount } => {
+                        let type_url = "/cosmos.bank.v1beta1.MsgSend";
+                        let msg = MsgSend {
+                            from_address: signer.address().to_string(),
+                            to_address: to_address.to_string(),
+                            amount: coins_to_proto(amount),
+                        };
+                        msg_to_any(type_url, &msg)
+                    }
+                    _ => {
+                        todo!() // TODO: Can't find BurnMsg...?
+                    }
                 },
-                "/cosmos.bank.v1beta1.MsgSend",
-                &signer,
-            ),
-            _ => {
-                todo!() // TODO: Can't find BurnMsg...?
+                CosmosMsg::Custom(_) => todo!(),
+                CosmosMsg::Stargate { type_url, value } => Ok(cosmrs::Any {
+                    type_url: type_url.clone(),
+                    value: value.0.clone(),
+                }),
+                CosmosMsg::Ibc(_) => todo!(),
+                CosmosMsg::Wasm(msg) => match msg {
+                    WasmMsg::Execute {
+                        contract_addr,
+                        msg,
+                        funds,
+                    } => msg_to_any(
+                        "/cosmwasm.wasm.v1.MsgExecuteContract",
+                        &MsgExecuteContract {
+                            contract: contract_addr.clone(),
+                            funds: coins_to_proto(&funds),
+                            sender: signer.address(),
+                            msg: msg.to_vec(),
+                        },
+                    ),
+                    WasmMsg::Instantiate {
+                        admin,
+                        code_id,
+                        msg,
+                        funds,
+                        label,
+                    } => msg_to_any(
+                        "/cosmwasm.wasm.v1.MsgInstantiateContract",
+                        &MsgInstantiateContract {
+                            sender: signer.address(),
+                            admin: admin.clone().unwrap_or_default(),
+                            code_id: *code_id,
+                            label: label.clone(),
+                            msg: msg.to_vec(),
+                            funds: coins_to_proto(&funds),
+                        },
+                    ),
+                    WasmMsg::Migrate {
+                        contract_addr,
+                        new_code_id,
+                        msg,
+                    } => msg_to_any(
+                        "/cosmwasm.wasm.v1.MsgMigrateContract",
+                        &MsgMigrateContract {
+                            contract: contract_addr.clone(),
+                            sender: signer.address(),
+                            code_id: *new_code_id,
+                            msg: msg.to_vec(),
+                        },
+                    ),
+                    WasmMsg::UpdateAdmin {
+                        contract_addr,
+                        admin,
+                    } => msg_to_any(
+                        "/cosmwasm.wasm.v1.MsgUpdateAdmin",
+                        &MsgUpdateAdmin {
+                            contract: contract_addr.clone(),
+                            sender: signer.address(),
+                            new_admin: admin.clone(),
+                        },
+                    ),
+                    WasmMsg::ClearAdmin { contract_addr } => msg_to_any(
+                        "/cosmwasm.wasm.v1.MsgClearAdmin",
+                        &MsgClearAdmin {
+                            contract: contract_addr.clone(),
+                            sender: signer.address(),
+                        },
+                    ),
+                    _ => Err(RunnerError::ExecuteError {
+                        msg: "Unsupported WasmMsg".to_string(),
+                    }),
+                },
+                // execute_wasm_msg::<R, S>(runner, &msg, signer),
+                CosmosMsg::Gov(_) => todo!(),
+                _ => todo!(),
             }
-        },
-        CosmosMsg::Custom(_) => todo!(),
-        CosmosMsg::Stargate { type_url, value } => runner.execute_multiple_raw(
-            vec![cosmrs::Any {
-                type_url: type_url.clone(),
-                value: value.0.clone(),
-            }],
-            &signer,
-        ),
-        CosmosMsg::Ibc(_) => todo!(),
-        CosmosMsg::Wasm(msg) => execute_wasm_msg::<R, S>(runner, &msg, signer),
-        CosmosMsg::Gov(_) => todo!(),
-        _ => todo!(),
-    }
+        })
+        .collect::<Result<Vec<_>, RunnerError>>()?;
+
+    runner.execute_multiple_raw(msgs, signer)
 }
 
 pub fn execute_wasm_msg<R, S>(
@@ -174,7 +256,7 @@ mod tests {
         MsgCreateDenom, MsgCreateDenomResponse,
     };
 
-    use crate::{utils::execute_cosmos_msg, Account, Bank, Module, OsmosisTestApp, Wasm};
+    use crate::{utils::execute_cosmos_msgs, Account, Bank, Module, OsmosisTestApp, Wasm};
 
     #[test]
     fn test_cosmos_msg() {
@@ -192,7 +274,7 @@ mod tests {
             to_address: to.address(),
             amount: vec![coin],
         });
-        execute_cosmos_msg::<_, MsgSendResponse>(&app, &send_msg, &signer).unwrap();
+        execute_cosmos_msgs::<_, MsgSendResponse>(&app, &[send_msg], &signer).unwrap();
         let balance = bank
             .query_balance(&QueryBalanceRequest {
                 address: to.address().to_string(),
@@ -225,9 +307,9 @@ mod tests {
             label: "test".to_string(),
             admin: None,
         });
-        let init_res = execute_cosmos_msg::<_, MsgInstantiateContractResponse>(
+        let init_res = execute_cosmos_msgs::<_, MsgInstantiateContractResponse>(
             &app,
-            &instantiate_msg,
+            &[instantiate_msg],
             &signer,
         )
         .unwrap();
@@ -241,7 +323,7 @@ mod tests {
             funds: vec![],
         });
         let execute_res =
-            execute_cosmos_msg::<_, MsgExecuteContractResponse>(&app, &execute_msg, &signer)
+            execute_cosmos_msgs::<_, MsgExecuteContractResponse>(&app, &[execute_msg], &signer)
                 .unwrap();
         let events = execute_res.events;
 
@@ -261,7 +343,7 @@ mod tests {
         }
         .into();
         let create_denom_res =
-            execute_cosmos_msg::<_, MsgCreateDenomResponse>(&app, &create_denom_msg, &signer)
+            execute_cosmos_msgs::<_, MsgCreateDenomResponse>(&app, &[create_denom_msg], &signer)
                 .unwrap();
         assert_eq!(
             create_denom_res.data.new_token_denom,
