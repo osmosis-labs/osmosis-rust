@@ -915,6 +915,37 @@ pub struct QueryTotalDelegationByDelegatorResponse {
     pub total_equivalent_staked_amount:
         ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
 }
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.QueryUnpoolWhitelistRequest")]
+#[proto_query(
+    path = "/osmosis.superfluid.Query/UnpoolWhitelist",
+    response_type = QueryUnpoolWhitelistResponse
+)]
+pub struct QueryUnpoolWhitelistRequest {}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.QueryUnpoolWhitelistResponse")]
+pub struct QueryUnpoolWhitelistResponse {
+    #[prost(uint64, repeated, tag = "1")]
+    pub pool_ids: ::prost::alloc::vec::Vec<u64>,
+}
 /// GenesisState defines the module's genesis state.
 #[derive(
     Clone,
@@ -1052,5 +1083,8 @@ impl<'a, Q: cosmwasm_std::CustomQuery> SuperfluidQuerier<'a, Q> {
         delegator_address: ::prost::alloc::string::String,
     ) -> Result<QueryTotalDelegationByDelegatorResponse, cosmwasm_std::StdError> {
         QueryTotalDelegationByDelegatorRequest { delegator_address }.query(self.querier)
+    }
+    pub fn unpool_whitelist(&self) -> Result<QueryUnpoolWhitelistResponse, cosmwasm_std::StdError> {
+        QueryUnpoolWhitelistRequest {}.query(self.querier)
     }
 }

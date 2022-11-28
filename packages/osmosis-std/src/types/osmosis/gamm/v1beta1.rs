@@ -1016,6 +1016,7 @@ pub struct QuerySpotPriceResponse {
     response_type = QuerySwapExactAmountInResponse
 )]
 pub struct QuerySwapExactAmountInRequest {
+    /// TODO: CHANGE THIS TO RESERVED IN A PATCH RELEASE
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
@@ -1061,6 +1062,7 @@ pub struct QuerySwapExactAmountInResponse {
     response_type = QuerySwapExactAmountOutResponse
 )]
 pub struct QuerySwapExactAmountOutRequest {
+    /// TODO: CHANGE THIS TO RESERVED IN A PATCH RELEASE
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
