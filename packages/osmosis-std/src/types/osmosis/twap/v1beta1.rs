@@ -98,7 +98,6 @@ pub struct GenesisState {
     #[prost(message, optional, tag = "2")]
     pub params: ::core::option::Option<Params>,
 }
-#[deprecated(since = "0.13.0", note = "use v2 instead")]
 #[derive(
     Clone,
     PartialEq,
@@ -114,6 +113,7 @@ pub struct GenesisState {
     path = "/osmosis.twap.v1beta1.Query/ArithmeticTwap",
     response_type = ArithmeticTwapResponse
 )]
+#[deprecated]
 pub struct ArithmeticTwapRequest {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -130,7 +130,6 @@ pub struct ArithmeticTwapRequest {
     #[prost(message, optional, tag = "5")]
     pub end_time: ::core::option::Option<crate::shim::Timestamp>,
 }
-#[deprecated(since = "0.13.0", note = "use v2 instead")]
 #[derive(
     Clone,
     PartialEq,
@@ -142,12 +141,11 @@ pub struct ArithmeticTwapRequest {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.twap.v1beta1.ArithmeticTwapResponse")]
+#[deprecated]
 pub struct ArithmeticTwapResponse {
     #[prost(string, tag = "1")]
     pub arithmetic_twap: ::prost::alloc::string::String,
 }
-
-#[deprecated(since = "0.13.0", note = "use v2 instead")]
 #[derive(
     Clone,
     PartialEq,
@@ -163,6 +161,7 @@ pub struct ArithmeticTwapResponse {
     path = "/osmosis.twap.v1beta1.Query/ArithmeticTwapToNow",
     response_type = ArithmeticTwapToNowResponse
 )]
+#[deprecated]
 pub struct ArithmeticTwapToNowRequest {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -177,8 +176,6 @@ pub struct ArithmeticTwapToNowRequest {
     #[prost(message, optional, tag = "4")]
     pub start_time: ::core::option::Option<crate::shim::Timestamp>,
 }
-
-#[deprecated(since = "0.13.0", note = "use v2 instead")]
 #[derive(
     Clone,
     PartialEq,
@@ -190,6 +187,7 @@ pub struct ArithmeticTwapToNowRequest {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.twap.v1beta1.ArithmeticTwapToNowResponse")]
+#[deprecated]
 pub struct ArithmeticTwapToNowResponse {
     #[prost(string, tag = "1")]
     pub arithmetic_twap: ::prost::alloc::string::String,
@@ -235,8 +233,7 @@ impl<'a, Q: cosmwasm_std::CustomQuery> TwapQuerier<'a, Q> {
     pub fn params(&self) -> Result<ParamsResponse, cosmwasm_std::StdError> {
         ParamsRequest {}.query(self.querier)
     }
-
-    #[deprecated(since = "0.13.0", note = "use v2 instead")]
+    #[deprecated]
     pub fn arithmetic_twap(
         &self,
         pool_id: u64,
@@ -254,8 +251,7 @@ impl<'a, Q: cosmwasm_std::CustomQuery> TwapQuerier<'a, Q> {
         }
         .query(self.querier)
     }
-
-    #[deprecated(since = "0.13.0", note = "use v2 instead")]
+    #[deprecated]
     pub fn arithmetic_twap_to_now(
         &self,
         pool_id: u64,

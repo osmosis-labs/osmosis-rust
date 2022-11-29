@@ -10,4 +10,3 @@ pub mod superfluid;
 pub mod tokenfactory;
 pub mod twap;
 pub mod txfees;
-pub mod validatorpreference;
