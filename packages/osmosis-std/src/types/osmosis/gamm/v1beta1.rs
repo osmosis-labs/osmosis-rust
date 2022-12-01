@@ -966,6 +966,9 @@ pub struct QueryPoolsWithFilterRequest {
     pub min_liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
     #[prost(string, tag = "2")]
     pub pool_type: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub pagination:
+        ::core::option::Option<super::super::super::cosmos::base::query::v1beta1::PageRequest>,
 }
 #[derive(
     Clone,
@@ -981,6 +984,10 @@ pub struct QueryPoolsWithFilterRequest {
 pub struct QueryPoolsWithFilterResponse {
     #[prost(message, repeated, tag = "1")]
     pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
+    /// pagination defines the pagination in the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::super::cosmos::base::query::v1beta1::PageResponse>,
 }
 /// QuerySpotPriceResponse defines the gRPC response structure for a SpotPrice
 /// query.
@@ -1191,10 +1198,14 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
         &self,
         min_liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
         pool_type: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<
+            super::super::super::cosmos::base::query::v1beta1::PageRequest,
+        >,
     ) -> Result<QueryPoolsWithFilterResponse, cosmwasm_std::StdError> {
         QueryPoolsWithFilterRequest {
             min_liquidity,
             pool_type,
+            pagination,
         }
         .query(self.querier)
     }

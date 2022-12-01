@@ -221,7 +221,10 @@ fn test_twap_query() {
                 )
                 .unwrap();
 
-            dbg!(res);
+            assert_eq!(
+                res.arithmetic_twap.chars().take(4).collect::<String>(),
+                "0.94"
+            );
         },
         true,
     );

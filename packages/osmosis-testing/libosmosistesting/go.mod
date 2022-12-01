@@ -6,21 +6,20 @@ replace (
 	github.com/CosmWasm/wasmd => github.com/osmosis-labs/wasmd v0.29.2-osmo-v13
 	// Our cosmos-sdk branch is:  https://github.com/osmosis-labs/cosmos-sdk, current branch: v13.x. Direct commit link: https://github.com/osmosis-labs/cosmos-sdk/commit/8757a61551aa1ea993c85a523e18094ab555b1d7
 	// tag: https://github.com/osmosis-labs/cosmos-sdk/releases/tag/sdk-v13.0.0-rc2
-	github.com/cosmos/cosmos-sdk => github.com/osmosis-labs/cosmos-sdk v0.45.1-0.20221122041228-bf54b8d65262
-
-	// fix dependabot alert: https://github.com/osmosis-labs/osmosis-rust/security/dependabot/1
-	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
+	github.com/cosmos/cosmos-sdk => github.com/osmosis-labs/cosmos-sdk v0.45.1-0.20221118211718-545aed73e94e
 	// use cosmos-compatible protobufs
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	// use grpc compatible with cosmos protobufs
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
+	// fix dependabot alert: https://github.com/osmosis-labs/osmosis-rust/security/dependabot/1
+	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
 )
 
 require (
 	github.com/CosmWasm/wasmd v0.28.0-osmo-v12
 	github.com/cosmos/cosmos-sdk v0.46.6
 	github.com/golang/protobuf v1.5.2
-	github.com/osmosis-labs/osmosis/v13 v13.0.0-rc4
+	github.com/osmosis-labs/osmosis/v13 v13.0.0-rc5
 	github.com/pkg/errors v0.9.1
 	github.com/tendermint/tendermint v0.34.22
 	github.com/tendermint/tm-db v0.6.8-0.20220506192307-f628bb5dc95b

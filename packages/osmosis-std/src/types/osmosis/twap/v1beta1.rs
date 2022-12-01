@@ -113,7 +113,6 @@ pub struct GenesisState {
     path = "/osmosis.twap.v1beta1.Query/ArithmeticTwap",
     response_type = ArithmeticTwapResponse
 )]
-#[deprecated]
 pub struct ArithmeticTwapRequest {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -141,7 +140,6 @@ pub struct ArithmeticTwapRequest {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.twap.v1beta1.ArithmeticTwapResponse")]
-#[deprecated]
 pub struct ArithmeticTwapResponse {
     #[prost(string, tag = "1")]
     pub arithmetic_twap: ::prost::alloc::string::String,
@@ -161,7 +159,6 @@ pub struct ArithmeticTwapResponse {
     path = "/osmosis.twap.v1beta1.Query/ArithmeticTwapToNow",
     response_type = ArithmeticTwapToNowResponse
 )]
-#[deprecated]
 pub struct ArithmeticTwapToNowRequest {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -187,7 +184,6 @@ pub struct ArithmeticTwapToNowRequest {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.twap.v1beta1.ArithmeticTwapToNowResponse")]
-#[deprecated]
 pub struct ArithmeticTwapToNowResponse {
     #[prost(string, tag = "1")]
     pub arithmetic_twap: ::prost::alloc::string::String,
@@ -233,7 +229,6 @@ impl<'a, Q: cosmwasm_std::CustomQuery> TwapQuerier<'a, Q> {
     pub fn params(&self) -> Result<ParamsResponse, cosmwasm_std::StdError> {
         ParamsRequest {}.query(self.querier)
     }
-    #[deprecated]
     pub fn arithmetic_twap(
         &self,
         pool_id: u64,
