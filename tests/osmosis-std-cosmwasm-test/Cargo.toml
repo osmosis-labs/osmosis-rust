@@ -43,7 +43,7 @@ optimize = """docker run --rm -v "$(pwd)":/code \
 cosmwasm-schema = "1.1.2"
 cosmwasm-std = "1.1.2"
 cosmwasm-storage = "1.1.2"
-cw-storage-plus = "0.13.2"
+cw-storage-plus = "0.15"
 cw2 = "0.13.2"
 jsonformat = "2.0.0"
 osmosis-std = {path = "../../packages/osmosis-std"}

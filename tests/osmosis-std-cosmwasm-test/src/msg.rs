@@ -3,7 +3,9 @@ pub use osmosis_std::types::osmosis::epochs::v1beta1::QueryEpochsInfoResponse;
 pub use osmosis_std::types::osmosis::gamm::v1beta1::{
     QueryNumPoolsResponse, QueryPoolParamsResponse, QueryPoolResponse,
 };
-pub use osmosis_std::types::osmosis::twap::v1beta1::{ArithmeticTwapToNowRequest,ArithmeticTwapToNowResponse};
+pub use osmosis_std::types::osmosis::twap::v1beta1::{
+    ArithmeticTwapToNowRequest, ArithmeticTwapToNowResponse,
+};
 
 /// Message type for `instantiate` entry_point
 #[cw_serde]
@@ -13,7 +15,9 @@ pub struct InstantiateMsg {
 
 /// Message type for `execute` entry_point
 #[cw_serde]
-pub enum ExecuteMsg {}
+pub enum ExecuteMsg {
+    SetMap { key: String, value: String },
+}
 
 /// Message type for `migrate` entry_point
 #[cw_serde]
@@ -36,5 +40,13 @@ pub enum QueryMsg {
     QueryPoolParams { pool_id: u64 },
 
     #[returns(ArithmeticTwapToNowResponse)]
-    QueryArithmeticTwapToNow(ArithmeticTwapToNowRequest)
+    QueryArithmeticTwapToNow(ArithmeticTwapToNowRequest),
+
+    #[returns(QueryMapResponse)]
+    QueryMap { key: String },
+}
+
+#[cw_serde]
+pub struct QueryMapResponse {
+    pub value: String,
 }

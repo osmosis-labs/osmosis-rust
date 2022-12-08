@@ -19,8 +19,8 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMsg};
-use crate::state::DEBUG;
+use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMapResponse, QueryMsg};
+use crate::state::{DEBUG, MAP};
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:osmosis-std-cosmwasm-test";
@@ -63,16 +63,16 @@ pub fn migrate(_deps: DepsMut, _env: Env, msg: MigrateMsg) -> Result<Response, C
 /// Handling contract execution
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn execute(
-    _deps: DepsMut,
+    deps: DepsMut,
     _env: Env,
     _info: MessageInfo,
     msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     match msg {
-        // Find matched incoming message variant and execute them with your custom logic.
-        //
-        // With `Response` type, it is possible to dispatch message to invoke external logic.
-        // See: https://github.com/CosmWasm/cosmwasm/blob/main/SEMANTICS.md#dispatching-messages
+        ExecuteMsg::SetMap { key, value } => {
+            MAP.save(deps.storage, key, &value)?;
+            Ok(Response::new().add_attribute("method", "set_map"))
+        }
     }
 }
 
@@ -94,7 +94,10 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         }
         QueryMsg::QueryArithmeticTwapToNow(arithmetic_twap_request) => {
             query_and_debug::<ArithmeticTwapToNowResponse>(&deps, arithmetic_twap_request)
-        },
+        }
+        QueryMsg::QueryMap { key } => to_binary(&QueryMapResponse {
+            value: MAP.load(deps.storage, key)?,
+        }),
     }
 }
 

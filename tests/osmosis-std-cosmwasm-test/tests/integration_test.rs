@@ -15,8 +15,8 @@ use osmosis_std::{
     },
 };
 use osmosis_std_cosmwasm_test::msg::{
-    ArithmeticTwapToNowRequest, ArithmeticTwapToNowResponse, QueryEpochsInfoResponse, QueryMsg,
-    QueryNumPoolsResponse, QueryPoolParamsResponse, QueryPoolResponse,
+    ArithmeticTwapToNowRequest, ArithmeticTwapToNowResponse, ExecuteMsg, QueryEpochsInfoResponse,
+    QueryMapResponse, QueryMsg, QueryNumPoolsResponse, QueryPoolParamsResponse, QueryPoolResponse,
 };
 use osmosis_testing::{Account, Runner};
 
@@ -225,6 +225,36 @@ fn test_twap_query() {
                 res.arithmetic_twap.chars().take(4).collect::<String>(),
                 "0.94"
             );
+        },
+        true,
+    );
+}
+
+#[test]
+fn test_cosmwasm_vm_storage_plus_compatability() {
+    with_env_setup(
+        |_app, wasm, signer, _code_id, contract_addr| {
+            wasm.execute(
+                &contract_addr,
+                &ExecuteMsg::SetMap {
+                    key: "key".to_string(),
+                    value: "value".to_string(),
+                },
+                &[],
+                &signer,
+            )
+            .unwrap();
+
+            let res: QueryMapResponse = wasm
+                .query(
+                    &contract_addr,
+                    &QueryMsg::QueryMap {
+                        key: "key".to_string(),
+                    },
+                )
+                .unwrap();
+
+            assert_eq!(res.value, "value".to_string());
         },
         true,
     );
