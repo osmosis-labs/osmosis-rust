@@ -246,6 +246,7 @@ impl<'a, Q: cosmwasm_std::CustomQuery> TwapQuerier<'a, Q> {
         }
         .query(self.querier)
     }
+    #[deprecated]
     pub fn arithmetic_twap_to_now(
         &self,
         pool_id: u64,

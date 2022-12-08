@@ -11,10 +11,10 @@ use proto_build::{
 };
 
 /// The Cosmos SDK commit or tag to be cloned and used to build the proto files
-const COSMOS_SDK_REV: &str = "sdk-v13.0.0-rc1";
+const COSMOS_SDK_REV: &str = "sdk-v13.0.0-rc2";
 
 /// The osmosis commit or tag to be cloned and used to build the proto files
-const OSMOSIS_REV: &str = "v13.0.0-rc2";
+const OSMOSIS_REV: &str = "v13.1.1";
 
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.

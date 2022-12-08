@@ -86,6 +86,7 @@ pub struct Output {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/cosmos.bank.v1beta1.Supply")]
+#[deprecated]
 pub struct Supply {
     #[prost(message, repeated, tag = "1")]
     pub total: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
