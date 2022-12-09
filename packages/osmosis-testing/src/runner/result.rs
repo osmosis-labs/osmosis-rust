@@ -89,6 +89,7 @@ where
 ///   2 -> ExecuteError
 ///
 /// The rest are undefined and remaining spaces are reserved for future use.
+#[derive(Debug)]
 pub struct RawResult(Result<Vec<u8>, RunnerError>);
 
 impl RawResult {
@@ -105,9 +106,7 @@ impl RawResult {
         let content = &bytes[1..];
 
         if code == 0 {
-            let res = CString::new(content).unwrap().into_bytes();
-
-            Some(Self(Ok(res)))
+            Some(Self(Ok(content.to_vec())))
         } else {
             let content_string = CString::new(content)
                 .unwrap()
@@ -229,5 +228,20 @@ mod tests {
                 msg: String::from("pool should have at least 2 assets, as they must be swapping between at least two assets")
             }
         )
+    }
+
+    #[test]
+    fn test_raw_result_ptr_with_0_bytes_in_content_should_not_error() {
+        let base64_string = base64::encode(vec![vec![0u8], vec![0u8]].concat());
+        let res = RawResult::from_ptr(
+            CString::new(base64_string.as_bytes().to_vec())
+                .unwrap()
+                .into_raw(),
+        )
+        .unwrap()
+        .into_result()
+        .unwrap();
+
+        assert_eq!(res, vec![0u8]);
     }
 }
