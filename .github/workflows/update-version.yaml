@@ -1,27 +1,20 @@
 on:
   workflow_dispatch:
+    name: update and rebuild
     inputs:
-      logLevel:
-        description: "Log level"
+      version:
+        description: "Osmosis version"
         required: true
-        default: "warning"
         type: choice
         options:
-          - info
-          - warning
-          - debug
-      tags:
-        description: "Test scenario tags"
-        required: false
-        type: boolean
-
+          - main
+          - v13
+          - v14
 jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "Log level: $LEVEL"
-          echo "Tags: $TAGS"
+          echo "version: $VERSION"
         env:
-          LEVEL: ${{ inputs.logLevel }}
-          TAGS: ${{ inputs.tags }}
+          VERSION: ${{ inputs.version }}
