@@ -11,11 +11,18 @@ on:
           - main
           - v13.x
           - v13.1.2
+      command:
+        type: string
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - run: |
-          cd packages/proto-build && cargo run -- --update-deps
+          ls && cd packages/proto-build && cargo run -- --update-deps
         env:
           VERSION: ${{ inputs.version }}
+          COMMAND: ${{ inputs.version }}
