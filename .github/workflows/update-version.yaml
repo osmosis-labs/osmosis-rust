@@ -38,7 +38,6 @@ jobs:
           restore-keys: ${{ runner.os }}-cargo-
 
       - run: |
-          cd packages/proto-build && cargo run -- --update-deps
+          ./scripts/update-and-rebuild.sh "$VERSION"
         env:
           VERSION: ${{ inputs.version }}
-          COMMAND: ${{ inputs.command }}
