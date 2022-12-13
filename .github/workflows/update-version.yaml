@@ -3,15 +3,9 @@ on:
   workflow_dispatch:
     name: update and rebuild
     inputs:
-      version:
-        description: "Osmosis version"
+      osmosis_rev:
+        description: "Osmosis revision"
         required: true
-        type: choice
-        options:
-          - main
-          - v13.x
-          - v13.1.2
-      command:
         type: string
 
 env:
@@ -38,6 +32,9 @@ jobs:
           restore-keys: ${{ runner.os }}-cargo-
 
       - run: |
-          ./scripts/update-and-rebuild.sh "$VERSION"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ./scripts/update-and-rebuild.sh "$OSMOSIS_REV"
+
         env:
-          VERSION: ${{ inputs.version }}
+          OSMOSIS_REV: ${{ inputs.osmosis_rev }}

@@ -11,18 +11,18 @@ sed -i "s/const OSMOSIS_REV: \&str = \".*\";/const OSMOSIS_REV: \&str = \"$OSMOS
 
 git diff
 
-# # rebuild osmosis-std
-# cd "$SCRIPT_DIR/../packages/proto-build/" && cargo run -- --update-deps
+# rebuild osmosis-std
+cd "$SCRIPT_DIR/../packages/proto-build/" && cargo run -- --update-deps
 
-# # if dirty or untracked file exists
-# if [[ $(git diff --stat) != '' ||  $(git ls-files  --exclude-standard  --others) ]]; then
-#   # add, commit and push
-#   git add "$SCRIPT_DIR/.."
-#   git commit -m "rebuild with $(git rev-parse --short HEAD:dependencies/osmosis)"
+# if dirty or untracked file exists
+if [[ $(git diff --stat) != '' ||  $(git ls-files  --exclude-standard  --others) ]]; then
+  # add, commit and push
+  git add "$SCRIPT_DIR/.."
+  git commit -m "rebuild with $(git rev-parse --short HEAD:dependencies/osmosis)"
 
-#   BRANCH="autobuild-$OSMOSIS_REV"
-#   git checkout -b "$BRANCH"
-#   git push -uf origin "$BRANCH"
-# else
-#   echo '[CLEAN] No update needed for this build'
-# fi
+  BRANCH="autobuild-$OSMOSIS_REV"
+  git checkout -b "$BRANCH"
+  git push -uf origin "$BRANCH"
+else
+  echo '[CLEAN] No update needed for this build'
+fi
