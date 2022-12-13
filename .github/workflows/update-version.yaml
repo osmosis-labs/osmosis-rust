@@ -1,3 +1,4 @@
+name: update and rebuild
 on:
   workflow_dispatch:
     name: update and rebuild
@@ -8,13 +9,13 @@ on:
         type: choice
         options:
           - main
-          - v13
-          - v14
+          - v13.x
+          - v13.1.2
 jobs:
-  log-the-inputs:
+  build:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "version: $VERSION"
+          cd packages/proto-build && cargo run -- --update-deps
         env:
           VERSION: ${{ inputs.version }}
