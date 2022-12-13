@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v3
 
       - run: |
-          ls && cd packages/proto-build && cargo run -- --update-deps
+          cd packages/proto-build && cargo run -- --update-deps
         env:
           VERSION: ${{ inputs.version }}
           COMMAND: ${{ inputs.version }}
