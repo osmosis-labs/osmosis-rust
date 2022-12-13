@@ -605,59 +605,6 @@ pub struct ConnectedIntermediaryAccountResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.superfluid.QueryTotalDelegationByValidatorForDenomRequest")]
-#[proto_query(
-    path = "/osmosis.superfluid.Query/TotalDelegationByValidatorForDenom",
-    response_type = QueryTotalDelegationByValidatorForDenomResponse
-)]
-pub struct QueryTotalDelegationByValidatorForDenomRequest {
-    #[prost(string, tag = "1")]
-    pub denom: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.QueryTotalDelegationByValidatorForDenomResponse")]
-pub struct QueryTotalDelegationByValidatorForDenomResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub assets: ::prost::alloc::vec::Vec<Delegations>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.Delegations")]
-pub struct Delegations {
-    #[prost(string, tag = "1")]
-    pub val_addr: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub amount_sfsd: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub osmo_equivalent: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
 #[proto_message(type_url = "/osmosis.superfluid.TotalSuperfluidDelegationsRequest")]
 #[proto_query(
     path = "/osmosis.superfluid.Query/TotalSuperfluidDelegations",
@@ -915,37 +862,6 @@ pub struct QueryTotalDelegationByDelegatorResponse {
     pub total_equivalent_staked_amount:
         ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
 }
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.QueryUnpoolWhitelistRequest")]
-#[proto_query(
-    path = "/osmosis.superfluid.Query/UnpoolWhitelist",
-    response_type = QueryUnpoolWhitelistResponse
-)]
-pub struct QueryUnpoolWhitelistRequest {}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.QueryUnpoolWhitelistResponse")]
-pub struct QueryUnpoolWhitelistResponse {
-    #[prost(uint64, repeated, tag = "1")]
-    pub pool_ids: ::prost::alloc::vec::Vec<u64>,
-}
 /// GenesisState defines the module's genesis state.
 #[derive(
     Clone,
@@ -1014,12 +930,6 @@ impl<'a, Q: cosmwasm_std::CustomQuery> SuperfluidQuerier<'a, Q> {
     ) -> Result<ConnectedIntermediaryAccountResponse, cosmwasm_std::StdError> {
         ConnectedIntermediaryAccountRequest { lock_id }.query(self.querier)
     }
-    pub fn total_delegation_by_validator_for_denom(
-        &self,
-        denom: ::prost::alloc::string::String,
-    ) -> Result<QueryTotalDelegationByValidatorForDenomResponse, cosmwasm_std::StdError> {
-        QueryTotalDelegationByValidatorForDenomRequest { denom }.query(self.querier)
-    }
     pub fn total_superfluid_delegations(
         &self,
     ) -> Result<TotalSuperfluidDelegationsResponse, cosmwasm_std::StdError> {
@@ -1083,8 +993,5 @@ impl<'a, Q: cosmwasm_std::CustomQuery> SuperfluidQuerier<'a, Q> {
         delegator_address: ::prost::alloc::string::String,
     ) -> Result<QueryTotalDelegationByDelegatorResponse, cosmwasm_std::StdError> {
         QueryTotalDelegationByDelegatorRequest { delegator_address }.query(self.querier)
-    }
-    pub fn unpool_whitelist(&self) -> Result<QueryUnpoolWhitelistResponse, cosmwasm_std::StdError> {
-        QueryUnpoolWhitelistRequest {}.query(self.querier)
     }
 }

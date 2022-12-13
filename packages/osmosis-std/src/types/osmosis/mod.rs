@@ -1,6 +1,5 @@
 pub mod epochs;
 pub mod gamm;
-pub mod ibcratelimit;
 pub mod incentives;
 pub mod lockup;
 pub mod mint;

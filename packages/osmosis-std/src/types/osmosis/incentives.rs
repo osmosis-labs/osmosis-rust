@@ -210,6 +210,38 @@ pub struct ModuleToDistributeCoinsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
+#[proto_message(type_url = "/osmosis.incentives.ModuleDistributedCoinsRequest")]
+#[proto_query(
+    path = "/osmosis.incentives.Query/ModuleDistributedCoins",
+    response_type = ModuleDistributedCoinsResponse
+)]
+pub struct ModuleDistributedCoinsRequest {}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.ModuleDistributedCoinsResponse")]
+pub struct ModuleDistributedCoinsResponse {
+    /// Coins that have been distributed already
+    #[prost(message, repeated, tag = "1")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto_message(type_url = "/osmosis.incentives.GaugeByIDRequest")]
 #[proto_query(
     path = "/osmosis.incentives.Query/GaugeByID",
@@ -585,6 +617,11 @@ impl<'a, Q: cosmwasm_std::CustomQuery> IncentivesQuerier<'a, Q> {
         &self,
     ) -> Result<ModuleToDistributeCoinsResponse, cosmwasm_std::StdError> {
         ModuleToDistributeCoinsRequest {}.query(self.querier)
+    }
+    pub fn module_distributed_coins(
+        &self,
+    ) -> Result<ModuleDistributedCoinsResponse, cosmwasm_std::StdError> {
+        ModuleDistributedCoinsRequest {}.query(self.querier)
     }
     pub fn gauge_by_id(&self, id: u64) -> Result<GaugeByIdResponse, cosmwasm_std::StdError> {
         GaugeByIdRequest { id }.query(self.querier)

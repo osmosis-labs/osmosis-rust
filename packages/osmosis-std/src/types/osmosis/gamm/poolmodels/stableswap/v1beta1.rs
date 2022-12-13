@@ -63,10 +63,10 @@ pub struct Pool {
         ::prost::alloc::vec::Vec<super::super::super::super::super::cosmos::base::v1beta1::Coin>,
     /// for calculation amognst assets with different precisions
     #[prost(uint64, repeated, packed = "false", tag = "7")]
-    pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
-    /// scaling_factor_controller is the address can adjust pool scaling factors
+    pub scaling_factor: ::prost::alloc::vec::Vec<u64>,
+    /// scaling_factor_governor is the address can adjust pool scaling factors
     #[prost(string, tag = "8")]
-    pub scaling_factor_controller: ::prost::alloc::string::String,
+    pub scaling_factor_governor: ::prost::alloc::string::String,
 }
 /// ===================== MsgCreatePool
 #[derive(
@@ -92,8 +92,6 @@ pub struct MsgCreateStableswapPool {
     pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, tag = "5")]
     pub future_pool_governor: ::prost::alloc::string::String,
-    #[prost(string, tag = "6")]
-    pub scaling_factor_controller: ::prost::alloc::string::String,
 }
 /// Returns a poolID with custom poolName.
 #[derive(
