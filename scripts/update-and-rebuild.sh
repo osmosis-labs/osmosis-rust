@@ -7,7 +7,7 @@ OSMOSIS_REV=${1:-main}
 
 # update revision in proto-build main.rs
 PROTO_BUILD_MAIN_RS="$SCRIPT_DIR/../packages/proto-build/src/main.rs"
-sed "s/const OSMOSIS_REV: \&str = \".*\";/const OSMOSIS_REV: \&str = \"$OSMOSIS_REV\";/g" "$PROTO_BUILD_MAIN_RS" | tee "$PROTO_BUILD_MAIN_RS"
+sed "s/const OSMOSIS_REV: \&str = \".*\";/const OSMOSIS_REV: \&str = \"$OSMOSIS_REV\";/g" "$PROTO_BUILD_MAIN_RS" | tee -i "$PROTO_BUILD_MAIN_RS"
 
 cat "$PROTO_BUILD_MAIN_RS"
 
