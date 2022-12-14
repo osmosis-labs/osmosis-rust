@@ -16,4 +16,5 @@ jobs:
           name: osmosis/osmosis
 
       - run: |
+          ls ..
           ./scripts/check-updates.sh
