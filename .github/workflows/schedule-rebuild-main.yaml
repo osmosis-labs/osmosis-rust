@@ -13,6 +13,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run update-and-rebuild
-        uses: ./.github/workflows/update-and-rebuild.yaml
+        uses: osmosis/osmosis-rust/.github/workflows/update-and-rebuild.yaml@main
         with:
           osmosis_rev: main
