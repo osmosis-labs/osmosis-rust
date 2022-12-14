@@ -1,9 +1,10 @@
 name: schedule check
 on:
-  - workflow_dispatch:
+  workflow_dispatch:
     name: manual trigger
-  - schedule:
-      - cron: "5 * * * *"
+
+  schedule:
+    - cron: "5 * * * *"
 
 jobs:
   build:
