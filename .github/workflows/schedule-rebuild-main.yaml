@@ -9,7 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Run update-and-rebuild
-        uses: ./.github/update-and-rebuild.yaml
+        uses: ./.github/workflows/update-and-rebuild.yaml
         with:
           osmosis_rev: main
