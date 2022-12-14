@@ -1,0 +1,18 @@
+name: schedule check
+on:
+  - workflow_dispatch:
+    name: manual trigger
+  - schedule:
+      - cron: "5 * * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          name: osmosis/osmosis
+
+      - run: |
+          ./scripts/check-updates.sh
