@@ -13,10 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Clone Osmosis repo
-        run: |
-          git clone https://github.com/osmosis/osmosis.git
-
       - run: |
-          ls
-          ./scripts/check-updates.sh
+          git submodule update --init --recursive
+          cd dependencies/osmosis
+          git branch -r --format="%(refname:short) %(objectname)" --list origin/main
