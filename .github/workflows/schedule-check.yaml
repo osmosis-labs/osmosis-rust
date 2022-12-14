@@ -12,9 +12,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          repository: osmosis/osmosis
+
+      - name: Clone Osmosis repo
+        run: |
+          git config --global url.https://github.com/.insteadOf git://github.com/
+          git clone https://github.com/osmosis/osmosis.git
 
       - run: |
-          ls ..
+          ls
           ./scripts/check-updates.sh
