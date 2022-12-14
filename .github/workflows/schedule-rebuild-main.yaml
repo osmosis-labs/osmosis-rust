@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     name: manula trigger
   schedule:
-    - cron: "5 * * * *"
+    - cron: "* 1 * * *"
 
 jobs:
   call-update-and-rebuild:
