@@ -7,6 +7,6 @@ on:
 
 jobs:
   call-update-and-rebuild:
-    uses: osmosis/osmosis-rust/.github/workflows/update-and-rebuild.yaml@main
+    uses: ./.github/workflows/update-and-rebuild.yaml
     with:
       osmosis_rev: main
