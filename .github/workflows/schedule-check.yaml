@@ -13,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          name: osmosis/osmosis
+          repository: osmosis/osmosis
 
       - run: |
           ls ..
