@@ -1,0 +1,15 @@
+name: update and rebuild [main]
+on:
+  workflow_dispatch:
+    name: manula trigger
+  schedule:
+    - cron: "5 * * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run update-and-rebuild
+        uses: ./.github/update-and-rebuild.yaml
+        with:
+          osmosis_rev: main
