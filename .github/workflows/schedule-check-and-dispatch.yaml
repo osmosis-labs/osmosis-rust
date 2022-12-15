@@ -1,4 +1,4 @@
-name: update and rebuild [main]
+name: schedule check and dispatch
 on:
   workflow_dispatch:
     name: manula trigger
@@ -12,7 +12,10 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
-        run: echo "matrix={\"target\":[\"main\",\"v13.x\"]}" >> $GITHUB_OUTPUT
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          ./scripts/check-updates.sh
 
   call-update-and-rebuild:
     needs: populate-matrix

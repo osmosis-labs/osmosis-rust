@@ -4,14 +4,32 @@ set -euxo pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-TEMP="$SCRIPT_DIR/../tmp"
 
-mkdir -p "$TEMP/tmp"
+# get latest osmosis tag timestamp from workflow state
+LATEST_OSMOSIS_TAG_TIMESTAMP_PATH="$SCRIPT_DIR/../workflow-state/LATEST_OSMOSIS_TAG_TIMESTAMP"
+LATEST_OSMOSIS_TAG_TIMESTAMP=$(cat "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH" || echo 0)
 
-# list all branches with:
+# list all branches/tags with:
 # `<branch_name> <commit_hash>`
-git branch -r --format="%(refname:short) %(objectname)" --list origin/main > "$TEMP/branches"
+FORMAT="%(refname:short) %(committerdate:unix)"
+cd dependencies/osmosis
 
+# get all related revisions
+REVS="$(git branch -r --format="$FORMAT" --list origin/main && \
+    git branch -r --format="$FORMAT" --list origin/v* && \
+    git tag --format="$FORMAT" --list v*)"
 
-# diff file / input stream
-# if there is a diff, change 
+# filter only rev that's greater than latest tag
+MATRIX=$(echo "$REVS" | awk -v latest_tag_timestamp="$LATEST_OSMOSIS_TAG_TIMESTAMP" '$2 > latest_tag_timestamp { print $1 }' | jq -RMrnc '{ "target": [inputs] }')
+
+# update latest tag timestmap
+rm -f "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
+LATEST_OSMOSIS_TAG_TIMESTAMP="$(git tag --format="$FORMAT" | awk '{ print $2 }' | sort -nr | head -n 1)"
+echo "$LATEST_OSMOSIS_TAG_TIMESTAMP" > "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
+
+git add "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
+git commit -m "Update latest osmosis tag timestamp to $LATEST_OSMOSIS_TAG_TIMESTAMP"
+git push
+
+# pass along target rev matrix
+echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
