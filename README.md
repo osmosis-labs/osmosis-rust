@@ -1,3 +1,5 @@
+> :information_desk_person: If you want to use latest update from osmosis' main branch, checkout `autobuild-main` branch.
+
 # osmosis-rust
 
 Rust libraries for Osmosis. The following table shows every published crates maintained in this repository:
