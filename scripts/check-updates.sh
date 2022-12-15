@@ -9,10 +9,13 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 LATEST_OSMOSIS_TAG_TIMESTAMP_PATH="$SCRIPT_DIR/../workflow-state/LATEST_OSMOSIS_TAG_TIMESTAMP"
 LATEST_OSMOSIS_TAG_TIMESTAMP=$(cat "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH" || echo 0)
 
+
+git submodule update --init --recursive 
+cd dependencies/osmosis
+
 # list all branches/tags with:
 # `<branch_name> <commit_hash>`
 FORMAT="%(refname:short) %(committerdate:unix)"
-cd dependencies/osmosis
 
 # get all related revisions
 REVS="$(git branch -r --format="$FORMAT" --list origin/main && \
