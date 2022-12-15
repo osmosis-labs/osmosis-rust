@@ -17,7 +17,7 @@ jobs:
   call-update-and-rebuild:
     needs: populate-matrix
     strategy:
-      matrix: ${{fromJson(needs.job1.outputs.matrix)}}
+      matrix: ${{fromJson(needs.populate-matrix.outputs.matrix)}}
     uses: ./.github/workflows/update-and-rebuild.yaml
     with:
       osmosis_rev: ${{ matrix.target }}
