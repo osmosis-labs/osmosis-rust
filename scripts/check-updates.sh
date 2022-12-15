@@ -3,6 +3,7 @@
 set -euxo pipefail
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+ROOT_DIR="$SCRIPT_DIR/.."
 
 
 # get latest osmosis tag timestamp from workflow state
@@ -30,6 +31,7 @@ rm -f "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
 LATEST_OSMOSIS_TAG_TIMESTAMP="$(git tag --format="$FORMAT" | awk '{ print $2 }' | sort -nr | head -n 1)"
 echo "$LATEST_OSMOSIS_TAG_TIMESTAMP" > "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
 
+cd "$ROOT_DIR"
 git add "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
 git commit -m "Update latest osmosis tag timestamp to $LATEST_OSMOSIS_TAG_TIMESTAMP"
 git push
