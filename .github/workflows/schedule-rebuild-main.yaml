@@ -12,7 +12,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
-        run: echo "::set-output name=matrix::{\"target\":[\"main\",\"v13.x\"]}"
+        run: echo "matrix={\"target\":[\"main\",\"v13.x\"]}" >> $GITHUB_OUTPUT
 
   call-update-and-rebuild:
     needs: populate-matrix
