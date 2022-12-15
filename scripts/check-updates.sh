@@ -32,9 +32,13 @@ LATEST_OSMOSIS_TAG_TIMESTAMP="$(git tag --format="$FORMAT" | awk '{ print $2 }' 
 echo "$LATEST_OSMOSIS_TAG_TIMESTAMP" > "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
 
 cd "$ROOT_DIR"
-git add "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
-git commit -m "Update latest osmosis tag timestamp to $LATEST_OSMOSIS_TAG_TIMESTAMP"
-git push
+
+# if dirty or untracked file exists
+if [[ $(git diff --stat) != '' ||  $(git ls-files  --exclude-standard  --others) ]]; then
+    git add "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
+    git commit -m "Update latest osmosis tag timestamp to $LATEST_OSMOSIS_TAG_TIMESTAMP"
+    git push
+fi
 
 # pass along target rev matrix
 echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
