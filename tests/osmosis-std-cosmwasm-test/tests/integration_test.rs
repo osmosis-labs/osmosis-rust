@@ -18,6 +18,7 @@ use osmosis_std_cosmwasm_test::msg::{
     ArithmeticTwapToNowRequest, ArithmeticTwapToNowResponse, ExecuteMsg, QueryEpochsInfoResponse,
     QueryMapResponse, QueryMsg, QueryNumPoolsResponse, QueryPoolParamsResponse, QueryPoolResponse,
 };
+use osmosis_testing::RunnerError::ExecuteError;
 use osmosis_testing::{Account, Runner};
 
 #[test]
@@ -242,6 +243,54 @@ fn test_cosmwasm_vm_storage_plus_compatability() {
                 },
                 &[],
                 &signer,
+            )
+            .unwrap();
+
+            let res: QueryMapResponse = wasm
+                .query(
+                    &contract_addr,
+                    &QueryMsg::QueryMap {
+                        key: "key".to_string(),
+                    },
+                )
+                .unwrap();
+
+            assert_eq!(res.value, "value".to_string());
+        },
+        true,
+    );
+}
+
+#[test]
+fn test_execute_after_error_should_not_messed_up_block_height() {
+    with_env_setup(
+        |app, wasm, owner, _code_id, contract_addr| {
+            let non_owner = app.init_account(&[]).unwrap();
+            let err = wasm
+                .execute(
+                    &contract_addr,
+                    &ExecuteMsg::SetMap {
+                        key: "key".to_string(),
+                        value: "value".to_string(),
+                    },
+                    &[],
+                    &non_owner,
+                )
+                .unwrap_err();
+
+            assert_eq!(err, ExecuteError {
+                msg: "failed to execute message; message index: 0: Unauthorized: execute wasm contract failed".to_string(),
+            });
+
+            // after error, end block should be called properly so that height is updated
+            wasm.execute(
+                &contract_addr,
+                &ExecuteMsg::SetMap {
+                    key: "key".to_string(),
+                    value: "value".to_string(),
+                },
+                &[],
+                &owner,
             )
             .unwrap();
 
