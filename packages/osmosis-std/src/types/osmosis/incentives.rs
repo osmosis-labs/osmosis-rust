@@ -1,4 +1,22 @@
 use osmosis_std_derive::CosmwasmExt;
+/// Params holds parameters for the incentives module
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.Params")]
+pub struct Params {
+    /// distr_epoch_identifier is what epoch type distribution will be triggered by
+    /// (day, week, etc.)
+    #[prost(string, tag = "1")]
+    pub distr_epoch_identifier: ::prost::alloc::string::String,
+}
 /// Gauge is an object that stores and distributes yields to recipients who
 /// satisfy certain conditions. Currently gauges support conditions around the
 /// duration for which a given denom is locked.
@@ -74,6 +92,39 @@ pub struct LockableDurationsInfo {
     /// List of incentivised durations that gauges will pay out to
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
+}
+/// GenesisState defines the incentives module's various parameters when first
+/// initialized
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.GenesisState")]
+pub struct GenesisState {
+    /// params are all the parameters of the module
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+    /// gauges are all gauges that should exist at genesis
+    #[prost(message, repeated, tag = "2")]
+    pub gauges: ::prost::alloc::vec::Vec<Gauge>,
+    /// lockable_durations are all lockup durations that gauges can be locked for
+    /// in order to recieve incentives
+    #[prost(message, repeated, tag = "3")]
+    pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
+    /// last_gauge_id is what the gauge number will increment from when creating
+    /// the next gauge after genesis
+    #[prost(uint64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub last_gauge_id: u64,
 }
 /// MsgCreateGauge creates a gague to distribute rewards to users
 #[derive(
@@ -197,38 +248,6 @@ pub struct ModuleToDistributeCoinsRequest {}
 #[proto_message(type_url = "/osmosis.incentives.ModuleToDistributeCoinsResponse")]
 pub struct ModuleToDistributeCoinsResponse {
     /// Coins that have yet to be distributed
-    #[prost(message, repeated, tag = "1")]
-    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.incentives.ModuleDistributedCoinsRequest")]
-#[proto_query(
-    path = "/osmosis.incentives.Query/ModuleDistributedCoins",
-    response_type = ModuleDistributedCoinsResponse
-)]
-pub struct ModuleDistributedCoinsRequest {}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.incentives.ModuleDistributedCoinsResponse")]
-pub struct ModuleDistributedCoinsResponse {
-    /// Coins that have been distributed already
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
@@ -555,57 +574,6 @@ pub struct QueryLockableDurationsResponse {
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
 }
-/// Params holds parameters for the incentives module
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.incentives.Params")]
-pub struct Params {
-    /// distr_epoch_identifier is what epoch type distribution will be triggered by
-    /// (day, week, etc.)
-    #[prost(string, tag = "1")]
-    pub distr_epoch_identifier: ::prost::alloc::string::String,
-}
-/// GenesisState defines the incentives module's various parameters when first
-/// initialized
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.incentives.GenesisState")]
-pub struct GenesisState {
-    /// params are all the parameters of the module
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-    /// gauges are all gauges that should exist at genesis
-    #[prost(message, repeated, tag = "2")]
-    pub gauges: ::prost::alloc::vec::Vec<Gauge>,
-    /// lockable_durations are all lockup durations that gauges can be locked for
-    /// in order to recieve incentives
-    #[prost(message, repeated, tag = "3")]
-    pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
-    /// last_gauge_id is what the gauge number will increment from when creating
-    /// the next gauge after genesis
-    #[prost(uint64, tag = "4")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub last_gauge_id: u64,
-}
 pub struct IncentivesQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
@@ -617,11 +585,6 @@ impl<'a, Q: cosmwasm_std::CustomQuery> IncentivesQuerier<'a, Q> {
         &self,
     ) -> Result<ModuleToDistributeCoinsResponse, cosmwasm_std::StdError> {
         ModuleToDistributeCoinsRequest {}.query(self.querier)
-    }
-    pub fn module_distributed_coins(
-        &self,
-    ) -> Result<ModuleDistributedCoinsResponse, cosmwasm_std::StdError> {
-        ModuleDistributedCoinsRequest {}.query(self.querier)
     }
     pub fn gauge_by_id(&self, id: u64) -> Result<GaugeByIdResponse, cosmwasm_std::StdError> {
         GaugeByIdRequest { id }.query(self.querier)
