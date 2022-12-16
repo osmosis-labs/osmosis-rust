@@ -180,6 +180,22 @@ impl OsmosisTestApp {
             }
         }
     }
+
+    /// Ensure that all execution that happens in `execution` happens in a block
+    /// and end block properly, no matter it suceeds or fails.
+    unsafe fn run_block<T, E>(&self, execution: impl Fn() -> Result<T, E>) -> Result<T, E> {
+        unsafe { BeginBlock(self.id) };
+        match execution() {
+            ok @ Ok(_) => {
+                unsafe { EndBlock(self.id) };
+                ok
+            }
+            err @ Err(_) => {
+                unsafe { EndBlock(self.id) };
+                err
+            }
+        }
+    }
 }
 
 impl<'a> Runner<'a> for OsmosisTestApp {
@@ -192,51 +208,49 @@ impl<'a> Runner<'a> for OsmosisTestApp {
         M: ::prost::Message,
         R: ::prost::Message + Default,
     {
-        unsafe { BeginBlock(self.id) };
+        unsafe {
+            self.run_block(|| {
+                let msgs = msgs
+                    .iter()
+                    .map(|(msg, type_url)| {
+                        let mut buf = Vec::new();
+                        M::encode(msg, &mut buf).map_err(EncodeError::ProtoEncodeError)?;
 
-        let msgs = msgs
-            .iter()
-            .map(|(msg, type_url)| {
+                        Ok(cosmrs::Any {
+                            type_url: type_url.to_string(),
+                            value: buf,
+                        })
+                    })
+                    .collect::<Result<Vec<cosmrs::Any>, RunnerError>>()?;
+
+                let fee = match &signer.fee_setting() {
+                    FeeSetting::Auto { .. } => self.estimate_fee(msgs.clone(), signer)?,
+                    FeeSetting::Custom { amount, gas_limit } => Fee::from_amount_and_gas(
+                        cosmrs::Coin {
+                            denom: amount.denom.parse().unwrap(),
+                            amount: amount.amount.to_string().parse().unwrap(),
+                        },
+                        *gas_limit,
+                    ),
+                };
+
+                let tx = self.create_signed_tx(msgs, signer, fee)?;
+
                 let mut buf = Vec::new();
-                M::encode(msg, &mut buf).map_err(EncodeError::ProtoEncodeError)?;
+                RequestDeliverTx::encode(&RequestDeliverTx { tx }, &mut buf)
+                    .map_err(EncodeError::ProtoEncodeError)?;
 
-                Ok(cosmrs::Any {
-                    type_url: type_url.to_string(),
-                    value: buf,
-                })
+                let base64_req = base64::encode(buf);
+                redefine_as_go_string!(base64_req);
+
+                let res = Execute(self.id, base64_req);
+                let res = RawResult::from_non_null_ptr(res).into_result()?;
+
+                ResponseDeliverTx::decode(res.as_slice())
+                    .map_err(DecodeError::ProtoDecodeError)?
+                    .try_into()
             })
-            .collect::<Result<Vec<cosmrs::Any>, RunnerError>>()?;
-
-        let fee = match &signer.fee_setting() {
-            FeeSetting::Auto { .. } => self.estimate_fee(msgs.clone(), signer)?,
-            FeeSetting::Custom { amount, gas_limit } => Fee::from_amount_and_gas(
-                cosmrs::Coin {
-                    denom: amount.denom.parse().unwrap(),
-                    amount: amount.amount.to_string().parse().unwrap(),
-                },
-                *gas_limit,
-            ),
-        };
-
-        let tx = self.create_signed_tx(msgs, signer, fee)?;
-
-        let mut buf = Vec::new();
-        RequestDeliverTx::encode(&RequestDeliverTx { tx }, &mut buf)
-            .map_err(EncodeError::ProtoEncodeError)?;
-
-        let base64_req = base64::encode(buf);
-        redefine_as_go_string!(base64_req);
-        let res = unsafe {
-            let res = Execute(self.id, base64_req);
-            let res = RawResult::from_non_null_ptr(res).into_result()?;
-
-            ResponseDeliverTx::decode(res.as_slice()).map_err(DecodeError::ProtoDecodeError)
-        }?
-        .try_into();
-
-        unsafe { EndBlock(self.id) };
-
-        res
+        }
     }
 
     fn query<Q, R>(&self, path: &str, q: &Q) -> RunnerResult<R>

@@ -20,7 +20,7 @@ use serde::Serialize;
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, MigrateMsg, QueryMapResponse, QueryMsg};
-use crate::state::{DEBUG, MAP};
+use crate::state::{DEBUG, MAP, OWNER};
 
 // version info for migration info
 const CONTRACT_NAME: &str = "crates.io:osmosis-std-cosmwasm-test";
@@ -37,6 +37,7 @@ pub fn instantiate(
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
 
     DEBUG.save(deps.storage, &msg.debug)?;
+    OWNER.save(deps.storage, &info.sender)?;
 
     // With `Response` type, it is possible to dispatch message to invoke external logic.
     // See: https://github.com/CosmWasm/cosmwasm/blob/main/SEMANTICS.md#dispatching-messages
@@ -65,11 +66,14 @@ pub fn migrate(_deps: DepsMut, _env: Env, msg: MigrateMsg) -> Result<Response, C
 pub fn execute(
     deps: DepsMut,
     _env: Env,
-    _info: MessageInfo,
+    info: MessageInfo,
     msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     match msg {
         ExecuteMsg::SetMap { key, value } => {
+            if OWNER.load(deps.storage)? != info.sender {
+                return Err(ContractError::Unauthorized {});
+            }
             MAP.save(deps.storage, key, &value)?;
             Ok(Response::new().add_attribute("method", "set_map"))
         }
