@@ -71,6 +71,48 @@ pub struct DistrRecord {
     #[prost(string, tag = "2")]
     pub weight: ::prost::alloc::string::String,
 }
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.PoolToGauge")]
+pub struct PoolToGauge {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub gauge_id: u64,
+    #[prost(message, optional, tag = "3")]
+    pub duration: ::core::option::Option<crate::shim::Duration>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.PoolToGauges")]
+pub struct PoolToGauges {
+    #[prost(message, repeated, tag = "2")]
+    pub pool_to_gauge: ::prost::alloc::vec::Vec<PoolToGauge>,
+}
 /// ReplacePoolIncentivesProposal is a gov Content type for updating the pool
 /// incentives. If a ReplacePoolIncentivesProposal passes, the proposal’s records
 /// override the existing DistrRecords set in the module. Each record has a
@@ -122,6 +164,29 @@ pub struct UpdatePoolIncentivesProposal {
     pub description: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "3")]
     pub records: ::prost::alloc::vec::Vec<DistrRecord>,
+}
+/// GenesisState defines the pool incentives module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.GenesisState")]
+pub struct GenesisState {
+    /// params defines all the paramaters of the module.
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+    #[prost(message, repeated, tag = "2")]
+    pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
+    #[prost(message, optional, tag = "3")]
+    pub distr_info: ::core::option::Option<DistrInfo>,
+    #[prost(message, optional, tag = "4")]
+    pub pool_to_gauges: ::core::option::Option<PoolToGauges>,
 }
 #[derive(
     Clone,
@@ -372,27 +437,6 @@ pub struct QueryExternalIncentiveGaugesRequest {}
 pub struct QueryExternalIncentiveGaugesResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<super::super::incentives::Gauge>,
-}
-/// GenesisState defines the pool incentives module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.GenesisState")]
-pub struct GenesisState {
-    /// params defines all the paramaters of the module.
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-    #[prost(message, repeated, tag = "2")]
-    pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
-    #[prost(message, optional, tag = "3")]
-    pub distr_info: ::core::option::Option<DistrInfo>,
 }
 pub struct PoolincentivesQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,

@@ -1,11 +1,16 @@
+pub mod downtimedetector;
 pub mod epochs;
 pub mod gamm;
+pub mod ibcratelimit;
 pub mod incentives;
 pub mod lockup;
 pub mod mint;
 pub mod poolincentives;
+pub mod protorev;
 pub mod store;
 pub mod superfluid;
+pub mod swaprouter;
 pub mod tokenfactory;
 pub mod twap;
 pub mod txfees;
+pub mod valsetpref;
