@@ -97,50 +97,6 @@ pub struct QueryFeeTokensResponse {
     #[prost(message, repeated, tag = "1")]
     pub fee_tokens: ::prost::alloc::vec::Vec<FeeToken>,
 }
-/// QueryDenomSpotPriceRequest defines grpc request structure for querying spot
-/// price for the specified tx fee denom
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceRequest")]
-#[proto_query(
-    path = "/osmosis.txfees.v1beta1.Query/DenomSpotPrice",
-    response_type = QueryDenomSpotPriceResponse
-)]
-pub struct QueryDenomSpotPriceRequest {
-    #[prost(string, tag = "1")]
-    pub denom: ::prost::alloc::string::String,
-}
-/// QueryDenomSpotPriceRequest defines grpc response structure for querying spot
-/// price for the specified tx fee denom
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceResponse")]
-pub struct QueryDenomSpotPriceResponse {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-    #[prost(string, tag = "2")]
-    pub spot_price: ::prost::alloc::string::String,
-}
 #[derive(
     Clone,
     PartialEq,
@@ -219,12 +175,6 @@ impl<'a, Q: cosmwasm_std::CustomQuery> TxfeesQuerier<'a, Q> {
     }
     pub fn fee_tokens(&self) -> Result<QueryFeeTokensResponse, cosmwasm_std::StdError> {
         QueryFeeTokensRequest {}.query(self.querier)
-    }
-    pub fn denom_spot_price(
-        &self,
-        denom: ::prost::alloc::string::String,
-    ) -> Result<QueryDenomSpotPriceResponse, cosmwasm_std::StdError> {
-        QueryDenomSpotPriceRequest { denom }.query(self.querier)
     }
     pub fn denom_pool_id(
         &self,

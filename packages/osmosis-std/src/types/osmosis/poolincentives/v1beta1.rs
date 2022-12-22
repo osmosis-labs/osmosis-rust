@@ -71,48 +71,6 @@ pub struct DistrRecord {
     #[prost(string, tag = "2")]
     pub weight: ::prost::alloc::string::String,
 }
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.PoolToGauge")]
-pub struct PoolToGauge {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub gauge_id: u64,
-    #[prost(message, optional, tag = "3")]
-    pub duration: ::core::option::Option<crate::shim::Duration>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.PoolToGauges")]
-pub struct PoolToGauges {
-    #[prost(message, repeated, tag = "2")]
-    pub pool_to_gauge: ::prost::alloc::vec::Vec<PoolToGauge>,
-}
 /// ReplacePoolIncentivesProposal is a gov Content type for updating the pool
 /// incentives. If a ReplacePoolIncentivesProposal passes, the proposal’s records
 /// override the existing DistrRecords set in the module. Each record has a
@@ -185,8 +143,6 @@ pub struct GenesisState {
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
     #[prost(message, optional, tag = "3")]
     pub distr_info: ::core::option::Option<DistrInfo>,
-    #[prost(message, optional, tag = "4")]
-    pub pool_to_gauges: ::core::option::Option<PoolToGauges>,
 }
 #[derive(
     Clone,
@@ -252,8 +208,6 @@ pub mod query_gauge_ids_response {
         pub gauge_id: u64,
         #[prost(message, optional, tag = "2")]
         pub duration: ::core::option::Option<crate::shim::Duration>,
-        #[prost(string, tag = "3")]
-        pub gauge_incentive_percentage: ::prost::alloc::string::String,
     }
 }
 #[derive(
