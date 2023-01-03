@@ -9,16 +9,16 @@ OSMOSIS_REV=${1:-main}
 ## Update and rebuild osmosis-std ##
 ####################################
 
-# update revision in proto-build main.rs
-PROTO_BUILD_MAIN_RS="$SCRIPT_DIR/../packages/proto-build/src/main.rs"
+# # update revision in proto-build main.rs
+# PROTO_BUILD_MAIN_RS="$SCRIPT_DIR/../packages/proto-build/src/main.rs"
 
-# use @ as a separator to avoid confusion on input like "origin/main"
-sed -i "s@const OSMOSIS_REV: \&str = \".*\";@const OSMOSIS_REV: \&str = \"$OSMOSIS_REV\";@g" "$PROTO_BUILD_MAIN_RS"
+# # use @ as a separator to avoid confusion on input like "origin/main"
+# sed -i "s@const OSMOSIS_REV: \&str = \".*\";@const OSMOSIS_REV: \&str = \"$OSMOSIS_REV\";@g" "$PROTO_BUILD_MAIN_RS"
 
-git diff
+# git diff
 
-# rebuild osmosis-std
-cd "$SCRIPT_DIR/../packages/proto-build/" && cargo run -- --update-deps
+# # rebuild osmosis-std
+# cd "$SCRIPT_DIR/../packages/proto-build/" && cargo run -- --update-deps
 
 ########################################
 ## Update and rebuild osmosis-testing ##
@@ -28,8 +28,8 @@ cd "$SCRIPT_DIR/../packages/proto-build/" && cargo run -- --update-deps
 
 
 # build and run update-osmosis-testing
-cd "$SCRIPT_DIR/update-osmosis-testing" && go build
-UPDATE_OSMOSIS_TESTING_REPLACE_BIN="$SCRIPT_DIR/update-osmosis-testing/update-osmosis-testing-replace"
+cd "$SCRIPT_DIR/update-osmosis-testing-replace" && go build
+UPDATE_OSMOSIS_TESTING_REPLACE_BIN="$SCRIPT_DIR/update-osmosis-testing-replace/update-osmosis-testing-replace"
 
 # run update-osmosis-testing-replace which will replace the `replace directives` in osmosis-testing
 # with osmosis'
