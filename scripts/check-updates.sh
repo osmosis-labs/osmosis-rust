@@ -24,7 +24,15 @@ REVS="$(git branch -r --format="$FORMAT" --list origin/main && \
     git tag --format="$FORMAT" --list v*)"
 
 # filter only rev that's greater than latest tag
-MATRIX=$(echo "$REVS" | awk -v latest_tag_timestamp="$LATEST_OSMOSIS_TAG_TIMESTAMP" '$2 > latest_tag_timestamp { print $1 }' | jq -RMrnc '{ "target": [inputs] }')
+MATRIX=$(
+    echo "$REVS" | \
+    awk -v latest_tag_timestamp="$LATEST_OSMOSIS_TAG_TIMESTAMP" '$2 > latest_tag_timestamp { print $1 }' | \
+    # strip origin
+    sed "s/^origin\///" | \
+
+    # jq filter target revs only v13 and above or main
+    jq -RMrnc '{ "target": [inputs | select( test("^main$") or ((capture("v(?<v>[0-9]+)") | .v | tonumber) >= 13))] }'
+)
 
 # update latest tag timestmap
 rm -f "$LATEST_OSMOSIS_TAG_TIMESTAMP_PATH"
