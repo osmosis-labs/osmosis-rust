@@ -48,7 +48,7 @@ $UPDATE_OSMOSIS_TESTING_REPLACE_BIN
 go mod tidy
 
 # sync rev
-go get "github.com/osmosis-labs/osmosis/$OSMOSIS_VERSION@$OSMOSIS_REV"
+go get "github.com/osmosis-labs/osmosis/$OSMOSIS_VERSION@$(echo "$OSMOSIS_REV" | sed "s/^origin\///")"
 
 
 ########################################
