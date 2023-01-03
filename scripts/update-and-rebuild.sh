@@ -5,20 +5,29 @@ set -euxo pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 OSMOSIS_REV=${1:-main}
 
+LATEST_OSMOSIS_VERSION="v13"
+
+# if "$OSMOIS_REV" is /v\d+/ then extract it as var
+if [[ "$OSMOSIS_REV" =~ ^v[0-9]+ ]]; then
+  OSMOSIS_VERSION=$(echo "$OSMOSIS_REV" | sed "s/\..*$//")
+else
+  OSMOSIS_VERSION="$LATEST_OSMOSIS_VERSION"
+fi
+
 ####################################
 ## Update and rebuild osmosis-std ##
 ####################################
 
-# # update revision in proto-build main.rs
-# PROTO_BUILD_MAIN_RS="$SCRIPT_DIR/../packages/proto-build/src/main.rs"
+# update revision in proto-build main.rs
+PROTO_BUILD_MAIN_RS="$SCRIPT_DIR/../packages/proto-build/src/main.rs"
 
-# # use @ as a separator to avoid confusion on input like "origin/main"
-# sed -i "s@const OSMOSIS_REV: \&str = \".*\";@const OSMOSIS_REV: \&str = \"$OSMOSIS_REV\";@g" "$PROTO_BUILD_MAIN_RS"
+# use @ as a separator to avoid confusion on input like "origin/main"
+sed -i "s@const OSMOSIS_REV: \&str = \".*\";@const OSMOSIS_REV: \&str = \"$OSMOSIS_REV\";@g" "$PROTO_BUILD_MAIN_RS"
 
-# git diff
+git diff
 
-# # rebuild osmosis-std
-# cd "$SCRIPT_DIR/../packages/proto-build/" && cargo run -- --update-deps
+# rebuild osmosis-std
+cd "$SCRIPT_DIR/../packages/proto-build/" && cargo run -- --update-deps
 
 ########################################
 ## Update and rebuild osmosis-testing ##
@@ -39,7 +48,7 @@ $UPDATE_OSMOSIS_TESTING_REPLACE_BIN
 go mod tidy
 
 # sync rev
-go get "github.com/osmosis-labs/osmosis/v13@$OSMOSIS_REV"
+go get "github.com/osmosis-labs/osmosis/$OSMOSIS_VERSION@$OSMOSIS_REV"
 
 
 ########################################
