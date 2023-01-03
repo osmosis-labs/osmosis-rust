@@ -1004,8 +1004,10 @@ pub struct QuerySpotPriceRequest {
     response_type = QueryPoolsWithFilterResponse
 )]
 pub struct QueryPoolsWithFilterRequest {
-    #[prost(message, repeated, tag = "1")]
-    pub min_liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    /// String of the coins in single string seperated by comma. Ex)
+    /// 10uatom,100uosmo
+    #[prost(string, tag = "1")]
+    pub min_liquidity: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub pool_type: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "3")]
@@ -1196,7 +1198,7 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
     }
     pub fn pools_with_filter(
         &self,
-        min_liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+        min_liquidity: ::prost::alloc::string::String,
         pool_type: ::prost::alloc::string::String,
         pagination: ::core::option::Option<
             super::super::super::cosmos::base::query::v1beta1::PageRequest,

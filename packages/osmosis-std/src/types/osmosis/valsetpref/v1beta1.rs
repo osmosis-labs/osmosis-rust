@@ -147,6 +147,37 @@ pub struct MsgUndelegateFromValidatorSet {
 )]
 #[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgUndelegateFromValidatorSetResponse")]
 pub struct MsgUndelegateFromValidatorSetResponse {}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgRedelegateValidatorSet")]
+pub struct MsgRedelegateValidatorSet {
+    /// delegator is the user who is trying to create a validator-set.
+    #[prost(string, tag = "1")]
+    pub delegator: ::prost::alloc::string::String,
+    /// list of {valAddr, weight} to delegate to
+    #[prost(message, repeated, tag = "2")]
+    pub preferences: ::prost::alloc::vec::Vec<ValidatorPreference>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgRedelegateValidatorSetResponse")]
+pub struct MsgRedelegateValidatorSetResponse {}
 /// MsgWithdrawDelegationRewards allows user to claim staking rewards from the
 /// validator set.
 #[derive(
