@@ -56,6 +56,10 @@ if [[ $(git diff --stat) != '' ||  $(git ls-files  --exclude-standard  --others)
   # remove "origin/"
   OSMOSIS_REV=$(echo "$OSMOSIS_REV" | sed "s/^origin\///")
   BRANCH="autobuild-$OSMOSIS_REV"
+
+  # force delete local "$BRANCH" if exists
+  git branch -D "$BRANCH" || true
+
   git checkout -b "$BRANCH"
   git push -uf origin "$BRANCH"
 else
