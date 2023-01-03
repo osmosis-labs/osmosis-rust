@@ -14,7 +14,9 @@ use osmosis_std::types::osmosis::gamm::v1beta1::{
     QueryNumPoolsRequest, QueryNumPoolsResponse, QueryPoolParamsRequest, QueryPoolParamsResponse,
     QueryPoolRequest, QueryPoolResponse,
 };
-use osmosis_std::types::osmosis::twap::v1beta1::ArithmeticTwapToNowResponse;
+use osmosis_std::types::osmosis::twap::v1beta1::{
+    ArithmeticTwapToNowResponse, GeometricTwapToNowResponse,
+};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
@@ -98,6 +100,9 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         }
         QueryMsg::QueryArithmeticTwapToNow(arithmetic_twap_request) => {
             query_and_debug::<ArithmeticTwapToNowResponse>(&deps, arithmetic_twap_request)
+        }
+        QueryMsg::QueryGeometricTwapToNow(geometric_twap_request) => {
+            query_and_debug::<GeometricTwapToNowResponse>(&deps, geometric_twap_request)
         }
         QueryMsg::QueryMap { key } => to_binary(&QueryMapResponse {
             value: MAP.load(deps.storage, key)?,

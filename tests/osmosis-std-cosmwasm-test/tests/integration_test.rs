@@ -12,11 +12,13 @@ use osmosis_std::{
             self,
             v1beta1::{MsgSwapExactAmountInResponse, SwapAmountInRoute},
         },
+        twap::v1beta1::GeometricTwapToNowRequest,
     },
 };
 use osmosis_std_cosmwasm_test::msg::{
-    ArithmeticTwapToNowRequest, ArithmeticTwapToNowResponse, ExecuteMsg, QueryEpochsInfoResponse,
-    QueryMapResponse, QueryMsg, QueryNumPoolsResponse, QueryPoolParamsResponse, QueryPoolResponse,
+    ArithmeticTwapToNowRequest, ArithmeticTwapToNowResponse, ExecuteMsg,
+    GeometricTwapToNowResponse, QueryEpochsInfoResponse, QueryMapResponse, QueryMsg,
+    QueryNumPoolsResponse, QueryPoolParamsResponse, QueryPoolResponse,
 };
 use osmosis_testing::RunnerError::ExecuteError;
 use osmosis_testing::{Account, Runner};
@@ -224,6 +226,26 @@ fn test_twap_query() {
 
             assert_eq!(
                 res.arithmetic_twap.chars().take(4).collect::<String>(),
+                "0.94"
+            );
+
+            let res: GeometricTwapToNowResponse = wasm
+                .query(
+                    &contract_addr,
+                    &QueryMsg::QueryGeometricTwapToNow(GeometricTwapToNowRequest {
+                        pool_id,
+                        base_asset: "uosmo".to_string(),
+                        quote_asset: "uion".to_string(),
+                        start_time: Some(Timestamp {
+                            seconds: time.as_secs() as i64,
+                            nanos: 0,
+                        }),
+                    }),
+                )
+                .unwrap();
+
+            assert_eq!(
+                res.geometric_twap.chars().take(4).collect::<String>(),
                 "0.94"
             );
         },

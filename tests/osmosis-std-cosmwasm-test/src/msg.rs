@@ -4,7 +4,8 @@ pub use osmosis_std::types::osmosis::gamm::v1beta1::{
     QueryNumPoolsResponse, QueryPoolParamsResponse, QueryPoolResponse,
 };
 pub use osmosis_std::types::osmosis::twap::v1beta1::{
-    ArithmeticTwapToNowRequest, ArithmeticTwapToNowResponse,
+    ArithmeticTwapToNowRequest, ArithmeticTwapToNowResponse, GeometricTwapToNowRequest,
+    GeometricTwapToNowResponse,
 };
 
 /// Message type for `instantiate` entry_point
@@ -41,6 +42,9 @@ pub enum QueryMsg {
 
     #[returns(ArithmeticTwapToNowResponse)]
     QueryArithmeticTwapToNow(ArithmeticTwapToNowRequest),
+
+    #[returns(GeometricTwapToNowResponse)]
+    QueryGeometricTwapToNow(GeometricTwapToNowRequest),
 
     #[returns(QueryMapResponse)]
     QueryMap { key: String },
