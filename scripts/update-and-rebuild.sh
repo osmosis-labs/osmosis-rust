@@ -44,11 +44,14 @@ UPDATE_OSMOSIS_TESTING_REPLACE_BIN="$SCRIPT_DIR/update-osmosis-testing-replace/u
 # with osmosis'
 $UPDATE_OSMOSIS_TESTING_REPLACE_BIN
 
-# tidy up updated go.mod
-go mod tidy
+
+cd "$SCRIPT_DIR/../packages/osmosis-testing/libosmosistesting"
 
 # sync rev
 go get "github.com/osmosis-labs/osmosis/$OSMOSIS_VERSION@$(echo "$OSMOSIS_REV" | sed "s/^origin\///")"
+
+# tidy up updated go.mod
+go mod tidy
 
 
 ########################################
