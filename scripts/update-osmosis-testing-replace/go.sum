@@ -1,2 +1,4 @@
+github.com/osmosis-labs/osmosis/v13 v13.1.2 h1:YAdl2db8s/0ps4CGU3SnR28ZzSREYB1QQl8Ees2vMzE=
+github.com/osmosis-labs/osmosis/v13 v13.1.2/go.mod h1:mU5PwHTfPOCwp37X5x9r6lrwCbGsW1AV0sYY7qFucd8=
 golang.org/x/mod v0.7.0 h1:LapD9S96VoQRhi/GrNTqeBJFrUjs5UHCAtTlgwA5oZA=
 golang.org/x/mod v0.7.0/go.mod h1:iBbtSCu2XBx23ZKBPSOrRkjjQPZFPuis4dIYUhu/chs=

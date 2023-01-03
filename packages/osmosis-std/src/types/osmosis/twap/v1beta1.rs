@@ -49,10 +49,11 @@ pub struct TwapRecord {
     pub p1_last_spot_price: ::prost::alloc::string::String,
     #[prost(string, tag = "8")]
     pub p0_arithmetic_twap_accumulator: ::prost::alloc::string::String,
+    /// string geometric_twap_accumulator = 7 [(gogoproto.customtype) =
+    /// "github.com/cosmos/cosmos-sdk/types.Dec",
+    /// (gogoproto.nullable) = false];
     #[prost(string, tag = "9")]
     pub p1_arithmetic_twap_accumulator: ::prost::alloc::string::String,
-    #[prost(string, tag = "10")]
-    pub geometric_twap_accumulator: ::prost::alloc::string::String,
     /// This field contains the time in which the last spot price error occured.
     /// It is used to alert the caller if they are getting a potentially erroneous
     /// TWAP, due to an unforeseen underlying error.
