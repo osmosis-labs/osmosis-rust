@@ -88,9 +88,9 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
-	github.com/osmosis-labs/osmosis/osmomath v0.0.2 // indirect
-	github.com/osmosis-labs/osmosis/osmoutils v0.0.0-20230101095308-fa4e70e17dbf // indirect
-	github.com/osmosis-labs/osmosis/x/ibc-hooks v0.0.0-20230101095308-fa4e70e17dbf // indirect
+	github.com/osmosis-labs/osmosis/osmomath v0.0.3-rc0 // indirect
+	github.com/osmosis-labs/osmosis/osmoutils v0.0.3-rc0 // indirect
+	github.com/osmosis-labs/osmosis/x/ibc-hooks v0.0.5-rc0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect

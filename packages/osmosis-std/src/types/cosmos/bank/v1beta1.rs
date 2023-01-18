@@ -161,25 +161,6 @@ pub struct Metadata {
     #[prost(string, tag = "6")]
     pub symbol: ::prost::alloc::string::String,
 }
-/// SendAuthorization allows the grantee to spend up to spend_limit coins from
-/// the granter's account.
-///
-/// Since: cosmos-sdk 0.43
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.SendAuthorization")]
-pub struct SendAuthorization {
-    #[prost(message, repeated, tag = "1")]
-    pub spend_limit: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
-}
 /// GenesisState defines the bank module's genesis state.
 #[derive(
     Clone,
@@ -252,70 +233,6 @@ pub struct GenesisSupplyOffset {
     #[prost(string, tag = "2")]
     pub offset: ::prost::alloc::string::String,
 }
-/// MsgSend represents a message to send coins from one account to another.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSend")]
-pub struct MsgSend {
-    #[prost(string, tag = "1")]
-    pub from_address: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub to_address: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub amount: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
-}
-/// MsgSendResponse defines the Msg/Send response type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSendResponse")]
-pub struct MsgSendResponse {}
-/// MsgMultiSend represents an arbitrary multi-in, multi-out send message.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSend")]
-pub struct MsgMultiSend {
-    #[prost(message, repeated, tag = "1")]
-    pub inputs: ::prost::alloc::vec::Vec<Input>,
-    #[prost(message, repeated, tag = "2")]
-    pub outputs: ::prost::alloc::vec::Vec<Output>,
-}
-/// MsgMultiSendResponse defines the Msg/MultiSend response type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSendResponse")]
-pub struct MsgMultiSendResponse {}
 /// QueryBalanceRequest is the request type for the Query/Balance RPC method.
 #[derive(
     Clone,
@@ -722,6 +639,89 @@ pub struct QueryBaseDenomResponse {
     #[prost(string, tag = "1")]
     pub base_denom: ::prost::alloc::string::String,
 }
+/// SendAuthorization allows the grantee to spend up to spend_limit coins from
+/// the granter's account.
+///
+/// Since: cosmos-sdk 0.43
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.SendAuthorization")]
+pub struct SendAuthorization {
+    #[prost(message, repeated, tag = "1")]
+    pub spend_limit: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+}
+/// MsgSend represents a message to send coins from one account to another.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSend")]
+pub struct MsgSend {
+    #[prost(string, tag = "1")]
+    pub from_address: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub to_address: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub amount: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+}
+/// MsgSendResponse defines the Msg/Send response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSendResponse")]
+pub struct MsgSendResponse {}
+/// MsgMultiSend represents an arbitrary multi-in, multi-out send message.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSend")]
+pub struct MsgMultiSend {
+    #[prost(message, repeated, tag = "1")]
+    pub inputs: ::prost::alloc::vec::Vec<Input>,
+    #[prost(message, repeated, tag = "2")]
+    pub outputs: ::prost::alloc::vec::Vec<Output>,
+}
+/// MsgMultiSendResponse defines the Msg/MultiSend response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSendResponse")]
+pub struct MsgMultiSendResponse {}
 pub struct BankQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
