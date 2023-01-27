@@ -1,25 +1,5 @@
 pub mod v1beta1;
 use osmosis_std_derive::CosmwasmExt;
-/// Params holds parameters for the superfluid module
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.Params")]
-pub struct Params {
-    /// minimum_risk_factor is to be cut on OSMO equivalent value of lp tokens for
-    /// superfluid staking, default: 5%. The minimum risk factor works
-    /// to counter-balance the staked amount on chain's exposure to various asset
-    /// volatilities, and have base staking be 'resistant' to volatility.
-    #[prost(string, tag = "1")]
-    pub minimum_risk_factor: ::prost::alloc::string::String,
-}
 /// SuperfluidAsset stores the pair of superfluid asset type and denom pair
 #[derive(
     Clone,
@@ -173,37 +153,6 @@ pub enum SuperfluidAssetType {
     Native = 0,
     /// SuperfluidAssetTypeLendingShare = 2; // for now not exist
     LpShare = 1,
-}
-/// GenesisState defines the module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.GenesisState")]
-pub struct GenesisState {
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-    /// superfluid_assets defines the registered superfluid assets that have been
-    /// registered via governance.
-    #[prost(message, repeated, tag = "2")]
-    pub superfluid_assets: ::prost::alloc::vec::Vec<SuperfluidAsset>,
-    /// osmo_equivalent_multipliers is the records of osmo equivalent amount of
-    /// each superfluid registered pool, updated every epoch.
-    #[prost(message, repeated, tag = "3")]
-    pub osmo_equivalent_multipliers: ::prost::alloc::vec::Vec<OsmoEquivalentMultiplierRecord>,
-    /// intermediary_accounts is a secondary account for superfluid staking that
-    /// plays an intermediary role between validators and the delegators.
-    #[prost(message, repeated, tag = "4")]
-    pub intermediary_accounts: ::prost::alloc::vec::Vec<SuperfluidIntermediaryAccount>,
-    #[prost(message, repeated, tag = "5")]
-    pub intemediary_account_connections:
-        ::prost::alloc::vec::Vec<LockIdIntermediaryAccountConnection>,
 }
 #[derive(
     Clone,
@@ -390,6 +339,26 @@ pub struct MsgUnPoolWhitelistedPool {
 pub struct MsgUnPoolWhitelistedPoolResponse {
     #[prost(uint64, repeated, tag = "1")]
     pub exited_lock_ids: ::prost::alloc::vec::Vec<u64>,
+}
+/// Params holds parameters for the superfluid module
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.Params")]
+pub struct Params {
+    /// minimum_risk_factor is to be cut on OSMO equivalent value of lp tokens for
+    /// superfluid staking, default: 5%. The minimum risk factor works
+    /// to counter-balance the staked amount on chain's exposure to various asset
+    /// volatilities, and have base staking be 'resistant' to volatility.
+    #[prost(string, tag = "1")]
+    pub minimum_risk_factor: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
@@ -976,6 +945,37 @@ pub struct QueryUnpoolWhitelistRequest {}
 pub struct QueryUnpoolWhitelistResponse {
     #[prost(uint64, repeated, tag = "1")]
     pub pool_ids: ::prost::alloc::vec::Vec<u64>,
+}
+/// GenesisState defines the module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.GenesisState")]
+pub struct GenesisState {
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+    /// superfluid_assets defines the registered superfluid assets that have been
+    /// registered via governance.
+    #[prost(message, repeated, tag = "2")]
+    pub superfluid_assets: ::prost::alloc::vec::Vec<SuperfluidAsset>,
+    /// osmo_equivalent_multipliers is the records of osmo equivalent amount of
+    /// each superfluid registered pool, updated every epoch.
+    #[prost(message, repeated, tag = "3")]
+    pub osmo_equivalent_multipliers: ::prost::alloc::vec::Vec<OsmoEquivalentMultiplierRecord>,
+    /// intermediary_accounts is a secondary account for superfluid staking that
+    /// plays an intermediary role between validators and the delegators.
+    #[prost(message, repeated, tag = "4")]
+    pub intermediary_accounts: ::prost::alloc::vec::Vec<SuperfluidIntermediaryAccount>,
+    #[prost(message, repeated, tag = "5")]
+    pub intemediary_account_connections:
+        ::prost::alloc::vec::Vec<LockIdIntermediaryAccountConnection>,
 }
 pub struct SuperfluidQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,

@@ -122,34 +122,6 @@ pub struct Params {
     )]
     pub minting_rewards_distribution_start_epoch: i64,
 }
-/// GenesisState defines the mint module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.mint.v1beta1.GenesisState")]
-pub struct GenesisState {
-    /// minter is an abstraction for holding current rewards information.
-    #[prost(message, optional, tag = "1")]
-    pub minter: ::core::option::Option<Minter>,
-    /// params defines all the paramaters of the mint module.
-    #[prost(message, optional, tag = "2")]
-    pub params: ::core::option::Option<Params>,
-    /// reduction_started_epoch is the first epoch in which the reduction of mint
-    /// begins.
-    #[prost(int64, tag = "3")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub reduction_started_epoch: i64,
-}
 /// QueryParamsRequest is the request type for the Query/Params RPC method.
 #[derive(
     Clone,
@@ -219,6 +191,34 @@ pub struct QueryEpochProvisionsResponse {
     /// epoch_provisions is the current minting per epoch provisions value.
     #[prost(bytes = "vec", tag = "1")]
     pub epoch_provisions: ::prost::alloc::vec::Vec<u8>,
+}
+/// GenesisState defines the mint module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.mint.v1beta1.GenesisState")]
+pub struct GenesisState {
+    /// minter is an abstraction for holding current rewards information.
+    #[prost(message, optional, tag = "1")]
+    pub minter: ::core::option::Option<Minter>,
+    /// params defines all the paramaters of the mint module.
+    #[prost(message, optional, tag = "2")]
+    pub params: ::core::option::Option<Params>,
+    /// reduction_started_epoch is the first epoch in which the reduction of mint
+    /// begins.
+    #[prost(int64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub reduction_started_epoch: i64,
 }
 pub struct MintQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
