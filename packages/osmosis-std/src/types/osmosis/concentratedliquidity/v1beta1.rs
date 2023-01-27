@@ -1,4 +1,167 @@
 use osmosis_std_derive::CosmwasmExt;
+/// ===================== MsgCreatePosition
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCreatePosition")]
+pub struct MsgCreatePosition {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(int64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lower_tick: i64,
+    #[prost(int64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub upper_tick: i64,
+    #[prost(message, optional, tag = "5")]
+    pub token_desired0: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "6")]
+    pub token_desired1: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "7")]
+    pub token_min_amount0: ::prost::alloc::string::String,
+    #[prost(string, tag = "8")]
+    pub token_min_amount1: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCreatePositionResponse")]
+pub struct MsgCreatePositionResponse {
+    #[prost(string, tag = "1")]
+    pub amount0: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub amount1: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub liquidity_created: ::prost::alloc::string::String,
+}
+/// ===================== MsgWithdrawPosition
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgWithdrawPosition")]
+pub struct MsgWithdrawPosition {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(int64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lower_tick: i64,
+    #[prost(int64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub upper_tick: i64,
+    #[prost(string, tag = "5")]
+    pub liquidity_amount: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgWithdrawPositionResponse")]
+pub struct MsgWithdrawPositionResponse {
+    #[prost(string, tag = "1")]
+    pub amount0: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub amount1: ::prost::alloc::string::String,
+}
+/// ===================== MsgCollectFees
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCollectFees")]
+pub struct MsgCollectFees {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(int64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lower_tick: i64,
+    #[prost(int64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub upper_tick: i64,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCollectFeesResponse")]
+pub struct MsgCollectFeesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub token_out: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
 #[derive(
     Clone,
     PartialEq,
@@ -15,6 +178,9 @@ pub struct TickInfo {
     pub liquidity_gross: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
     pub liquidity_net: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub fee_growth_outside:
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::DecCoin>,
 }
 #[derive(
     Clone,
@@ -55,6 +221,11 @@ pub struct Pool {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub tick_spacing: u64,
+    #[prost(string, tag = "9")]
+    pub precision_factor_at_price_one: ::prost::alloc::string::String,
+    /// swap_fee is the ratio that is charged on the amount of token in.
+    #[prost(string, tag = "10")]
+    pub swap_fee: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,
@@ -70,25 +241,6 @@ pub struct Pool {
 pub struct Position {
     #[prost(string, tag = "1")]
     pub liquidity: ::prost::alloc::string::String,
-}
-/// GenesisState defines the concentrated liquidity module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.GenesisState")]
-pub struct GenesisState {
-    /// params are all the parameters of the module
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<super::Params>,
-    #[prost(message, repeated, tag = "2")]
-    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
 }
 /// ===================== MsgCreateConcentratedPool
 #[derive(
@@ -115,6 +267,10 @@ pub struct MsgCreateConcentratedPool {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub tick_spacing: u64,
+    #[prost(string, tag = "5")]
+    pub precision_factor_at_price_one: ::prost::alloc::string::String,
+    #[prost(string, tag = "9")]
+    pub swap_fee: ::prost::alloc::string::String,
 }
 /// Returns a unique poolID to identify the pool with.
 #[derive(
@@ -250,7 +406,7 @@ pub struct QueryParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<super::Params>,
 }
-/// ===================== MsgCreatePosition
+/// GenesisState defines the concentrated liquidity module's genesis state.
 #[derive(
     Clone,
     PartialEq,
@@ -261,108 +417,13 @@ pub struct QueryParamsResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCreatePosition")]
-pub struct MsgCreatePosition {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-    #[prost(string, tag = "2")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(int64, tag = "3")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub lower_tick: i64,
-    #[prost(int64, tag = "4")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub upper_tick: i64,
-    #[prost(message, optional, tag = "5")]
-    pub token_desired0: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(message, optional, tag = "6")]
-    pub token_desired1: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(string, tag = "7")]
-    pub token_min_amount0: ::prost::alloc::string::String,
-    #[prost(string, tag = "8")]
-    pub token_min_amount1: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCreatePositionResponse")]
-pub struct MsgCreatePositionResponse {
-    #[prost(string, tag = "1")]
-    pub amount0: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub amount1: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub liquidity_created: ::prost::alloc::string::String,
-}
-/// ===================== MsgWithdrawPosition
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgWithdrawPosition")]
-pub struct MsgWithdrawPosition {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-    #[prost(string, tag = "2")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(int64, tag = "3")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub lower_tick: i64,
-    #[prost(int64, tag = "4")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub upper_tick: i64,
-    #[prost(string, tag = "5")]
-    pub liquidity_amount: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgWithdrawPositionResponse")]
-pub struct MsgWithdrawPositionResponse {
-    #[prost(string, tag = "1")]
-    pub amount0: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub amount1: ::prost::alloc::string::String,
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.GenesisState")]
+pub struct GenesisState {
+    /// params are all the parameters of the module
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<super::Params>,
+    #[prost(message, repeated, tag = "2")]
+    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
 }
 pub struct ConcentratedliquidityQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,

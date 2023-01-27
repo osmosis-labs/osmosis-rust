@@ -208,6 +208,44 @@ pub struct MsgWithdrawDelegationRewards {
 )]
 #[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgWithdrawDelegationRewardsResponse")]
 pub struct MsgWithdrawDelegationRewardsResponse {}
+/// MsgDelegateBondedTokens breaks bonded lockup (by ID) of osmo, of
+/// length <= 2 weeks and takes all that osmo and delegates according to
+/// delegator's current validator set preference.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgDelegateBondedTokens")]
+pub struct MsgDelegateBondedTokens {
+    /// delegator is the user who is trying to force unbond osmo and delegate.
+    #[prost(string, tag = "1")]
+    pub delegator: ::prost::alloc::string::String,
+    /// lockup id of osmo in the pool
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgDelegateBondedTokensResponse")]
+pub struct MsgDelegateBondedTokensResponse {}
 /// Request type for UserValidatorPreferences.
 #[derive(
     Clone,

@@ -49,7 +49,7 @@ pub fn generate() {
         name: "cosmos".to_string(),
         version: COSMOS_SDK_REV.to_string(),
         project_dir: COSMOS_SDK_DIR.to_string(),
-        include_mods: vec!["bank".to_string()],
+        include_mods: vec!["bank".to_string(), "authz".to_string()],
     };
 
     let osmosis_code_generator = CodeGenerator::new(

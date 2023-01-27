@@ -165,29 +165,6 @@ pub struct UpdatePoolIncentivesProposal {
     #[prost(message, repeated, tag = "3")]
     pub records: ::prost::alloc::vec::Vec<DistrRecord>,
 }
-/// GenesisState defines the pool incentives module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.GenesisState")]
-pub struct GenesisState {
-    /// params defines all the paramaters of the module.
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-    #[prost(message, repeated, tag = "2")]
-    pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
-    #[prost(message, optional, tag = "3")]
-    pub distr_info: ::core::option::Option<DistrInfo>,
-    #[prost(message, optional, tag = "4")]
-    pub pool_to_gauges: ::core::option::Option<PoolToGauges>,
-}
 #[derive(
     Clone,
     PartialEq,
@@ -437,6 +414,29 @@ pub struct QueryExternalIncentiveGaugesRequest {}
 pub struct QueryExternalIncentiveGaugesResponse {
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<super::super::incentives::Gauge>,
+}
+/// GenesisState defines the pool incentives module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.GenesisState")]
+pub struct GenesisState {
+    /// params defines all the paramaters of the module.
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+    #[prost(message, repeated, tag = "2")]
+    pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
+    #[prost(message, optional, tag = "3")]
+    pub distr_info: ::core::option::Option<DistrInfo>,
+    #[prost(message, optional, tag = "4")]
+    pub pool_to_gauges: ::core::option::Option<PoolToGauges>,
 }
 pub struct PoolincentivesQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
