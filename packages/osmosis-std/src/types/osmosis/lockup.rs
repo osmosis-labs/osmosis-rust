@@ -24,6 +24,7 @@ pub struct PeriodLock {
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
+    #[serde(alias = "ID")]
     pub id: u64,
     /// Owner is the account address of the lock owner.
     /// Only the owner can modify the state of the lock.
