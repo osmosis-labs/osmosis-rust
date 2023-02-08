@@ -24,7 +24,6 @@ pub struct PeriodLock {
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
-    #[serde(alias = "ID")]
     pub id: u64,
     /// Owner is the account address of the lock owner.
     /// Only the owner can modify the state of the lock.
@@ -328,6 +327,9 @@ pub struct MsgForceUnlockResponse {
 pub struct Params {
     #[prost(string, repeated, tag = "1")]
     pub force_unlock_allowed_addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag = "2")]
+    pub non_owner_force_unlock_allowed_addresses:
+        ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(
     Clone,

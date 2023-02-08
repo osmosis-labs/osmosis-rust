@@ -255,6 +255,42 @@ pub struct MsgSuperfluidUnbondLock {
 )]
 #[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLockResponse")]
 pub struct MsgSuperfluidUnbondLockResponse {}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateAndUnbondLock")]
+pub struct MsgSuperfluidUndelegateAndUnbondLock {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+    /// Amount of unlocking coin.
+    #[prost(message, optional, tag = "3")]
+    pub coin: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateAndUnbondLockResponse")]
+pub struct MsgSuperfluidUndelegateAndUnbondLockResponse {}
 /// MsgLockAndSuperfluidDelegate locks coins with the unbonding period duration,
 /// and then does a superfluid lock from the newly created lockup, to the
 /// specified validator addr.

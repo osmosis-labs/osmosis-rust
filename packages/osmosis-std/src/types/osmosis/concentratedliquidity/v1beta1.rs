@@ -40,6 +40,8 @@ pub struct MsgCreatePosition {
     pub token_min_amount0: ::prost::alloc::string::String,
     #[prost(string, tag = "8")]
     pub token_min_amount1: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "9")]
+    pub frozen_until: ::core::option::Option<crate::shim::Timestamp>,
 }
 #[derive(
     Clone,
@@ -95,6 +97,8 @@ pub struct MsgWithdrawPosition {
     pub upper_tick: i64,
     #[prost(string, tag = "5")]
     pub liquidity_amount: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "6")]
+    pub frozen_until: ::core::option::Option<crate::shim::Timestamp>,
 }
 #[derive(
     Clone,
@@ -241,6 +245,8 @@ pub struct Pool {
 pub struct Position {
     #[prost(string, tag = "1")]
     pub liquidity: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub frozen_until: ::core::option::Option<crate::shim::Timestamp>,
 }
 /// ===================== MsgCreateConcentratedPool
 #[derive(
@@ -293,6 +299,76 @@ pub struct MsgCreateConcentratedPoolResponse {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub pool_id: u64,
+}
+///=============================== Positions
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.QueryUserPositionsRequest")]
+#[proto_query(
+    path = "/osmosis.concentratedliquidity.v1beta1.Query/UserPositions",
+    response_type = QueryUserPositionsResponse
+)]
+pub struct QueryUserPositionsRequest {
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.QueryUserPositionsResponse")]
+pub struct QueryUserPositionsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub positions: ::prost::alloc::vec::Vec<FullPositionByOwnerResult>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.FullPositionByOwnerResult")]
+pub struct FullPositionByOwnerResult {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(int64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lower_tick: i64,
+    #[prost(int64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub upper_tick: i64,
+    #[prost(message, optional, tag = "4")]
+    pub frozen_until: ::core::option::Option<crate::shim::Timestamp>,
+    #[prost(string, tag = "5")]
+    pub liquidity: ::prost::alloc::string::String,
 }
 ///=============================== Pool
 #[derive(
@@ -406,6 +482,70 @@ pub struct QueryParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<super::Params>,
 }
+///=============================== LiquidityDepthsForRange
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.concentratedliquidity.v1beta1.QueryLiquidityDepthsForRangeRequest"
+)]
+#[proto_query(
+    path = "/osmosis.concentratedliquidity.v1beta1.Query/LiquidityDepthsForRange",
+    response_type = QueryLiquidityDepthsForRangeResponse
+)]
+pub struct QueryLiquidityDepthsForRangeRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(string, tag = "2")]
+    pub lower_tick: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub upper_tick: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.concentratedliquidity.v1beta1.QueryLiquidityDepthsForRangeResponse"
+)]
+pub struct QueryLiquidityDepthsForRangeResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub liquidity_depths: ::prost::alloc::vec::Vec<LiquidityDepth>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.LiquidityDepth")]
+pub struct LiquidityDepth {
+    #[prost(string, tag = "1")]
+    pub liquidity_net: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub tick_index: ::prost::alloc::string::String,
+}
 /// GenesisState defines the concentrated liquidity module's genesis state.
 #[derive(
     Clone,
@@ -445,5 +585,24 @@ impl<'a, Q: cosmwasm_std::CustomQuery> ConcentratedliquidityQuerier<'a, Q> {
     }
     pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
         QueryParamsRequest {}.query(self.querier)
+    }
+    pub fn liquidity_depths_for_range(
+        &self,
+        pool_id: u64,
+        lower_tick: ::prost::alloc::string::String,
+        upper_tick: ::prost::alloc::string::String,
+    ) -> Result<QueryLiquidityDepthsForRangeResponse, cosmwasm_std::StdError> {
+        QueryLiquidityDepthsForRangeRequest {
+            pool_id,
+            lower_tick,
+            upper_tick,
+        }
+        .query(self.querier)
+    }
+    pub fn user_positions(
+        &self,
+        address: ::prost::alloc::string::String,
+    ) -> Result<QueryUserPositionsResponse, cosmwasm_std::StdError> {
+        QueryUserPositionsRequest { address }.query(self.querier)
     }
 }
