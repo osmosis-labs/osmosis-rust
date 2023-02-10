@@ -133,45 +133,6 @@ pub enum LockQueryType {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.lockup.Params")]
-pub struct Params {
-    #[prost(string, repeated, tag = "1")]
-    pub force_unlock_allowed_addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-/// GenesisState defines the lockup module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.GenesisState")]
-pub struct GenesisState {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub last_lock_id: u64,
-    #[prost(message, repeated, tag = "2")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-    #[prost(message, repeated, tag = "3")]
-    pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
 #[proto_message(type_url = "/osmosis.lockup.MsgLockTokens")]
 pub struct MsgLockTokens {
     #[prost(string, tag = "1")]
@@ -351,6 +312,21 @@ pub struct MsgForceUnlock {
 pub struct MsgForceUnlockResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.Params")]
+pub struct Params {
+    #[prost(string, repeated, tag = "1")]
+    pub force_unlock_allowed_addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(
     Clone,
@@ -947,6 +923,30 @@ pub struct QueryParamsRequest {}
 pub struct QueryParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
+}
+/// GenesisState defines the lockup module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.GenesisState")]
+pub struct GenesisState {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub last_lock_id: u64,
+    #[prost(message, repeated, tag = "2")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+    #[prost(message, repeated, tag = "3")]
+    pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
 }
 pub struct LockupQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
