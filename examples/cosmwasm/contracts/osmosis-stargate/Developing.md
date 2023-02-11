@@ -67,7 +67,7 @@ reproducible build process, so third parties can verify that the uploaded Wasm
 code did indeed come from the claimed rust code.
 
 To solve both these issues, we have produced `rust-optimizer`, a docker image to
-produce an extremely small build output in a consistent manner. The suggest way
+produce an extremely small build output in a consistent manner. The suggested way
 to run it is this:
 
 ```sh
@@ -85,7 +85,7 @@ docker run --rm -v "$(pwd)":/code \
   cosmwasm/rust-optimizer-arm64:0.12.6
 ```
 
-We must mount the contract code to `/code`. You can use a absolute path instead
+We must mount the contract code to `/code`. You can use an absolute path instead
 of `$(pwd)` if you don't want to `cd` to the directory first. The other two
 volumes are nice for speedup. Mounting `/code/target` in particular is useful
 to avoid docker overwriting your local dev files with root permissions.
