@@ -56,7 +56,7 @@ containing a simple working contract and build system that you can customize.
 
 ## Create a Repo
 
-After generating, you have a initialized local git repo, but no commits, and no remote.
+After generating, you have an initialized local git repo, but no commits, and no remote.
 Go to a server (eg. github) and create a new upstream repo (called `YOUR-GIT-URL` below).
 Then run the following:
 
@@ -96,5 +96,5 @@ to the world, once you are ready to deploy it on a running blockchain. And
 that have been published.
 
 Please replace this README file with information about your specific project. You can keep
-the `Developing.md` and `Publishing.md` files as useful referenced, but please set some
+the `Developing.md` and `Publishing.md` files as useful references, but please set some
 proper description in the README.
