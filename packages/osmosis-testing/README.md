@@ -15,7 +15,7 @@ CosmWasm x Osmosis integration testing library that, unlike `cw-multi-test`, it 
 
 ## Getting Started
 
-To demonstrate how `osmosis-testing` works, let use simple example contract: [cw-whitelist](https://github.com/CosmWasm/cw-plus/tree/main/contracts/cw1-whitelist) from `cw-plus`.
+To demonstrate how `osmosis-testing` works, let's use a simple example contract: [cw-whitelist](https://github.com/CosmWasm/cw-plus/tree/main/contracts/cw1-whitelist) from `cw-plus`.
 
 Here is how to setup the test:
 
@@ -42,7 +42,7 @@ let new_admin = &accs[1];
 ```
 
 Now we have the appchain instance and accounts that have some initial balances and can interact with the appchain.
-This does not run Docker instance or spawning external process, it just load the appchain's code as a library create an in memory instance.
+This does not run Docker instance or spawning external process, it just loads the appchain's code as a library create an in memory instance.
 
 Note that `init_accounts` is a convenience function that creates multiple accounts with the same initial balance.
 If you want to create just one account, you can use `init_account` instead.
@@ -87,7 +87,7 @@ let new_admin = &accs[1];
 
 // ============= NEW CODE ================
 
-// `Wasm` is the module we use to interact with cosmwasm releated logic on the appchain
+// `Wasm` is the module we use to interact with cosmwasm related logic on the appchain
 // it implements `Module` trait which you will see more later.
 let wasm = Wasm::new(&app);
 
@@ -100,7 +100,7 @@ let code_id = wasm
     .code_id;
 ```
 
-Not that in this example, it loads wasm bytecode from [cw-plus release](https://github.com/CosmWasm/cw-plus/releases) for simple demonstration purposes.
+Not that in this example, it load wasm bytecode from [cw-plus release](https://github.com/CosmWasm/cw-plus/releases) for simple demonstration purposes.
 You might want to run `cargo wasm` and find your wasm file in `target/wasm32-unknown-unknown/release/<contract_name>.wasm`.
 
 ```rust
@@ -217,7 +217,7 @@ assert!(admin_list.mutable);
 
 // ============= NEW CODE ================
 
-// update admin list and rechec the state
+// update admin list and recheck the state
 let new_admins = vec![new_admin.address()];
 wasm.execute::<ExecuteMsg>(
     &contract_addr,
@@ -239,14 +239,14 @@ assert!(admin_list.mutable);
 
 ## Debugging
 
-In your contract code, if you want to debug, you can use [`deps.api.debug(..)`](https://docs.rs/cosmwasm-std/latest/cosmwasm_std/trait.Api.html#tymethod.debug) which will prints the debug message to stdout. `wasmd` disabled this by default but `OsmosisTestApp` allows stdout emission so that you can debug your smart contract while running tests.
+In your contract code, if you want to debug, you can use [`deps.api.debug(..)`](https://docs.rs/cosmwasm-std/latest/cosmwasm_std/trait.Api.html#tymethod.debug) which will print the debug message to stdout. `wasmd` disabled this by default but `OsmosisTestApp` allows stdout emission so that you can debug your smart contract while running tests.
 
 ## Using Module Wrapper
 
-In some cases, you might want interact directly with appchain logic to setup the environment or query appchain's state.
-Module wrappers provides convenient functions to interact with the appchain's module.
+In some cases, you might want to interact directly with appchain logic to setup the environment or query appchain's state.
+Module wrappers provide convenient functions to interact with the appchain's module.
 
-Let's try interact with `Gamm` module:
+Let's try to interact with the `Gamm` module:
 
 ```rust
 use cosmwasm_std::Coin;
