@@ -22,7 +22,7 @@ use osmosis_std::types::osmosis::tokenfactory::v1beta1::MsgCreateDenom;
 pub fn try_create_denom(env: Env, subdenom: String) -> Result<Response, ContractError> {
     let sender = env.contract.address.into();
 
-    // construct message and convet them into cosmos message
+    // construct message and convert them into cosmos message
     // (notice `CosmosMsg` type and `.into()`)
     let msg_create_denom: CosmosMsg = MsgCreateDenom { sender, subdenom }.into();
 
@@ -35,7 +35,7 @@ pub fn try_create_denom(env: Env, subdenom: String) -> Result<Response, Contract
 
 ## Querying Osmosis' module
 
-Each module has their own querier that derived from protobuf service definition that can be found [here](https://github.com/osmosis-labs/osmosis/tree/v12.1.0/proto/osmosis).
+Each module has its own querier that derived from protobuf service definition that can be found [here](https://github.com/osmosis-labs/osmosis/tree/v12.1.0/proto/osmosis).
 
 To avoid non-determinism in stargate queries, only some of them are whitelisted, you can find the list [here](https://github.com/osmosis-labs/osmosis/blob/v12.1.0/wasmbinding/stargate_whitelist.go).
 
