@@ -1,22 +1,4 @@
 use osmosis_std_derive::CosmwasmExt;
-/// Params holds parameters for the incentives module
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.incentives.Params")]
-pub struct Params {
-    /// distr_epoch_identifier is what epoch type distribution will be triggered by
-    /// (day, week, etc.)
-    #[prost(string, tag = "1")]
-    pub distr_epoch_identifier: ::prost::alloc::string::String,
-}
 /// Gauge is an object that stores and distributes yields to recipients who
 /// satisfy certain conditions. Currently gauges support conditions around the
 /// duration for which a given denom is locked.
@@ -93,6 +75,24 @@ pub struct LockableDurationsInfo {
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
 }
+/// Params holds parameters for the incentives module
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.Params")]
+pub struct Params {
+    /// distr_epoch_identifier is what epoch type distribution will be triggered by
+    /// (day, week, etc.)
+    #[prost(string, tag = "1")]
+    pub distr_epoch_identifier: ::prost::alloc::string::String,
+}
 /// GenesisState defines the incentives module's various parameters when first
 /// initialized
 #[derive(
@@ -126,99 +126,6 @@ pub struct GenesisState {
     )]
     pub last_gauge_id: u64,
 }
-/// MsgCreateGauge creates a gague to distribute rewards to users
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.incentives.MsgCreateGauge")]
-pub struct MsgCreateGauge {
-    /// is_perpetual shows if it's a perpetual or non-perpetual gauge
-    /// Non-perpetual gauges distribute their tokens equally per epoch while the
-    /// gauge is in the active period. Perpetual gauges distribute all their tokens
-    /// at a single time and only distribute their tokens again once the gauge is
-    /// refilled
-    #[prost(bool, tag = "1")]
-    pub is_perpetual: bool,
-    /// owner is the address of gauge creator
-    #[prost(string, tag = "2")]
-    pub owner: ::prost::alloc::string::String,
-    /// distribute_to show which lock the gauge should distribute to by time
-    /// duration or by timestamp
-    #[prost(message, optional, tag = "3")]
-    pub distribute_to: ::core::option::Option<super::lockup::QueryCondition>,
-    /// coins are coin(s) to be distributed by the gauge
-    #[prost(message, repeated, tag = "4")]
-    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-    /// start_time is the distribution start time
-    #[prost(message, optional, tag = "5")]
-    pub start_time: ::core::option::Option<crate::shim::Timestamp>,
-    /// num_epochs_paid_over is the number of epochs distribution will be completed
-    /// over
-    #[prost(uint64, tag = "6")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub num_epochs_paid_over: u64,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.incentives.MsgCreateGaugeResponse")]
-pub struct MsgCreateGaugeResponse {}
-/// MsgAddToGauge adds coins to a previously created gauge
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.incentives.MsgAddToGauge")]
-pub struct MsgAddToGauge {
-    /// owner is the gauge owner's address
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-    /// gauge_id is the ID of gauge that rewards are getting added to
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub gauge_id: u64,
-    /// rewards are the coin(s) to add to gauge
-    #[prost(message, repeated, tag = "3")]
-    pub rewards: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.incentives.MsgAddToGaugeResponse")]
-pub struct MsgAddToGaugeResponse {}
 #[derive(
     Clone,
     PartialEq,
@@ -574,6 +481,99 @@ pub struct QueryLockableDurationsResponse {
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
 }
+/// MsgCreateGauge creates a gague to distribute rewards to users
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.MsgCreateGauge")]
+pub struct MsgCreateGauge {
+    /// is_perpetual shows if it's a perpetual or non-perpetual gauge
+    /// Non-perpetual gauges distribute their tokens equally per epoch while the
+    /// gauge is in the active period. Perpetual gauges distribute all their tokens
+    /// at a single time and only distribute their tokens again once the gauge is
+    /// refilled
+    #[prost(bool, tag = "1")]
+    pub is_perpetual: bool,
+    /// owner is the address of gauge creator
+    #[prost(string, tag = "2")]
+    pub owner: ::prost::alloc::string::String,
+    /// distribute_to show which lock the gauge should distribute to by time
+    /// duration or by timestamp
+    #[prost(message, optional, tag = "3")]
+    pub distribute_to: ::core::option::Option<super::lockup::QueryCondition>,
+    /// coins are coin(s) to be distributed by the gauge
+    #[prost(message, repeated, tag = "4")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+    /// start_time is the distribution start time
+    #[prost(message, optional, tag = "5")]
+    pub start_time: ::core::option::Option<crate::shim::Timestamp>,
+    /// num_epochs_paid_over is the number of epochs distribution will be completed
+    /// over
+    #[prost(uint64, tag = "6")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub num_epochs_paid_over: u64,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.MsgCreateGaugeResponse")]
+pub struct MsgCreateGaugeResponse {}
+/// MsgAddToGauge adds coins to a previously created gauge
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.MsgAddToGauge")]
+pub struct MsgAddToGauge {
+    /// owner is the gauge owner's address
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    /// gauge_id is the ID of gauge that rewards are getting added to
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub gauge_id: u64,
+    /// rewards are the coin(s) to add to gauge
+    #[prost(message, repeated, tag = "3")]
+    pub rewards: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.MsgAddToGaugeResponse")]
+pub struct MsgAddToGaugeResponse {}
 pub struct IncentivesQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
