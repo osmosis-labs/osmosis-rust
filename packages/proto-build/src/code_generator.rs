@@ -11,6 +11,9 @@ use walkdir::WalkDir;
 use crate::{mod_gen, transform};
 
 const DESCRIPTOR_FILE: &str = "descriptor.bin";
+const UNSUPPORTED_MODULE: &[&str] = &[
+    "cosmos.base.abci", // currently unsupported due to dependency on tendermint-proto
+];
 
 #[derive(Clone, Debug)]
 pub struct CosmosProject {
@@ -66,6 +69,7 @@ impl CodeGenerator {
             self.project.name
         );
 
+        self.exclude_unsupported_module();
         self.transform();
         self.generate_mod_file();
         self.fmt();
@@ -86,6 +90,26 @@ impl CodeGenerator {
             &self.project.version,
             &self.tmp_namespaced_dir(),
         );
+    }
+
+    fn exclude_unsupported_module(&self) {
+        for entry in WalkDir::new(self.tmp_namespaced_dir()) {
+            let entry = entry.unwrap();
+            if entry.file_type().is_file() {
+                let filename = entry
+                    .file_name()
+                    .to_os_string()
+                    .to_str()
+                    .unwrap()
+                    .to_string();
+                if UNSUPPORTED_MODULE
+                    .iter()
+                    .any(|module| filename.contains(module))
+                {
+                    fs::remove_file(entry.path()).unwrap();
+                }
+            }
+        }
     }
 
     fn generate_mod_file(&self) {

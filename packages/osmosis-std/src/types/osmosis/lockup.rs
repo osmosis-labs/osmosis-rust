@@ -20,11 +20,11 @@ pub struct PeriodLock {
     /// The ID of the lock is decided upon lock creation, incrementing by 1 for
     /// every lock.
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "ID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
-    #[serde(alias = "ID")]
     pub id: u64,
     /// Owner is the account address of the lock owner.
     /// Only the owner can modify the state of the lock.
@@ -156,6 +156,7 @@ pub struct MsgLockTokens {
 #[proto_message(type_url = "/osmosis.lockup.MsgLockTokensResponse")]
 pub struct MsgLockTokensResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "ID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -207,6 +208,7 @@ pub struct MsgBeginUnlocking {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "ID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -248,6 +250,7 @@ pub struct MsgExtendLockup {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "ID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -290,6 +293,7 @@ pub struct MsgForceUnlock {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "ID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

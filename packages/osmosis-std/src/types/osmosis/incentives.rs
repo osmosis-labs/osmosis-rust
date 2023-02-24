@@ -16,6 +16,7 @@ use osmosis_std_derive::CosmwasmExt;
 pub struct Gauge {
     /// id is the unique ID of a Gauge
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "ID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -218,6 +219,7 @@ pub struct ModuleToDistributeCoinsResponse {
 pub struct GaugeByIdRequest {
     /// Gague ID being queried
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "ID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

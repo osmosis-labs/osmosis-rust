@@ -168,6 +168,36 @@ pub fn allow_serde_int_as_str(s: ItemStruct) -> ItemStruct {
 
     syn::ItemStruct { fields, ..s }
 }
+
+/// some of proto's fields in osmosis' modules are named `ID` but prost generates `id` field
+/// this function adds `#[serde(alias = "ID")]` to the `id` field
+/// so that serde can deserialize `ID` field to `id` field.
+/// This is required because the `ID` field is used in the query response and is serialized as json.
+pub fn serde_alias_id_with_uppercased(s: ItemStruct) -> ItemStruct {
+    let fields_vec = s
+        .fields
+        .clone()
+        .into_iter()
+        .map(|mut field| {
+            if field.ident == Some(format_ident!("id")) {
+                let serde_alias_id: syn::Attribute = parse_quote! {
+                    #[serde(alias = "ID")]
+                };
+                field.attrs.append(&mut vec![serde_alias_id]);
+                field
+            } else {
+                field
+            }
+        })
+        .collect::<Vec<syn::Field>>();
+
+    let fields_named: syn::FieldsNamed = parse_quote! {
+        { #(#fields_vec,)* }
+    };
+    let fields = syn::Fields::Named(fields_named);
+
+    syn::ItemStruct { fields, ..s }
+}
 // ====== helpers ======
 
 fn get_query_attr(
@@ -489,6 +519,31 @@ mod tests {
             #[derive(PartialEq, Eq, Debug)]
             struct Hello {
                 name: String
+            }
+        };
+
+        assert_ast_eq!(result, expected);
+    }
+
+    #[test]
+    #[allow(non_snake_case)]
+    fn test_alias_id_with_ID_if_there_id_a_field_named_id() {
+        let item_struct: ItemStruct = syn::parse_quote! {
+            #[derive(PartialEq, Eq, Debug)]
+            struct PeriodLock {
+                id: u64,
+                duration: Duration,
+            }
+        };
+
+        let result = serde_alias_id_with_uppercased(item_struct);
+
+        let expected: ItemStruct = syn::parse_quote! {
+            #[derive(PartialEq, Eq, Debug)]
+            struct PeriodLock {
+                #[serde(alias = "ID")]
+                id: u64,
+                duration: Duration,
             }
         };
 

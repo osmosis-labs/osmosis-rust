@@ -326,6 +326,7 @@ pub struct MsgLockAndSuperfluidDelegate {
 #[proto_message(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse")]
 pub struct MsgLockAndSuperfluidDelegateResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "ID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
