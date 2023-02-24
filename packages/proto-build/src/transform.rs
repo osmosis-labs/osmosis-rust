@@ -160,6 +160,7 @@ fn transform_items(
             Item::Struct(s) => Item::Struct({
                 let s = transformers::add_derive_eq(&s);
                 let s = transformers::append_attrs(src, &s, descriptor);
+                let s = transformers::serde_alias_id_with_uppercased(s);
                 transformers::allow_serde_int_as_str(s)
             }),
 

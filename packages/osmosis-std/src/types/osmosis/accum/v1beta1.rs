@@ -13,6 +13,8 @@ use osmosis_std_derive::CosmwasmExt;
 pub struct AccumulatorContent {
     #[prost(message, repeated, tag = "1")]
     pub accum_value: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::DecCoin>,
+    #[prost(string, tag = "2")]
+    pub total_shares: ::prost::alloc::string::String,
 }
 #[derive(
     Clone,

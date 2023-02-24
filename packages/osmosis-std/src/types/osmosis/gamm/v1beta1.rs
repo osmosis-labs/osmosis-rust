@@ -114,6 +114,7 @@ pub struct Pool {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "ID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -142,48 +143,6 @@ pub struct Pool {
     /// sum of all non-normalized pool weights
     #[prost(string, tag = "7")]
     pub total_weight: ::prost::alloc::string::String,
-}
-/// Params holds parameters for the incentives module
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.Params")]
-pub struct Params {
-    #[prost(message, repeated, tag = "1")]
-    pub pool_creation_fee:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
-}
-/// GenesisState defines the gamm module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.GenesisState")]
-pub struct GenesisState {
-    #[prost(message, repeated, tag = "1")]
-    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
-    /// will be renamed to next_pool_id in an upcoming version
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub next_pool_number: u64,
-    #[prost(message, optional, tag = "3")]
-    pub params: ::core::option::Option<Params>,
 }
 /// ===================== MsgJoinPool
 /// This is really MsgJoinPoolNoSwap
@@ -281,33 +240,12 @@ pub struct MsgExitPoolResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.SwapAmountInRoute")]
-pub struct SwapAmountInRoute {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-    #[prost(string, tag = "2")]
-    pub token_out_denom: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.MsgSwapExactAmountIn")]
 pub struct MsgSwapExactAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "2")]
-    pub routes: ::prost::alloc::vec::Vec<SwapAmountInRoute>,
+    pub routes: ::prost::alloc::vec::Vec<super::super::poolmanager::v1beta1::SwapAmountInRoute>,
     #[prost(message, optional, tag = "3")]
     pub token_in: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
     #[prost(string, tag = "4")]
@@ -328,28 +266,6 @@ pub struct MsgSwapExactAmountInResponse {
     #[prost(string, tag = "1")]
     pub token_out_amount: ::prost::alloc::string::String,
 }
-/// ===================== MsgSwapExactAmountOut
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.SwapAmountOutRoute")]
-pub struct SwapAmountOutRoute {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-    #[prost(string, tag = "2")]
-    pub token_in_denom: ::prost::alloc::string::String,
-}
 #[derive(
     Clone,
     PartialEq,
@@ -365,7 +281,7 @@ pub struct MsgSwapExactAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "2")]
-    pub routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
+    pub routes: ::prost::alloc::vec::Vec<super::super::poolmanager::v1beta1::SwapAmountOutRoute>,
     #[prost(string, tag = "3")]
     pub token_in_max_amount: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "4")]
@@ -559,6 +475,150 @@ pub struct MsgExitSwapExternAmountOutResponse {
     #[prost(string, tag = "1")]
     pub share_in_amount: ::prost::alloc::string::String,
 }
+/// Params holds parameters for the incentives module
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.Params")]
+pub struct Params {
+    #[prost(message, repeated, tag = "1")]
+    pub pool_creation_fee:
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+/// GenesisState defines the gamm module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.GenesisState")]
+pub struct GenesisState {
+    #[prost(message, repeated, tag = "1")]
+    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
+    /// will be renamed to next_pool_id in an upcoming version
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub next_pool_number: u64,
+    #[prost(message, optional, tag = "3")]
+    pub params: ::core::option::Option<Params>,
+    #[prost(message, optional, tag = "4")]
+    pub migration_records: ::core::option::Option<MigrationRecords>,
+}
+/// MigrationRecords contains all the links between balancer and concentrated
+/// pools
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.MigrationRecords")]
+pub struct MigrationRecords {
+    #[prost(message, repeated, tag = "1")]
+    pub balancer_to_concentrated_pool_links:
+        ::prost::alloc::vec::Vec<BalancerToConcentratedPoolLink>,
+}
+/// BalancerToConcentratedPoolLink defines a single link between a single
+/// balancer pool and a single concentrated liquidity pool. This link is used to
+/// allow a balancer pool to migrate to a single canonical full range
+/// concentrated liquidity pool position
+/// A balancer pool can be linked to a maximum of one cl pool, and a cl pool can
+/// be linked to a maximum of one balancer pool.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.BalancerToConcentratedPoolLink")]
+pub struct BalancerToConcentratedPoolLink {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub balancer_pool_id: u64,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub cl_pool_id: u64,
+}
+/// ReplaceMigrationRecordsProposal is a gov Content type for updating the
+/// migration records. If a ReplaceMigrationRecordsProposal passes, the
+/// proposal’s records override the existing MigrationRecords set in the module.
+/// Each record specifies a single connection between a single balancer pool and
+/// a single concentrated pool.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.ReplaceMigrationRecordsProposal")]
+pub struct ReplaceMigrationRecordsProposal {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub records: ::prost::alloc::vec::Vec<BalancerToConcentratedPoolLink>,
+}
+/// For example: if the existing DistrRecords were:
+/// [(Balancer 1, CL 5), (Balancer 2, CL 6), (Balancer 3, CL 7)]
+/// And an UpdateMigrationRecordsProposal includes
+/// [(Balancer 2, CL 0), (Balancer 3, CL 4), (Balancer 4, CL 10)]
+/// This would leave Balancer 1 record, delete Balancer 2 record,
+/// Edit Balancer 3 record, and Add Balancer 4 record
+/// The result MigrationRecords in state would be:
+/// [(Balancer 1, CL 5), (Balancer 3, CL 4), (Balancer 4, CL 10)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.UpdateMigrationRecordsProposal")]
+pub struct UpdateMigrationRecordsProposal {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub records: ::prost::alloc::vec::Vec<BalancerToConcentratedPoolLink>,
+}
 ///=============================== Pool
 #[derive(
     Clone,
@@ -655,6 +715,7 @@ pub struct QueryPoolsResponse {
     path = "/osmosis.gamm.v1beta1.Query/NumPools",
     response_type = QueryNumPoolsResponse
 )]
+#[deprecated]
 pub struct QueryNumPoolsRequest {}
 #[derive(
     Clone,
@@ -667,6 +728,7 @@ pub struct QueryNumPoolsRequest {}
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryNumPoolsResponse")]
+#[deprecated]
 pub struct QueryNumPoolsResponse {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -1068,8 +1130,8 @@ pub struct QuerySpotPriceResponse {
     path = "/osmosis.gamm.v1beta1.Query/EstimateSwapExactAmountIn",
     response_type = QuerySwapExactAmountInResponse
 )]
+#[deprecated]
 pub struct QuerySwapExactAmountInRequest {
-    /// TODO: CHANGE THIS TO RESERVED IN A PATCH RELEASE
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
@@ -1081,7 +1143,7 @@ pub struct QuerySwapExactAmountInRequest {
     #[prost(string, tag = "3")]
     pub token_in: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "4")]
-    pub routes: ::prost::alloc::vec::Vec<SwapAmountInRoute>,
+    pub routes: ::prost::alloc::vec::Vec<super::super::poolmanager::v1beta1::SwapAmountInRoute>,
 }
 #[derive(
     Clone,
@@ -1094,6 +1156,7 @@ pub struct QuerySwapExactAmountInRequest {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountInResponse")]
+#[deprecated]
 pub struct QuerySwapExactAmountInResponse {
     #[prost(string, tag = "1")]
     pub token_out_amount: ::prost::alloc::string::String,
@@ -1114,8 +1177,8 @@ pub struct QuerySwapExactAmountInResponse {
     path = "/osmosis.gamm.v1beta1.Query/EstimateSwapExactAmountOut",
     response_type = QuerySwapExactAmountOutResponse
 )]
+#[deprecated]
 pub struct QuerySwapExactAmountOutRequest {
-    /// TODO: CHANGE THIS TO RESERVED IN A PATCH RELEASE
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
@@ -1125,7 +1188,7 @@ pub struct QuerySwapExactAmountOutRequest {
     )]
     pub pool_id: u64,
     #[prost(message, repeated, tag = "3")]
-    pub routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
+    pub routes: ::prost::alloc::vec::Vec<super::super::poolmanager::v1beta1::SwapAmountOutRoute>,
     #[prost(string, tag = "4")]
     pub token_out: ::prost::alloc::string::String,
 }
@@ -1140,6 +1203,7 @@ pub struct QuerySwapExactAmountOutRequest {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QuerySwapExactAmountOutResponse")]
+#[deprecated]
 pub struct QuerySwapExactAmountOutResponse {
     #[prost(string, tag = "1")]
     pub token_in_amount: ::prost::alloc::string::String,
@@ -1190,6 +1254,7 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
     ) -> Result<QueryPoolsResponse, cosmwasm_std::StdError> {
         QueryPoolsRequest { pagination }.query(self.querier)
     }
+    #[deprecated]
     pub fn num_pools(&self) -> Result<QueryNumPoolsResponse, cosmwasm_std::StdError> {
         QueryNumPoolsRequest {}.query(self.querier)
     }
@@ -1274,12 +1339,13 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
         }
         .query(self.querier)
     }
+    #[deprecated]
     pub fn estimate_swap_exact_amount_in(
         &self,
         sender: ::prost::alloc::string::String,
         pool_id: u64,
         token_in: ::prost::alloc::string::String,
-        routes: ::prost::alloc::vec::Vec<SwapAmountInRoute>,
+        routes: ::prost::alloc::vec::Vec<super::super::poolmanager::v1beta1::SwapAmountInRoute>,
     ) -> Result<QuerySwapExactAmountInResponse, cosmwasm_std::StdError> {
         QuerySwapExactAmountInRequest {
             sender,
@@ -1289,11 +1355,12 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
         }
         .query(self.querier)
     }
+    #[deprecated]
     pub fn estimate_swap_exact_amount_out(
         &self,
         sender: ::prost::alloc::string::String,
         pool_id: u64,
-        routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
+        routes: ::prost::alloc::vec::Vec<super::super::poolmanager::v1beta1::SwapAmountOutRoute>,
         token_out: ::prost::alloc::string::String,
     ) -> Result<QuerySwapExactAmountOutResponse, cosmwasm_std::StdError> {
         QuerySwapExactAmountOutRequest {

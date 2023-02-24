@@ -14,7 +14,7 @@ use proto_build::{
 const COSMOS_SDK_REV: &str = "sdk-v13.0.0-rc2";
 
 /// The osmosis commit or tag to be cloned and used to build the proto files
-const OSMOSIS_REV: &str = "origin/main";
+const OSMOSIS_REV: &str = "origin/feat/non-owner-force-unlock";
 
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.
@@ -49,7 +49,7 @@ pub fn generate() {
         name: "cosmos".to_string(),
         version: COSMOS_SDK_REV.to_string(),
         project_dir: COSMOS_SDK_DIR.to_string(),
-        include_mods: vec!["bank".to_string()],
+        include_mods: vec!["bank".to_string(), "authz".to_string()],
     };
 
     let osmosis_code_generator = CodeGenerator::new(

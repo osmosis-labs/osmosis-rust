@@ -48,24 +48,6 @@ pub struct UpdateFeeTokenProposal {
     #[prost(message, optional, tag = "3")]
     pub feetoken: ::core::option::Option<FeeToken>,
 }
-/// GenesisState defines the txfees module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.txfees.v1beta1.GenesisState")]
-pub struct GenesisState {
-    #[prost(string, tag = "1")]
-    pub basedenom: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "2")]
-    pub feetokens: ::prost::alloc::vec::Vec<FeeToken>,
-}
 #[derive(
     Clone,
     PartialEq,
@@ -209,6 +191,24 @@ pub struct QueryBaseDenomRequest {}
 pub struct QueryBaseDenomResponse {
     #[prost(string, tag = "1")]
     pub base_denom: ::prost::alloc::string::String,
+}
+/// GenesisState defines the txfees module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.GenesisState")]
+pub struct GenesisState {
+    #[prost(string, tag = "1")]
+    pub basedenom: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub feetokens: ::prost::alloc::vec::Vec<FeeToken>,
 }
 pub struct TxfeesQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
