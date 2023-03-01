@@ -1,4 +1,42 @@
 use osmosis_std_derive::CosmwasmExt;
+/// GenesisState defines the authz module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.GenesisState")]
+pub struct GenesisState {
+    #[prost(message, repeated, tag = "1")]
+    pub authorization: ::prost::alloc::vec::Vec<GrantAuthorization>,
+}
+/// GrantAuthorization defines the GenesisState/GrantAuthorization type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.GrantAuthorization")]
+pub struct GrantAuthorization {
+    #[prost(string, tag = "1")]
+    pub granter: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub grantee: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "3")]
+    pub authorization: ::core::option::Option<crate::shim::Any>,
+    #[prost(message, optional, tag = "4")]
+    pub expiration: ::core::option::Option<crate::shim::Timestamp>,
+}
 /// GenericAuthorization gives the grantee unrestricted permissions to execute
 /// the provided method on behalf of the granter's account.
 #[derive(
@@ -35,6 +73,54 @@ pub struct Grant {
     pub authorization: ::core::option::Option<crate::shim::Any>,
     #[prost(message, optional, tag = "2")]
     pub expiration: ::core::option::Option<crate::shim::Timestamp>,
+}
+/// QueryGrantsRequest is the request type for the Query/Grants RPC method.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGrantsRequest")]
+#[proto_query(
+    path = "/cosmos.authz.v1beta1.Query/Grants",
+    response_type = QueryGrantsResponse
+)]
+pub struct QueryGrantsRequest {
+    #[prost(string, tag = "1")]
+    pub granter: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub grantee: ::prost::alloc::string::String,
+    /// Optional, msg_type_url, when set, will query only grants matching given msg type.
+    #[prost(string, tag = "3")]
+    pub msg_type_url: ::prost::alloc::string::String,
+    /// pagination defines an pagination for the request.
+    #[prost(message, optional, tag = "4")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// QueryGrantsResponse is the response type for the Query/Authorizations RPC method.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGrantsResponse")]
+pub struct QueryGrantsResponse {
+    /// authorizations is a list of grants granted for grantee by granter.
+    #[prost(message, repeated, tag = "1")]
+    pub grants: ::prost::alloc::vec::Vec<Grant>,
+    /// pagination defines an pagination for the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
 }
 /// MsgGrant is a request type for Grant method. It declares authorization to the grantee
 /// on behalf of the granter with the provided expiration time.
@@ -143,54 +229,6 @@ pub struct MsgRevoke {
 )]
 #[proto_message(type_url = "/cosmos.authz.v1beta1.MsgRevokeResponse")]
 pub struct MsgRevokeResponse {}
-/// QueryGrantsRequest is the request type for the Query/Grants RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGrantsRequest")]
-#[proto_query(
-    path = "/cosmos.authz.v1beta1.Query/Grants",
-    response_type = QueryGrantsResponse
-)]
-pub struct QueryGrantsRequest {
-    #[prost(string, tag = "1")]
-    pub granter: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub grantee: ::prost::alloc::string::String,
-    /// Optional, msg_type_url, when set, will query only grants matching given msg type.
-    #[prost(string, tag = "3")]
-    pub msg_type_url: ::prost::alloc::string::String,
-    /// pagination defines an pagination for the request.
-    #[prost(message, optional, tag = "4")]
-    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
-}
-/// QueryGrantsResponse is the response type for the Query/Authorizations RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGrantsResponse")]
-pub struct QueryGrantsResponse {
-    /// authorizations is a list of grants granted for grantee by granter.
-    #[prost(message, repeated, tag = "1")]
-    pub grants: ::prost::alloc::vec::Vec<Grant>,
-    /// pagination defines an pagination for the response.
-    #[prost(message, optional, tag = "2")]
-    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
-}
 /// EventGrant is emitted on Msg/Grant
 #[derive(
     Clone,
@@ -236,44 +274,6 @@ pub struct EventRevoke {
     /// Grantee account address
     #[prost(string, tag = "4")]
     pub grantee: ::prost::alloc::string::String,
-}
-/// GenesisState defines the authz module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.GenesisState")]
-pub struct GenesisState {
-    #[prost(message, repeated, tag = "1")]
-    pub authorization: ::prost::alloc::vec::Vec<GrantAuthorization>,
-}
-/// GrantAuthorization defines the GenesisState/GrantAuthorization type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.GrantAuthorization")]
-pub struct GrantAuthorization {
-    #[prost(string, tag = "1")]
-    pub granter: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub grantee: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "3")]
-    pub authorization: ::core::option::Option<crate::shim::Any>,
-    #[prost(message, optional, tag = "4")]
-    pub expiration: ::core::option::Option<crate::shim::Timestamp>,
 }
 pub struct AuthzQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
