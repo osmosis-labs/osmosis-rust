@@ -154,229 +154,6 @@ pub enum SuperfluidAssetType {
     /// SuperfluidAssetTypeLendingShare = 2; // for now not exist
     LpShare = 1,
 }
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidDelegate")]
-pub struct MsgSuperfluidDelegate {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub lock_id: u64,
-    #[prost(string, tag = "3")]
-    pub val_addr: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidDelegateResponse")]
-pub struct MsgSuperfluidDelegateResponse {}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegate")]
-pub struct MsgSuperfluidUndelegate {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub lock_id: u64,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateResponse")]
-pub struct MsgSuperfluidUndelegateResponse {}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLock")]
-pub struct MsgSuperfluidUnbondLock {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub lock_id: u64,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLockResponse")]
-pub struct MsgSuperfluidUnbondLockResponse {}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateAndUnbondLock")]
-pub struct MsgSuperfluidUndelegateAndUnbondLock {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub lock_id: u64,
-    /// Amount of unlocking coin.
-    #[prost(message, optional, tag = "3")]
-    pub coin: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateAndUnbondLockResponse")]
-pub struct MsgSuperfluidUndelegateAndUnbondLockResponse {}
-/// MsgLockAndSuperfluidDelegate locks coins with the unbonding period duration,
-/// and then does a superfluid lock from the newly created lockup, to the
-/// specified validator addr.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegate")]
-pub struct MsgLockAndSuperfluidDelegate {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "2")]
-    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-    #[prost(string, tag = "3")]
-    pub val_addr: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse")]
-pub struct MsgLockAndSuperfluidDelegateResponse {
-    #[prost(uint64, tag = "1")]
-    #[serde(alias = "ID")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub id: u64,
-}
-/// MsgUnPoolWhitelistedPool Unpools every lock the sender has, that is
-/// associated with pool pool_id. If pool_id is not approved for unpooling by
-/// governance, this is a no-op. Unpooling takes the locked gamm shares, and runs
-/// "ExitPool" on it, to get the constituent tokens. e.g. z gamm/pool/1 tokens
-/// ExitPools into constituent tokens x uatom, y uosmo. Then it creates a new
-/// lock for every constituent token, with the duration associated with the lock.
-/// If the lock was unbonding, the new lockup durations should be the time left
-/// until unbond completion.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPool")]
-pub struct MsgUnPoolWhitelistedPool {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPoolResponse")]
-pub struct MsgUnPoolWhitelistedPoolResponse {
-    #[prost(uint64, repeated, tag = "1")]
-    pub exited_lock_ids: ::prost::alloc::vec::Vec<u64>,
-}
 /// Params holds parameters for the superfluid module
 #[derive(
     Clone,
@@ -396,6 +173,37 @@ pub struct Params {
     /// volatilities, and have base staking be 'resistant' to volatility.
     #[prost(string, tag = "1")]
     pub minimum_risk_factor: ::prost::alloc::string::String,
+}
+/// GenesisState defines the module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.GenesisState")]
+pub struct GenesisState {
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+    /// superfluid_assets defines the registered superfluid assets that have been
+    /// registered via governance.
+    #[prost(message, repeated, tag = "2")]
+    pub superfluid_assets: ::prost::alloc::vec::Vec<SuperfluidAsset>,
+    /// osmo_equivalent_multipliers is the records of osmo equivalent amount of
+    /// each superfluid registered pool, updated every epoch.
+    #[prost(message, repeated, tag = "3")]
+    pub osmo_equivalent_multipliers: ::prost::alloc::vec::Vec<OsmoEquivalentMultiplierRecord>,
+    /// intermediary_accounts is a secondary account for superfluid staking that
+    /// plays an intermediary role between validators and the delegators.
+    #[prost(message, repeated, tag = "4")]
+    pub intermediary_accounts: ::prost::alloc::vec::Vec<SuperfluidIntermediaryAccount>,
+    #[prost(message, repeated, tag = "5")]
+    pub intemediary_account_connections:
+        ::prost::alloc::vec::Vec<LockIdIntermediaryAccountConnection>,
 }
 #[derive(
     Clone,
@@ -983,7 +791,6 @@ pub struct QueryUnpoolWhitelistResponse {
     #[prost(uint64, repeated, tag = "1")]
     pub pool_ids: ::prost::alloc::vec::Vec<u64>,
 }
-/// GenesisState defines the module's genesis state.
 #[derive(
     Clone,
     PartialEq,
@@ -994,25 +801,218 @@ pub struct QueryUnpoolWhitelistResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.superfluid.GenesisState")]
-pub struct GenesisState {
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-    /// superfluid_assets defines the registered superfluid assets that have been
-    /// registered via governance.
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidDelegate")]
+pub struct MsgSuperfluidDelegate {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+    #[prost(string, tag = "3")]
+    pub val_addr: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidDelegateResponse")]
+pub struct MsgSuperfluidDelegateResponse {}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegate")]
+pub struct MsgSuperfluidUndelegate {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateResponse")]
+pub struct MsgSuperfluidUndelegateResponse {}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLock")]
+pub struct MsgSuperfluidUnbondLock {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUnbondLockResponse")]
+pub struct MsgSuperfluidUnbondLockResponse {}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateAndUnbondLock")]
+pub struct MsgSuperfluidUndelegateAndUnbondLock {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+    /// Amount of unlocking coin.
+    #[prost(message, optional, tag = "3")]
+    pub coin: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidUndelegateAndUnbondLockResponse")]
+pub struct MsgSuperfluidUndelegateAndUnbondLockResponse {}
+/// MsgLockAndSuperfluidDelegate locks coins with the unbonding period duration,
+/// and then does a superfluid lock from the newly created lockup, to the
+/// specified validator addr.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegate")]
+pub struct MsgLockAndSuperfluidDelegate {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "2")]
-    pub superfluid_assets: ::prost::alloc::vec::Vec<SuperfluidAsset>,
-    /// osmo_equivalent_multipliers is the records of osmo equivalent amount of
-    /// each superfluid registered pool, updated every epoch.
-    #[prost(message, repeated, tag = "3")]
-    pub osmo_equivalent_multipliers: ::prost::alloc::vec::Vec<OsmoEquivalentMultiplierRecord>,
-    /// intermediary_accounts is a secondary account for superfluid staking that
-    /// plays an intermediary role between validators and the delegators.
-    #[prost(message, repeated, tag = "4")]
-    pub intermediary_accounts: ::prost::alloc::vec::Vec<SuperfluidIntermediaryAccount>,
-    #[prost(message, repeated, tag = "5")]
-    pub intemediary_account_connections:
-        ::prost::alloc::vec::Vec<LockIdIntermediaryAccountConnection>,
+    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "3")]
+    pub val_addr: ::prost::alloc::string::String,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse")]
+pub struct MsgLockAndSuperfluidDelegateResponse {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "ID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub id: u64,
+}
+/// MsgUnPoolWhitelistedPool Unpools every lock the sender has, that is
+/// associated with pool pool_id. If pool_id is not approved for unpooling by
+/// governance, this is a no-op. Unpooling takes the locked gamm shares, and runs
+/// "ExitPool" on it, to get the constituent tokens. e.g. z gamm/pool/1 tokens
+/// ExitPools into constituent tokens x uatom, y uosmo. Then it creates a new
+/// lock for every constituent token, with the duration associated with the lock.
+/// If the lock was unbonding, the new lockup durations should be the time left
+/// until unbond completion.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPool")]
+pub struct MsgUnPoolWhitelistedPool {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPoolResponse")]
+pub struct MsgUnPoolWhitelistedPoolResponse {
+    #[prost(uint64, repeated, tag = "1")]
+    pub exited_lock_ids: ::prost::alloc::vec::Vec<u64>,
 }
 pub struct SuperfluidQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,

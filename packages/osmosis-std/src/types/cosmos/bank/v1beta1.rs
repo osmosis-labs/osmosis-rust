@@ -161,7 +161,7 @@ pub struct Metadata {
     #[prost(string, tag = "6")]
     pub symbol: ::prost::alloc::string::String,
 }
-/// MsgSend represents a message to send coins from one account to another.
+/// GenesisState defines the bank module's genesis state.
 #[derive(
     Clone,
     PartialEq,
@@ -172,47 +172,27 @@ pub struct Metadata {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSend")]
-pub struct MsgSend {
-    #[prost(string, tag = "1")]
-    pub from_address: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub to_address: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub amount: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
-}
-/// MsgSendResponse defines the Msg/Send response type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSendResponse")]
-pub struct MsgSendResponse {}
-/// MsgMultiSend represents an arbitrary multi-in, multi-out send message.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSend")]
-pub struct MsgMultiSend {
-    #[prost(message, repeated, tag = "1")]
-    pub inputs: ::prost::alloc::vec::Vec<Input>,
+#[proto_message(type_url = "/cosmos.bank.v1beta1.GenesisState")]
+pub struct GenesisState {
+    /// params defines all the paramaters of the module.
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+    /// balances is an array containing the balances of all the accounts.
     #[prost(message, repeated, tag = "2")]
-    pub outputs: ::prost::alloc::vec::Vec<Output>,
+    pub balances: ::prost::alloc::vec::Vec<Balance>,
+    /// supply represents the total supply. If it is left empty, then supply will be calculated based on the provided
+    /// balances. Otherwise, it will be used to validate that the sum of the balances equals this amount.
+    #[prost(message, repeated, tag = "3")]
+    pub supply: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+    /// denom_metadata defines the metadata of the differents coins.
+    #[prost(message, repeated, tag = "4")]
+    pub denom_metadata: ::prost::alloc::vec::Vec<Metadata>,
+    /// supply_offsets defines the amount of supply offset.
+    #[prost(message, repeated, tag = "5")]
+    pub supply_offsets: ::prost::alloc::vec::Vec<GenesisSupplyOffset>,
 }
-/// MsgMultiSendResponse defines the Msg/MultiSend response type.
+/// Balance defines an account address and balance pair used in the bank module's
+/// genesis state.
 #[derive(
     Clone,
     PartialEq,
@@ -223,8 +203,36 @@ pub struct MsgMultiSend {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSendResponse")]
-pub struct MsgMultiSendResponse {}
+#[proto_message(type_url = "/cosmos.bank.v1beta1.Balance")]
+pub struct Balance {
+    /// address is the address of the balance holder.
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+    /// coins defines the different coins this balance holds.
+    #[prost(message, repeated, tag = "2")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+}
+/// GenesisSupplyOffset encodes the supply offsets, just for genesis.
+/// The offsets are serialized directly by denom in state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.GenesisSupplyOffset")]
+pub struct GenesisSupplyOffset {
+    /// Denom
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+    /// SupplyOffset
+    #[prost(string, tag = "2")]
+    pub offset: ::prost::alloc::string::String,
+}
 /// QueryBalanceRequest is the request type for the Query/Balance RPC method.
 #[derive(
     Clone,
@@ -631,6 +639,70 @@ pub struct QueryBaseDenomResponse {
     #[prost(string, tag = "1")]
     pub base_denom: ::prost::alloc::string::String,
 }
+/// MsgSend represents a message to send coins from one account to another.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSend")]
+pub struct MsgSend {
+    #[prost(string, tag = "1")]
+    pub from_address: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub to_address: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub amount: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+}
+/// MsgSendResponse defines the Msg/Send response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSendResponse")]
+pub struct MsgSendResponse {}
+/// MsgMultiSend represents an arbitrary multi-in, multi-out send message.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSend")]
+pub struct MsgMultiSend {
+    #[prost(message, repeated, tag = "1")]
+    pub inputs: ::prost::alloc::vec::Vec<Input>,
+    #[prost(message, repeated, tag = "2")]
+    pub outputs: ::prost::alloc::vec::Vec<Output>,
+}
+/// MsgMultiSendResponse defines the Msg/MultiSend response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSendResponse")]
+pub struct MsgMultiSendResponse {}
 /// SendAuthorization allows the grantee to spend up to spend_limit coins from
 /// the granter's account.
 ///
@@ -649,78 +721,6 @@ pub struct QueryBaseDenomResponse {
 pub struct SendAuthorization {
     #[prost(message, repeated, tag = "1")]
     pub spend_limit: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
-}
-/// GenesisState defines the bank module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.GenesisState")]
-pub struct GenesisState {
-    /// params defines all the paramaters of the module.
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-    /// balances is an array containing the balances of all the accounts.
-    #[prost(message, repeated, tag = "2")]
-    pub balances: ::prost::alloc::vec::Vec<Balance>,
-    /// supply represents the total supply. If it is left empty, then supply will be calculated based on the provided
-    /// balances. Otherwise, it will be used to validate that the sum of the balances equals this amount.
-    #[prost(message, repeated, tag = "3")]
-    pub supply: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
-    /// denom_metadata defines the metadata of the differents coins.
-    #[prost(message, repeated, tag = "4")]
-    pub denom_metadata: ::prost::alloc::vec::Vec<Metadata>,
-    /// supply_offsets defines the amount of supply offset.
-    #[prost(message, repeated, tag = "5")]
-    pub supply_offsets: ::prost::alloc::vec::Vec<GenesisSupplyOffset>,
-}
-/// Balance defines an account address and balance pair used in the bank module's
-/// genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.Balance")]
-pub struct Balance {
-    /// address is the address of the balance holder.
-    #[prost(string, tag = "1")]
-    pub address: ::prost::alloc::string::String,
-    /// coins defines the different coins this balance holds.
-    #[prost(message, repeated, tag = "2")]
-    pub coins: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
-}
-/// GenesisSupplyOffset encodes the supply offsets, just for genesis.
-/// The offsets are serialized directly by denom in state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.GenesisSupplyOffset")]
-pub struct GenesisSupplyOffset {
-    /// Denom
-    #[prost(string, tag = "1")]
-    pub denom: ::prost::alloc::string::String,
-    /// SupplyOffset
-    #[prost(string, tag = "2")]
-    pub offset: ::prost::alloc::string::String,
 }
 pub struct BankQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,

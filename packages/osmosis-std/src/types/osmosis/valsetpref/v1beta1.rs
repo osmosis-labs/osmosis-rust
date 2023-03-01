@@ -44,6 +44,43 @@ pub struct ValidatorSetPreferences {
     #[prost(message, repeated, tag = "2")]
     pub preferences: ::prost::alloc::vec::Vec<ValidatorPreference>,
 }
+/// Request type for UserValidatorPreferences.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.UserValidatorPreferencesRequest")]
+#[proto_query(
+    path = "/osmosis.valsetpref.v1beta1.Query/UserValidatorPreferences",
+    response_type = UserValidatorPreferencesResponse
+)]
+pub struct UserValidatorPreferencesRequest {
+    /// user account address
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+}
+/// Response type the QueryUserValidatorPreferences query request
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.UserValidatorPreferencesResponse")]
+pub struct UserValidatorPreferencesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub preferences: ::prost::alloc::vec::Vec<ValidatorPreference>,
+}
 /// MsgCreateValidatorSetPreference is a list that holds validator-set.
 #[derive(
     Clone,
@@ -246,43 +283,6 @@ pub struct MsgDelegateBondedTokens {
 )]
 #[proto_message(type_url = "/osmosis.valsetpref.v1beta1.MsgDelegateBondedTokensResponse")]
 pub struct MsgDelegateBondedTokensResponse {}
-/// Request type for UserValidatorPreferences.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.UserValidatorPreferencesRequest")]
-#[proto_query(
-    path = "/osmosis.valsetpref.v1beta1.Query/UserValidatorPreferences",
-    response_type = UserValidatorPreferencesResponse
-)]
-pub struct UserValidatorPreferencesRequest {
-    /// user account address
-    #[prost(string, tag = "1")]
-    pub address: ::prost::alloc::string::String,
-}
-/// Response type the QueryUserValidatorPreferences query request
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.valsetpref.v1beta1.UserValidatorPreferencesResponse")]
-pub struct UserValidatorPreferencesResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub preferences: ::prost::alloc::vec::Vec<ValidatorPreference>,
-}
 pub struct ValsetprefQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }

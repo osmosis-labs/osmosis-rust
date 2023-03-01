@@ -39,6 +39,10 @@ pub struct Route {
     /// -> right)
     #[prost(message, repeated, tag = "1")]
     pub trades: ::prost::alloc::vec::Vec<Trade>,
+    /// The step size that will be used to find the optimal swap amount in the
+    /// binary search
+    #[prost(string, tag = "2")]
+    pub step_size: ::prost::alloc::string::String,
 }
 /// Trade is a single trade in a route
 #[derive(
@@ -155,263 +159,6 @@ pub struct BaseDenom {
     #[prost(string, tag = "2")]
     pub step_size: ::prost::alloc::string::String,
 }
-/// MsgSetHotRoutes defines the Msg/SetHotRoutes request type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetHotRoutes")]
-pub struct MsgSetHotRoutes {
-    /// admin is the account that is authorized to set the hot routes.
-    #[prost(string, tag = "1")]
-    pub admin: ::prost::alloc::string::String,
-    /// hot_routes is the list of hot routes to set.
-    #[prost(message, repeated, tag = "2")]
-    pub hot_routes: ::prost::alloc::vec::Vec<TokenPairArbRoutes>,
-}
-/// MsgSetHotRoutesResponse defines the Msg/SetHotRoutes response type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetHotRoutesResponse")]
-pub struct MsgSetHotRoutesResponse {}
-/// MsgSetDeveloperAccount defines the Msg/SetDeveloperAccount request type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetDeveloperAccount")]
-pub struct MsgSetDeveloperAccount {
-    /// admin is the account that is authorized to set the developer account.
-    #[prost(string, tag = "1")]
-    pub admin: ::prost::alloc::string::String,
-    /// developer_account is the account that will receive a portion of the profits
-    /// from the protorev module.
-    #[prost(string, tag = "2")]
-    pub developer_account: ::prost::alloc::string::String,
-}
-/// MsgSetDeveloperAccountResponse defines the Msg/SetDeveloperAccount response
-/// type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetDeveloperAccountResponse")]
-pub struct MsgSetDeveloperAccountResponse {}
-/// MsgSetPoolWeights defines the Msg/SetPoolWeights request type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetPoolWeights")]
-pub struct MsgSetPoolWeights {
-    /// admin is the account that is authorized to set the pool weights.
-    #[prost(string, tag = "1")]
-    pub admin: ::prost::alloc::string::String,
-    /// pool_weights is the list of pool weights to set.
-    #[prost(message, optional, tag = "2")]
-    pub pool_weights: ::core::option::Option<PoolWeights>,
-}
-/// MsgSetPoolWeightsResponse defines the Msg/SetPoolWeights response type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetPoolWeightsResponse")]
-pub struct MsgSetPoolWeightsResponse {}
-/// MsgSetMaxPoolPointsPerTx defines the Msg/SetMaxPoolPointsPerTx request type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerTx")]
-pub struct MsgSetMaxPoolPointsPerTx {
-    /// admin is the account that is authorized to set the max pool points per tx.
-    #[prost(string, tag = "1")]
-    pub admin: ::prost::alloc::string::String,
-    /// max_pool_points_per_tx is the maximum number of pool points that can be
-    /// consumed per transaction.
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_pool_points_per_tx: u64,
-}
-/// MsgSetMaxPoolPointsPerTxResponse defines the Msg/SetMaxPoolPointsPerTx
-/// response type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerTxResponse")]
-pub struct MsgSetMaxPoolPointsPerTxResponse {}
-/// MsgSetMaxPoolPointsPerBlock defines the Msg/SetMaxPoolPointsPerBlock request
-/// type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerBlock")]
-pub struct MsgSetMaxPoolPointsPerBlock {
-    /// admin is the account that is authorized to set the max pool points per
-    /// block.
-    #[prost(string, tag = "1")]
-    pub admin: ::prost::alloc::string::String,
-    /// max_pool_points_per_block is the maximum number of pool points that can be
-    /// consumed per block.
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_pool_points_per_block: u64,
-}
-/// MsgSetMaxPoolPointsPerBlockResponse defines the
-/// Msg/SetMaxPoolPointsPerBlock response type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerBlockResponse")]
-pub struct MsgSetMaxPoolPointsPerBlockResponse {}
-/// MsgSetBaseDenoms defines the Msg/SetBaseDenoms request type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetBaseDenoms")]
-pub struct MsgSetBaseDenoms {
-    /// admin is the account that is authorized to set the base denoms.
-    #[prost(string, tag = "1")]
-    pub admin: ::prost::alloc::string::String,
-    /// base_denoms is the list of base denoms to set.
-    #[prost(message, repeated, tag = "2")]
-    pub base_denoms: ::prost::alloc::vec::Vec<BaseDenom>,
-}
-/// MsgSetBaseDenomsResponse defines the Msg/SetBaseDenoms response type.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetBaseDenomsResponse")]
-pub struct MsgSetBaseDenomsResponse {}
-/// SetProtoRevEnabledProposal is a gov Content type to update whether the
-/// protorev module is enabled
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.SetProtoRevEnabledProposal")]
-pub struct SetProtoRevEnabledProposal {
-    #[prost(string, tag = "1")]
-    pub title: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(bool, tag = "3")]
-    pub enabled: bool,
-}
-/// SetProtoRevAdminAccountProposal is a gov Content type to set the admin
-/// account that will receive permissions to alter hot routes and set the
-/// developer address that will be receiving a share of profits from the module
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.SetProtoRevAdminAccountProposal")]
-pub struct SetProtoRevAdminAccountProposal {
-    #[prost(string, tag = "1")]
-    pub title: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub account: ::prost::alloc::string::String,
-}
 /// Params defines the parameters for the module.
 #[derive(
     Clone,
@@ -428,6 +175,23 @@ pub struct Params {
     /// Boolean whether the module is going to be enabled
     #[prost(bool, tag = "1")]
     pub enabled: bool,
+}
+/// GenesisState defines the protorev module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.GenesisState")]
+pub struct GenesisState {
+    /// Module Parameters
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
 }
 /// QueryParamsRequest is request type for the Query/Params RPC method.
 #[derive(
@@ -956,7 +720,7 @@ pub struct QueryGetProtoRevEnabledResponse {
     #[prost(bool, tag = "1")]
     pub enabled: bool,
 }
-/// GenesisState defines the protorev module's genesis state.
+/// MsgSetHotRoutes defines the Msg/SetHotRoutes request type.
 #[derive(
     Clone,
     PartialEq,
@@ -967,14 +731,251 @@ pub struct QueryGetProtoRevEnabledResponse {
     schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.GenesisState")]
-pub struct GenesisState {
-    /// Module Parameters
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-    /// Hot routes that are configured on genesis
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetHotRoutes")]
+pub struct MsgSetHotRoutes {
+    /// admin is the account that is authorized to set the hot routes.
+    #[prost(string, tag = "1")]
+    pub admin: ::prost::alloc::string::String,
+    /// hot_routes is the list of hot routes to set.
     #[prost(message, repeated, tag = "2")]
-    pub token_pairs: ::prost::alloc::vec::Vec<TokenPairArbRoutes>,
+    pub hot_routes: ::prost::alloc::vec::Vec<TokenPairArbRoutes>,
+}
+/// MsgSetHotRoutesResponse defines the Msg/SetHotRoutes response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetHotRoutesResponse")]
+pub struct MsgSetHotRoutesResponse {}
+/// MsgSetDeveloperAccount defines the Msg/SetDeveloperAccount request type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetDeveloperAccount")]
+pub struct MsgSetDeveloperAccount {
+    /// admin is the account that is authorized to set the developer account.
+    #[prost(string, tag = "1")]
+    pub admin: ::prost::alloc::string::String,
+    /// developer_account is the account that will receive a portion of the profits
+    /// from the protorev module.
+    #[prost(string, tag = "2")]
+    pub developer_account: ::prost::alloc::string::String,
+}
+/// MsgSetDeveloperAccountResponse defines the Msg/SetDeveloperAccount response
+/// type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetDeveloperAccountResponse")]
+pub struct MsgSetDeveloperAccountResponse {}
+/// MsgSetPoolWeights defines the Msg/SetPoolWeights request type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetPoolWeights")]
+pub struct MsgSetPoolWeights {
+    /// admin is the account that is authorized to set the pool weights.
+    #[prost(string, tag = "1")]
+    pub admin: ::prost::alloc::string::String,
+    /// pool_weights is the list of pool weights to set.
+    #[prost(message, optional, tag = "2")]
+    pub pool_weights: ::core::option::Option<PoolWeights>,
+}
+/// MsgSetPoolWeightsResponse defines the Msg/SetPoolWeights response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetPoolWeightsResponse")]
+pub struct MsgSetPoolWeightsResponse {}
+/// MsgSetMaxPoolPointsPerTx defines the Msg/SetMaxPoolPointsPerTx request type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerTx")]
+pub struct MsgSetMaxPoolPointsPerTx {
+    /// admin is the account that is authorized to set the max pool points per tx.
+    #[prost(string, tag = "1")]
+    pub admin: ::prost::alloc::string::String,
+    /// max_pool_points_per_tx is the maximum number of pool points that can be
+    /// consumed per transaction.
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_pool_points_per_tx: u64,
+}
+/// MsgSetMaxPoolPointsPerTxResponse defines the Msg/SetMaxPoolPointsPerTx
+/// response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerTxResponse")]
+pub struct MsgSetMaxPoolPointsPerTxResponse {}
+/// MsgSetMaxPoolPointsPerBlock defines the Msg/SetMaxPoolPointsPerBlock request
+/// type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerBlock")]
+pub struct MsgSetMaxPoolPointsPerBlock {
+    /// admin is the account that is authorized to set the max pool points per
+    /// block.
+    #[prost(string, tag = "1")]
+    pub admin: ::prost::alloc::string::String,
+    /// max_pool_points_per_block is the maximum number of pool points that can be
+    /// consumed per block.
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_pool_points_per_block: u64,
+}
+/// MsgSetMaxPoolPointsPerBlockResponse defines the
+/// Msg/SetMaxPoolPointsPerBlock response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerBlockResponse")]
+pub struct MsgSetMaxPoolPointsPerBlockResponse {}
+/// MsgSetBaseDenoms defines the Msg/SetBaseDenoms request type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetBaseDenoms")]
+pub struct MsgSetBaseDenoms {
+    /// admin is the account that is authorized to set the base denoms.
+    #[prost(string, tag = "1")]
+    pub admin: ::prost::alloc::string::String,
+    /// base_denoms is the list of base denoms to set.
+    #[prost(message, repeated, tag = "2")]
+    pub base_denoms: ::prost::alloc::vec::Vec<BaseDenom>,
+}
+/// MsgSetBaseDenomsResponse defines the Msg/SetBaseDenoms response type.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetBaseDenomsResponse")]
+pub struct MsgSetBaseDenomsResponse {}
+/// SetProtoRevEnabledProposal is a gov Content type to update whether the
+/// protorev module is enabled
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.SetProtoRevEnabledProposal")]
+pub struct SetProtoRevEnabledProposal {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(bool, tag = "3")]
+    pub enabled: bool,
+}
+/// SetProtoRevAdminAccountProposal is a gov Content type to set the admin
+/// account that will receive permissions to alter hot routes and set the
+/// developer address that will be receiving a share of profits from the module
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.SetProtoRevAdminAccountProposal")]
+pub struct SetProtoRevAdminAccountProposal {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub account: ::prost::alloc::string::String,
 }
 pub struct ProtorevQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,

@@ -1,4 +1,88 @@
 use osmosis_std_derive::CosmwasmExt;
+/// ModuleRouter defines a route encapsulating pool type.
+/// It is used as the value of a mapping from pool id to the pool type,
+/// allowing the pool manager to know which module to route swaps to given the
+/// pool id.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.ModuleRoute")]
+pub struct ModuleRoute {
+    /// pool_type specifies the type of the pool
+    #[prost(enumeration = "PoolType", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_type: i32,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
+/// PoolType is an enumeration of all supported pool types.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PoolType {
+    /// Balancer is the standard xy=k curve. Its pool model is defined in x/gamm.
+    Balancer = 0,
+    /// Stableswap is the Solidly cfmm stable swap curve. Its pool model is defined
+    /// in x/gamm.
+    Stableswap = 1,
+}
+/// Params holds parameters for the poolmanager module
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.Params")]
+pub struct Params {
+    #[prost(message, repeated, tag = "1")]
+    pub pool_creation_fee:
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+/// GenesisState defines the poolmanager module's genesis state.
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.GenesisState")]
+pub struct GenesisState {
+    /// the next_pool_id
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub next_pool_id: u64,
+    /// params is the container of poolmanager parameters.
+    #[prost(message, optional, tag = "2")]
+    pub params: ::core::option::Option<Params>,
+    /// pool_routes is the container of the mappings from pool id to pool type.
+    #[prost(message, repeated, tag = "3")]
+    pub pool_routes: ::prost::alloc::vec::Vec<ModuleRoute>,
+}
 #[derive(
     Clone,
     PartialEq,
@@ -114,47 +198,6 @@ pub struct MsgSwapExactAmountOut {
 pub struct MsgSwapExactAmountOutResponse {
     #[prost(string, tag = "1")]
     pub token_in_amount: ::prost::alloc::string::String,
-}
-/// Params holds parameters for the poolmanager module
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.Params")]
-pub struct Params {
-    #[prost(message, repeated, tag = "1")]
-    pub pool_creation_fee:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
-}
-/// GenesisState defines the poolmanager module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.GenesisState")]
-pub struct GenesisState {
-    /// the next_pool_id
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub next_pool_id: u64,
-    /// params is the container of poolmanager parameters.
-    #[prost(message, optional, tag = "2")]
-    pub params: ::core::option::Option<Params>,
 }
 ///=============================== Params
 #[derive(
@@ -315,43 +358,6 @@ pub struct NumPoolsResponse {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub num_pools: u64,
-}
-/// ModuleRouter defines a route encapsulating pool type.
-/// It is used as the value of a mapping from pool id to the pool type,
-/// allowing the pool manager to know which module to route swaps to given the
-/// pool id.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.ModuleRoute")]
-pub struct ModuleRoute {
-    /// pool_type specifies the type of the pool
-    #[prost(enumeration = "PoolType", tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_type: i32,
-}
-/// PoolType is an enumeration of all supported pool types.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum PoolType {
-    /// Balancer is the standard xy=k curve. Its pool model is defined in x/gamm.
-    Balancer = 0,
-    /// Stableswap is the Solidly cfmm stable swap curve. Its pool model is defined
-    /// in x/gamm.
-    Stableswap = 1,
-    /// Concentrated is the pool model specific to concentrated liquidity. It is
-    /// defined in x/concentrated-liquidity.
-    Concentrated = 2,
 }
 pub struct PoolmanagerQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
