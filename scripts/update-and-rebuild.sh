@@ -22,7 +22,7 @@ fi
 PROTO_BUILD_MAIN_RS="$SCRIPT_DIR/../packages/proto-build/src/main.rs"
 
 # use @ as a separator to avoid confusion on input like "origin/main"
-sed -i "s@const OSMOSIS_REV: \&str = \".*\";@const OSMOSIS_REV: \&str = \"$OSMOSIS_REV\";@g" "$PROTO_BUILD_MAIN_RS"
+sed -i -- "s@const OSMOSIS_REV: \&str = \".*\";@const OSMOSIS_REV: \&str = \"$OSMOSIS_REV\";@g" "$PROTO_BUILD_MAIN_RS"
 
 git diff
 
