@@ -4,14 +4,15 @@ use osmosis_std_derive::CosmwasmExt;
 /// unlock time and the number of coins locked. A state of a period lock is
 /// created upon lock creation, and deleted once the lock has been matured after
 /// the `duration` has passed since unbonding started.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.PeriodLock")]
@@ -46,14 +47,15 @@ pub struct PeriodLock {
 /// QueryCondition is a struct used for querying locks upon different conditions.
 /// Duration field and timestamp fields could be optional, depending on the
 /// LockQueryType.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.QueryCondition")]
@@ -83,14 +85,15 @@ pub struct QueryCondition {
 /// original denom and synthetic suffix. At the time of synthetic lockup creation
 /// and deletion, accumulation store is also being updated and on querier side,
 /// they can query as freely as native lockup.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.SyntheticLock")]
@@ -120,18 +123,748 @@ pub struct SyntheticLock {
 /// either be by duration or start time of the lock.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
+#[derive(::serde::Serialize, ::serde::Deserialize, ::schemars::JsonSchema)]
 pub enum LockQueryType {
     ByDuration = 0,
     ByTime = 1,
 }
+impl LockQueryType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            LockQueryType::ByDuration => "ByDuration",
+            LockQueryType::ByTime => "ByTime",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ByDuration" => Some(Self::ByDuration),
+            "ByTime" => Some(Self::ByTime),
+            _ => None,
+        }
+    }
+}
+/// GenesisState defines the lockup module's genesis state.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.GenesisState")]
+pub struct GenesisState {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub last_lock_id: u64,
+    #[prost(message, repeated, tag = "2")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+    #[prost(message, repeated, tag = "3")]
+    pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.Params")]
+pub struct Params {
+    #[prost(string, repeated, tag = "1")]
+    pub force_unlock_allowed_addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.ModuleBalanceRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/ModuleBalance",
+    response_type = ModuleBalanceResponse
+)]
+pub struct ModuleBalanceRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.ModuleBalanceResponse")]
+pub struct ModuleBalanceResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.ModuleLockedAmountRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/ModuleLockedAmount",
+    response_type = ModuleLockedAmountResponse
+)]
+pub struct ModuleLockedAmountRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.ModuleLockedAmountResponse")]
+pub struct ModuleLockedAmountResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockableCoinsRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountUnlockableCoins",
+    response_type = AccountUnlockableCoinsResponse
+)]
+pub struct AccountUnlockableCoinsRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockableCoinsResponse")]
+pub struct AccountUnlockableCoinsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockingCoinsRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountUnlockingCoins",
+    response_type = AccountUnlockingCoinsResponse
+)]
+pub struct AccountUnlockingCoinsRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockingCoinsResponse")]
+pub struct AccountUnlockingCoinsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedCoinsRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountLockedCoins",
+    response_type = AccountLockedCoinsResponse
+)]
+pub struct AccountLockedCoinsRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedCoinsResponse")]
+pub struct AccountLockedCoinsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountLockedPastTime",
+    response_type = AccountLockedPastTimeResponse
+)]
+pub struct AccountLockedPastTimeRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeResponse")]
+pub struct AccountLockedPastTimeResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountLockedPastTimeNotUnlockingOnly",
+    response_type = AccountLockedPastTimeNotUnlockingOnlyResponse
+)]
+pub struct AccountLockedPastTimeNotUnlockingOnlyRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyResponse")]
+pub struct AccountLockedPastTimeNotUnlockingOnlyResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountUnlockedBeforeTime",
+    response_type = AccountUnlockedBeforeTimeResponse
+)]
+pub struct AccountUnlockedBeforeTimeRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeResponse")]
+pub struct AccountUnlockedBeforeTimeResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountLockedPastTimeDenom",
+    response_type = AccountLockedPastTimeDenomResponse
+)]
+pub struct AccountLockedPastTimeDenomRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
+    #[prost(string, tag = "3")]
+    pub denom: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomResponse")]
+pub struct AccountLockedPastTimeDenomResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.LockedDenomRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/LockedDenom",
+    response_type = LockedDenomResponse
+)]
+pub struct LockedDenomRequest {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub duration: ::core::option::Option<crate::shim::Duration>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.LockedDenomResponse")]
+pub struct LockedDenomResponse {
+    #[prost(string, tag = "1")]
+    pub amount: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.LockedRequest")]
+#[proto_query(path = "/osmosis.lockup.Query/LockedByID", response_type = LockedResponse)]
+pub struct LockedRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.LockedResponse")]
+pub struct LockedResponse {
+    #[prost(message, optional, tag = "1")]
+    pub lock: ::core::option::Option<PeriodLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.NextLockIDRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/NextLockID",
+    response_type = NextLockIdResponse
+)]
+pub struct NextLockIdRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.NextLockIDResponse")]
+pub struct NextLockIdResponse {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIDRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/SyntheticLockupsByLockupID",
+    response_type = SyntheticLockupsByLockupIdResponse
+)]
+pub struct SyntheticLockupsByLockupIdRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIDResponse")]
+pub struct SyntheticLockupsByLockupIdResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountLockedLongerDuration",
+    response_type = AccountLockedLongerDurationResponse
+)]
+pub struct AccountLockedLongerDurationRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub duration: ::core::option::Option<crate::shim::Duration>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationResponse")]
+pub struct AccountLockedLongerDurationResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedDurationRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountLockedDuration",
+    response_type = AccountLockedDurationResponse
+)]
+pub struct AccountLockedDurationRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub duration: ::core::option::Option<crate::shim::Duration>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedDurationResponse")]
+pub struct AccountLockedDurationResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountLockedLongerDurationNotUnlockingOnly",
+    response_type = AccountLockedLongerDurationNotUnlockingOnlyResponse
+)]
+pub struct AccountLockedLongerDurationNotUnlockingOnlyRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub duration: ::core::option::Option<crate::shim::Duration>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyResponse")]
+pub struct AccountLockedLongerDurationNotUnlockingOnlyResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/AccountLockedLongerDurationDenom",
+    response_type = AccountLockedLongerDurationDenomResponse
+)]
+pub struct AccountLockedLongerDurationDenomRequest {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub duration: ::core::option::Option<crate::shim::Duration>,
+    #[prost(string, tag = "3")]
+    pub denom: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomResponse")]
+pub struct AccountLockedLongerDurationDenomResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.QueryParamsRequest")]
+#[proto_query(
+    path = "/osmosis.lockup.Query/Params",
+    response_type = QueryParamsResponse
+)]
+pub struct QueryParamsRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.QueryParamsResponse")]
+pub struct QueryParamsResponse {
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgLockTokens")]
@@ -143,14 +876,15 @@ pub struct MsgLockTokens {
     #[prost(message, repeated, tag = "3")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgLockTokensResponse")]
@@ -163,14 +897,15 @@ pub struct MsgLockTokensResponse {
     )]
     pub id: u64,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgBeginUnlockingAll")]
@@ -178,14 +913,15 @@ pub struct MsgBeginUnlockingAll {
     #[prost(string, tag = "1")]
     pub owner: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgBeginUnlockingAllResponse")]
@@ -193,14 +929,15 @@ pub struct MsgBeginUnlockingAllResponse {
     #[prost(message, repeated, tag = "1")]
     pub unlocks: ::prost::alloc::vec::Vec<PeriodLock>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgBeginUnlocking")]
@@ -218,31 +955,39 @@ pub struct MsgBeginUnlocking {
     #[prost(message, repeated, tag = "3")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgBeginUnlockingResponse")]
 pub struct MsgBeginUnlockingResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub unlocking_lock_id: u64,
 }
 /// MsgExtendLockup extends the existing lockup's duration.
 /// The new duration is longer than the original.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgExtendLockup")]
@@ -261,14 +1006,15 @@ pub struct MsgExtendLockup {
     #[prost(message, optional, tag = "3")]
     pub duration: ::core::option::Option<crate::shim::Duration>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgExtendLockupResponse")]
@@ -278,14 +1024,15 @@ pub struct MsgExtendLockupResponse {
 }
 /// MsgForceUnlock unlocks locks immediately for
 /// addresses registered via governance.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgForceUnlock")]
@@ -303,658 +1050,21 @@ pub struct MsgForceUnlock {
     #[prost(message, repeated, tag = "3")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.lockup.MsgForceUnlockResponse")]
 pub struct MsgForceUnlockResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.Params")]
-pub struct Params {
-    #[prost(string, repeated, tag = "1")]
-    pub force_unlock_allowed_addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, repeated, tag = "2")]
-    pub non_owner_force_unlock_allowed_addresses:
-        ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.ModuleBalanceRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/ModuleBalance",
-    response_type = ModuleBalanceResponse
-)]
-pub struct ModuleBalanceRequest {}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.ModuleBalanceResponse")]
-pub struct ModuleBalanceResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.ModuleLockedAmountRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/ModuleLockedAmount",
-    response_type = ModuleLockedAmountResponse
-)]
-pub struct ModuleLockedAmountRequest {}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.ModuleLockedAmountResponse")]
-pub struct ModuleLockedAmountResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountUnlockableCoinsRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountUnlockableCoins",
-    response_type = AccountUnlockableCoinsResponse
-)]
-pub struct AccountUnlockableCoinsRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountUnlockableCoinsResponse")]
-pub struct AccountUnlockableCoinsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountUnlockingCoinsRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountUnlockingCoins",
-    response_type = AccountUnlockingCoinsResponse
-)]
-pub struct AccountUnlockingCoinsRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountUnlockingCoinsResponse")]
-pub struct AccountUnlockingCoinsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedCoinsRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountLockedCoins",
-    response_type = AccountLockedCoinsResponse
-)]
-pub struct AccountLockedCoinsRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedCoinsResponse")]
-pub struct AccountLockedCoinsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountLockedPastTime",
-    response_type = AccountLockedPastTimeResponse
-)]
-pub struct AccountLockedPastTimeRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeResponse")]
-pub struct AccountLockedPastTimeResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountLockedPastTimeNotUnlockingOnly",
-    response_type = AccountLockedPastTimeNotUnlockingOnlyResponse
-)]
-pub struct AccountLockedPastTimeNotUnlockingOnlyRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeNotUnlockingOnlyResponse")]
-pub struct AccountLockedPastTimeNotUnlockingOnlyResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountUnlockedBeforeTime",
-    response_type = AccountUnlockedBeforeTimeResponse
-)]
-pub struct AccountUnlockedBeforeTimeRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountUnlockedBeforeTimeResponse")]
-pub struct AccountUnlockedBeforeTimeResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountLockedPastTimeDenom",
-    response_type = AccountLockedPastTimeDenomResponse
-)]
-pub struct AccountLockedPastTimeDenomRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
-    #[prost(string, tag = "3")]
-    pub denom: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedPastTimeDenomResponse")]
-pub struct AccountLockedPastTimeDenomResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.LockedDenomRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/LockedDenom",
-    response_type = LockedDenomResponse
-)]
-pub struct LockedDenomRequest {
-    #[prost(string, tag = "1")]
-    pub denom: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub duration: ::core::option::Option<crate::shim::Duration>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.LockedDenomResponse")]
-pub struct LockedDenomResponse {
-    #[prost(string, tag = "1")]
-    pub amount: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.LockedRequest")]
-#[proto_query(path = "/osmosis.lockup.Query/LockedByID", response_type = LockedResponse)]
-pub struct LockedRequest {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub lock_id: u64,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.LockedResponse")]
-pub struct LockedResponse {
-    #[prost(message, optional, tag = "1")]
-    pub lock: ::core::option::Option<PeriodLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIDRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/SyntheticLockupsByLockupID",
-    response_type = SyntheticLockupsByLockupIdResponse
-)]
-pub struct SyntheticLockupsByLockupIdRequest {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub lock_id: u64,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.SyntheticLockupsByLockupIDResponse")]
-pub struct SyntheticLockupsByLockupIdResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountLockedLongerDuration",
-    response_type = AccountLockedLongerDurationResponse
-)]
-pub struct AccountLockedLongerDurationRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub duration: ::core::option::Option<crate::shim::Duration>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationResponse")]
-pub struct AccountLockedLongerDurationResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedDurationRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountLockedDuration",
-    response_type = AccountLockedDurationResponse
-)]
-pub struct AccountLockedDurationRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub duration: ::core::option::Option<crate::shim::Duration>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedDurationResponse")]
-pub struct AccountLockedDurationResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountLockedLongerDurationNotUnlockingOnly",
-    response_type = AccountLockedLongerDurationNotUnlockingOnlyResponse
-)]
-pub struct AccountLockedLongerDurationNotUnlockingOnlyRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub duration: ::core::option::Option<crate::shim::Duration>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationNotUnlockingOnlyResponse")]
-pub struct AccountLockedLongerDurationNotUnlockingOnlyResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/AccountLockedLongerDurationDenom",
-    response_type = AccountLockedLongerDurationDenomResponse
-)]
-pub struct AccountLockedLongerDurationDenomRequest {
-    #[prost(string, tag = "1")]
-    pub owner: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub duration: ::core::option::Option<crate::shim::Duration>,
-    #[prost(string, tag = "3")]
-    pub denom: ::prost::alloc::string::String,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.AccountLockedLongerDurationDenomResponse")]
-pub struct AccountLockedLongerDurationDenomResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.QueryParamsRequest")]
-#[proto_query(
-    path = "/osmosis.lockup.Query/Params",
-    response_type = QueryParamsResponse
-)]
-pub struct QueryParamsRequest {}
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.QueryParamsResponse")]
-pub struct QueryParamsResponse {
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-}
-/// GenesisState defines the lockup module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.lockup.GenesisState")]
-pub struct GenesisState {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub last_lock_id: u64,
-    #[prost(message, repeated, tag = "2")]
-    pub locks: ::prost::alloc::vec::Vec<PeriodLock>,
-    #[prost(message, repeated, tag = "3")]
-    pub synthetic_locks: ::prost::alloc::vec::Vec<SyntheticLock>,
 }
 pub struct LockupQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
@@ -1032,6 +1142,9 @@ impl<'a, Q: cosmwasm_std::CustomQuery> LockupQuerier<'a, Q> {
     }
     pub fn locked_by_id(&self, lock_id: u64) -> Result<LockedResponse, cosmwasm_std::StdError> {
         LockedRequest { lock_id }.query(self.querier)
+    }
+    pub fn next_lock_id(&self) -> Result<NextLockIdResponse, cosmwasm_std::StdError> {
+        NextLockIdRequest {}.query(self.querier)
     }
     pub fn synthetic_lockups_by_lockup_id(
         &self,

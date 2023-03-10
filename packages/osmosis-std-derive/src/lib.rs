@@ -124,7 +124,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
     }).into()
 }
 
-fn get_type_url(attrs: &Vec<syn::Attribute>) -> proc_macro2::TokenStream {
+fn get_type_url(attrs: &[syn::Attribute]) -> proc_macro2::TokenStream {
     let proto_message = get_attr("proto_message", attrs).and_then(|a| a.parse_meta().ok());
 
     if let Some(syn::Meta::List(meta)) = proto_message.clone() {
@@ -146,7 +146,7 @@ fn get_type_url(attrs: &Vec<syn::Attribute>) -> proc_macro2::TokenStream {
     }
 }
 
-fn get_query_attrs<F>(attrs: &Vec<syn::Attribute>, f: F) -> proc_macro2::TokenStream
+fn get_query_attrs<F>(attrs: &[syn::Attribute], f: F) -> proc_macro2::TokenStream
 where
     F: FnMut(&Vec<TokenTree>) -> Option<proc_macro2::TokenStream>,
 {
@@ -185,8 +185,10 @@ where
     }
 }
 
-fn get_attr<'a>(attr_ident: &str, attrs: &'a Vec<syn::Attribute>) -> Option<&'a syn::Attribute> {
-    attrs.iter().find(|&attr| attr.path.segments.len() == 1 && attr.path.segments[0].ident == attr_ident)
+fn get_attr<'a>(attr_ident: &str, attrs: &'a [syn::Attribute]) -> Option<&'a syn::Attribute> {
+    attrs
+        .iter()
+        .find(|&attr| attr.path.segments.len() == 1 && attr.path.segments[0].ident == attr_ident)
 }
 
 fn proto_message_attr_error<T: quote::ToTokens>(tokens: T) -> proc_macro2::TokenStream {

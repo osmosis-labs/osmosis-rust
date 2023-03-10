@@ -30,31 +30,6 @@ git diff
 cd "$SCRIPT_DIR/../packages/proto-build/" && cargo run -- --update-deps
 
 ########################################
-## Update and rebuild osmosis-testing ##
-########################################
-
-# submodules already updated due to `cargo run -- --update-deps`
-
-
-# build and run update-osmosis-testing
-cd "$SCRIPT_DIR/update-osmosis-testing-replace" && go build
-UPDATE_OSMOSIS_TESTING_REPLACE_BIN="$SCRIPT_DIR/update-osmosis-testing-replace/update-osmosis-testing-replace"
-
-# run update-osmosis-testing-replace which will replace the `replace directives` in osmosis-testing
-# with osmosis'
-$UPDATE_OSMOSIS_TESTING_REPLACE_BIN
-
-
-cd "$SCRIPT_DIR/../packages/osmosis-testing/libosmosistesting"
-
-# sync rev
-go get "github.com/osmosis-labs/osmosis/$OSMOSIS_VERSION@$(echo "$OSMOSIS_REV" | sed "s/^origin\///")"
-
-# tidy up updated go.mod
-go mod tidy
-
-
-########################################
 ## Update git revision if there is    ##
 ## any change                         ##
 ########################################

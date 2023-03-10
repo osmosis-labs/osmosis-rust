@@ -1,14 +1,15 @@
 use osmosis_std_derive::CosmwasmExt;
 /// SetSuperfluidAssetsProposal is a gov Content type to update the superfluid
 /// assets
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.superfluid.v1beta1.SetSuperfluidAssetsProposal")]
@@ -22,14 +23,15 @@ pub struct SetSuperfluidAssetsProposal {
 }
 /// RemoveSuperfluidAssetsProposal is a gov Content type to remove the superfluid
 /// assets by denom
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.superfluid.v1beta1.RemoveSuperfluidAssetsProposal")]
@@ -43,14 +45,15 @@ pub struct RemoveSuperfluidAssetsProposal {
 }
 /// UpdateUnpoolWhiteListProposal is a gov Content type to update the
 /// allowed list of pool ids.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.superfluid.v1beta1.UpdateUnpoolWhiteListProposal")]

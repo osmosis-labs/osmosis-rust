@@ -1,14 +1,15 @@
 use osmosis_std_derive::CosmwasmExt;
 /// QuerySpotPriceRequest defines the gRPC request structure for a SpotPrice
 /// query.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v2.QuerySpotPriceRequest")]
@@ -30,14 +31,15 @@ pub struct QuerySpotPriceRequest {
 }
 /// QuerySpotPriceResponse defines the gRPC response structure for a SpotPrice
 /// query.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v2.QuerySpotPriceResponse")]

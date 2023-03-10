@@ -156,15 +156,23 @@ fn transform_items(
     };
     items
         .into_iter()
-        .map(|i| match i.clone() {
+        .map(|i| match i {
             Item::Struct(s) => Item::Struct({
-                let s = transformers::add_derive_eq(&s);
-                let s = transformers::append_attrs(src, &s, descriptor);
+                let s = transformers::add_derive_eq_struct(&s);
+                let s = transformers::append_attrs_struct(src, &s, descriptor);
                 let s = transformers::serde_alias_id_with_uppercased(s);
                 transformers::allow_serde_int_as_str(s)
             }),
 
-            _ => i,
+            Item::Enum(e) => Item::Enum({
+                let e = transformers::add_derive_eq_enum(&e);
+                transformers::append_attrs_enum(src, &e, descriptor)
+            }),
+
+            // This is a temporary hack to fix the issue with clashing stake authorization validators
+            Item::Mod(m) => Item::Mod(transformers::fix_clashing_stake_authorization_validators(m)),
+
+            i => i,
         })
         // TODO: Remove this temporary hack when cosmos & tendermint code gen is supported
         .map(remove_struct_fields_that_depends_on_tendermint_proto)

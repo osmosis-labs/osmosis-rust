@@ -3,14 +3,15 @@ use osmosis_std_derive::CosmwasmExt;
 /// This marks the token as eligible for use as a tx fee asset in Osmosis.
 /// Its price in osmo is derived through looking at the provided pool ID.
 /// The pool ID must have osmo as one of its assets.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.FeeToken")]
@@ -24,19 +25,39 @@ pub struct FeeToken {
     )]
     pub pool_id: u64,
 }
-/// UpdateFeeTokenProposal is a gov Content type for adding a new whitelisted fee
-/// token. It must specify a denom along with gamm pool ID to use as a spot price
-/// calculator. It can be used to add a new denom to the whitelist It can also be
-/// used to update the Pool to associate with the denom. If Pool ID is set to 0,
-/// it will remove the denom from the whitelisted set.
+/// GenesisState defines the txfees module's genesis state.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.GenesisState")]
+pub struct GenesisState {
+    #[prost(string, tag = "1")]
+    pub basedenom: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub feetokens: ::prost::alloc::vec::Vec<FeeToken>,
+}
+/// UpdateFeeTokenProposal is a gov Content type for adding a new whitelisted fee
+/// token. It must specify a denom along with gamm pool ID to use as a spot price
+/// calculator. It can be used to add a new denom to the whitelist It can also be
+/// used to update the Pool to associate with the denom. If Pool ID is set to 0,
+/// it will remove the denom from the whitelisted set.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.UpdateFeeTokenProposal")]
@@ -48,14 +69,15 @@ pub struct UpdateFeeTokenProposal {
     #[prost(message, optional, tag = "3")]
     pub feetoken: ::core::option::Option<FeeToken>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryFeeTokensRequest")]
@@ -64,14 +86,15 @@ pub struct UpdateFeeTokenProposal {
     response_type = QueryFeeTokensResponse
 )]
 pub struct QueryFeeTokensRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryFeeTokensResponse")]
@@ -81,14 +104,15 @@ pub struct QueryFeeTokensResponse {
 }
 /// QueryDenomSpotPriceRequest defines grpc request structure for querying spot
 /// price for the specified tx fee denom
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceRequest")]
@@ -102,14 +126,15 @@ pub struct QueryDenomSpotPriceRequest {
 }
 /// QueryDenomSpotPriceRequest defines grpc response structure for querying spot
 /// price for the specified tx fee denom
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceResponse")]
@@ -123,14 +148,15 @@ pub struct QueryDenomSpotPriceResponse {
     #[prost(string, tag = "2")]
     pub spot_price: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdRequest")]
@@ -142,14 +168,15 @@ pub struct QueryDenomPoolIdRequest {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdResponse")]
@@ -161,14 +188,15 @@ pub struct QueryDenomPoolIdResponse {
     )]
     pub pool_id: u64,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryBaseDenomRequest")]
@@ -177,38 +205,21 @@ pub struct QueryDenomPoolIdResponse {
     response_type = QueryBaseDenomResponse
 )]
 pub struct QueryBaseDenomRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryBaseDenomResponse")]
 pub struct QueryBaseDenomResponse {
     #[prost(string, tag = "1")]
     pub base_denom: ::prost::alloc::string::String,
-}
-/// GenesisState defines the txfees module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.txfees.v1beta1.GenesisState")]
-pub struct GenesisState {
-    #[prost(string, tag = "1")]
-    pub basedenom: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "2")]
-    pub feetokens: ::prost::alloc::vec::Vec<FeeToken>,
 }
 pub struct TxfeesQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
