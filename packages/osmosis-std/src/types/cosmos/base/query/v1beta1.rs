@@ -2,21 +2,22 @@ use osmosis_std_derive::CosmwasmExt;
 /// PageRequest is to be embedded in gRPC request messages for efficient
 /// pagination. Ex:
 ///
-///  message SomeRequest {
-///          Foo some_parameter = 1;
-///          PageRequest pagination = 2;
-///  }
+///   message SomeRequest {
+///           Foo some_parameter = 1;
+///           PageRequest pagination = 2;
+///   }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.query.v1beta1.PageRequest")]
+#[proto_message(type_url = "/cosmos.base.query.v1beta1.PageRequestPageRequest")]
 pub struct PageRequest {
     /// key is a value returned in PageResponse.next_key to begin
     /// querying the next page most efficiently. Only one of offset or key
@@ -55,21 +56,22 @@ pub struct PageRequest {
 /// PageResponse is to be embedded in gRPC response messages where the
 /// corresponding request message has used PageRequest.
 ///
-///  message SomeResponse {
-///          repeated Bar results = 1;
-///          PageResponse page = 2;
-///  }
+///   message SomeResponse {
+///           repeated Bar results = 1;
+///           PageResponse page = 2;
+///   }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.query.v1beta1.PageResponse")]
+#[proto_message(type_url = "/cosmos.base.query.v1beta1.PageResponsePageResponse")]
 pub struct PageResponse {
     /// next_key is the key to be passed to PageRequest.key to
     /// query the next page most efficiently

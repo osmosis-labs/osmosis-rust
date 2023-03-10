@@ -1,13 +1,14 @@
 use osmosis_std_derive::CosmwasmExt;
 /// TokenPairArbRoutes tracks all of the hot routes for a given pair of tokens
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.TokenPairArbRoutes")]
@@ -23,14 +24,15 @@ pub struct TokenPairArbRoutes {
     pub token_out: ::prost::alloc::string::String,
 }
 /// Route is a hot route for a given pair of tokens
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.Route")]
@@ -39,45 +41,50 @@ pub struct Route {
     /// -> right)
     #[prost(message, repeated, tag = "1")]
     pub trades: ::prost::alloc::vec::Vec<Trade>,
+    /// The step size that will be used to find the optimal swap amount in the
+    /// binary search
+    #[prost(string, tag = "2")]
+    pub step_size: ::prost::alloc::string::String,
 }
 /// Trade is a single trade in a route
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.Trade")]
 pub struct Trade {
-    /// The pool IDs that are travered in the directed cyclic graph (traversed left
-    /// -> right)
+    /// The pool id of the pool that is traded on
     #[prost(uint64, tag = "1")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub pool: u64,
-    /// The denom of token A that is traded
+    /// The denom of the token that is traded
     #[prost(string, tag = "2")]
     pub token_in: ::prost::alloc::string::String,
-    /// The denom of token B that is traded
+    /// The denom of the token that is received
     #[prost(string, tag = "3")]
     pub token_out: ::prost::alloc::string::String,
 }
 /// RouteStatistics contains the number of trades the module has executed after a
 /// swap on a given route and the profits from the trades
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.RouteStatistics")]
@@ -90,7 +97,7 @@ pub struct RouteStatistics {
     #[prost(string, tag = "2")]
     pub number_of_trades: ::prost::alloc::string::String,
     /// route is the route that was used (pool ids along the arbitrage route)
-    #[prost(uint64, repeated, tag = "3")]
+    #[prost(uint64, repeated, packed = "false", tag = "3")]
     pub route: ::prost::alloc::vec::Vec<u64>,
 }
 /// PoolWeights contains the weights of all of the different pool types. This
@@ -98,14 +105,15 @@ pub struct RouteStatistics {
 /// significantly between the different pool types. Each weight roughly
 /// corresponds to the amount of time (in ms) it takes to execute a swap on that
 /// pool type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.PoolWeights")]
@@ -135,14 +143,15 @@ pub struct PoolWeights {
 /// BaseDenom represents a single base denom that the module uses for its
 /// arbitrage trades. It contains the denom name alongside the step size of the
 /// binary search that is used to find the optimal swap amount
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.BaseDenom")]
@@ -155,15 +164,709 @@ pub struct BaseDenom {
     #[prost(string, tag = "2")]
     pub step_size: ::prost::alloc::string::String,
 }
-/// MsgSetHotRoutes defines the Msg/SetHotRoutes request type.
+/// Params defines the parameters for the module.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.Params")]
+pub struct Params {
+    /// Boolean whether the protorev module is enabled.
+    #[prost(bool, tag = "1")]
+    pub enabled: bool,
+    /// The admin account (settings manager) of the protorev module.
+    #[prost(string, tag = "2")]
+    pub admin: ::prost::alloc::string::String,
+}
+/// GenesisState defines the protorev module's genesis state.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.GenesisState")]
+pub struct GenesisState {
+    /// Parameters for the protorev module.
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+    /// Token pair arb routes for the protorev module (hot routes).
+    #[prost(message, repeated, tag = "2")]
+    pub token_pair_arb_routes: ::prost::alloc::vec::Vec<TokenPairArbRoutes>,
+    /// The base denominations being used to create cyclic arbitrage routes via the
+    /// highest liquidity method.
+    #[prost(message, repeated, tag = "3")]
+    pub base_denoms: ::prost::alloc::vec::Vec<BaseDenom>,
+    /// The pool weights that are being used to calculate the weight (compute cost)
+    /// of each route.
+    #[prost(message, optional, tag = "4")]
+    pub pool_weights: ::core::option::Option<PoolWeights>,
+    /// The number of days since module genesis.
+    #[prost(uint64, tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub days_since_module_genesis: u64,
+    /// The fees the developer account has accumulated over time.
+    #[prost(message, repeated, tag = "6")]
+    pub developer_fees: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    /// The latest block height that the module has processed.
+    #[prost(uint64, tag = "7")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub latest_block_height: u64,
+    /// The developer account address of the module.
+    #[prost(string, tag = "8")]
+    pub developer_address: ::prost::alloc::string::String,
+    /// Max pool points per block i.e. the maximum compute time (in ms)
+    /// that protorev can use per block.
+    #[prost(uint64, tag = "9")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_pool_points_per_block: u64,
+    /// Max pool points per tx i.e. the maximum compute time (in ms) that
+    /// protorev can use per tx.
+    #[prost(uint64, tag = "10")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_pool_points_per_tx: u64,
+    /// The number of pool points that have been consumed in the current block.
+    #[prost(uint64, tag = "11")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub point_count_for_block: u64,
+}
+/// SetProtoRevEnabledProposal is a gov Content type to update whether the
+/// protorev module is enabled
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.SetProtoRevEnabledProposal")]
+pub struct SetProtoRevEnabledProposal {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(bool, tag = "3")]
+    pub enabled: bool,
+}
+/// SetProtoRevAdminAccountProposal is a gov Content type to set the admin
+/// account that will receive permissions to alter hot routes and set the
+/// developer address that will be receiving a share of profits from the module
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.SetProtoRevAdminAccountProposal")]
+pub struct SetProtoRevAdminAccountProposal {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub account: ::prost::alloc::string::String,
+}
+/// QueryParamsRequest is request type for the Query/Params RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryParamsRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/Params",
+    response_type = QueryParamsResponse
+)]
+pub struct QueryParamsRequest {}
+/// QueryParamsResponse is response type for the Query/Params RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryParamsResponse")]
+pub struct QueryParamsResponse {
+    /// params holds all the parameters of this module.
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+}
+/// QueryGetProtoRevNumberOfTradesRequest is request type for the
+/// Query/GetProtoRevNumberOfTrades RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevNumberOfTradesRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevNumberOfTrades",
+    response_type = QueryGetProtoRevNumberOfTradesResponse
+)]
+pub struct QueryGetProtoRevNumberOfTradesRequest {}
+/// QueryGetProtoRevNumberOfTradesResponse is response type for the
+/// Query/GetProtoRevNumberOfTrades RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevNumberOfTradesResponse")]
+pub struct QueryGetProtoRevNumberOfTradesResponse {
+    /// number_of_trades is the number of trades the module has executed
+    #[prost(string, tag = "1")]
+    pub number_of_trades: ::prost::alloc::string::String,
+}
+/// QueryGetProtoRevProfitsByDenomRequest is request type for the
+/// Query/GetProtoRevProfitsByDenom RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevProfitsByDenomRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevProfitsByDenom",
+    response_type = QueryGetProtoRevProfitsByDenomResponse
+)]
+pub struct QueryGetProtoRevProfitsByDenomRequest {
+    /// denom is the denom to query profits by
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+}
+/// QueryGetProtoRevProfitsByDenomResponse is response type for the
+/// Query/GetProtoRevProfitsByDenom RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevProfitsByDenomResponse")]
+pub struct QueryGetProtoRevProfitsByDenomResponse {
+    /// profit is the profits of the module by the selected denom
+    #[prost(message, optional, tag = "1")]
+    pub profit: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+/// QueryGetProtoRevAllProfitsRequest is request type for the
+/// Query/GetProtoRevAllProfits RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAllProfitsRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevAllProfits",
+    response_type = QueryGetProtoRevAllProfitsResponse
+)]
+pub struct QueryGetProtoRevAllProfitsRequest {}
+/// QueryGetProtoRevAllProfitsResponse is response type for the
+/// Query/GetProtoRevAllProfits RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAllProfitsResponse")]
+pub struct QueryGetProtoRevAllProfitsResponse {
+    /// profits is a list of all of the profits from the module
+    #[prost(message, repeated, tag = "1")]
+    pub profits: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+/// QueryGetProtoRevStatisticsByPoolRequest is request type for the
+/// Query/GetProtoRevStatisticsByRoute RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevStatisticsByRouteRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevStatisticsByRoute",
+    response_type = QueryGetProtoRevStatisticsByRouteResponse
+)]
+pub struct QueryGetProtoRevStatisticsByRouteRequest {
+    /// route is the set of pool ids to query statistics by i.e. 1,2,3
+    #[prost(uint64, repeated, packed = "false", tag = "1")]
+    pub route: ::prost::alloc::vec::Vec<u64>,
+}
+/// QueryGetProtoRevStatisticsByRouteResponse is response type for the
+/// Query/GetProtoRevStatisticsByRoute RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevStatisticsByRouteResponse")]
+pub struct QueryGetProtoRevStatisticsByRouteResponse {
+    /// statistics contains the number of trades the module has executed after a
+    /// swap on a given pool and the profits from the trades
+    #[prost(message, optional, tag = "1")]
+    pub statistics: ::core::option::Option<RouteStatistics>,
+}
+/// QueryGetProtoRevAllRouteStatisticsRequest is request type for the
+/// Query/GetProtoRevAllRouteStatistics RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAllRouteStatisticsRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevAllRouteStatistics",
+    response_type = QueryGetProtoRevAllRouteStatisticsResponse
+)]
+pub struct QueryGetProtoRevAllRouteStatisticsRequest {}
+/// QueryGetProtoRevAllRouteStatisticsResponse is response type for the
+/// Query/GetProtoRevAllRouteStatistics RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAllRouteStatisticsResponse")]
+pub struct QueryGetProtoRevAllRouteStatisticsResponse {
+    /// statistics contains the number of trades/profits the module has executed on
+    /// all routes it has successfully executed a trade on
+    #[prost(message, repeated, tag = "1")]
+    pub statistics: ::prost::alloc::vec::Vec<RouteStatistics>,
+}
+/// QueryGetProtoRevTokenPairArbRoutesRequest is request type for the
+/// Query/GetProtoRevTokenPairArbRoutes RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevTokenPairArbRoutesRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevTokenPairArbRoutes",
+    response_type = QueryGetProtoRevTokenPairArbRoutesResponse
+)]
+pub struct QueryGetProtoRevTokenPairArbRoutesRequest {}
+/// QueryGetProtoRevTokenPairArbRoutesResponse is response type for the
+/// Query/GetProtoRevTokenPairArbRoutes RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevTokenPairArbRoutesResponse")]
+pub struct QueryGetProtoRevTokenPairArbRoutesResponse {
+    /// routes is a list of all of the hot routes that the module is currently
+    /// arbitraging
+    #[prost(message, repeated, tag = "1")]
+    pub routes: ::prost::alloc::vec::Vec<TokenPairArbRoutes>,
+}
+/// QueryGetProtoRevAdminAccountRequest is request type for the
+/// Query/GetProtoRevAdminAccount RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAdminAccountRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevAdminAccount",
+    response_type = QueryGetProtoRevAdminAccountResponse
+)]
+pub struct QueryGetProtoRevAdminAccountRequest {}
+/// QueryGetProtoRevAdminAccountResponse is response type for the
+/// Query/GetProtoRevAdminAccount RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAdminAccountResponse")]
+pub struct QueryGetProtoRevAdminAccountResponse {
+    /// admin_account is the admin account of the module
+    #[prost(string, tag = "1")]
+    pub admin_account: ::prost::alloc::string::String,
+}
+/// QueryGetProtoRevDeveloperAccountRequest is request type for the
+/// Query/GetProtoRevDeveloperAccount RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevDeveloperAccountRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevDeveloperAccount",
+    response_type = QueryGetProtoRevDeveloperAccountResponse
+)]
+pub struct QueryGetProtoRevDeveloperAccountRequest {}
+/// QueryGetProtoRevDeveloperAccountResponse is response type for the
+/// Query/GetProtoRevDeveloperAccount RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevDeveloperAccountResponse")]
+pub struct QueryGetProtoRevDeveloperAccountResponse {
+    /// developer_account is the developer account of the module
+    #[prost(string, tag = "1")]
+    pub developer_account: ::prost::alloc::string::String,
+}
+/// QueryGetProtoRevPoolWeightsRequest is request type for the
+/// Query/GetProtoRevPoolWeights RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevPoolWeightsRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevPoolWeights",
+    response_type = QueryGetProtoRevPoolWeightsResponse
+)]
+pub struct QueryGetProtoRevPoolWeightsRequest {}
+/// QueryGetProtoRevPoolWeightsResponse is response type for the
+/// Query/GetProtoRevPoolWeights RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevPoolWeightsResponse")]
+pub struct QueryGetProtoRevPoolWeightsResponse {
+    /// pool_weights is a list of all of the pool weights
+    #[prost(message, optional, tag = "1")]
+    pub pool_weights: ::core::option::Option<PoolWeights>,
+}
+/// QueryGetProtoRevMaxPoolPointsPerBlockRequest is request type for the
+/// Query/GetProtoRevMaxPoolPointsPerBlock RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevMaxPoolPointsPerBlockRequest"
+)]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevMaxPoolPointsPerBlock",
+    response_type = QueryGetProtoRevMaxPoolPointsPerBlockResponse
+)]
+pub struct QueryGetProtoRevMaxPoolPointsPerBlockRequest {}
+/// QueryGetProtoRevMaxPoolPointsPerBlockResponse is response type for the
+/// Query/GetProtoRevMaxPoolPointsPerBlock RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevMaxPoolPointsPerBlockResponse"
+)]
+pub struct QueryGetProtoRevMaxPoolPointsPerBlockResponse {
+    /// max_pool_points_per_block is the maximum number of pool points that can be
+    /// consumed per block
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_pool_points_per_block: u64,
+}
+/// QueryGetProtoRevMaxPoolPointsPerTxRequest is request type for the
+/// Query/GetProtoRevMaxPoolPointsPerTx RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevMaxPoolPointsPerTxRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevMaxPoolPointsPerTx",
+    response_type = QueryGetProtoRevMaxPoolPointsPerTxResponse
+)]
+pub struct QueryGetProtoRevMaxPoolPointsPerTxRequest {}
+/// QueryGetProtoRevMaxPoolPointsPerTxResponse is response type for the
+/// Query/GetProtoRevMaxPoolPointsPerTx RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevMaxPoolPointsPerTxResponse")]
+pub struct QueryGetProtoRevMaxPoolPointsPerTxResponse {
+    /// max_pool_points_per_tx is the maximum number of pool points that can be
+    /// consumed per transaction
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_pool_points_per_tx: u64,
+}
+/// QueryGetProtoRevBaseDenomsRequest is request type for the
+/// Query/GetProtoRevBaseDenoms RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevBaseDenomsRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevBaseDenoms",
+    response_type = QueryGetProtoRevBaseDenomsResponse
+)]
+pub struct QueryGetProtoRevBaseDenomsRequest {}
+/// QueryGetProtoRevBaseDenomsResponse is response type for the
+/// Query/GetProtoRevBaseDenoms RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevBaseDenomsResponse")]
+pub struct QueryGetProtoRevBaseDenomsResponse {
+    /// base_denoms is a list of all of the base denoms and step sizes
+    #[prost(message, repeated, tag = "1")]
+    pub base_denoms: ::prost::alloc::vec::Vec<BaseDenom>,
+}
+/// QueryGetProtoRevEnabledRequest is request type for the
+/// Query/GetProtoRevEnabled RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevEnabledRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevEnabled",
+    response_type = QueryGetProtoRevEnabledResponse
+)]
+pub struct QueryGetProtoRevEnabledRequest {}
+/// QueryGetProtoRevEnabledResponse is response type for the
+/// Query/GetProtoRevEnabled RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevEnabledResponse")]
+pub struct QueryGetProtoRevEnabledResponse {
+    /// enabled is whether the module is enabled
+    #[prost(bool, tag = "1")]
+    pub enabled: bool,
+}
+/// MsgSetHotRoutes defines the Msg/SetHotRoutes request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetHotRoutes")]
@@ -176,27 +879,29 @@ pub struct MsgSetHotRoutes {
     pub hot_routes: ::prost::alloc::vec::Vec<TokenPairArbRoutes>,
 }
 /// MsgSetHotRoutesResponse defines the Msg/SetHotRoutes response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetHotRoutesResponse")]
 pub struct MsgSetHotRoutesResponse {}
 /// MsgSetDeveloperAccount defines the Msg/SetDeveloperAccount request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetDeveloperAccount")]
@@ -211,27 +916,29 @@ pub struct MsgSetDeveloperAccount {
 }
 /// MsgSetDeveloperAccountResponse defines the Msg/SetDeveloperAccount response
 /// type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetDeveloperAccountResponse")]
 pub struct MsgSetDeveloperAccountResponse {}
 /// MsgSetPoolWeights defines the Msg/SetPoolWeights request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetPoolWeights")]
@@ -244,27 +951,29 @@ pub struct MsgSetPoolWeights {
     pub pool_weights: ::core::option::Option<PoolWeights>,
 }
 /// MsgSetPoolWeightsResponse defines the Msg/SetPoolWeights response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetPoolWeightsResponse")]
 pub struct MsgSetPoolWeightsResponse {}
 /// MsgSetMaxPoolPointsPerTx defines the Msg/SetMaxPoolPointsPerTx request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerTx")]
@@ -283,28 +992,30 @@ pub struct MsgSetMaxPoolPointsPerTx {
 }
 /// MsgSetMaxPoolPointsPerTxResponse defines the Msg/SetMaxPoolPointsPerTx
 /// response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerTxResponse")]
 pub struct MsgSetMaxPoolPointsPerTxResponse {}
 /// MsgSetMaxPoolPointsPerBlock defines the Msg/SetMaxPoolPointsPerBlock request
 /// type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerBlock")]
@@ -324,27 +1035,29 @@ pub struct MsgSetMaxPoolPointsPerBlock {
 }
 /// MsgSetMaxPoolPointsPerBlockResponse defines the
 /// Msg/SetMaxPoolPointsPerBlock response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetMaxPoolPointsPerBlockResponse")]
 pub struct MsgSetMaxPoolPointsPerBlockResponse {}
 /// MsgSetBaseDenoms defines the Msg/SetBaseDenoms request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetBaseDenoms")]
@@ -357,625 +1070,19 @@ pub struct MsgSetBaseDenoms {
     pub base_denoms: ::prost::alloc::vec::Vec<BaseDenom>,
 }
 /// MsgSetBaseDenomsResponse defines the Msg/SetBaseDenoms response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.MsgSetBaseDenomsResponse")]
 pub struct MsgSetBaseDenomsResponse {}
-/// SetProtoRevEnabledProposal is a gov Content type to update whether the
-/// protorev module is enabled
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.SetProtoRevEnabledProposal")]
-pub struct SetProtoRevEnabledProposal {
-    #[prost(string, tag = "1")]
-    pub title: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(bool, tag = "3")]
-    pub enabled: bool,
-}
-/// SetProtoRevAdminAccountProposal is a gov Content type to set the admin
-/// account that will receive permissions to alter hot routes and set the
-/// developer address that will be receiving a share of profits from the module
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.SetProtoRevAdminAccountProposal")]
-pub struct SetProtoRevAdminAccountProposal {
-    #[prost(string, tag = "1")]
-    pub title: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub account: ::prost::alloc::string::String,
-}
-/// Params defines the parameters for the module.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.Params")]
-pub struct Params {
-    /// Boolean whether the module is going to be enabled
-    #[prost(bool, tag = "1")]
-    pub enabled: bool,
-}
-/// QueryParamsRequest is request type for the Query/Params RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryParamsRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/Params",
-    response_type = QueryParamsResponse
-)]
-pub struct QueryParamsRequest {}
-/// QueryParamsResponse is response type for the Query/Params RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryParamsResponse")]
-pub struct QueryParamsResponse {
-    /// params holds all the parameters of this module.
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-}
-/// QueryGetProtoRevNumberOfTradesRequest is request type for the
-/// Query/GetProtoRevNumberOfTrades RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevNumberOfTradesRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevNumberOfTrades",
-    response_type = QueryGetProtoRevNumberOfTradesResponse
-)]
-pub struct QueryGetProtoRevNumberOfTradesRequest {}
-/// QueryGetProtoRevNumberOfTradesResponse is response type for the
-/// Query/GetProtoRevNumberOfTrades RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevNumberOfTradesResponse")]
-pub struct QueryGetProtoRevNumberOfTradesResponse {
-    /// number_of_trades is the number of trades the module has executed
-    #[prost(string, tag = "1")]
-    pub number_of_trades: ::prost::alloc::string::String,
-}
-/// QueryGetProtoRevProfitsByDenomRequest is request type for the
-/// Query/GetProtoRevProfitsByDenom RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevProfitsByDenomRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevProfitsByDenom",
-    response_type = QueryGetProtoRevProfitsByDenomResponse
-)]
-pub struct QueryGetProtoRevProfitsByDenomRequest {
-    /// denom is the denom to query profits by
-    #[prost(string, tag = "1")]
-    pub denom: ::prost::alloc::string::String,
-}
-/// QueryGetProtoRevProfitsByDenomResponse is response type for the
-/// Query/GetProtoRevProfitsByDenom RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevProfitsByDenomResponse")]
-pub struct QueryGetProtoRevProfitsByDenomResponse {
-    /// profit is the profits of the module by the selected denom
-    #[prost(message, optional, tag = "1")]
-    pub profit: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
-}
-/// QueryGetProtoRevAllProfitsRequest is request type for the
-/// Query/GetProtoRevAllProfits RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAllProfitsRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevAllProfits",
-    response_type = QueryGetProtoRevAllProfitsResponse
-)]
-pub struct QueryGetProtoRevAllProfitsRequest {}
-/// QueryGetProtoRevAllProfitsResponse is response type for the
-/// Query/GetProtoRevAllProfits RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAllProfitsResponse")]
-pub struct QueryGetProtoRevAllProfitsResponse {
-    /// profits is a list of all of the profits from the module
-    #[prost(message, repeated, tag = "1")]
-    pub profits: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
-}
-/// QueryGetProtoRevStatisticsByPoolRequest is request type for the
-/// Query/GetProtoRevStatisticsByRoute RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevStatisticsByRouteRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevStatisticsByRoute",
-    response_type = QueryGetProtoRevStatisticsByRouteResponse
-)]
-pub struct QueryGetProtoRevStatisticsByRouteRequest {
-    /// route is the set of pool ids to query statistics by i.e. 1,2,3
-    #[prost(uint64, repeated, tag = "1")]
-    pub route: ::prost::alloc::vec::Vec<u64>,
-}
-/// QueryGetProtoRevStatisticsByRouteResponse is response type for the
-/// Query/GetProtoRevStatisticsByRoute RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevStatisticsByRouteResponse")]
-pub struct QueryGetProtoRevStatisticsByRouteResponse {
-    /// statistics contains the number of trades the module has executed after a
-    /// swap on a given pool and the profits from the trades
-    #[prost(message, optional, tag = "1")]
-    pub statistics: ::core::option::Option<RouteStatistics>,
-}
-/// QueryGetProtoRevAllRouteStatisticsRequest is request type for the
-/// Query/GetProtoRevAllRouteStatistics RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAllRouteStatisticsRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevAllRouteStatistics",
-    response_type = QueryGetProtoRevAllRouteStatisticsResponse
-)]
-pub struct QueryGetProtoRevAllRouteStatisticsRequest {}
-/// QueryGetProtoRevAllRouteStatisticsResponse is response type for the
-/// Query/GetProtoRevAllRouteStatistics RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAllRouteStatisticsResponse")]
-pub struct QueryGetProtoRevAllRouteStatisticsResponse {
-    /// statistics contains the number of trades/profits the module has executed on
-    /// all routes it has successfully executed a trade on
-    #[prost(message, repeated, tag = "1")]
-    pub statistics: ::prost::alloc::vec::Vec<RouteStatistics>,
-}
-/// QueryGetProtoRevTokenPairArbRoutesRequest is request type for the
-/// Query/GetProtoRevTokenPairArbRoutes RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevTokenPairArbRoutesRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevTokenPairArbRoutes",
-    response_type = QueryGetProtoRevTokenPairArbRoutesResponse
-)]
-pub struct QueryGetProtoRevTokenPairArbRoutesRequest {}
-/// QueryGetProtoRevTokenPairArbRoutesResponse is response type for the
-/// Query/GetProtoRevTokenPairArbRoutes RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevTokenPairArbRoutesResponse")]
-pub struct QueryGetProtoRevTokenPairArbRoutesResponse {
-    /// routes is a list of all of the hot routes that the module is currently
-    /// arbitraging
-    #[prost(message, repeated, tag = "1")]
-    pub routes: ::prost::alloc::vec::Vec<TokenPairArbRoutes>,
-}
-/// QueryGetProtoRevAdminAccountRequest is request type for the
-/// Query/GetProtoRevAdminAccount RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAdminAccountRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevAdminAccount",
-    response_type = QueryGetProtoRevAdminAccountResponse
-)]
-pub struct QueryGetProtoRevAdminAccountRequest {}
-/// QueryGetProtoRevAdminAccountResponse is response type for the
-/// Query/GetProtoRevAdminAccount RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevAdminAccountResponse")]
-pub struct QueryGetProtoRevAdminAccountResponse {
-    /// admin_account is the admin account of the module
-    #[prost(string, tag = "1")]
-    pub admin_account: ::prost::alloc::string::String,
-}
-/// QueryGetProtoRevDeveloperAccountRequest is request type for the
-/// Query/GetProtoRevDeveloperAccount RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevDeveloperAccountRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevDeveloperAccount",
-    response_type = QueryGetProtoRevDeveloperAccountResponse
-)]
-pub struct QueryGetProtoRevDeveloperAccountRequest {}
-/// QueryGetProtoRevDeveloperAccountResponse is response type for the
-/// Query/GetProtoRevDeveloperAccount RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevDeveloperAccountResponse")]
-pub struct QueryGetProtoRevDeveloperAccountResponse {
-    /// developer_account is the developer account of the module
-    #[prost(string, tag = "1")]
-    pub developer_account: ::prost::alloc::string::String,
-}
-/// QueryGetProtoRevPoolWeightsRequest is request type for the
-/// Query/GetProtoRevPoolWeights RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevPoolWeightsRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevPoolWeights",
-    response_type = QueryGetProtoRevPoolWeightsResponse
-)]
-pub struct QueryGetProtoRevPoolWeightsRequest {}
-/// QueryGetProtoRevPoolWeightsResponse is response type for the
-/// Query/GetProtoRevPoolWeights RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevPoolWeightsResponse")]
-pub struct QueryGetProtoRevPoolWeightsResponse {
-    /// pool_weights is a list of all of the pool weights
-    #[prost(message, optional, tag = "1")]
-    pub pool_weights: ::core::option::Option<PoolWeights>,
-}
-/// QueryGetProtoRevMaxPoolPointsPerBlockRequest is request type for the
-/// Query/GetProtoRevMaxPoolPointsPerBlock RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(
-    type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevMaxPoolPointsPerBlockRequest"
-)]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevMaxPoolPointsPerBlock",
-    response_type = QueryGetProtoRevMaxPoolPointsPerBlockResponse
-)]
-pub struct QueryGetProtoRevMaxPoolPointsPerBlockRequest {}
-/// QueryGetProtoRevMaxPoolPointsPerBlockResponse is response type for the
-/// Query/GetProtoRevMaxPoolPointsPerBlock RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(
-    type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevMaxPoolPointsPerBlockResponse"
-)]
-pub struct QueryGetProtoRevMaxPoolPointsPerBlockResponse {
-    /// max_pool_points_per_block is the maximum number of pool points that can be
-    /// consumed per block
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_pool_points_per_block: u64,
-}
-/// QueryGetProtoRevMaxPoolPointsPerTxRequest is request type for the
-/// Query/GetProtoRevMaxPoolPointsPerTx RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevMaxPoolPointsPerTxRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevMaxPoolPointsPerTx",
-    response_type = QueryGetProtoRevMaxPoolPointsPerTxResponse
-)]
-pub struct QueryGetProtoRevMaxPoolPointsPerTxRequest {}
-/// QueryGetProtoRevMaxPoolPointsPerTxResponse is response type for the
-/// Query/GetProtoRevMaxPoolPointsPerTx RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevMaxPoolPointsPerTxResponse")]
-pub struct QueryGetProtoRevMaxPoolPointsPerTxResponse {
-    /// max_pool_points_per_tx is the maximum number of pool points that can be
-    /// consumed per transaction
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_pool_points_per_tx: u64,
-}
-/// QueryGetProtoRevBaseDenomsRequest is request type for the
-/// Query/GetProtoRevBaseDenoms RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevBaseDenomsRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevBaseDenoms",
-    response_type = QueryGetProtoRevBaseDenomsResponse
-)]
-pub struct QueryGetProtoRevBaseDenomsRequest {}
-/// QueryGetProtoRevBaseDenomsResponse is response type for the
-/// Query/GetProtoRevBaseDenoms RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevBaseDenomsResponse")]
-pub struct QueryGetProtoRevBaseDenomsResponse {
-    /// base_denoms is a list of all of the base denoms and step sizes
-    #[prost(message, repeated, tag = "1")]
-    pub base_denoms: ::prost::alloc::vec::Vec<BaseDenom>,
-}
-/// QueryGetProtoRevEnabledRequest is request type for the
-/// Query/GetProtoRevEnabled RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevEnabledRequest")]
-#[proto_query(
-    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevEnabled",
-    response_type = QueryGetProtoRevEnabledResponse
-)]
-pub struct QueryGetProtoRevEnabledRequest {}
-/// QueryGetProtoRevEnabledResponse is response type for the
-/// Query/GetProtoRevEnabled RPC method.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevEnabledResponse")]
-pub struct QueryGetProtoRevEnabledResponse {
-    /// enabled is whether the module is enabled
-    #[prost(bool, tag = "1")]
-    pub enabled: bool,
-}
-/// GenesisState defines the protorev module's genesis state.
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.protorev.v1beta1.GenesisState")]
-pub struct GenesisState {
-    /// Module Parameters
-    #[prost(message, optional, tag = "1")]
-    pub params: ::core::option::Option<Params>,
-    /// Hot routes that are configured on genesis
-    #[prost(message, repeated, tag = "2")]
-    pub token_pairs: ::prost::alloc::vec::Vec<TokenPairArbRoutes>,
-}
 pub struct ProtorevQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }

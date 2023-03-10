@@ -1,14 +1,15 @@
 use osmosis_std_derive::CosmwasmExt;
 /// EpochInfo is a struct that describes the data going into
 /// a timer defined by the x/epochs module.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.EpochInfo")]
@@ -70,14 +71,15 @@ pub struct EpochInfo {
     pub current_epoch_start_height: i64,
 }
 /// GenesisState defines the epochs module's genesis state.
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.GenesisState")]
@@ -85,14 +87,15 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "1")]
     pub epochs: ::prost::alloc::vec::Vec<EpochInfo>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoRequest")]
@@ -101,14 +104,15 @@ pub struct GenesisState {
     response_type = QueryEpochsInfoResponse
 )]
 pub struct QueryEpochsInfoRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryEpochsInfoResponse")]
@@ -116,14 +120,15 @@ pub struct QueryEpochsInfoResponse {
     #[prost(message, repeated, tag = "1")]
     pub epochs: ::prost::alloc::vec::Vec<EpochInfo>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochRequest")]
@@ -135,14 +140,15 @@ pub struct QueryCurrentEpochRequest {
     #[prost(string, tag = "1")]
     pub identifier: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
     PartialEq,
     Eq,
     ::prost::Message,
-    serde::Serialize,
-    serde::Deserialize,
-    schemars::JsonSchema,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.epochs.v1beta1.QueryCurrentEpochResponse")]
