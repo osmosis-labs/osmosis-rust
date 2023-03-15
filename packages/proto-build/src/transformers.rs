@@ -3,17 +3,14 @@ use std::path::Path;
 
 use heck::ToSnakeCase;
 use heck::ToUpperCamelCase;
+use proc_macro2::{Group, TokenStream as TokenStream2, TokenTree};
 use prost_types::{
     DescriptorProto, EnumDescriptorProto, FileDescriptorSet, ServiceDescriptorProto,
 };
+use quote::{format_ident, quote};
 use regex::Regex;
 use syn::ItemEnum;
 use syn::ItemMod;
-use syn::__private::quote::__private::Group;
-use syn::__private::quote::__private::TokenStream as TokenStream2;
-use syn::__private::quote::__private::TokenTree;
-use syn::__private::quote::format_ident;
-use syn::__private::quote::quote;
 use syn::{parse_quote, Attribute, Fields, Ident, Item, ItemStruct, Type};
 
 /// Regex substitutions to apply to the prost-generated output
