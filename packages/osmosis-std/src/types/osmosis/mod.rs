@@ -1,4 +1,5 @@
 pub mod accum;
+pub mod concentratedliquidity;
 pub mod downtimedetector;
 pub mod epochs;
 pub mod gamm;

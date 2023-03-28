@@ -194,6 +194,44 @@ pub struct QueryDenomsFromCreatorResponse {
     #[prost(string, repeated, tag = "1")]
     pub denoms: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.QueryBeforeSendHookAddressRequest")]
+#[proto_query(
+    path = "/osmosis.tokenfactory.v1beta1.Query/BeforeSendHookAddress",
+    response_type = QueryBeforeSendHookAddressResponse
+)]
+pub struct QueryBeforeSendHookAddressRequest {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+}
+/// QueryBeforeSendHookAddressResponse defines the response structure for the
+/// DenomBeforeSendHook gRPC query.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.QueryBeforeSendHookAddressResponse")]
+pub struct QueryBeforeSendHookAddressResponse {
+    #[prost(string, tag = "1")]
+    pub cosmwasm_address: ::prost::alloc::string::String,
+}
 /// MsgCreateDenom defines the message structure for the CreateDenom gRPC service
 /// method. It allows an account to create a new denom. It requires a sender
 /// address and a sub denomination. The (sender_address, sub_denomination) tuple
@@ -259,6 +297,8 @@ pub struct MsgMint {
     pub sender: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
     pub amount: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "3")]
+    pub mint_to_address: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -292,6 +332,8 @@ pub struct MsgBurn {
     pub sender: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
     pub amount: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "3")]
+    pub burn_from_address: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -343,6 +385,43 @@ pub struct MsgChangeAdmin {
 )]
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgChangeAdminResponse")]
 pub struct MsgChangeAdminResponse {}
+/// MsgSetBeforeSendHook is the sdk.Msg type for allowing an admin account to
+/// assign a CosmWasm contract to call with a BeforeSend hook
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgSetBeforeSendHook")]
+pub struct MsgSetBeforeSendHook {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub denom: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub cosmwasm_address: ::prost::alloc::string::String,
+}
+/// MsgSetBeforeSendHookResponse defines the response structure for an executed
+/// MsgSetBeforeSendHook message.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgSetBeforeSendHookResponse")]
+pub struct MsgSetBeforeSendHookResponse {}
 /// MsgSetDenomMetadata is the sdk.Msg type for allowing an admin account to set
 /// the denom's bank metadata
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -378,6 +457,41 @@ pub struct MsgSetDenomMetadata {
 )]
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgSetDenomMetadataResponse")]
 pub struct MsgSetDenomMetadataResponse {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgForceTransfer")]
+pub struct MsgForceTransfer {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub amount: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(string, tag = "3")]
+    pub transfer_from_address: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub transfer_to_address: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgForceTransferResponse")]
+pub struct MsgForceTransferResponse {}
 pub struct TokenfactoryQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
@@ -399,5 +513,11 @@ impl<'a, Q: cosmwasm_std::CustomQuery> TokenfactoryQuerier<'a, Q> {
         creator: ::prost::alloc::string::String,
     ) -> Result<QueryDenomsFromCreatorResponse, cosmwasm_std::StdError> {
         QueryDenomsFromCreatorRequest { creator }.query(self.querier)
+    }
+    pub fn before_send_hook_address(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QueryBeforeSendHookAddressResponse, cosmwasm_std::StdError> {
+        QueryBeforeSendHookAddressRequest { denom }.query(self.querier)
     }
 }
