@@ -6,3 +6,6 @@
 	path = dependencies/osmosis
 	url = https://github.com/osmosis-labs/osmosis.git
 	branch = v13.x
+[submodule "wasmd"]
+	path = dependencies/wasmd
+	url = https://github.com/CosmWasm/wasmd.git

@@ -14,7 +14,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.v1beta1.CoinCoin")]
+#[proto_message(type_url = "/cosmos.base.v1beta1.CoinCoinCoin")]
 pub struct Coin {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -36,7 +36,7 @@ pub struct Coin {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.v1beta1.DecCoinDecCoin")]
+#[proto_message(type_url = "/cosmos.base.v1beta1.DecCoinDecCoinDecCoin")]
 pub struct DecCoin {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
@@ -55,7 +55,7 @@ pub struct DecCoin {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.v1beta1.IntProtoIntProto")]
+#[proto_message(type_url = "/cosmos.base.v1beta1.IntProtoIntProtoIntProto")]
 pub struct IntProto {
     #[prost(string, tag = "1")]
     pub int: ::prost::alloc::string::String,
@@ -72,7 +72,7 @@ pub struct IntProto {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.v1beta1.DecProtoDecProto")]
+#[proto_message(type_url = "/cosmos.base.v1beta1.DecProtoDecProtoDecProto")]
 pub struct DecProto {
     #[prost(string, tag = "1")]
     pub dec: ::prost::alloc::string::String,
