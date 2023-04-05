@@ -87,6 +87,9 @@ pub enum PoolType {
     /// Concentrated is the pool model specific to concentrated liquidity. It is
     /// defined in x/concentrated-liquidity.
     Concentrated = 2,
+    /// CosmWasm is the pool model specific to CosmWasm. It is defined in
+    /// x/cosmwasmpool.
+    CosmWasm = 3,
 }
 impl PoolType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -98,6 +101,7 @@ impl PoolType {
             PoolType::Balancer => "Balancer",
             PoolType::Stableswap => "Stableswap",
             PoolType::Concentrated => "Concentrated",
+            PoolType::CosmWasm => "CosmWasm",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -106,6 +110,7 @@ impl PoolType {
             "Balancer" => Some(Self::Balancer),
             "Stableswap" => Some(Self::Stableswap),
             "Concentrated" => Some(Self::Concentrated),
+            "CosmWasm" => Some(Self::CosmWasm),
             _ => None,
         }
     }

@@ -72,6 +72,9 @@ pub struct SmoothWeightChangeParams {
 pub struct PoolParams {
     #[prost(string, tag = "1")]
     pub swap_fee: ::prost::alloc::string::String,
+    /// N.B.: exit fee is disabled during pool creation in x/poolmanager. While old
+    /// pools can maintain a non-zero fee. No new pool can be created with non-zero
+    /// fee anymore
     #[prost(string, tag = "2")]
     pub exit_fee: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "3")]
