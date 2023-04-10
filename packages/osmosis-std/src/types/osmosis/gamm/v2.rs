@@ -1,6 +1,5 @@
 use osmosis_std_derive::CosmwasmExt;
-/// QuerySpotPriceRequest defines the gRPC request structure for a SpotPrice
-/// query.
+/// Deprecated: please use alternate in x/poolmanager
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -17,6 +16,7 @@ use osmosis_std_derive::CosmwasmExt;
     path = "/osmosis.gamm.v2.Query/SpotPrice",
     response_type = QuerySpotPriceResponse
 )]
+#[deprecated]
 pub struct QuerySpotPriceRequest {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -29,8 +29,7 @@ pub struct QuerySpotPriceRequest {
     #[prost(string, tag = "3")]
     pub quote_asset_denom: ::prost::alloc::string::String,
 }
-/// QuerySpotPriceResponse defines the gRPC response structure for a SpotPrice
-/// query.
+/// Depreacted: please use alternate in x/poolmanager
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -43,6 +42,7 @@ pub struct QuerySpotPriceRequest {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v2.QuerySpotPriceResponse")]
+#[deprecated]
 pub struct QuerySpotPriceResponse {
     /// String of the Dec. Ex) 10.203uatom
     #[prost(string, tag = "1")]
@@ -55,6 +55,7 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
     pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
         Self { querier }
     }
+    #[deprecated]
     pub fn spot_price(
         &self,
         pool_id: u64,
