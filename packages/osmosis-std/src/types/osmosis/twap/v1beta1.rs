@@ -20,6 +20,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[proto_message(type_url = "/osmosis.twap.v1beta1.TwapRecord")]
 pub struct TwapRecord {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -75,6 +76,7 @@ pub struct TwapRecord {
 #[proto_message(type_url = "/osmosis.twap.v1beta1.Params")]
 pub struct Params {
     #[prost(string, tag = "1")]
+    #[serde(alias = "prune_epochIDentifier")]
     pub prune_epoch_identifier: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "2")]
     pub record_history_keep_period: ::core::option::Option<crate::shim::Duration>,
@@ -118,6 +120,7 @@ pub struct GenesisState {
 )]
 pub struct ArithmeticTwapRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -166,6 +169,7 @@ pub struct ArithmeticTwapResponse {
 )]
 pub struct ArithmeticTwapToNowRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -212,6 +216,7 @@ pub struct ArithmeticTwapToNowResponse {
 )]
 pub struct GeometricTwapRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -260,6 +265,7 @@ pub struct GeometricTwapResponse {
 )]
 pub struct GeometricTwapToNowRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

@@ -93,6 +93,7 @@ pub struct Params {
     pub genesis_epoch_provisions: ::prost::alloc::string::String,
     /// epoch_identifier mint epoch identifier e.g. (day, week).
     #[prost(string, tag = "3")]
+    #[serde(alias = "epochIDentifier")]
     pub epoch_identifier: ::prost::alloc::string::String,
     /// reduction_period_in_epochs the number of epochs it takes
     /// to reduce the rewards.

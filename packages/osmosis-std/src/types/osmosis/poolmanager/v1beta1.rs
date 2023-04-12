@@ -13,6 +13,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[proto_message(type_url = "/osmosis.poolmanager.v1beta1.SwapAmountInRoute")]
 pub struct SwapAmountInRoute {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -35,6 +36,7 @@ pub struct SwapAmountInRoute {
 #[proto_message(type_url = "/osmosis.poolmanager.v1beta1.SwapAmountOutRoute")]
 pub struct SwapAmountOutRoute {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -68,6 +70,7 @@ pub struct ModuleRoute {
     )]
     pub pool_type: i32,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -84,12 +87,6 @@ pub enum PoolType {
     /// Stableswap is the Solidly cfmm stable swap curve. Its pool model is defined
     /// in x/gamm.
     Stableswap = 1,
-    /// Concentrated is the pool model specific to concentrated liquidity. It is
-    /// defined in x/concentrated-liquidity.
-    Concentrated = 2,
-    /// CosmWasm is the pool model specific to CosmWasm. It is defined in
-    /// x/cosmwasmpool.
-    CosmWasm = 3,
 }
 impl PoolType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -100,8 +97,6 @@ impl PoolType {
         match self {
             PoolType::Balancer => "Balancer",
             PoolType::Stableswap => "Stableswap",
-            PoolType::Concentrated => "Concentrated",
-            PoolType::CosmWasm => "CosmWasm",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -109,8 +104,6 @@ impl PoolType {
         match value {
             "Balancer" => Some(Self::Balancer),
             "Stableswap" => Some(Self::Stableswap),
-            "Concentrated" => Some(Self::Concentrated),
-            "CosmWasm" => Some(Self::CosmWasm),
             _ => None,
         }
     }
@@ -149,6 +142,7 @@ pub struct Params {
 pub struct GenesisState {
     /// the next_pool_id
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "next_poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -291,7 +285,11 @@ pub struct ParamsResponse {
     response_type = EstimateSwapExactAmountInResponse
 )]
 pub struct EstimateSwapExactAmountInRequest {
+    /// TODO: CHANGE THIS TO RESERVED IN A PATCH RELEASE
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -301,36 +299,6 @@ pub struct EstimateSwapExactAmountInRequest {
     pub token_in: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "4")]
     pub routes: ::prost::alloc::vec::Vec<SwapAmountInRoute>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(
-    type_url = "/osmosis.poolmanager.v1beta1.EstimateSinglePoolSwapExactAmountInRequest"
-)]
-#[proto_query(
-    path = "/osmosis.poolmanager.v1beta1.Query/EstimateSinglePoolSwapExactAmountIn",
-    response_type = EstimateSwapExactAmountInResponse
-)]
-pub struct EstimateSinglePoolSwapExactAmountInRequest {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-    #[prost(string, tag = "2")]
-    pub token_in: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub token_out_denom: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -366,7 +334,11 @@ pub struct EstimateSwapExactAmountInResponse {
     response_type = EstimateSwapExactAmountOutResponse
 )]
 pub struct EstimateSwapExactAmountOutRequest {
+    /// TODO: CHANGE THIS TO RESERVED IN A PATCH RELEASE
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -375,36 +347,6 @@ pub struct EstimateSwapExactAmountOutRequest {
     #[prost(message, repeated, tag = "3")]
     pub routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
     #[prost(string, tag = "4")]
-    pub token_out: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(
-    type_url = "/osmosis.poolmanager.v1beta1.EstimateSinglePoolSwapExactAmountOutRequest"
-)]
-#[proto_query(
-    path = "/osmosis.poolmanager.v1beta1.Query/EstimateSinglePoolSwapExactAmountOut",
-    response_type = EstimateSwapExactAmountOutResponse
-)]
-pub struct EstimateSinglePoolSwapExactAmountOutRequest {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-    #[prost(string, tag = "2")]
-    pub token_in_denom: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
     pub token_out: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -461,137 +403,6 @@ pub struct NumPoolsResponse {
     )]
     pub num_pools: u64,
 }
-/// =============================== Pool
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.PoolRequest")]
-#[proto_query(
-    path = "/osmosis.poolmanager.v1beta1.Query/Pool",
-    response_type = PoolResponse
-)]
-pub struct PoolRequest {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.PoolResponse")]
-pub struct PoolResponse {
-    #[prost(message, optional, tag = "1")]
-    pub pool: ::core::option::Option<crate::shim::Any>,
-}
-/// =============================== AllPools
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.AllPoolsRequest")]
-#[proto_query(
-    path = "/osmosis.poolmanager.v1beta1.Query/AllPools",
-    response_type = AllPoolsResponse
-)]
-pub struct AllPoolsRequest {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.AllPoolsResponse")]
-pub struct AllPoolsResponse {
-    #[prost(message, repeated, tag = "1")]
-    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
-}
-/// SpotPriceRequest defines the gRPC request structure for a SpotPrice
-/// query.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.SpotPriceRequest")]
-#[proto_query(
-    path = "/osmosis.poolmanager.v1beta1.Query/SpotPrice",
-    response_type = SpotPriceResponse
-)]
-pub struct SpotPriceRequest {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-    #[prost(string, tag = "2")]
-    pub base_asset_denom: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub quote_asset_denom: ::prost::alloc::string::String,
-}
-/// SpotPriceResponse defines the gRPC response structure for a SpotPrice
-/// query.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.SpotPriceResponse")]
-pub struct SpotPriceResponse {
-    /// String of the Dec. Ex) 10.203uatom
-    #[prost(string, tag = "1")]
-    pub spot_price: ::prost::alloc::string::String,
-}
 pub struct PoolmanagerQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
@@ -604,76 +415,35 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
     }
     pub fn estimate_swap_exact_amount_in(
         &self,
+        sender: ::prost::alloc::string::String,
         pool_id: u64,
         token_in: ::prost::alloc::string::String,
         routes: ::prost::alloc::vec::Vec<SwapAmountInRoute>,
     ) -> Result<EstimateSwapExactAmountInResponse, cosmwasm_std::StdError> {
         EstimateSwapExactAmountInRequest {
+            sender,
             pool_id,
             token_in,
             routes,
-        }
-        .query(self.querier)
-    }
-    pub fn estimate_single_pool_swap_exact_amount_in(
-        &self,
-        pool_id: u64,
-        token_in: ::prost::alloc::string::String,
-        token_out_denom: ::prost::alloc::string::String,
-    ) -> Result<EstimateSwapExactAmountInResponse, cosmwasm_std::StdError> {
-        EstimateSinglePoolSwapExactAmountInRequest {
-            pool_id,
-            token_in,
-            token_out_denom,
         }
         .query(self.querier)
     }
     pub fn estimate_swap_exact_amount_out(
         &self,
+        sender: ::prost::alloc::string::String,
         pool_id: u64,
         routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
         token_out: ::prost::alloc::string::String,
     ) -> Result<EstimateSwapExactAmountOutResponse, cosmwasm_std::StdError> {
         EstimateSwapExactAmountOutRequest {
+            sender,
             pool_id,
             routes,
-            token_out,
-        }
-        .query(self.querier)
-    }
-    pub fn estimate_single_pool_swap_exact_amount_out(
-        &self,
-        pool_id: u64,
-        token_in_denom: ::prost::alloc::string::String,
-        token_out: ::prost::alloc::string::String,
-    ) -> Result<EstimateSwapExactAmountOutResponse, cosmwasm_std::StdError> {
-        EstimateSinglePoolSwapExactAmountOutRequest {
-            pool_id,
-            token_in_denom,
             token_out,
         }
         .query(self.querier)
     }
     pub fn num_pools(&self) -> Result<NumPoolsResponse, cosmwasm_std::StdError> {
         NumPoolsRequest {}.query(self.querier)
-    }
-    pub fn pool(&self, pool_id: u64) -> Result<PoolResponse, cosmwasm_std::StdError> {
-        PoolRequest { pool_id }.query(self.querier)
-    }
-    pub fn all_pools(&self, pool_id: u64) -> Result<AllPoolsResponse, cosmwasm_std::StdError> {
-        AllPoolsRequest { pool_id }.query(self.querier)
-    }
-    pub fn spot_price(
-        &self,
-        pool_id: u64,
-        base_asset_denom: ::prost::alloc::string::String,
-        quote_asset_denom: ::prost::alloc::string::String,
-    ) -> Result<SpotPriceResponse, cosmwasm_std::StdError> {
-        SpotPriceRequest {
-            pool_id,
-            base_asset_denom,
-            quote_asset_denom,
-        }
-        .query(self.querier)
     }
 }

@@ -72,9 +72,6 @@ pub struct SmoothWeightChangeParams {
 pub struct PoolParams {
     #[prost(string, tag = "1")]
     pub swap_fee: ::prost::alloc::string::String,
-    /// N.B.: exit fee is disabled during pool creation in x/poolmanager. While old
-    /// pools can maintain a non-zero fee. No new pool can be created with non-zero
-    /// fee anymore
     #[prost(string, tag = "2")]
     pub exit_fee: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "3")]
@@ -194,112 +191,6 @@ pub struct GenesisState {
     pub next_pool_number: u64,
     #[prost(message, optional, tag = "3")]
     pub params: ::core::option::Option<Params>,
-    #[prost(message, optional, tag = "4")]
-    pub migration_records: ::core::option::Option<MigrationRecords>,
-}
-/// MigrationRecords contains all the links between balancer and concentrated
-/// pools
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.MigrationRecords")]
-pub struct MigrationRecords {
-    #[prost(message, repeated, tag = "1")]
-    pub balancer_to_concentrated_pool_links:
-        ::prost::alloc::vec::Vec<BalancerToConcentratedPoolLink>,
-}
-/// BalancerToConcentratedPoolLink defines a single link between a single
-/// balancer pool and a single concentrated liquidity pool. This link is used to
-/// allow a balancer pool to migrate to a single canonical full range
-/// concentrated liquidity pool position
-/// A balancer pool can be linked to a maximum of one cl pool, and a cl pool can
-/// be linked to a maximum of one balancer pool.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.BalancerToConcentratedPoolLink")]
-pub struct BalancerToConcentratedPoolLink {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub balancer_pool_id: u64,
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub cl_pool_id: u64,
-}
-/// ReplaceMigrationRecordsProposal is a gov Content type for updating the
-/// migration records. If a ReplaceMigrationRecordsProposal passes, the
-/// proposal’s records override the existing MigrationRecords set in the module.
-/// Each record specifies a single connection between a single balancer pool and
-/// a single concentrated pool.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.ReplaceMigrationRecordsProposal")]
-pub struct ReplaceMigrationRecordsProposal {
-    #[prost(string, tag = "1")]
-    pub title: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub records: ::prost::alloc::vec::Vec<BalancerToConcentratedPoolLink>,
-}
-/// For example: if the existing DistrRecords were:
-/// [(Balancer 1, CL 5), (Balancer 2, CL 6), (Balancer 3, CL 7)]
-/// And an UpdateMigrationRecordsProposal includes
-/// [(Balancer 2, CL 0), (Balancer 3, CL 4), (Balancer 4, CL 10)]
-/// This would leave Balancer 1 record, delete Balancer 2 record,
-/// Edit Balancer 3 record, and Add Balancer 4 record
-/// The result MigrationRecords in state would be:
-/// [(Balancer 1, CL 5), (Balancer 3, CL 4), (Balancer 4, CL 10)]
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.UpdateMigrationRecordsProposal")]
-pub struct UpdateMigrationRecordsProposal {
-    #[prost(string, tag = "1")]
-    pub title: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub description: ::prost::alloc::string::String,
-    #[prost(message, repeated, tag = "3")]
-    pub records: ::prost::alloc::vec::Vec<BalancerToConcentratedPoolLink>,
 }
 /// ===================== MsgJoinPool
 /// This is really MsgJoinPoolNoSwap
@@ -319,6 +210,7 @@ pub struct MsgJoinPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -364,6 +256,7 @@ pub struct MsgExitPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -485,6 +378,7 @@ pub struct MsgJoinSwapExternAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -532,6 +426,7 @@ pub struct MsgJoinSwapShareAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -577,6 +472,7 @@ pub struct MsgExitSwapShareAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -622,6 +518,7 @@ pub struct MsgExitSwapExternAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -649,7 +546,6 @@ pub struct MsgExitSwapExternAmountOutResponse {
     pub share_in_amount: ::prost::alloc::string::String,
 }
 /// =============================== Pool
-/// Deprecated: please use the alternative in x/poolmanager
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -666,16 +562,15 @@ pub struct MsgExitSwapExternAmountOutResponse {
     path = "/osmosis.gamm.v1beta1.Query/Pool",
     response_type = QueryPoolResponse
 )]
-#[deprecated]
 pub struct QueryPoolRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub pool_id: u64,
 }
-/// Deprecated: please use the alternative in x/poolmanager
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -688,7 +583,6 @@ pub struct QueryPoolRequest {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryPoolResponse")]
-#[deprecated]
 pub struct QueryPoolResponse {
     #[prost(message, optional, tag = "1")]
     pub pool: ::core::option::Option<crate::shim::Any>,
@@ -795,6 +689,7 @@ pub struct QueryNumPoolsResponse {
 )]
 pub struct QueryPoolTypeRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -836,6 +731,7 @@ pub struct QueryPoolTypeResponse {
 )]
 pub struct QueryCalcJoinPoolSharesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -881,6 +777,7 @@ pub struct QueryCalcJoinPoolSharesResponse {
 )]
 pub struct QueryCalcExitPoolCoinsFromSharesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -924,6 +821,7 @@ pub struct QueryCalcExitPoolCoinsFromSharesResponse {
 )]
 pub struct QueryPoolParamsRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -965,6 +863,7 @@ pub struct QueryPoolParamsResponse {
 )]
 pub struct QueryTotalPoolLiquidityRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1006,6 +905,7 @@ pub struct QueryTotalPoolLiquidityResponse {
 )]
 pub struct QueryTotalSharesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1047,6 +947,7 @@ pub struct QueryTotalSharesResponse {
 )]
 pub struct QueryCalcJoinPoolNoSwapSharesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1094,6 +995,7 @@ pub struct QueryCalcJoinPoolNoSwapSharesResponse {
 #[deprecated]
 pub struct QuerySpotPriceRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1193,6 +1095,7 @@ pub struct QuerySwapExactAmountInRequest {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1242,6 +1145,7 @@ pub struct QuerySwapExactAmountOutRequest {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1339,7 +1243,6 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
         }
         .query(self.querier)
     }
-    #[deprecated]
     pub fn pool(&self, pool_id: u64) -> Result<QueryPoolResponse, cosmwasm_std::StdError> {
         QueryPoolRequest { pool_id }.query(self.querier)
     }

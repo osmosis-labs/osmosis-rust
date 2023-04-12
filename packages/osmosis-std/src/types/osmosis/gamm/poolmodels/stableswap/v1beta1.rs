@@ -18,9 +18,6 @@ use osmosis_std_derive::CosmwasmExt;
 pub struct PoolParams {
     #[prost(string, tag = "1")]
     pub swap_fee: ::prost::alloc::string::String,
-    /// N.B.: exit fee is disabled during pool creation in x/poolmanager. While old
-    /// pools can maintain a non-zero fee. No new pool can be created with non-zero
-    /// fee anymore
     #[prost(string, tag = "2")]
     pub exit_fee: ::prost::alloc::string::String,
 }
@@ -119,6 +116,7 @@ pub struct MsgCreateStableswapPool {
 )]
 pub struct MsgCreateStableswapPoolResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -145,6 +143,7 @@ pub struct MsgStableSwapAdjustScalingFactors {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
