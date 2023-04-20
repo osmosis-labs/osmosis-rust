@@ -14,7 +14,7 @@ use proto_build::{
 const COSMOS_SDK_REV: &str = "origin/osmosis-main";
 
 /// The osmosis commit or tag to be cloned and used to build the proto files
-const OSMOSIS_REV: &str = "origin/main";
+const OSMOSIS_REV: &str = "origin/v15.0.1-rc0";
 
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.
