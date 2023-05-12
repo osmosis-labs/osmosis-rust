@@ -19,6 +19,7 @@ pub struct FeeToken {
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -140,6 +141,7 @@ pub struct QueryDenomSpotPriceRequest {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomSpotPriceResponse")]
 pub struct QueryDenomSpotPriceResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -182,6 +184,7 @@ pub struct QueryDenomPoolIdRequest {
 #[proto_message(type_url = "/osmosis.txfees.v1beta1.QueryDenomPoolIdResponse")]
 pub struct QueryDenomPoolIdResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

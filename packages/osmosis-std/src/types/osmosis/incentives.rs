@@ -95,6 +95,7 @@ pub struct Params {
     /// distr_epoch_identifier is what epoch type distribution will be triggered by
     /// (day, week, etc.)
     #[prost(string, tag = "1")]
+    #[serde(alias = "distr_epochIDentifier")]
     pub distr_epoch_identifier: ::prost::alloc::string::String,
 }
 /// GenesisState defines the incentives module's various parameters when first
@@ -125,6 +126,7 @@ pub struct GenesisState {
     /// last_gauge_id is what the gauge number will increment from when creating
     /// the next gauge after genesis
     #[prost(uint64, tag = "4")]
+    #[serde(alias = "last_gaugeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -443,6 +445,7 @@ pub struct RewardsEstRequest {
     pub owner: ::prost::alloc::string::String,
     /// Lock IDs included in future reward estimation
     #[prost(uint64, repeated, tag = "2")]
+    #[serde(alias = "lockIDs")]
     pub lock_ids: ::prost::alloc::vec::Vec<u64>,
     /// Upper time limit of reward estimation
     /// Lower limit is current epoch
@@ -580,6 +583,7 @@ pub struct MsgAddToGauge {
     pub owner: ::prost::alloc::string::String,
     /// gauge_id is the ID of gauge that rewards are getting added to
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "gaugeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

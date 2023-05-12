@@ -67,6 +67,7 @@ pub struct DistrInfo {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.DistrRecord")]
 pub struct DistrRecord {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "gaugeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -89,12 +90,14 @@ pub struct DistrRecord {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.PoolToGauge")]
 pub struct PoolToGauge {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub pool_id: u64,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "gaugeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -215,6 +218,7 @@ pub struct UpdatePoolIncentivesProposal {
 )]
 pub struct QueryGaugeIdsRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -235,6 +239,7 @@ pub struct QueryGaugeIdsRequest {
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.QueryGaugeIdsResponse")]
 pub struct QueryGaugeIdsResponse {
     #[prost(message, repeated, tag = "1")]
+    #[serde(alias = "gaugeIDs_with_duration")]
     pub gauge_ids_with_duration:
         ::prost::alloc::vec::Vec<query_gauge_ids_response::GaugeIdWithDuration>,
 }
@@ -257,6 +262,7 @@ pub mod query_gauge_ids_response {
     )]
     pub struct GaugeIdWithDuration {
         #[prost(uint64, tag = "1")]
+        #[serde(alias = "gaugeID")]
         #[serde(
             serialize_with = "crate::serde::as_str::serialize",
             deserialize_with = "crate::serde::as_str::deserialize"
@@ -398,6 +404,7 @@ pub struct QueryIncentivizedPoolsRequest {}
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.IncentivizedPool")]
 pub struct IncentivizedPool {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -406,6 +413,7 @@ pub struct IncentivizedPool {
     #[prost(message, optional, tag = "2")]
     pub lockable_duration: ::core::option::Option<crate::shim::Duration>,
     #[prost(uint64, tag = "3")]
+    #[serde(alias = "gaugeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

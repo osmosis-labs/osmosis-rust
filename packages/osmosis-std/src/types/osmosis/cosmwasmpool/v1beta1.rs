@@ -49,12 +49,14 @@ pub struct CosmWasmPool {
     #[prost(string, tag = "2")]
     pub contract_address: ::prost::alloc::string::String,
     #[prost(uint64, tag = "3")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub pool_id: u64,
     #[prost(uint64, tag = "4")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -76,6 +78,7 @@ pub struct CosmWasmPool {
 #[proto_message(type_url = "/osmosis.cosmwasmpool.v1beta1.MsgCreateCosmWasmPool")]
 pub struct MsgCreateCosmWasmPool {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -101,6 +104,7 @@ pub struct MsgCreateCosmWasmPool {
 #[proto_message(type_url = "/osmosis.cosmwasmpool.v1beta1.MsgCreateCosmWasmPoolResponse")]
 pub struct MsgCreateCosmWasmPoolResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

@@ -19,6 +19,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[deprecated]
 pub struct QuerySpotPriceRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

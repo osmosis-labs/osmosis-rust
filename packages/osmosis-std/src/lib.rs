@@ -9,3 +9,5 @@ pub const OSMOSISD_VERSION: &str = include_str!("types/OSMOSIS_COMMIT");
 mod serde;
 pub mod shim;
 pub mod types;
+
+pub use shim::{cosmwasm_to_proto_coins, try_proto_to_cosmwasm_coins};

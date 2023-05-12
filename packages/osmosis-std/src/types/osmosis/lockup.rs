@@ -101,6 +101,7 @@ pub struct SyntheticLock {
     /// Underlying Lock ID is the underlying native lock's id for this synthetic
     /// lockup. A synthetic lock MUST have an underlying lock.
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "underlying_lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -163,6 +164,7 @@ impl LockQueryType {
 #[proto_message(type_url = "/osmosis.lockup.GenesisState")]
 pub struct GenesisState {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "last_lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -570,6 +572,7 @@ pub struct LockedDenomResponse {
 #[proto_query(path = "/osmosis.lockup.Query/LockedByID", response_type = LockedResponse)]
 pub struct LockedRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -623,6 +626,7 @@ pub struct NextLockIdRequest {}
 #[proto_message(type_url = "/osmosis.lockup.NextLockIDResponse")]
 pub struct NextLockIdResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -647,6 +651,7 @@ pub struct NextLockIdResponse {
 )]
 pub struct SyntheticLockupsByLockupIdRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -971,6 +976,7 @@ pub struct MsgBeginUnlockingResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "unlocking_lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

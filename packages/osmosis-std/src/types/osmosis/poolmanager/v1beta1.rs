@@ -13,6 +13,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[proto_message(type_url = "/osmosis.poolmanager.v1beta1.SwapAmountInRoute")]
 pub struct SwapAmountInRoute {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -35,6 +36,7 @@ pub struct SwapAmountInRoute {
 #[proto_message(type_url = "/osmosis.poolmanager.v1beta1.SwapAmountOutRoute")]
 pub struct SwapAmountOutRoute {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -68,6 +70,7 @@ pub struct ModuleRoute {
     )]
     pub pool_type: i32,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -149,6 +152,7 @@ pub struct Params {
 pub struct GenesisState {
     /// the next_pool_id
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "next_poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -292,6 +296,7 @@ pub struct ParamsResponse {
 )]
 pub struct EstimateSwapExactAmountInRequest {
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -322,6 +327,7 @@ pub struct EstimateSwapExactAmountInRequest {
 )]
 pub struct EstimateSinglePoolSwapExactAmountInRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -367,6 +373,7 @@ pub struct EstimateSwapExactAmountInResponse {
 )]
 pub struct EstimateSwapExactAmountOutRequest {
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -397,6 +404,7 @@ pub struct EstimateSwapExactAmountOutRequest {
 )]
 pub struct EstimateSinglePoolSwapExactAmountOutRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -480,6 +488,7 @@ pub struct NumPoolsResponse {
 )]
 pub struct PoolRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -521,6 +530,7 @@ pub struct PoolResponse {
 )]
 pub struct AllPoolsRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -563,6 +573,7 @@ pub struct AllPoolsResponse {
 )]
 pub struct SpotPriceRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

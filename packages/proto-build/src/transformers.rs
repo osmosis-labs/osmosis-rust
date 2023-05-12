@@ -201,12 +201,24 @@ pub fn serde_alias_id_with_uppercased(s: ItemStruct) -> ItemStruct {
         .clone()
         .into_iter()
         .map(|mut field| {
-            if field.ident == Some(format_ident!("id")) {
-                let serde_alias_id: syn::Attribute = parse_quote! {
-                    #[serde(alias = "ID")]
-                };
-                field.attrs.append(&mut vec![serde_alias_id]);
-                field
+            if let Some(ident) = &field.ident {
+                let ident_str = ident.to_string();
+                if ident_str == "id" {
+                    let serde_alias_id: syn::Attribute = parse_quote! {
+                        #[serde(alias = "ID")]
+                    };
+                    field.attrs.append(&mut vec![serde_alias_id]);
+                    field
+                } else if ident_str.contains("_id") {
+                    let ident_str = ident_str.replace("_id", "ID");
+                    let serde_alias_id: syn::Attribute = parse_quote! {
+                        #[serde(alias = #ident_str)]
+                    };
+                    field.attrs.append(&mut vec![serde_alias_id]);
+                    field
+                } else {
+                    field
+                }
             } else {
                 field
             }
@@ -612,6 +624,32 @@ mod tests {
                 #[serde(alias = "ID")]
                 id: u64,
                 duration: Duration,
+            }
+        };
+
+        assert_ast_eq!(result, expected);
+    }
+
+    #[test]
+    #[allow(non_snake_case)]
+    fn test_alias_partial_id_with_ID() {
+        let item_struct: ItemStruct = syn::parse_quote! {
+            #[derive(PartialEq, Eq, Debug)]
+            pub struct FeeToken {
+                pub denom: ::prost::alloc::string::String,
+
+                pub pool_id: u64,
+            }
+        };
+
+        let result = serde_alias_id_with_uppercased(item_struct);
+
+        let expected: ItemStruct = syn::parse_quote! {
+            #[derive(PartialEq, Eq, Debug)]
+            pub struct FeeToken {
+                pub denom: ::prost::alloc::string::String,
+                #[serde(alias = "poolID")]
+                pub pool_id: u64,
             }
         };
 

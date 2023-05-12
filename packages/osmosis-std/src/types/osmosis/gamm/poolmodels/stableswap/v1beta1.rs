@@ -119,6 +119,7 @@ pub struct MsgCreateStableswapPool {
 )]
 pub struct MsgCreateStableswapPoolResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -145,6 +146,7 @@ pub struct MsgStableSwapAdjustScalingFactors {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

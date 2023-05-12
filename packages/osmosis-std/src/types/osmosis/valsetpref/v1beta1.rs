@@ -280,6 +280,7 @@ pub struct MsgDelegateBondedTokens {
     pub delegator: ::prost::alloc::string::String,
     /// lockup id of osmo in the pool
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

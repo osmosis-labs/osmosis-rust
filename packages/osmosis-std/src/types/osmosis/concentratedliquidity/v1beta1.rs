@@ -15,6 +15,7 @@ use osmosis_std_derive::CosmwasmExt;
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.Position")]
 pub struct Position {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "positionID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -23,6 +24,7 @@ pub struct Position {
     #[prost(string, tag = "2")]
     pub address: ::prost::alloc::string::String,
     #[prost(uint64, tag = "3")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -62,10 +64,10 @@ pub struct Position {
 pub struct PositionWithUnderlyingAssetBreakdown {
     #[prost(message, optional, tag = "1")]
     pub position: ::core::option::Option<Position>,
-    #[prost(string, tag = "2")]
-    pub asset0: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub asset1: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub asset0: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "3")]
+    pub asset1: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -125,6 +127,7 @@ pub struct UptimeTracker {
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.IncentiveRecord")]
 pub struct IncentiveRecord {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -190,6 +193,7 @@ pub struct IncentiveRecordBody {
 pub struct FullTick {
     /// pool id associated with the tick.
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -258,6 +262,7 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "3")]
     pub positions: ::prost::alloc::vec::Vec<Position>,
     #[prost(uint64, tag = "4")]
+    #[serde(alias = "next_positionID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -307,6 +312,7 @@ pub struct QueryUserPositionsRequest {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -348,6 +354,7 @@ pub struct QueryUserPositionsResponse {
 )]
 pub struct QueryPositionByIdRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "positionID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -506,6 +513,7 @@ pub struct LiquidityDepthWithRange {
 )]
 pub struct QueryLiquidityNetInDirectionRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -513,10 +521,22 @@ pub struct QueryLiquidityNetInDirectionRequest {
     pub pool_id: u64,
     #[prost(string, tag = "2")]
     pub token_in: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub start_tick: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub bound_tick: ::prost::alloc::string::String,
+    #[prost(int64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub start_tick: i64,
+    #[prost(bool, tag = "4")]
+    pub use_cur_tick: bool,
+    #[prost(int64, tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub bound_tick: i64,
+    #[prost(bool, tag = "6")]
+    pub use_no_bound: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -565,6 +585,7 @@ pub struct QueryLiquidityNetInDirectionResponse {
 )]
 pub struct QueryTotalLiquidityForRangeRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -608,6 +629,7 @@ pub struct QueryTotalLiquidityForRangeResponse {
 )]
 pub struct QueryClaimableFeesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "positionID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -678,6 +700,7 @@ pub struct MsgCreateConcentratedPool {
 )]
 pub struct MsgCreateConcentratedPoolResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -754,6 +777,7 @@ pub struct Pool {
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCreatePosition")]
 pub struct MsgCreatePosition {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -796,6 +820,7 @@ pub struct MsgCreatePosition {
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCreatePositionResponse")]
 pub struct MsgCreatePositionResponse {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "positionID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -825,6 +850,7 @@ pub struct MsgCreatePositionResponse {
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgWithdrawPosition")]
 pub struct MsgWithdrawPosition {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "positionID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -868,6 +894,7 @@ pub struct MsgWithdrawPositionResponse {
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCollectFees")]
 pub struct MsgCollectFees {
     #[prost(uint64, repeated, packed = "false", tag = "1")]
+    #[serde(alias = "positionIDs")]
     pub position_ids: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, tag = "2")]
     pub sender: ::prost::alloc::string::String,
@@ -903,6 +930,7 @@ pub struct MsgCollectFeesResponse {
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCollectIncentives")]
 pub struct MsgCollectIncentives {
     #[prost(uint64, repeated, packed = "false", tag = "1")]
+    #[serde(alias = "positionIDs")]
     pub position_ids: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, tag = "2")]
     pub sender: ::prost::alloc::string::String,
@@ -939,6 +967,7 @@ pub struct MsgCollectIncentivesResponse {
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCreateIncentive")]
 pub struct MsgCreateIncentive {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -981,6 +1010,49 @@ pub struct MsgCreateIncentiveResponse {
     #[prost(message, optional, tag = "5")]
     pub min_uptime: ::core::option::Option<crate::shim::Duration>,
 }
+/// ===================== MsgFungifyChargedPositions
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgFungifyChargedPositions")]
+pub struct MsgFungifyChargedPositions {
+    #[prost(uint64, repeated, packed = "false", tag = "1")]
+    #[serde(alias = "positionIDs")]
+    pub position_ids: ::prost::alloc::vec::Vec<u64>,
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.concentratedliquidity.v1beta1.MsgFungifyChargedPositionsResponse"
+)]
+pub struct MsgFungifyChargedPositionsResponse {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "new_positionID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub new_position_id: u64,
+}
 pub struct ConcentratedliquidityQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
@@ -1016,14 +1088,18 @@ impl<'a, Q: cosmwasm_std::CustomQuery> ConcentratedliquidityQuerier<'a, Q> {
         &self,
         pool_id: u64,
         token_in: ::prost::alloc::string::String,
-        start_tick: ::prost::alloc::string::String,
-        bound_tick: ::prost::alloc::string::String,
+        start_tick: i64,
+        use_cur_tick: bool,
+        bound_tick: i64,
+        use_no_bound: bool,
     ) -> Result<QueryLiquidityNetInDirectionResponse, cosmwasm_std::StdError> {
         QueryLiquidityNetInDirectionRequest {
             pool_id,
             token_in,
             start_tick,
+            use_cur_tick,
             bound_tick,
+            use_no_bound,
         }
         .query(self.querier)
     }

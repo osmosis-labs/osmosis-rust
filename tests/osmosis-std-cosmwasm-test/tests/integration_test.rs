@@ -10,8 +10,9 @@ use osmosis_std::{
         epochs::v1beta1::EpochInfo,
         gamm::{
             self,
-            v1beta1::{MsgSwapExactAmountInResponse, SwapAmountInRoute},
+            v1beta1::{MsgSwapExactAmountInResponse, Pool, PoolParams},
         },
+        poolmanager::v1beta1::SwapAmountInRoute,
         twap::v1beta1::GeometricTwapToNowRequest,
     },
 };
@@ -20,8 +21,8 @@ use osmosis_std_cosmwasm_test::msg::{
     GeometricTwapToNowResponse, QueryEpochsInfoResponse, QueryMapResponse, QueryMsg,
     QueryNumPoolsResponse, QueryPoolParamsResponse, QueryPoolResponse,
 };
-use osmosis_testing::RunnerError::ExecuteError;
-use osmosis_testing::{Account, Runner};
+use osmosis_test_tube::RunnerError::ExecuteError;
+use osmosis_test_tube::{Account, Runner};
 
 #[test]
 fn test_u64_response_deser() {
@@ -148,8 +149,7 @@ fn test_any_balancer_pool_response_deser() {
                 .query(&contract_addr, &QueryMsg::QueryPool { pool_id })
                 .unwrap();
 
-            let pool: osmosis_testing::osmosis_std::types::osmosis::gamm::v1beta1::Pool =
-                res.pool.unwrap().try_into().unwrap();
+            let pool: Pool = res.pool.unwrap().try_into().unwrap();
             assert_eq!(pool, helpers::mock_balancner_pool());
         },
         false,
@@ -167,8 +167,7 @@ fn test_any_balancer_pool_params_response_deser() {
                 .query(&contract_addr, &QueryMsg::QueryPoolParams { pool_id })
                 .unwrap();
 
-            let pool: osmosis_testing::osmosis_std::types::osmosis::gamm::v1beta1::PoolParams =
-                res.params.unwrap().try_into().unwrap();
+            let pool: PoolParams = res.params.unwrap().try_into().unwrap();
 
             assert_eq!(pool, helpers::mock_balancner_pool().pool_params.unwrap());
         },

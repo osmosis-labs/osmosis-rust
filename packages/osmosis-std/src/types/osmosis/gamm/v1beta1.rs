@@ -236,12 +236,14 @@ pub struct MigrationRecords {
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.BalancerToConcentratedPoolLink")]
 pub struct BalancerToConcentratedPoolLink {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "balancer_poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub balancer_pool_id: u64,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "cl_poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -319,6 +321,7 @@ pub struct MsgJoinPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -364,6 +367,7 @@ pub struct MsgExitPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -485,6 +489,7 @@ pub struct MsgJoinSwapExternAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -532,6 +537,7 @@ pub struct MsgJoinSwapShareAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -577,6 +583,7 @@ pub struct MsgExitSwapShareAmountIn {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -622,6 +629,7 @@ pub struct MsgExitSwapExternAmountOut {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -669,6 +677,7 @@ pub struct MsgExitSwapExternAmountOutResponse {
 #[deprecated]
 pub struct QueryPoolRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -795,6 +804,7 @@ pub struct QueryNumPoolsResponse {
 )]
 pub struct QueryPoolTypeRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -836,6 +846,7 @@ pub struct QueryPoolTypeResponse {
 )]
 pub struct QueryCalcJoinPoolSharesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -881,6 +892,7 @@ pub struct QueryCalcJoinPoolSharesResponse {
 )]
 pub struct QueryCalcExitPoolCoinsFromSharesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -924,6 +936,7 @@ pub struct QueryCalcExitPoolCoinsFromSharesResponse {
 )]
 pub struct QueryPoolParamsRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -965,6 +978,7 @@ pub struct QueryPoolParamsResponse {
 )]
 pub struct QueryTotalPoolLiquidityRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1006,6 +1020,7 @@ pub struct QueryTotalPoolLiquidityResponse {
 )]
 pub struct QueryTotalSharesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1047,6 +1062,7 @@ pub struct QueryTotalSharesResponse {
 )]
 pub struct QueryCalcJoinPoolNoSwapSharesRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1094,6 +1110,7 @@ pub struct QueryCalcJoinPoolNoSwapSharesResponse {
 #[deprecated]
 pub struct QuerySpotPriceRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1193,6 +1210,7 @@ pub struct QuerySwapExactAmountInRequest {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1242,6 +1260,7 @@ pub struct QuerySwapExactAmountOutRequest {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"

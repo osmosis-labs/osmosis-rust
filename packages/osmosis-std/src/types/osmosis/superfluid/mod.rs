@@ -48,6 +48,7 @@ pub struct SuperfluidIntermediaryAccount {
     pub val_addr: ::prost::alloc::string::String,
     /// perpetual gauge for rewards distribution
     #[prost(uint64, tag = "3")]
+    #[serde(alias = "gaugeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -127,6 +128,7 @@ pub struct SuperfluidDelegationRecord {
 #[proto_message(type_url = "/osmosis.superfluid.LockIdIntermediaryAccountConnection")]
 pub struct LockIdIntermediaryAccountConnection {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -395,6 +397,7 @@ pub struct SuperfluidIntermediaryAccountInfo {
     #[prost(string, tag = "2")]
     pub val_addr: ::prost::alloc::string::String,
     #[prost(uint64, tag = "3")]
+    #[serde(alias = "gaugeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -460,6 +463,7 @@ pub struct AllIntermediaryAccountsResponse {
 )]
 pub struct ConnectedIntermediaryAccountRequest {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -850,6 +854,7 @@ pub struct QueryUnpoolWhitelistRequest {}
 #[proto_message(type_url = "/osmosis.superfluid.QueryUnpoolWhitelistResponse")]
 pub struct QueryUnpoolWhitelistResponse {
     #[prost(uint64, repeated, tag = "1")]
+    #[serde(alias = "poolIDs")]
     pub pool_ids: ::prost::alloc::vec::Vec<u64>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -868,6 +873,7 @@ pub struct MsgSuperfluidDelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -905,6 +911,7 @@ pub struct MsgSuperfluidUndelegate {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -940,6 +947,7 @@ pub struct MsgSuperfluidUnbondLock {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -975,6 +983,7 @@ pub struct MsgSuperfluidUndelegateAndUnbondLock {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1065,6 +1074,7 @@ pub struct MsgUnPoolWhitelistedPool {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1085,6 +1095,7 @@ pub struct MsgUnPoolWhitelistedPool {
 #[proto_message(type_url = "/osmosis.superfluid.MsgUnPoolWhitelistedPoolResponse")]
 pub struct MsgUnPoolWhitelistedPoolResponse {
     #[prost(uint64, repeated, tag = "1")]
+    #[serde(alias = "exited_lockIDs")]
     pub exited_lock_ids: ::prost::alloc::vec::Vec<u64>,
 }
 /// =====================
@@ -1107,6 +1118,7 @@ pub struct MsgUnlockAndMigrateSharesToFullRangeConcentratedPosition {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
