@@ -17,7 +17,7 @@ struct HistoricalInfo {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.CommissionRatesCommissionRates")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.CommissionRates")]
 pub struct CommissionRates {
     /// rate is the commission rate charged to delegators, as a fraction.
     #[prost(string, tag = "1")]
@@ -41,7 +41,7 @@ pub struct CommissionRates {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.CommissionCommission")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.Commission")]
 pub struct Commission {
     /// commission_rates defines the initial commission rates to be used for creating a validator.
     #[prost(message, optional, tag = "1")]
@@ -62,7 +62,7 @@ pub struct Commission {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.DescriptionDescription")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.Description")]
 pub struct Description {
     /// moniker defines a human-readable name for the validator.
     #[prost(string, tag = "1")]
@@ -99,7 +99,7 @@ pub struct Description {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.ValidatorValidator")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.Validator")]
 pub struct Validator {
     /// operator_address defines the address of the validator's operator; bech encoded in JSON.
     #[prost(string, tag = "1")]
@@ -155,7 +155,7 @@ pub struct Validator {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.ValAddressesValAddresses")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.ValAddresses")]
 pub struct ValAddresses {
     #[prost(string, repeated, tag = "1")]
     pub addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
@@ -174,7 +174,7 @@ pub struct ValAddresses {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.DVPairDVPair")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.DVPair")]
 pub struct DvPair {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -193,7 +193,7 @@ pub struct DvPair {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.DVPairsDVPairs")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.DVPairs")]
 pub struct DvPairs {
     #[prost(message, repeated, tag = "1")]
     pub pairs: ::prost::alloc::vec::Vec<DvPair>,
@@ -213,7 +213,7 @@ pub struct DvPairs {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.DVVTripletDVVTriplet")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.DVVTriplet")]
 pub struct DvvTriplet {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -234,7 +234,7 @@ pub struct DvvTriplet {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.DVVTripletsDVVTriplets")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.DVVTriplets")]
 pub struct DvvTriplets {
     #[prost(message, repeated, tag = "1")]
     pub triplets: ::prost::alloc::vec::Vec<DvvTriplet>,
@@ -253,7 +253,7 @@ pub struct DvvTriplets {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.DelegationDelegation")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.Delegation")]
 pub struct Delegation {
     /// delegator_address is the bech32-encoded address of the delegator.
     #[prost(string, tag = "1")]
@@ -278,7 +278,7 @@ pub struct Delegation {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.UnbondingDelegationUnbondingDelegation")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.UnbondingDelegation")]
 pub struct UnbondingDelegation {
     /// delegator_address is the bech32-encoded address of the delegator.
     #[prost(string, tag = "1")]
@@ -304,9 +304,7 @@ pub struct UnbondingDelegation {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(
-    type_url = "/cosmos.staking.v1beta1.UnbondingDelegationEntryUnbondingDelegationEntry"
-)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.UnbondingDelegationEntry")]
 pub struct UnbondingDelegationEntry {
     /// creation_height is the height which the unbonding took place.
     #[prost(int64, tag = "1")]
@@ -337,7 +335,7 @@ pub struct UnbondingDelegationEntry {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.RedelegationEntryRedelegationEntry")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.RedelegationEntry")]
 pub struct RedelegationEntry {
     /// creation_height  defines the height which the redelegation took place.
     #[prost(int64, tag = "1")]
@@ -369,7 +367,7 @@ pub struct RedelegationEntry {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.RedelegationRedelegation")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.Redelegation")]
 pub struct Redelegation {
     /// delegator_address is the bech32-encoded address of the delegator.
     #[prost(string, tag = "1")]
@@ -398,7 +396,7 @@ pub struct Redelegation {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.ParamsParams")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.Params")]
 pub struct Params {
     /// unbonding_time is the time duration of unbonding.
     #[prost(message, optional, tag = "1")]
@@ -447,7 +445,7 @@ pub struct Params {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.DelegationResponseDelegationResponse")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.DelegationResponse")]
 pub struct DelegationResponse {
     #[prost(message, optional, tag = "1")]
     pub delegation: ::core::option::Option<Delegation>,
@@ -468,9 +466,7 @@ pub struct DelegationResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(
-    type_url = "/cosmos.staking.v1beta1.RedelegationEntryResponseRedelegationEntryResponse"
-)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.RedelegationEntryResponse")]
 pub struct RedelegationEntryResponse {
     #[prost(message, optional, tag = "1")]
     pub redelegation_entry: ::core::option::Option<RedelegationEntry>,
@@ -491,7 +487,7 @@ pub struct RedelegationEntryResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.RedelegationResponseRedelegationResponse")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.RedelegationResponse")]
 pub struct RedelegationResponse {
     #[prost(message, optional, tag = "1")]
     pub redelegation: ::core::option::Option<Redelegation>,
@@ -511,7 +507,7 @@ pub struct RedelegationResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.v1beta1.PoolPool")]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.Pool")]
 pub struct Pool {
     #[prost(string, tag = "1")]
     pub not_bonded_tokens: ::prost::alloc::string::String,

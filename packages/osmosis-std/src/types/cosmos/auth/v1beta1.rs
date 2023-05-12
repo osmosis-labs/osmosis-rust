@@ -13,7 +13,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.auth.v1beta1.BaseAccountBaseAccount")]
+#[proto_message(type_url = "/cosmos.auth.v1beta1.BaseAccount")]
 pub struct BaseAccount {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
@@ -44,7 +44,7 @@ pub struct BaseAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.auth.v1beta1.ModuleAccountModuleAccount")]
+#[proto_message(type_url = "/cosmos.auth.v1beta1.ModuleAccount")]
 pub struct ModuleAccount {
     #[prost(message, optional, tag = "1")]
     pub base_account: ::core::option::Option<BaseAccount>,
@@ -65,7 +65,7 @@ pub struct ModuleAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.auth.v1beta1.ParamsParams")]
+#[proto_message(type_url = "/cosmos.auth.v1beta1.Params")]
 pub struct Params {
     #[prost(uint64, tag = "1")]
     #[serde(
