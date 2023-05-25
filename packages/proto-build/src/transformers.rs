@@ -274,6 +274,7 @@ fn get_type_url(src: &Path, ident: &Ident, descriptor: &FileDescriptorSet) -> St
             ]
         })
         .filter(|r| r.is_some())
+        .take(1)
         .collect();
 
     format!("/{}.{}", type_path, name.unwrap())

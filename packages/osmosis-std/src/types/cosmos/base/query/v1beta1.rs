@@ -17,7 +17,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.query.v1beta1.PageRequestPageRequest")]
+#[proto_message(type_url = "/cosmos.base.query.v1beta1.PageRequest")]
 pub struct PageRequest {
     /// key is a value returned in PageResponse.next_key to begin
     /// querying the next page most efficiently. Only one of offset or key
@@ -71,7 +71,7 @@ pub struct PageRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.query.v1beta1.PageResponsePageResponse")]
+#[proto_message(type_url = "/cosmos.base.query.v1beta1.PageResponse")]
 pub struct PageResponse {
     /// next_key is the key to be passed to PageRequest.key to
     /// query the next page most efficiently

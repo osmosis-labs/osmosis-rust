@@ -16,6 +16,9 @@ const COSMOS_SDK_REV: &str = "origin/osmosis-main";
 /// The osmosis commit or tag to be cloned and used to build the proto files
 const OSMOSIS_REV: &str = "origin/main";
 
+/// The wasmd commit or tag to be cloned and used to build the proto files
+const WASMD_REV: &str = "v0.30.0";
+
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.
 
@@ -25,6 +28,8 @@ const OUT_DIR: &str = "../osmosis-std/src/types/";
 const COSMOS_SDK_DIR: &str = "../../dependencies/cosmos-sdk/";
 /// Directory where the osmosis submodule is located
 const OSMOSIS_DIR: &str = "../../dependencies/osmosis/";
+/// Directory where the wasmd submodule is located
+const WASMD_DIR: &str = "../../dependencies/wasmd/";
 
 /// A temporary directory for proto building
 const TMP_BUILD_DIR: &str = "/tmp/tmp-protobuf/";
@@ -34,6 +39,7 @@ pub fn generate() {
     if args.iter().any(|arg| arg == "--update-deps") {
         git::update_submodule(COSMOS_SDK_DIR, COSMOS_SDK_REV);
         git::update_submodule(OSMOSIS_DIR, OSMOSIS_REV);
+        git::update_submodule(WASMD_DIR, WASMD_REV);
     }
 
     let tmp_build_dir: PathBuf = TMP_BUILD_DIR.parse().unwrap();
@@ -43,6 +49,12 @@ pub fn generate() {
         name: "osmosis".to_string(),
         version: OSMOSIS_REV.to_string(),
         project_dir: OSMOSIS_DIR.to_string(),
+        include_mods: vec![],
+    };
+    let wasmd_project = CosmosProject {
+        name: "wasmd".to_string(),
+        version: WASMD_REV.to_string(),
+        project_dir: WASMD_DIR.to_string(),
         include_mods: vec![],
     };
     let cosmos_project = CosmosProject {
@@ -64,7 +76,7 @@ pub fn generate() {
         out_dir,
         tmp_build_dir,
         osmosis_project,
-        vec![cosmos_project],
+        vec![cosmos_project, wasmd_project],
     );
 
     osmosis_code_generator.generate();
