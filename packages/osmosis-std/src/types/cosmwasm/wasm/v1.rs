@@ -301,6 +301,7 @@ pub struct CodeInfo {
 pub struct ContractInfo {
     /// CodeID is the reference to the stored Wasm code
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -319,6 +320,7 @@ pub struct ContractInfo {
     #[prost(message, optional, tag = "5")]
     pub created: ::core::option::Option<AbsoluteTxPosition>,
     #[prost(string, tag = "6")]
+    #[serde(alias = "ibc_portID")]
     pub ibc_port_id: ::prost::alloc::string::String,
     /// Extension is an extension point to store custom metadata within the
     /// persistence model.
@@ -347,6 +349,7 @@ pub struct ContractCodeHistoryEntry {
     pub operation: i32,
     /// CodeID is the reference to the stored WASM code
     #[prost(uint64, tag = "2")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -538,6 +541,7 @@ pub struct MsgStoreCode {
 pub struct MsgStoreCodeResponse {
     /// CodeID is the reference to the stored WASM code
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -570,6 +574,7 @@ pub struct MsgInstantiateContract {
     pub admin: ::prost::alloc::string::String,
     /// CodeID is the reference to the stored WASM code
     #[prost(uint64, tag = "3")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -608,6 +613,7 @@ pub struct MsgInstantiateContract2 {
     pub admin: ::prost::alloc::string::String,
     /// CodeID is the reference to the stored WASM code
     #[prost(uint64, tag = "3")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -739,6 +745,7 @@ pub struct MsgMigrateContract {
     pub contract: ::prost::alloc::string::String,
     /// CodeID references the new WASM code
     #[prost(uint64, tag = "3")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -928,6 +935,7 @@ pub mod genesis_state {
 #[proto_message(type_url = "/cosmwasm.wasm.v1.Code")]
 pub struct Code {
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1115,6 +1123,7 @@ pub struct InstantiateContractProposal {
     pub admin: ::prost::alloc::string::String,
     /// CodeID is the reference to the stored WASM code
     #[prost(uint64, tag = "5")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1157,6 +1166,7 @@ pub struct MigrateContractProposal {
     pub contract: ::prost::alloc::string::String,
     /// CodeID references the new WASM code
     #[prost(uint64, tag = "5")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1302,6 +1312,7 @@ pub struct PinCodesProposal {
     pub description: ::prost::alloc::string::String,
     /// CodeIDs references the new WASM codes
     #[prost(uint64, repeated, packed = "false", tag = "3")]
+    #[serde(alias = "codeIDs")]
     pub code_ids: ::prost::alloc::vec::Vec<u64>,
 }
 /// UnpinCodesProposal gov proposal content type to unpin a set of code ids in
@@ -1327,6 +1338,7 @@ pub struct UnpinCodesProposal {
     pub description: ::prost::alloc::string::String,
     /// CodeIDs references the WASM codes
     #[prost(uint64, repeated, packed = "false", tag = "3")]
+    #[serde(alias = "codeIDs")]
     pub code_ids: ::prost::alloc::vec::Vec<u64>,
 }
 /// AccessConfigUpdate contains the code id and the access config to be
@@ -1346,6 +1358,7 @@ pub struct UnpinCodesProposal {
 pub struct AccessConfigUpdate {
     /// CodeID is the reference to the stored WASM code to be updated
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1552,6 +1565,7 @@ pub struct QueryContractHistoryResponse {
 pub struct QueryContractsByCodeRequest {
     /// grpc-gateway_out does not support Go style CodID
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1740,6 +1754,7 @@ pub struct QuerySmartContractStateResponse {
 pub struct QueryCodeRequest {
     /// grpc-gateway_out does not support Go style CodID
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1762,6 +1777,7 @@ pub struct QueryCodeRequest {
 pub struct CodeInfoResponse {
     /// id for legacy support
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "codeID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1877,6 +1893,7 @@ pub struct QueryPinnedCodesRequest {
 #[proto_message(type_url = "/cosmwasm.wasm.v1.QueryPinnedCodesResponse")]
 pub struct QueryPinnedCodesResponse {
     #[prost(uint64, repeated, packed = "false", tag = "1")]
+    #[serde(alias = "codeIDs")]
     pub code_ids: ::prost::alloc::vec::Vec<u64>,
     /// pagination defines the pagination in the response.
     #[prost(message, optional, tag = "2")]
