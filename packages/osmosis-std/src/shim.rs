@@ -8,7 +8,7 @@ use std::fmt;
 use std::str::FromStr;
 
 use prost::Message;
-use std::iter::FromIterator;
+
 #[derive(Clone, PartialEq, Eq, ::prost::Message, schemars::JsonSchema)]
 pub struct Timestamp {
     /// Represents seconds of UTC time since Unix epoch
@@ -34,7 +34,8 @@ impl Serialize for Timestamp {
             nanos: self.nanos,
         };
         ts.normalize();
-        let dt = NaiveDateTime::from_timestamp(ts.seconds, ts.nanos as u32);
+        let dt = NaiveDateTime::from_timestamp_opt(ts.seconds, ts.nanos as u32)
+            .expect("invalid or out-of-range datetime");
         let dt: DateTime<Utc> = DateTime::from_utc(dt, Utc);
         serializer.serialize_str(format!("{:?}", dt).as_str())
     }
