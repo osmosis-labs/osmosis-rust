@@ -14,7 +14,7 @@ use proto_build::{
 const COSMOS_SDK_REV: &str = "origin/osmosis-main";
 
 /// The osmosis commit or tag to be cloned and used to build the proto files
-const OSMOSIS_REV: &str = "origin/main";
+const OSMOSIS_REV: &str = "v15.1.2";
 
 /// The wasmd commit or tag to be cloned and used to build the proto files
 const WASMD_REV: &str = "v0.30.0";
