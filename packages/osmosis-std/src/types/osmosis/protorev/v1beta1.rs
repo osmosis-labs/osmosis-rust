@@ -857,6 +857,57 @@ pub struct QueryGetProtoRevEnabledResponse {
     #[prost(bool, tag = "1")]
     pub enabled: bool,
 }
+/// QueryGetProtoRevPoolRequest is request type for the
+/// Query/GetProtoRevPool RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevPoolRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetProtoRevPool",
+    response_type = QueryGetProtoRevPoolResponse
+)]
+pub struct QueryGetProtoRevPoolRequest {
+    /// base_denom is the base denom set in protorev for the denom pair to pool
+    /// mapping
+    #[prost(string, tag = "1")]
+    pub base_denom: ::prost::alloc::string::String,
+    /// other_denom is the other denom for the denom pair to pool mapping
+    #[prost(string, tag = "2")]
+    pub other_denom: ::prost::alloc::string::String,
+}
+/// QueryGetProtoRevPoolResponse is response type for the
+/// Query/GetProtoRevPool RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetProtoRevPoolResponse")]
+pub struct QueryGetProtoRevPoolResponse {
+    /// pool_id is the pool_id stored for the denom pair
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
 /// MsgSetHotRoutes defines the Msg/SetHotRoutes request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -1159,5 +1210,16 @@ impl<'a, Q: cosmwasm_std::CustomQuery> ProtorevQuerier<'a, Q> {
         &self,
     ) -> Result<QueryGetProtoRevEnabledResponse, cosmwasm_std::StdError> {
         QueryGetProtoRevEnabledRequest {}.query(self.querier)
+    }
+    pub fn get_proto_rev_pool(
+        &self,
+        base_denom: ::prost::alloc::string::String,
+        other_denom: ::prost::alloc::string::String,
+    ) -> Result<QueryGetProtoRevPoolResponse, cosmwasm_std::StdError> {
+        QueryGetProtoRevPoolRequest {
+            base_denom,
+            other_denom,
+        }
+        .query(self.querier)
     }
 }

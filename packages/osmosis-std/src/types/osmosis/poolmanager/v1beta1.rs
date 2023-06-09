@@ -45,6 +45,42 @@ pub struct SwapAmountOutRoute {
     #[prost(string, tag = "2")]
     pub token_in_denom: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.SwapAmountInSplitRoute")]
+pub struct SwapAmountInSplitRoute {
+    #[prost(message, repeated, tag = "1")]
+    pub pools: ::prost::alloc::vec::Vec<SwapAmountInRoute>,
+    #[prost(string, tag = "2")]
+    pub token_in_amount: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.SwapAmountOutSplitRoute")]
+pub struct SwapAmountOutSplitRoute {
+    #[prost(message, repeated, tag = "1")]
+    pub pools: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
+    #[prost(string, tag = "2")]
+    pub token_out_amount: ::prost::alloc::string::String,
+}
 /// ModuleRouter defines a route encapsulating pool type.
 /// It is used as the value of a mapping from pool id to the pool type,
 /// allowing the pool manager to know which module to route swaps to given the
@@ -204,6 +240,45 @@ pub struct MsgSwapExactAmountInResponse {
     #[prost(string, tag = "1")]
     pub token_out_amount: ::prost::alloc::string::String,
 }
+/// ===================== MsgSplitRouteSwapExactAmountIn
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.MsgSplitRouteSwapExactAmountIn")]
+pub struct MsgSplitRouteSwapExactAmountIn {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub routes: ::prost::alloc::vec::Vec<SwapAmountInSplitRoute>,
+    #[prost(string, tag = "3")]
+    pub token_in_denom: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub token_out_min_amount: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.MsgSplitRouteSwapExactAmountInResponse")]
+pub struct MsgSplitRouteSwapExactAmountInResponse {
+    #[prost(string, tag = "1")]
+    pub token_out_amount: ::prost::alloc::string::String,
+}
 /// ===================== MsgSwapExactAmountOut
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -240,6 +315,45 @@ pub struct MsgSwapExactAmountOut {
 )]
 #[proto_message(type_url = "/osmosis.poolmanager.v1beta1.MsgSwapExactAmountOutResponse")]
 pub struct MsgSwapExactAmountOutResponse {
+    #[prost(string, tag = "1")]
+    pub token_in_amount: ::prost::alloc::string::String,
+}
+/// ===================== MsgSplitRouteSwapExactAmountOut
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.MsgSplitRouteSwapExactAmountOut")]
+pub struct MsgSplitRouteSwapExactAmountOut {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "2")]
+    pub routes: ::prost::alloc::vec::Vec<SwapAmountOutSplitRoute>,
+    #[prost(string, tag = "3")]
+    pub token_out_denom: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub token_in_max_amount: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.MsgSplitRouteSwapExactAmountOutResponse")]
+pub struct MsgSplitRouteSwapExactAmountOutResponse {
     #[prost(string, tag = "1")]
     pub token_in_amount: ::prost::alloc::string::String,
 }
@@ -528,15 +642,7 @@ pub struct PoolResponse {
     path = "/osmosis.poolmanager.v1beta1.Query/AllPools",
     response_type = AllPoolsResponse
 )]
-pub struct AllPoolsRequest {
-    #[prost(uint64, tag = "1")]
-    #[serde(alias = "poolID")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
-}
+pub struct AllPoolsRequest {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -602,6 +708,48 @@ pub struct SpotPriceResponse {
     /// String of the Dec. Ex) 10.203uatom
     #[prost(string, tag = "1")]
     pub spot_price: ::prost::alloc::string::String,
+}
+/// =============================== PoolLiquidity
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TotalPoolLiquidityRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/TotalPoolLiquidity",
+    response_type = TotalPoolLiquidityResponse
+)]
+pub struct TotalPoolLiquidityRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TotalPoolLiquidityResponse")]
+pub struct TotalPoolLiquidityResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
 }
 pub struct PoolmanagerQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
@@ -671,8 +819,8 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
     pub fn pool(&self, pool_id: u64) -> Result<PoolResponse, cosmwasm_std::StdError> {
         PoolRequest { pool_id }.query(self.querier)
     }
-    pub fn all_pools(&self, pool_id: u64) -> Result<AllPoolsResponse, cosmwasm_std::StdError> {
-        AllPoolsRequest { pool_id }.query(self.querier)
+    pub fn all_pools(&self) -> Result<AllPoolsResponse, cosmwasm_std::StdError> {
+        AllPoolsRequest {}.query(self.querier)
     }
     pub fn spot_price(
         &self,
@@ -686,5 +834,11 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
             quote_asset_denom,
         }
         .query(self.querier)
+    }
+    pub fn total_pool_liquidity(
+        &self,
+        pool_id: u64,
+    ) -> Result<TotalPoolLiquidityResponse, cosmwasm_std::StdError> {
+        TotalPoolLiquidityRequest { pool_id }.query(self.querier)
     }
 }

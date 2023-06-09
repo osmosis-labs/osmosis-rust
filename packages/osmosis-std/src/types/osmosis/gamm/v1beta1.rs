@@ -960,6 +960,7 @@ pub struct QueryPoolParamsResponse {
     pub params: ::core::option::Option<crate::shim::Any>,
 }
 /// =============================== PoolLiquidity
+/// Deprecated: please use the alternative in x/poolmanager
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -976,6 +977,7 @@ pub struct QueryPoolParamsResponse {
     path = "/osmosis.gamm.v1beta1.Query/TotalPoolLiquidity",
     response_type = QueryTotalPoolLiquidityResponse
 )]
+#[deprecated]
 pub struct QueryTotalPoolLiquidityRequest {
     #[prost(uint64, tag = "1")]
     #[serde(alias = "poolID")]
@@ -985,6 +987,7 @@ pub struct QueryTotalPoolLiquidityRequest {
     )]
     pub pool_id: u64,
 }
+/// Deprecated: please use the alternative in x/poolmanager
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -997,6 +1000,7 @@ pub struct QueryTotalPoolLiquidityRequest {
     CosmwasmExt,
 )]
 #[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryTotalPoolLiquidityResponse")]
+#[deprecated]
 pub struct QueryTotalPoolLiquidityResponse {
     #[prost(message, repeated, tag = "1")]
     pub liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
@@ -1321,6 +1325,53 @@ pub struct QueryTotalLiquidityResponse {
     #[prost(message, repeated, tag = "1")]
     pub liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
 }
+/// =============================== QueryConcentratedPoolIdLinkFromCFMM
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryConcentratedPoolIdLinkFromCFMMRequest")]
+#[proto_query(
+    path = "/osmosis.gamm.v1beta1.Query/ConcentratedPoolIdLinkFromCFMM",
+    response_type = QueryConcentratedPoolIdLinkFromCfmmResponse
+)]
+pub struct QueryConcentratedPoolIdLinkFromCfmmRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "cfmm_poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub cfmm_pool_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryConcentratedPoolIdLinkFromCFMMResponse")]
+pub struct QueryConcentratedPoolIdLinkFromCfmmResponse {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "concentrated_poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub concentrated_pool_id: u64,
+}
 pub struct GammQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
@@ -1396,6 +1447,7 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
     ) -> Result<QueryPoolParamsResponse, cosmwasm_std::StdError> {
         QueryPoolParamsRequest { pool_id }.query(self.querier)
     }
+    #[deprecated]
     pub fn total_pool_liquidity(
         &self,
         pool_id: u64,
@@ -1453,5 +1505,11 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
             token_out,
         }
         .query(self.querier)
+    }
+    pub fn concentrated_pool_id_link_from_cfmm(
+        &self,
+        cfmm_pool_id: u64,
+    ) -> Result<QueryConcentratedPoolIdLinkFromCfmmResponse, cosmwasm_std::StdError> {
+        QueryConcentratedPoolIdLinkFromCfmmRequest { cfmm_pool_id }.query(self.querier)
     }
 }
