@@ -66,6 +66,7 @@ pub fn generate() {
             "authz".to_string(),
             "bank".to_string(),
             "base".to_string(),
+            "gov".to_string(),
             "staking/v1beta1/genesis.proto".to_string(),
             "staking/v1beta1/staking.proto".to_string(),
             "staking/v1beta1/tx.proto".to_string(),
