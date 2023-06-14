@@ -133,6 +133,7 @@ pub struct SyntheticLock {
 pub enum LockQueryType {
     ByDuration = 0,
     ByTime = 1,
+    NoLock = 2,
 }
 impl LockQueryType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -143,6 +144,7 @@ impl LockQueryType {
         match self {
             LockQueryType::ByDuration => "ByDuration",
             LockQueryType::ByTime => "ByTime",
+            LockQueryType::NoLock => "NoLock",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -150,6 +152,7 @@ impl LockQueryType {
         match value {
             "ByDuration" => Some(Self::ByDuration),
             "ByTime" => Some(Self::ByTime),
+            "NoLock" => Some(Self::NoLock),
             _ => None,
         }
     }

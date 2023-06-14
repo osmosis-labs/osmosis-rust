@@ -81,7 +81,7 @@ pub struct FullPositionBreakdown {
         ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, repeated, tag = "6")]
     pub forfeited_incentives:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::DecCoin>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -1011,7 +1011,7 @@ pub struct ClaimableIncentivesResponse {
         ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, repeated, tag = "2")]
     pub forfeited_incentives:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::DecCoin>,
 }
 /// ===================== QueryPoolAccumulatorRewards
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1160,6 +1160,57 @@ pub struct IncentiveRecordsResponse {
     pub pagination:
         ::core::option::Option<super::super::super::cosmos::base::query::v1beta1::PageResponse>,
 }
+/// =============================== CFMMPoolIdLinkFromConcentratedPoolId
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.concentratedliquidity.v1beta1.CFMMPoolIdLinkFromConcentratedPoolIdRequest"
+)]
+#[proto_query(
+    path = "/osmosis.concentratedliquidity.v1beta1.Query/CFMMPoolIdLinkFromConcentratedPoolId",
+    response_type = CfmmPoolIdLinkFromConcentratedPoolIdResponse
+)]
+pub struct CfmmPoolIdLinkFromConcentratedPoolIdRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "concentrated_poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub concentrated_pool_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.concentratedliquidity.v1beta1.CFMMPoolIdLinkFromConcentratedPoolIdResponse"
+)]
+pub struct CfmmPoolIdLinkFromConcentratedPoolIdResponse {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "cfmm_poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub cfmm_pool_id: u64,
+}
 /// ===================== MsgCreatePosition
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -1230,8 +1281,6 @@ pub struct MsgCreatePositionResponse {
     pub amount0: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub amount1: ::prost::alloc::string::String,
-    #[prost(message, optional, tag = "4")]
-    pub join_time: ::core::option::Option<crate::shim::Timestamp>,
     #[prost(string, tag = "5")]
     pub liquidity_created: ::prost::alloc::string::String,
     /// the lower and upper tick are in the response because there are
@@ -1439,7 +1488,7 @@ pub struct MsgCollectIncentivesResponse {
         ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, repeated, tag = "2")]
     pub forfeited_incentives:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::DecCoin>,
 }
 /// ===================== MsgFungifyChargedPositions
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1587,6 +1636,15 @@ impl<'a, Q: cosmwasm_std::CustomQuery> ConcentratedliquidityQuerier<'a, Q> {
         TickAccumulatorTrackersRequest {
             pool_id,
             tick_index,
+        }
+        .query(self.querier)
+    }
+    pub fn cfmm_pool_id_link_from_concentrated_pool_id(
+        &self,
+        concentrated_pool_id: u64,
+    ) -> Result<CfmmPoolIdLinkFromConcentratedPoolIdResponse, cosmwasm_std::StdError> {
+        CfmmPoolIdLinkFromConcentratedPoolIdRequest {
+            concentrated_pool_id,
         }
         .query(self.querier)
     }
