@@ -93,6 +93,8 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
 
             fn try_from(binary: cosmwasm_std::Binary) -> Result<Self, Self::Error> {
                 use ::prost::Message;
+                #[cfg(feature = "backtraces")]
+                use std::backtrace::Backtrace;
                 Self::decode(&binary[..]).map_err(|e| {
                     cosmwasm_std::StdError::ParseErr {
                         target_type: stringify!(#ident).to_string(),
@@ -102,6 +104,8 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
                             binary.to_vec(),
                             e
                         ),
+                        #[cfg(feature = "backtraces")]
+                        backtrace: Backtrace::capture(),
                     }
                 })
             }
@@ -111,17 +115,26 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
             type Error = cosmwasm_std::StdError;
 
             fn try_from(result: cosmwasm_std::SubMsgResult) -> Result<Self, Self::Error> {
+                #[cfg(feature = "backtraces")]
+                use std::backtrace::Backtrace;
                 result
                     .into_result()
-                    .map_err(|e| cosmwasm_std::StdError::GenericErr { msg: e })?
+                    .map_err(|e| cosmwasm_std::StdError::GenericErr {
+                        msg: e,
+                        #[cfg(feature = "backtraces")]
+                        backtrace: Backtrace::capture(),
+                    })?
                     .data
                     .ok_or_else(|| cosmwasm_std::StdError::NotFound {
                         kind: "cosmwasm_std::SubMsgResult::<T>".to_string(),
+                        #[cfg(feature = "backtraces")]
+                        backtrace: Backtrace::capture(),
                     })?
                     .try_into()
             }
         }
-    }).into()
+    })
+    .into()
 }
 
 fn get_type_url(attrs: &[syn::Attribute]) -> proc_macro2::TokenStream {
