@@ -3,7 +3,7 @@ description = "Standard library for Osmosis with CosmWasm support included"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 name = "osmosis-std"
-version = "0.16.0-beta.0"
+version = "0.16.0-beta.1"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -13,7 +13,7 @@ backtraces = ["cosmwasm-std/backtraces", "osmosis-std-derive/backtraces"]
 [dependencies]
 chrono = {version = "0.4.22", default-features = false}
 cosmwasm-std = {version = "1.1.2", features = ["stargate"]}
-osmosis-std-derive = {version = "0.16.0-beta.0", path = "../osmosis-std-derive"}
+osmosis-std-derive = {version = "0.16.0-beta.1", path = "../osmosis-std-derive"}
 prost = {version = "0.11.0", default-features = false, features = ["prost-derive"]}
 prost-types = {version = "0.11.1", default-features = false}
 schemars = "0.8.8"
