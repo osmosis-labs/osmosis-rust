@@ -65,17 +65,26 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
         impl #ident {
             pub const TYPE_URL: &'static str = #type_url;
             #cosmwasm_query
+
+            pub fn to_proto_bytes(&self) -> Vec<u8> {
+                let mut bytes = Vec::new();
+                prost::Message::encode(self, &mut bytes)
+                    .expect("Message encoding must be infallible");
+                bytes
+            }
+            pub fn to_any(&self) -> crate::shim::Any {
+                crate::shim::Any {
+                    type_url: Self::TYPE_URL.to_string(),
+                    value: self.to_proto_bytes(),
+                }
+            }            
         }
 
         #query_request_conversion
 
         impl From<#ident> for cosmwasm_std::Binary {
             fn from(msg: #ident) -> Self {
-                let mut bytes = Vec::new();
-                prost::Message::encode(&msg, &mut bytes)
-                    .expect("Message encoding must be infallible");
-
-                cosmwasm_std::Binary(bytes)
+                cosmwasm_std::Binary(msg.to_proto_bytes())
             }
         }
 
