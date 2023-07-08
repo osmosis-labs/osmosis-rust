@@ -81,7 +81,25 @@ pub struct FullPositionBreakdown {
         ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, repeated, tag = "6")]
     pub forfeited_incentives:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::DecCoin>,
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.PositionWithPeriodLock")]
+pub struct PositionWithPeriodLock {
+    #[prost(message, optional, tag = "1")]
+    pub position: ::core::option::Option<Position>,
+    #[prost(message, optional, tag = "2")]
+    pub locks: ::core::option::Option<super::super::lockup::PeriodLock>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -175,22 +193,21 @@ pub struct UptimeTracker {
 )]
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.IncentiveRecord")]
 pub struct IncentiveRecord {
+    /// incentive_id is the id uniquely identifying this incentive record.
     #[prost(uint64, tag = "1")]
+    #[serde(alias = "incentiveID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub incentive_id: u64,
+    #[prost(uint64, tag = "2")]
     #[serde(alias = "poolID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub pool_id: u64,
-    /// incentive_denom is the denom of the token being distributed as part of this
-    /// incentive record
-    #[prost(string, tag = "2")]
-    pub incentive_denom: ::prost::alloc::string::String,
-    /// incentiveCreator is the address that created the incentive record. This
-    /// address does not have any special privileges – it is only kept to keep
-    /// incentive records created by different addresses separate.
-    #[prost(string, tag = "3")]
-    pub incentive_creator_addr: ::prost::alloc::string::String,
     /// incentive record body holds necessary
     #[prost(message, optional, tag = "4")]
     pub incentive_record_body: ::core::option::Option<IncentiveRecordBody>,
@@ -215,9 +232,9 @@ pub struct IncentiveRecord {
 )]
 #[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.IncentiveRecordBody")]
 pub struct IncentiveRecordBody {
-    /// remaining_amount is the total amount of incentives to be distributed
-    #[prost(string, tag = "1")]
-    pub remaining_amount: ::prost::alloc::string::String,
+    /// remaining_coin is the total amount of incentives to be distributed
+    #[prost(message, optional, tag = "1")]
+    pub remaining_coin: ::core::option::Option<super::super::super::cosmos::base::v1beta1::DecCoin>,
     /// emission_rate is the incentive emission rate per second
     #[prost(string, tag = "2")]
     pub emission_rate: ::prost::alloc::string::String,
@@ -344,6 +361,13 @@ pub struct GenesisState {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub next_position_id: u64,
+    #[prost(uint64, tag = "5")]
+    #[serde(alias = "next_incentive_recordID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub next_incentive_record_id: u64,
 }
 /// In original struct of Accum object, store.KVStore is stored together.
 /// For handling genesis, we do not need to include store.KVStore since we use
@@ -473,59 +497,6 @@ pub struct PoolRecord {
     pub exponent_at_price_one: ::prost::alloc::string::String,
     #[prost(string, tag = "5")]
     pub spread_factor: ::prost::alloc::string::String,
-}
-/// ===================== MsgCreateConcentratedPool
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCreateConcentratedPool")]
-pub struct MsgCreateConcentratedPool {
-    #[prost(string, tag = "1")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub denom0: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub denom1: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "4")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub tick_spacing: u64,
-    #[prost(string, tag = "5")]
-    pub spread_factor: ::prost::alloc::string::String,
-}
-/// Returns a unique poolID to identify the pool with.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(
-    type_url = "/osmosis.concentratedliquidity.v1beta1.MsgCreateConcentratedPoolResponse"
-)]
-pub struct MsgCreateConcentratedPoolResponse {
-    #[prost(uint64, tag = "1")]
-    #[serde(alias = "poolID")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub pool_id: u64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -1011,7 +982,7 @@ pub struct ClaimableIncentivesResponse {
         ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, repeated, tag = "2")]
     pub forfeited_incentives:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::DecCoin>,
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
 }
 /// ===================== QueryPoolAccumulatorRewards
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1211,6 +1182,77 @@ pub struct CfmmPoolIdLinkFromConcentratedPoolIdResponse {
     )]
     pub cfmm_pool_id: u64,
 }
+/// =============================== UserUnbondingPositions
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.UserUnbondingPositionsRequest")]
+#[proto_query(
+    path = "/osmosis.concentratedliquidity.v1beta1.Query/UserUnbondingPositions",
+    response_type = UserUnbondingPositionsResponse
+)]
+pub struct UserUnbondingPositionsRequest {
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.UserUnbondingPositionsResponse")]
+pub struct UserUnbondingPositionsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub positions_with_period_lock: ::prost::alloc::vec::Vec<PositionWithPeriodLock>,
+}
+/// =============================== GetTotalLiquidity
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.GetTotalLiquidityRequest")]
+#[proto_query(
+    path = "/osmosis.concentratedliquidity.v1beta1.Query/GetTotalLiquidity",
+    response_type = GetTotalLiquidityResponse
+)]
+pub struct GetTotalLiquidityRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.GetTotalLiquidityResponse")]
+pub struct GetTotalLiquidityResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub total_liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
 /// ===================== MsgCreatePosition
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -1331,14 +1373,14 @@ pub struct MsgAddToPosition {
     pub amount1: ::prost::alloc::string::String,
     /// token_min_amount0 represents the minimum amount of token0 desired from the
     /// new position being created. Note that this field indicates the min amount0
-    /// corresponding to the total liquidity of the position, not just the
-    /// liquidity that is being added.
+    /// corresponding to the liquidity that is being added, not the total
+    /// liquidity of the position.
     #[prost(string, tag = "5")]
     pub token_min_amount0: ::prost::alloc::string::String,
     /// token_min_amount1 represents the minimum amount of token1 desired from the
     /// new position being created. Note that this field indicates the min amount1
-    /// corresponding to the total liquidity of the position, not just the
-    /// liquidity that is being added.
+    /// corresponding to the liquidity that is being added, not the total
+    /// liquidity of the position.
     #[prost(string, tag = "6")]
     pub token_min_amount1: ::prost::alloc::string::String,
 }
@@ -1488,7 +1530,7 @@ pub struct MsgCollectIncentivesResponse {
         ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
     #[prost(message, repeated, tag = "2")]
     pub forfeited_incentives:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::DecCoin>,
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
 }
 /// ===================== MsgFungifyChargedPositions
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1647,5 +1689,14 @@ impl<'a, Q: cosmwasm_std::CustomQuery> ConcentratedliquidityQuerier<'a, Q> {
             concentrated_pool_id,
         }
         .query(self.querier)
+    }
+    pub fn user_unbonding_positions(
+        &self,
+        address: ::prost::alloc::string::String,
+    ) -> Result<UserUnbondingPositionsResponse, cosmwasm_std::StdError> {
+        UserUnbondingPositionsRequest { address }.query(self.querier)
+    }
+    pub fn get_total_liquidity(&self) -> Result<GetTotalLiquidityResponse, cosmwasm_std::StdError> {
+        GetTotalLiquidityRequest {}.query(self.querier)
     }
 }

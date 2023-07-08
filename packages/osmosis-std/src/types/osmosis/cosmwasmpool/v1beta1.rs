@@ -45,6 +45,8 @@ pub struct GenesisState {
     /// params is the container of cosmwasmpool parameters.
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
+    #[prost(message, repeated, tag = "2")]
+    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
 }
 /// UploadCosmWasmPoolCodeAndWhiteListProposal is a gov Content type for
 /// uploading coswasm pool code and adding it to internal whitelist. Only the

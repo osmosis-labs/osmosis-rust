@@ -151,52 +151,6 @@ pub struct Pool {
     #[prost(string, tag = "7")]
     pub total_weight: ::prost::alloc::string::String,
 }
-/// Params holds parameters for the incentives module
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.Params")]
-pub struct Params {
-    #[prost(message, repeated, tag = "1")]
-    pub pool_creation_fee:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
-}
-/// GenesisState defines the gamm module's genesis state.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.GenesisState")]
-pub struct GenesisState {
-    #[prost(message, repeated, tag = "1")]
-    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
-    /// will be renamed to next_pool_id in an upcoming version
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub next_pool_number: u64,
-    #[prost(message, optional, tag = "3")]
-    pub params: ::core::option::Option<Params>,
-    #[prost(message, optional, tag = "4")]
-    pub migration_records: ::core::option::Option<MigrationRecords>,
-}
 /// MigrationRecords contains all the links between balancer and concentrated
 /// pools
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -249,6 +203,52 @@ pub struct BalancerToConcentratedPoolLink {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub cl_pool_id: u64,
+}
+/// Params holds parameters for the incentives module
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.Params")]
+pub struct Params {
+    #[prost(message, repeated, tag = "1")]
+    pub pool_creation_fee:
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+/// GenesisState defines the gamm module's genesis state.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.GenesisState")]
+pub struct GenesisState {
+    #[prost(message, repeated, tag = "1")]
+    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
+    /// will be renamed to next_pool_id in an upcoming version
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub next_pool_number: u64,
+    #[prost(message, optional, tag = "3")]
+    pub params: ::core::option::Option<Params>,
+    #[prost(message, optional, tag = "4")]
+    pub migration_records: ::core::option::Option<MigrationRecords>,
 }
 /// ReplaceMigrationRecordsProposal is a gov Content type for updating the
 /// migration records. If a ReplaceMigrationRecordsProposal passes, the

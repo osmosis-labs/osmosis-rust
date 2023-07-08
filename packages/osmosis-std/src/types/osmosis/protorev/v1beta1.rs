@@ -256,6 +256,9 @@ pub struct GenesisState {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub point_count_for_block: u64,
+    /// All of the profits that have been accumulated by the module.
+    #[prost(message, repeated, tag = "12")]
+    pub profits: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
 }
 /// SetProtoRevEnabledProposal is a gov Content type to update whether the
 /// protorev module is enabled

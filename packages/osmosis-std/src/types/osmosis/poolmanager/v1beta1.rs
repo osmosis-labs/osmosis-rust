@@ -709,7 +709,7 @@ pub struct SpotPriceResponse {
     #[prost(string, tag = "1")]
     pub spot_price: ::prost::alloc::string::String,
 }
-/// =============================== PoolLiquidity
+/// =============================== TotalPoolLiquidity
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -748,6 +748,40 @@ pub struct TotalPoolLiquidityRequest {
 )]
 #[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TotalPoolLiquidityResponse")]
 pub struct TotalPoolLiquidityResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+/// =============================== TotalLiquidity
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TotalLiquidityRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/TotalLiquidity",
+    response_type = TotalLiquidityResponse
+)]
+pub struct TotalLiquidityRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TotalLiquidityResponse")]
+pub struct TotalLiquidityResponse {
     #[prost(message, repeated, tag = "1")]
     pub liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
 }
@@ -840,5 +874,8 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
         pool_id: u64,
     ) -> Result<TotalPoolLiquidityResponse, cosmwasm_std::StdError> {
         TotalPoolLiquidityRequest { pool_id }.query(self.querier)
+    }
+    pub fn total_liquidity(&self) -> Result<TotalLiquidityResponse, cosmwasm_std::StdError> {
+        TotalLiquidityRequest {}.query(self.querier)
     }
 }
