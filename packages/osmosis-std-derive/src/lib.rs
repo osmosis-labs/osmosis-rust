@@ -77,7 +77,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
                     type_url: Self::TYPE_URL.to_string(),
                     value: self.to_proto_bytes(),
                 }
-            }            
+            }
         }
 
         #query_request_conversion
@@ -102,20 +102,16 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
 
             fn try_from(binary: cosmwasm_std::Binary) -> Result<Self, Self::Error> {
                 use ::prost::Message;
-                #[cfg(feature = "backtraces")]
-                use std::backtrace::Backtrace;
                 Self::decode(&binary[..]).map_err(|e| {
-                    cosmwasm_std::StdError::ParseErr {
-                        target_type: stringify!(#ident).to_string(),
-                        msg: format!(
+                    cosmwasm_std::StdError::parse_err(
+                        stringify!(#ident),
+                        format!(
                             "Unable to decode binary: \n  - base64: {}\n  - bytes array: {:?}\n\n{:?}",
                             binary,
                             binary.to_vec(),
                             e
-                        ),
-                        #[cfg(feature = "backtraces")]
-                        backtrace: Backtrace::capture(),
-                    }
+                        )
+                    )
                 })
             }
         }
@@ -124,21 +120,11 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
             type Error = cosmwasm_std::StdError;
 
             fn try_from(result: cosmwasm_std::SubMsgResult) -> Result<Self, Self::Error> {
-                #[cfg(feature = "backtraces")]
-                use std::backtrace::Backtrace;
                 result
                     .into_result()
-                    .map_err(|e| cosmwasm_std::StdError::GenericErr {
-                        msg: e,
-                        #[cfg(feature = "backtraces")]
-                        backtrace: Backtrace::capture(),
-                    })?
+                    .map_err(|e| cosmwasm_std::StdError::generic_err(e))?
                     .data
-                    .ok_or_else(|| cosmwasm_std::StdError::NotFound {
-                        kind: "cosmwasm_std::SubMsgResult::<T>".to_string(),
-                        #[cfg(feature = "backtraces")]
-                        backtrace: Backtrace::capture(),
-                    })?
+                    .ok_or_else(|| cosmwasm_std::StdError::not_found("cosmwasm_std::SubMsgResult::<T>"))?
                     .try_into()
             }
         }
