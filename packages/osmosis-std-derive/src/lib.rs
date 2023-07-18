@@ -22,6 +22,13 @@ macro_rules! match_kv_attr {
     };
 }
 
+mod shim {
+    pub struct Any {
+        pub type_url: String,
+        pub value: Vec<u8>,
+    }
+}
+
 #[proc_macro_derive(CosmwasmExt, attributes(proto_message, proto_query))]
 pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
