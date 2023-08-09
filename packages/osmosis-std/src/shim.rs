@@ -289,6 +289,8 @@ expand_as_any!(
     // pools have distincted structure
     crate::types::osmosis::gamm::v1beta1::Pool,
     crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::Pool,
+    crate::types::osmosis::concentratedliquidity::v1beta1::Pool,
+    crate::types::osmosis::cosmwasmpool::v1beta1::CosmWasmPool,
     // balancer pool param has more fields
     crate::types::osmosis::gamm::v1beta1::PoolParams,
     crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::PoolParams,
