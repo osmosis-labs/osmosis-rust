@@ -433,6 +433,40 @@ pub struct EstimateSwapExactAmountInRequest {
     CosmwasmExt,
 )]
 #[proto_message(
+    type_url = "/osmosis.poolmanager.v1beta1.EstimateSwapExactAmountInWithPrimitiveTypesRequest"
+)]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/EstimateSwapExactAmountInWithPrimitiveTypes",
+    response_type = EstimateSwapExactAmountInResponse
+)]
+pub struct EstimateSwapExactAmountInWithPrimitiveTypesRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(string, tag = "2")]
+    pub token_in: ::prost::alloc::string::String,
+    #[prost(uint64, repeated, packed = "false", tag = "3")]
+    #[serde(alias = "routes_poolID")]
+    pub routes_pool_id: ::prost::alloc::vec::Vec<u64>,
+    #[prost(string, repeated, tag = "4")]
+    pub routes_token_out_denom: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
     type_url = "/osmosis.poolmanager.v1beta1.EstimateSinglePoolSwapExactAmountInRequest"
 )]
 #[proto_query(
@@ -495,6 +529,40 @@ pub struct EstimateSwapExactAmountOutRequest {
     pub pool_id: u64,
     #[prost(message, repeated, tag = "3")]
     pub routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
+    #[prost(string, tag = "4")]
+    pub token_out: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.poolmanager.v1beta1.EstimateSwapExactAmountOutWithPrimitiveTypesRequest"
+)]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/EstimateSwapExactAmountOutWithPrimitiveTypes",
+    response_type = EstimateSwapExactAmountOutResponse
+)]
+pub struct EstimateSwapExactAmountOutWithPrimitiveTypesRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(uint64, repeated, packed = "false", tag = "2")]
+    #[serde(alias = "routes_poolID")]
+    pub routes_pool_id: ::prost::alloc::vec::Vec<u64>,
+    #[prost(string, repeated, tag = "3")]
+    pub routes_token_in_denom: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, tag = "4")]
     pub token_out: ::prost::alloc::string::String,
 }
@@ -808,6 +876,21 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
         }
         .query(self.querier)
     }
+    pub fn estimate_swap_exact_amount_in_with_primitive_types(
+        &self,
+        pool_id: u64,
+        token_in: ::prost::alloc::string::String,
+        routes_pool_id: ::prost::alloc::vec::Vec<u64>,
+        routes_token_out_denom: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    ) -> Result<EstimateSwapExactAmountInResponse, cosmwasm_std::StdError> {
+        EstimateSwapExactAmountInWithPrimitiveTypesRequest {
+            pool_id,
+            token_in,
+            routes_pool_id,
+            routes_token_out_denom,
+        }
+        .query(self.querier)
+    }
     pub fn estimate_single_pool_swap_exact_amount_in(
         &self,
         pool_id: u64,
@@ -830,6 +913,21 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
         EstimateSwapExactAmountOutRequest {
             pool_id,
             routes,
+            token_out,
+        }
+        .query(self.querier)
+    }
+    pub fn estimate_swap_exact_amount_out_with_primitive_types(
+        &self,
+        pool_id: u64,
+        routes_pool_id: ::prost::alloc::vec::Vec<u64>,
+        routes_token_in_denom: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+        token_out: ::prost::alloc::string::String,
+    ) -> Result<EstimateSwapExactAmountOutResponse, cosmwasm_std::StdError> {
+        EstimateSwapExactAmountOutWithPrimitiveTypesRequest {
+            pool_id,
+            routes_pool_id,
+            routes_token_in_denom,
             token_out,
         }
         .query(self.querier)

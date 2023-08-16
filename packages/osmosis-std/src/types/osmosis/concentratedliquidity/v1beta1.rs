@@ -493,8 +493,6 @@ pub struct PoolRecord {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub tick_spacing: u64,
-    #[prost(string, tag = "4")]
-    pub exponent_at_price_one: ::prost::alloc::string::String,
     #[prost(string, tag = "5")]
     pub spread_factor: ::prost::alloc::string::String,
 }

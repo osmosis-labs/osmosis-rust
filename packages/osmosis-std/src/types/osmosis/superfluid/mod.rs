@@ -1410,55 +1410,6 @@ pub struct MsgAddToConcentratedLiquiditySuperfluidPositionResponse {
     )]
     pub lock_id: u64,
 }
-/// ===================== MsgLockExistingFullRangePositionAndSFStake
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.superfluid.MsgLockExistingFullRangePositionAndSFStake")]
-pub struct MsgLockExistingFullRangePositionAndSfStake {
-    #[prost(uint64, tag = "1")]
-    #[serde(alias = "positionID")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub position_id: u64,
-    #[prost(string, tag = "2")]
-    pub sender: ::prost::alloc::string::String,
-    #[prost(string, tag = "3")]
-    pub val_addr: ::prost::alloc::string::String,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(
-    type_url = "/osmosis.superfluid.MsgLockExistingFullRangePositionAndSFStakeResponse"
-)]
-pub struct MsgLockExistingFullRangePositionAndSfStakeResponse {
-    #[prost(uint64, tag = "1")]
-    #[serde(alias = "concentrated_lockID")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub concentrated_lock_id: u64,
-}
 pub struct SuperfluidQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
