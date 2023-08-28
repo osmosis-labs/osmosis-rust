@@ -69,6 +69,10 @@ pub struct Pool {
         ::prost::alloc::vec::Vec<super::super::super::super::super::cosmos::base::v1beta1::Coin>,
     /// for calculation amognst assets with different precisions
     #[prost(uint64, repeated, packed = "false", tag = "7")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
     /// scaling_factor_controller is the address can adjust pool scaling factors
     #[prost(string, tag = "8")]
