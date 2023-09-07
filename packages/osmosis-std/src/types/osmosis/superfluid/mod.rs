@@ -1410,6 +1410,61 @@ pub struct MsgAddToConcentratedLiquiditySuperfluidPositionResponse {
     )]
     pub lock_id: u64,
 }
+/// ===================== MsgUnbondConvertAndStake
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgUnbondConvertAndStake")]
+pub struct MsgUnbondConvertAndStake {
+    /// lock ID to convert and stake.
+    /// lock id with 0 should be provided if converting liquid gamm shares to stake
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "lockID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+    /// validator address to delegate to.
+    /// If provided empty string, we use the validators returned from
+    /// valset-preference module.
+    #[prost(string, tag = "3")]
+    pub val_addr: ::prost::alloc::string::String,
+    /// min_amt_to_stake indicates the minimum amount to stake after conversion
+    #[prost(string, tag = "4")]
+    pub min_amt_to_stake: ::prost::alloc::string::String,
+    /// shares_to_convert indicates shares wanted to stake.
+    /// Note that this field is only used for liquid(unlocked) gamm shares.
+    /// For all other cases, this field would be disregarded.
+    #[prost(message, optional, tag = "5")]
+    pub shares_to_convert: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgUnbondConvertAndStakeResponse")]
+pub struct MsgUnbondConvertAndStakeResponse {
+    #[prost(string, tag = "1")]
+    pub total_amt_staked: ::prost::alloc::string::String,
+}
 pub struct SuperfluidQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
