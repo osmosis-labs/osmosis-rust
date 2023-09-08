@@ -18,6 +18,13 @@ fi
 ## Update and rebuild osmosis-std ##
 ####################################
 
+
+if [[ -n "${SKIP_GIT_UPDATE:-}" ]]; then
+  echo '[SKIP] SKIP_GIT_UPDATE is set, skipping git update'
+  exit 0
+fi
+
+
 # update revision in proto-build main.rs
 PROTO_BUILD_MAIN_RS="$SCRIPT_DIR/../packages/proto-build/src/main.rs"
 
