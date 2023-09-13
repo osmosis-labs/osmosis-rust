@@ -191,6 +191,50 @@ pub fn allow_serde_int_as_str(s: ItemStruct) -> ItemStruct {
     syn::ItemStruct { fields, ..s }
 }
 
+pub fn allow_serde_vec_int_as_vec_str(s: ItemStruct) -> ItemStruct {
+    let fields_vec = s
+        .fields
+        .clone()
+        .into_iter()
+        .map(|mut field| {
+            let int_types = vec![
+                parse_quote!(vec![i8]),
+                parse_quote!(vec![i16]),
+                parse_quote!(vec![i32]),
+                parse_quote!(vec![i64]),
+                parse_quote!(vec![i128]),
+                parse_quote!(vec![isize]),
+                parse_quote!(vec![u8]),
+                parse_quote!(vec![u16]),
+                parse_quote!(vec![u32]),
+                parse_quote!(vec![u64]),
+                parse_quote!(vec![u128]),
+                parse_quote!(vec![usize]),
+            ];
+
+            if int_types.contains(&field.ty) {
+                let from_str: syn::Attribute = parse_quote! {
+                    #[serde(
+                        serialize_with = "crate::serde::as_str_vec::serialize",
+                        deserialize_with = "crate::serde::as_str_vec::deserialize"
+                    )]
+                };
+                field.attrs.append(&mut vec![from_str]);
+                field
+            } else {
+                field
+            }
+        })
+        .collect::<Vec<syn::Field>>();
+
+    let fields_named: syn::FieldsNamed = parse_quote! {
+        { #(#fields_vec,)* }
+    };
+    let fields = syn::Fields::Named(fields_named);
+
+    syn::ItemStruct { fields, ..s }
+}
+
 /// some of proto's fields in osmosis' modules are named `ID` but prost generates `id` field
 /// this function adds `#[serde(alias = "ID")]` to the `id` field
 /// so that serde can deserialize `ID` field to `id` field.

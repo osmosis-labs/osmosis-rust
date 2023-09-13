@@ -161,7 +161,8 @@ fn transform_items(
                 let s = transformers::add_derive_eq_struct(&s);
                 let s = transformers::append_attrs_struct(src, &s, descriptor);
                 let s = transformers::serde_alias_id_with_uppercased(s);
-                transformers::allow_serde_int_as_str(s)
+                let s = transformers::allow_serde_int_as_str(s);
+                transformers::allow_serde_vec_int_as_vec_str(s)
             }),
 
             Item::Enum(e) => Item::Enum({
