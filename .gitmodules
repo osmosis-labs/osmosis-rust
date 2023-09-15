@@ -1,11 +1,12 @@
 [submodule "dependencies/cosmos-sdk"]
 	path = dependencies/cosmos-sdk
 	url = https://github.com/osmosis-labs/cosmos-sdk.git
-	branch = v13.x
+	branch = osmosis-main
 [submodule "dependencies/osmosis"]
 	path = dependencies/osmosis
 	url = https://github.com/osmosis-labs/osmosis.git
-	branch = v13.x
+	branch = main
 [submodule "wasmd"]
 	path = dependencies/wasmd
-	url = https://github.com/CosmWasm/wasmd.git
+	url = https://github.com/osmosis-labs/wasmd.git
+	branch = master

@@ -292,7 +292,9 @@ pub struct MsgCreateDenomResponse {
     pub new_token_denom: ::prost::alloc::string::String,
 }
 /// MsgMint is the sdk.Msg type for allowing an admin account to mint
-/// more of a token.  For now, we only support minting to the sender account
+/// more of a token.
+/// Only the admin of the token factory denom has permission to mint unless
+/// the denom does not have any admin.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -327,7 +329,9 @@ pub struct MsgMint {
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.MsgMintResponse")]
 pub struct MsgMintResponse {}
 /// MsgBurn is the sdk.Msg type for allowing an admin account to burn
-/// a token.  For now, we only support burning from the sender account.
+/// a token.
+/// Only the admin of the token factory denom has permission to burn unless
+/// the denom does not have any admin.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,

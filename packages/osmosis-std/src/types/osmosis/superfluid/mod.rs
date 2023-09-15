@@ -153,6 +153,42 @@ pub struct UnpoolWhitelistedPools {
     #[prost(uint64, repeated, tag = "1")]
     pub ids: ::prost::alloc::vec::Vec<u64>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.ConcentratedPoolUserPositionRecord")]
+pub struct ConcentratedPoolUserPositionRecord {
+    #[prost(string, tag = "1")]
+    pub validator_address: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(alias = "positionID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub position_id: u64,
+    #[prost(uint64, tag = "3")]
+    #[serde(alias = "lockID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+    #[prost(message, optional, tag = "4")]
+    pub synthetic_lock: ::core::option::Option<super::lockup::SyntheticLock>,
+    #[prost(message, optional, tag = "5")]
+    pub delegation_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, optional, tag = "6")]
+    pub equivalent_staked_amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+}
 /// SuperfluidAssetType indicates whether the superfluid asset is
 /// a native token, lp share of a pool, or concentrated share of a pool
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -871,6 +907,86 @@ pub struct QueryUnpoolWhitelistResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
+#[proto_message(
+    type_url = "/osmosis.superfluid.UserConcentratedSuperfluidPositionsDelegatedRequest"
+)]
+#[proto_query(
+    path = "/osmosis.superfluid.Query/UserConcentratedSuperfluidPositionsDelegated",
+    response_type = UserConcentratedSuperfluidPositionsDelegatedResponse
+)]
+pub struct UserConcentratedSuperfluidPositionsDelegatedRequest {
+    #[prost(string, tag = "1")]
+    pub delegator_address: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.superfluid.UserConcentratedSuperfluidPositionsDelegatedResponse"
+)]
+pub struct UserConcentratedSuperfluidPositionsDelegatedResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub cl_pool_user_position_records: ::prost::alloc::vec::Vec<ConcentratedPoolUserPositionRecord>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.superfluid.UserConcentratedSuperfluidPositionsUndelegatingRequest"
+)]
+#[proto_query(
+    path = "/osmosis.superfluid.Query/UserConcentratedSuperfluidPositionsUndelegating",
+    response_type = UserConcentratedSuperfluidPositionsUndelegatingResponse
+)]
+pub struct UserConcentratedSuperfluidPositionsUndelegatingRequest {
+    #[prost(string, tag = "1")]
+    pub delegator_address: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.superfluid.UserConcentratedSuperfluidPositionsUndelegatingResponse"
+)]
+pub struct UserConcentratedSuperfluidPositionsUndelegatingResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub cl_pool_user_position_records: ::prost::alloc::vec::Vec<ConcentratedPoolUserPositionRecord>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto_message(type_url = "/osmosis.superfluid.MsgSuperfluidDelegate")]
 pub struct MsgSuperfluidDelegate {
     #[prost(string, tag = "1")]
@@ -1190,13 +1306,13 @@ pub struct MsgUnPoolWhitelistedPoolResponse {
 pub struct MsgUnlockAndMigrateSharesToFullRangeConcentratedPosition {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
-    #[prost(uint64, tag = "2")]
+    #[prost(int64, tag = "2")]
     #[serde(alias = "lockID")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
-    pub lock_id: u64,
+    pub lock_id: i64,
     #[prost(message, optional, tag = "3")]
     pub shares_to_migrate: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
     /// token_out_mins indicates minimum token to exit Balancer pool with.
@@ -1293,6 +1409,61 @@ pub struct MsgAddToConcentratedLiquiditySuperfluidPositionResponse {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub lock_id: u64,
+}
+/// ===================== MsgUnbondConvertAndStake
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgUnbondConvertAndStake")]
+pub struct MsgUnbondConvertAndStake {
+    /// lock ID to convert and stake.
+    /// lock id with 0 should be provided if converting liquid gamm shares to stake
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "lockID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub lock_id: u64,
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+    /// validator address to delegate to.
+    /// If provided empty string, we use the validators returned from
+    /// valset-preference module.
+    #[prost(string, tag = "3")]
+    pub val_addr: ::prost::alloc::string::String,
+    /// min_amt_to_stake indicates the minimum amount to stake after conversion
+    #[prost(string, tag = "4")]
+    pub min_amt_to_stake: ::prost::alloc::string::String,
+    /// shares_to_convert indicates shares wanted to stake.
+    /// Note that this field is only used for liquid(unlocked) gamm shares.
+    /// For all other cases, this field would be disregarded.
+    #[prost(message, optional, tag = "5")]
+    pub shares_to_convert: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.MsgUnbondConvertAndStakeResponse")]
+pub struct MsgUnbondConvertAndStakeResponse {
+    #[prost(string, tag = "1")]
+    pub total_amt_staked: ::prost::alloc::string::String,
 }
 pub struct SuperfluidQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
@@ -1403,5 +1574,20 @@ impl<'a, Q: cosmwasm_std::CustomQuery> SuperfluidQuerier<'a, Q> {
     }
     pub fn unpool_whitelist(&self) -> Result<QueryUnpoolWhitelistResponse, cosmwasm_std::StdError> {
         QueryUnpoolWhitelistRequest {}.query(self.querier)
+    }
+    pub fn user_concentrated_superfluid_positions_delegated(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+    ) -> Result<UserConcentratedSuperfluidPositionsDelegatedResponse, cosmwasm_std::StdError> {
+        UserConcentratedSuperfluidPositionsDelegatedRequest { delegator_address }
+            .query(self.querier)
+    }
+    pub fn user_concentrated_superfluid_positions_undelegating(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+    ) -> Result<UserConcentratedSuperfluidPositionsUndelegatingResponse, cosmwasm_std::StdError>
+    {
+        UserConcentratedSuperfluidPositionsUndelegatingRequest { delegator_address }
+            .query(self.querier)
     }
 }

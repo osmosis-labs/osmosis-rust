@@ -61,6 +61,39 @@ pub struct Gauge {
     #[prost(message, repeated, tag = "8")]
     pub distributed_coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
 }
+/// Gauge is an object that stores GroupGaugeId as well as internalGaugeIds. We
+/// linked these two together so that we can distribute tokens from groupGauge to
+/// internalGauges.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.GroupGauge")]
+pub struct GroupGauge {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "group_gaugeID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub group_gauge_id: u64,
+    #[prost(uint64, repeated, tag = "2")]
+    #[serde(alias = "internalIDs")]
+    pub internal_ids: ::prost::alloc::vec::Vec<u64>,
+    #[prost(enumeration = "SplittingPolicy", tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub splitting_policy: i32,
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -77,6 +110,34 @@ pub struct LockableDurationsInfo {
     /// List of incentivised durations that gauges will pay out to
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
+}
+/// SplittingPolicy determines the way we want to split incentives in groupGauges
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+#[derive(::serde::Serialize, ::serde::Deserialize, ::schemars::JsonSchema)]
+pub enum SplittingPolicy {
+    Volume = 0,
+    Evenly = 1,
+}
+impl SplittingPolicy {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            SplittingPolicy::Volume => "Volume",
+            SplittingPolicy::Evenly => "Evenly",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "Volume" => Some(Self::Volume),
+            "Evenly" => Some(Self::Evenly),
+            _ => None,
+        }
+    }
 }
 /// Params holds parameters for the incentives module
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -550,6 +611,20 @@ pub struct MsgCreateGauge {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub num_epochs_paid_over: u64,
+    /// pool_id is the ID of the pool that the gauge is meant to be associated
+    /// with. if pool_id is set, then the "QueryCondition.LockQueryType" must be
+    /// "NoLock" with all other fields of the "QueryCondition.LockQueryType" struct
+    /// unset, including "QueryCondition.Denom". However, note that, internally,
+    /// the empty string in "QueryCondition.Denom" ends up being overwritten with
+    /// incentivestypes.NoLockExternalGaugeDenom(<pool-id>) so that the gauges
+    /// associated with a pool can be queried by this prefix if needed.
+    #[prost(uint64, tag = "7")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(

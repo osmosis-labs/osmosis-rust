@@ -1,3 +1,4 @@
+pub mod poolmodel;
 pub mod v1beta1;
 use osmosis_std_derive::CosmwasmExt;
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -25,6 +26,8 @@ pub struct Params {
     /// from CL to Balancer pools will be discounted to encourage LPs to migrate.
     /// e.g. a rate of 0.05 means Balancer LPs get 5% less incentives than full
     /// range CL LPs.
+    /// This field can range from (0,1]. If set to 1, it indicates that all
+    /// incentives stay at cl pool.
     #[prost(string, tag = "3")]
     pub balancer_shares_reward_discount: ::prost::alloc::string::String,
     /// authorized_quote_denoms is a list of quote denoms that can be used as

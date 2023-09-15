@@ -45,6 +45,8 @@ pub struct GenesisState {
     /// params is the container of cosmwasmpool parameters.
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
+    #[prost(message, repeated, tag = "2")]
+    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
 }
 /// UploadCosmWasmPoolCodeAndWhiteListProposal is a gov Content type for
 /// uploading coswasm pool code and adding it to internal whitelist. Only the
@@ -742,7 +744,7 @@ pub struct MsgCreateCosmWasmPoolResponse {
     )]
     pub pool_id: u64,
 }
-/// =============================== Params
+/// =============================== ContractInfoByPoolId
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -776,6 +778,102 @@ pub struct ParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
 }
+/// =============================== Pools
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.cosmwasmpool.v1beta1.PoolsRequest")]
+#[proto_query(
+    path = "/osmosis.cosmwasmpool.v1beta1.Query/Pools",
+    response_type = PoolsResponse
+)]
+pub struct PoolsRequest {
+    /// pagination defines an optional pagination for the request.
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.cosmwasmpool.v1beta1.PoolsResponse")]
+pub struct PoolsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
+    /// pagination defines the pagination in the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+/// =============================== ContractInfoByPoolId
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.cosmwasmpool.v1beta1.ContractInfoByPoolIdRequest")]
+#[proto_query(
+    path = "/osmosis.cosmwasmpool.v1beta1.Query/ContractInfoByPoolId",
+    response_type = ContractInfoByPoolIdResponse
+)]
+pub struct ContractInfoByPoolIdRequest {
+    /// pool_id is the pool id of the requested pool.
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.cosmwasmpool.v1beta1.ContractInfoByPoolIdResponse")]
+pub struct ContractInfoByPoolIdResponse {
+    /// contract_address is the pool address and contract address
+    /// of the requested pool id.
+    #[prost(string, tag = "1")]
+    pub contract_address: ::prost::alloc::string::String,
+    /// code_id is the code id of the requested pool id.
+    #[prost(uint64, tag = "2")]
+    #[serde(alias = "codeID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub code_id: u64,
+}
 pub struct CosmwasmpoolQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
@@ -783,7 +881,21 @@ impl<'a, Q: cosmwasm_std::CustomQuery> CosmwasmpoolQuerier<'a, Q> {
     pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
         Self { querier }
     }
+    pub fn pools(
+        &self,
+        pagination: ::core::option::Option<
+            super::super::super::cosmos::base::query::v1beta1::PageRequest,
+        >,
+    ) -> Result<PoolsResponse, cosmwasm_std::StdError> {
+        PoolsRequest { pagination }.query(self.querier)
+    }
     pub fn params(&self) -> Result<ParamsResponse, cosmwasm_std::StdError> {
         ParamsRequest {}.query(self.querier)
+    }
+    pub fn contract_info_by_pool_id(
+        &self,
+        pool_id: u64,
+    ) -> Result<ContractInfoByPoolIdResponse, cosmwasm_std::StdError> {
+        ContractInfoByPoolIdRequest { pool_id }.query(self.querier)
     }
 }

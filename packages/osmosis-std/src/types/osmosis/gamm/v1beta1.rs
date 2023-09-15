@@ -151,52 +151,6 @@ pub struct Pool {
     #[prost(string, tag = "7")]
     pub total_weight: ::prost::alloc::string::String,
 }
-/// Params holds parameters for the incentives module
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.Params")]
-pub struct Params {
-    #[prost(message, repeated, tag = "1")]
-    pub pool_creation_fee:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
-}
-/// GenesisState defines the gamm module's genesis state.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.gamm.v1beta1.GenesisState")]
-pub struct GenesisState {
-    #[prost(message, repeated, tag = "1")]
-    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
-    /// will be renamed to next_pool_id in an upcoming version
-    #[prost(uint64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub next_pool_number: u64,
-    #[prost(message, optional, tag = "3")]
-    pub params: ::core::option::Option<Params>,
-    #[prost(message, optional, tag = "4")]
-    pub migration_records: ::core::option::Option<MigrationRecords>,
-}
 /// MigrationRecords contains all the links between balancer and concentrated
 /// pools
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -250,6 +204,52 @@ pub struct BalancerToConcentratedPoolLink {
     )]
     pub cl_pool_id: u64,
 }
+/// Params holds parameters for the incentives module
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.Params")]
+pub struct Params {
+    #[prost(message, repeated, tag = "1")]
+    pub pool_creation_fee:
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+/// GenesisState defines the gamm module's genesis state.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.GenesisState")]
+pub struct GenesisState {
+    #[prost(message, repeated, tag = "1")]
+    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
+    /// will be renamed to next_pool_id in an upcoming version
+    #[prost(uint64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub next_pool_number: u64,
+    #[prost(message, optional, tag = "3")]
+    pub params: ::core::option::Option<Params>,
+    #[prost(message, optional, tag = "4")]
+    pub migration_records: ::core::option::Option<MigrationRecords>,
+}
 /// ReplaceMigrationRecordsProposal is a gov Content type for updating the
 /// migration records. If a ReplaceMigrationRecordsProposal passes, the
 /// proposal’s records override the existing MigrationRecords set in the module.
@@ -302,6 +302,94 @@ pub struct UpdateMigrationRecordsProposal {
     pub description: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "3")]
     pub records: ::prost::alloc::vec::Vec<BalancerToConcentratedPoolLink>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.PoolRecordWithCFMMLink")]
+pub struct PoolRecordWithCfmmLink {
+    #[prost(string, tag = "1")]
+    pub denom0: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub denom1: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub tick_spacing: u64,
+    #[prost(string, tag = "4")]
+    pub exponent_at_price_one: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub spread_factor: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "6")]
+    #[serde(alias = "balancer_poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub balancer_pool_id: u64,
+}
+/// CreateConcentratedLiquidityPoolsAndLinktoCFMMProposal is a gov Content type
+/// for creating concentrated liquidity pools and linking it to a CFMM pool.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.gamm.v1beta1.CreateConcentratedLiquidityPoolsAndLinktoCFMMProposal"
+)]
+pub struct CreateConcentratedLiquidityPoolsAndLinktoCfmmProposal {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub pool_records_with_cfmm_link: ::prost::alloc::vec::Vec<PoolRecordWithCfmmLink>,
+}
+/// SetScalingFactorControllerProposal is a gov Content type for updating the
+/// scaling factor controller address of a stableswap pool
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.SetScalingFactorControllerProposal")]
+pub struct SetScalingFactorControllerProposal {
+    #[prost(string, tag = "1")]
+    pub title: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub description: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(string, tag = "4")]
+    pub controller_address: ::prost::alloc::string::String,
 }
 /// ===================== MsgJoinPool
 /// This is really MsgJoinPoolNoSwap
@@ -1372,6 +1460,40 @@ pub struct QueryConcentratedPoolIdLinkFromCfmmResponse {
     )]
     pub concentrated_pool_id: u64,
 }
+/// =============================== QueryCFMMConcentratedPoolLinks
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryCFMMConcentratedPoolLinksRequest")]
+#[proto_query(
+    path = "/osmosis.gamm.v1beta1.Query/CFMMConcentratedPoolLinks",
+    response_type = QueryCfmmConcentratedPoolLinksResponse
+)]
+pub struct QueryCfmmConcentratedPoolLinksRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.QueryCFMMConcentratedPoolLinksResponse")]
+pub struct QueryCfmmConcentratedPoolLinksResponse {
+    #[prost(message, optional, tag = "1")]
+    pub migration_records: ::core::option::Option<MigrationRecords>,
+}
 pub struct GammQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
@@ -1511,5 +1633,10 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
         cfmm_pool_id: u64,
     ) -> Result<QueryConcentratedPoolIdLinkFromCfmmResponse, cosmwasm_std::StdError> {
         QueryConcentratedPoolIdLinkFromCfmmRequest { cfmm_pool_id }.query(self.querier)
+    }
+    pub fn cfmm_concentrated_pool_links(
+        &self,
+    ) -> Result<QueryCfmmConcentratedPoolLinksResponse, cosmwasm_std::StdError> {
+        QueryCfmmConcentratedPoolLinksRequest {}.query(self.querier)
     }
 }
