@@ -277,6 +277,10 @@ pub struct Params {
 pub struct CodeInfo {
     /// CodeHash is the unique identifier created by wasmvm
     #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub code_hash: ::prost::alloc::vec::Vec<u8>,
     /// Creator address who initially stored the code
     #[prost(string, tag = "2")]
@@ -359,6 +363,10 @@ pub struct ContractCodeHistoryEntry {
     #[prost(message, optional, tag = "3")]
     pub updated: ::core::option::Option<AbsoluteTxPosition>,
     #[prost(bytes = "vec", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
 }
 /// AbsoluteTxPosition is a unique transaction position that allows for global
@@ -408,9 +416,17 @@ pub struct AbsoluteTxPosition {
 pub struct Model {
     /// hex-encode key to read it better (this is often ascii)
     #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub key: ::prost::alloc::vec::Vec<u8>,
     /// base64-encode raw value
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub value: ::prost::alloc::vec::Vec<u8>,
 }
 /// AccessType permission types
@@ -547,6 +563,10 @@ pub struct Code {
     #[prost(message, optional, tag = "2")]
     pub code_info: ::core::option::Option<CodeInfo>,
     #[prost(bytes = "vec", tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub code_bytes: ::prost::alloc::vec::Vec<u8>,
     /// Pinned to wasmvm cache
     #[prost(bool, tag = "4")]
@@ -590,6 +610,10 @@ pub struct Contract {
 #[proto_message(type_url = "/cosmwasm.wasm.v1.Sequence")]
 pub struct Sequence {
     #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub id_key: ::prost::alloc::vec::Vec<u8>,
     #[prost(uint64, tag = "2")]
     #[serde(
@@ -634,6 +658,10 @@ pub struct MsgIbcSend {
     /// Data is the payload to transfer. We must not make assumption what format or
     /// content is in here.
     #[prost(bytes = "vec", tag = "6")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
 /// MsgIBCSendResponse
@@ -700,6 +728,10 @@ pub struct StoreCodeProposal {
     pub run_as: ::prost::alloc::string::String,
     /// WASMByteCode can be raw or gzip compressed
     #[prost(bytes = "vec", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
     /// InstantiatePermission to apply on contract creation, optional
     #[prost(message, optional, tag = "7")]
@@ -717,6 +749,10 @@ pub struct StoreCodeProposal {
     /// CodeHash is the SHA256 sum of the code outputted by builder, used for smart
     /// contract verification
     #[prost(bytes = "vec", tag = "11")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub code_hash: ::prost::alloc::vec::Vec<u8>,
 }
 /// InstantiateContractProposal gov proposal content type to instantiate a
@@ -759,6 +795,10 @@ pub struct InstantiateContractProposal {
     pub label: ::prost::alloc::string::String,
     /// Msg json encoded message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "7")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
     #[prost(message, repeated, tag = "8")]
@@ -804,12 +844,20 @@ pub struct InstantiateContract2Proposal {
     pub label: ::prost::alloc::string::String,
     /// Msg json encode message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "7")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
     #[prost(message, repeated, tag = "8")]
     pub funds: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
     /// Salt is an arbitrary value provided by the sender. Size can be 1 to 64.
     #[prost(bytes = "vec", tag = "9")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub salt: ::prost::alloc::vec::Vec<u8>,
     /// FixMsg include the msg value into the hash for the predictable address.
     /// Default is false
@@ -851,6 +899,10 @@ pub struct MigrateContractProposal {
     pub code_id: u64,
     /// Msg json encoded message to be passed to the contract on migration
     #[prost(bytes = "vec", tag = "6")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
 }
 /// SudoContractProposal gov proposal content type to call sudo on a contract.
@@ -878,6 +930,10 @@ pub struct SudoContractProposal {
     pub contract: ::prost::alloc::string::String,
     /// Msg json encoded message to be passed to the contract as sudo
     #[prost(bytes = "vec", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
 }
 /// ExecuteContractProposal gov proposal content type to call execute on a
@@ -909,6 +965,10 @@ pub struct ExecuteContractProposal {
     pub contract: ::prost::alloc::string::String,
     /// Msg json encoded message to be passed to the contract as execute
     #[prost(bytes = "vec", tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
     #[prost(message, repeated, tag = "6")]
@@ -990,6 +1050,10 @@ pub struct PinCodesProposal {
     /// CodeIDs references the new WASM codes
     #[prost(uint64, repeated, packed = "false", tag = "3")]
     #[serde(alias = "codeIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub code_ids: ::prost::alloc::vec::Vec<u64>,
 }
 /// UnpinCodesProposal gov proposal content type to unpin a set of code ids in
@@ -1016,6 +1080,10 @@ pub struct UnpinCodesProposal {
     /// CodeIDs references the WASM codes
     #[prost(uint64, repeated, packed = "false", tag = "3")]
     #[serde(alias = "codeIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub code_ids: ::prost::alloc::vec::Vec<u64>,
 }
 /// AccessConfigUpdate contains the code id and the access config to be
@@ -1097,6 +1165,10 @@ pub struct StoreAndInstantiateContractProposal {
     pub run_as: ::prost::alloc::string::String,
     /// WASMByteCode can be raw or gzip compressed
     #[prost(bytes = "vec", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
     /// InstantiatePermission to apply on contract creation, optional
     #[prost(message, optional, tag = "5")]
@@ -1112,6 +1184,10 @@ pub struct StoreAndInstantiateContractProposal {
     pub label: ::prost::alloc::string::String,
     /// Msg json encoded message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "9")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
     #[prost(message, repeated, tag = "10")]
@@ -1126,6 +1202,10 @@ pub struct StoreAndInstantiateContractProposal {
     /// CodeHash is the SHA256 sum of the code outputted by builder, used for smart
     /// contract verification
     #[prost(bytes = "vec", tag = "13")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub code_hash: ::prost::alloc::vec::Vec<u8>,
 }
 /// QueryContractInfoRequest is the request type for the Query/ContractInfo RPC
@@ -1348,6 +1428,10 @@ pub struct QueryRawContractStateRequest {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub query_data: ::prost::alloc::vec::Vec<u8>,
 }
 /// QueryRawContractStateResponse is the response type for the
@@ -1367,6 +1451,10 @@ pub struct QueryRawContractStateRequest {
 pub struct QueryRawContractStateResponse {
     /// Data contains the raw store data
     #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
 /// QuerySmartContractStateRequest is the request type for the
@@ -1393,6 +1481,10 @@ pub struct QuerySmartContractStateRequest {
     pub address: ::prost::alloc::string::String,
     /// QueryData contains the query data passed to the contract
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub query_data: ::prost::alloc::vec::Vec<u8>,
 }
 /// QuerySmartContractStateResponse is the response type for the
@@ -1412,6 +1504,10 @@ pub struct QuerySmartContractStateRequest {
 pub struct QuerySmartContractStateResponse {
     /// Data contains the json data returned from the smart contract
     #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
 /// QueryCodeRequest is the request type for the Query/Code RPC method
@@ -1463,6 +1559,10 @@ pub struct CodeInfoResponse {
     #[prost(string, tag = "2")]
     pub creator: ::prost::alloc::string::String,
     #[prost(bytes = "vec", tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub data_hash: ::prost::alloc::vec::Vec<u8>,
     #[prost(message, optional, tag = "6")]
     pub instantiate_permission: ::core::option::Option<AccessConfig>,
@@ -1484,6 +1584,10 @@ pub struct QueryCodeResponse {
     #[prost(message, optional, tag = "1")]
     pub code_info: ::core::option::Option<CodeInfoResponse>,
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
 /// QueryCodesRequest is the request type for the Query/Codes RPC method
@@ -1571,6 +1675,10 @@ pub struct QueryPinnedCodesRequest {
 pub struct QueryPinnedCodesResponse {
     #[prost(uint64, repeated, packed = "false", tag = "1")]
     #[serde(alias = "codeIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub code_ids: ::prost::alloc::vec::Vec<u64>,
     /// pagination defines the pagination in the response.
     #[prost(message, optional, tag = "2")]
@@ -1682,6 +1790,10 @@ pub struct MsgStoreCode {
     pub sender: ::prost::alloc::string::String,
     /// WASMByteCode can be raw or gzip compressed
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
     /// InstantiatePermission access control to apply on contract creation,
     /// optional
@@ -1712,6 +1824,10 @@ pub struct MsgStoreCodeResponse {
     pub code_id: u64,
     /// Checksum is the sha256 hash of the stored code
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub checksum: ::prost::alloc::vec::Vec<u8>,
 }
 /// MsgInstantiateContract create a new smart contract instance for the given
@@ -1748,6 +1864,10 @@ pub struct MsgInstantiateContract {
     pub label: ::prost::alloc::string::String,
     /// Msg json encoded message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
     #[prost(message, repeated, tag = "6")]
@@ -1787,12 +1907,20 @@ pub struct MsgInstantiateContract2 {
     pub label: ::prost::alloc::string::String,
     /// Msg json encoded message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
     #[prost(message, repeated, tag = "6")]
     pub funds: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
     /// Salt is an arbitrary value provided by the sender. Size can be 1 to 64.
     #[prost(bytes = "vec", tag = "7")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub salt: ::prost::alloc::vec::Vec<u8>,
     /// FixMsg include the msg value into the hash for the predictable address.
     /// Default is false
@@ -1818,6 +1946,10 @@ pub struct MsgInstantiateContractResponse {
     pub address: ::prost::alloc::string::String,
     /// Data contains bytes to returned from the contract
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
 /// MsgInstantiateContract2Response return instantiation result data
@@ -1839,6 +1971,10 @@ pub struct MsgInstantiateContract2Response {
     pub address: ::prost::alloc::string::String,
     /// Data contains bytes to returned from the contract
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
 /// MsgExecuteContract submits the given message data to a smart contract
@@ -1863,6 +1999,10 @@ pub struct MsgExecuteContract {
     pub contract: ::prost::alloc::string::String,
     /// Msg json encoded message to be passed to the contract
     #[prost(bytes = "vec", tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on execution
     #[prost(message, repeated, tag = "5")]
@@ -1884,6 +2024,10 @@ pub struct MsgExecuteContract {
 pub struct MsgExecuteContractResponse {
     /// Data contains bytes to returned from the contract
     #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
 /// MsgMigrateContract runs a code upgrade/ downgrade for a smart contract
@@ -1916,6 +2060,10 @@ pub struct MsgMigrateContract {
     pub code_id: u64,
     /// Msg json encoded message to be passed to the contract on migration
     #[prost(bytes = "vec", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
 }
 /// MsgMigrateContractResponse returns contract migration result data.
@@ -1935,6 +2083,10 @@ pub struct MsgMigrateContractResponse {
     /// Data contains same raw bytes returned as data from the wasm contract.
     /// (May be empty)
     #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
 /// MsgUpdateAdmin sets a new admin for a smart contract

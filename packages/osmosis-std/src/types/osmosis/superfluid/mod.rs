@@ -151,6 +151,10 @@ pub struct LockIdIntermediaryAccountConnection {
 #[proto_message(type_url = "/osmosis.superfluid.UnpoolWhitelistedPools")]
 pub struct UnpoolWhitelistedPools {
     #[prost(uint64, repeated, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub ids: ::prost::alloc::vec::Vec<u64>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -894,6 +898,10 @@ pub struct QueryUnpoolWhitelistRequest {}
 pub struct QueryUnpoolWhitelistResponse {
     #[prost(uint64, repeated, tag = "1")]
     #[serde(alias = "poolIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub pool_ids: ::prost::alloc::vec::Vec<u64>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1285,6 +1293,10 @@ pub struct MsgUnPoolWhitelistedPool {
 pub struct MsgUnPoolWhitelistedPoolResponse {
     #[prost(uint64, repeated, tag = "1")]
     #[serde(alias = "exited_lockIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub exited_lock_ids: ::prost::alloc::vec::Vec<u64>,
 }
 /// =====================

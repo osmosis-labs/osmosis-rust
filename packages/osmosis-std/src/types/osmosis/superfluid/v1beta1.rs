@@ -63,6 +63,10 @@ pub struct UpdateUnpoolWhiteListProposal {
     #[prost(string, tag = "2")]
     pub description: ::prost::alloc::string::String,
     #[prost(uint64, repeated, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub ids: ::prost::alloc::vec::Vec<u64>,
     #[prost(bool, tag = "4")]
     pub is_overwrite: bool,

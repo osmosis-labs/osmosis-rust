@@ -572,6 +572,10 @@ pub struct GenesisState {
     /// last_total_power tracks the total amounts of bonded tokens recorded during
     /// the previous end block.
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub last_total_power: ::prost::alloc::vec::Vec<u8>,
     /// last_validator_powers is a special index that provides a historical list
     /// of the last-block's bonded validators.

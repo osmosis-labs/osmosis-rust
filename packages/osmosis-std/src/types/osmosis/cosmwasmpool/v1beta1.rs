@@ -16,6 +16,10 @@ pub struct Params {
     /// instantiated.
     #[prost(uint64, repeated, packed = "false", tag = "1")]
     #[serde(alias = "codeID_whitelist")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub code_id_whitelist: ::prost::alloc::vec::Vec<u64>,
     /// pool_migration_limit is the maximum number of pools that can be migrated
     /// at once via governance proposal. This is to have a constant bound on the
@@ -72,6 +76,10 @@ pub struct UploadCosmWasmPoolCodeAndWhiteListProposal {
     pub description: ::prost::alloc::string::String,
     /// WASMByteCode can be raw or gzip compressed
     #[prost(bytes = "vec", tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
 }
 /// MigratePoolContractsProposal is a gov Content type for
@@ -122,6 +130,10 @@ pub struct MigratePoolContractsProposal {
     /// the given wasm_byte_code.
     #[prost(uint64, repeated, tag = "3")]
     #[serde(alias = "poolIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub pool_ids: ::prost::alloc::vec::Vec<u64>,
     /// new_code_id is the code id of the contract code to migrate to.
     /// Assumes that the code is already uploaded to chain. Only one of
@@ -137,9 +149,17 @@ pub struct MigratePoolContractsProposal {
     /// has not been uploaded yet so uploads the given code and migrates to it.
     /// Only one of new_code_id and wasm_byte_code should be set.
     #[prost(bytes = "vec", tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
     /// MigrateMsg migrate message to be used for migrating the pool contracts.
     #[prost(bytes = "vec", tag = "6")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub migrate_msg: ::prost::alloc::vec::Vec<u8>,
 }
 /// ===================== InstantiateMsg
@@ -439,6 +459,10 @@ pub struct CosmWasmPool {
     )]
     pub code_id: u64,
     #[prost(bytes = "vec", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub instantiate_msg: ::prost::alloc::vec::Vec<u8>,
 }
 /// ===================== GetSwapFeeQueryMsg
@@ -718,6 +742,10 @@ pub struct MsgCreateCosmWasmPool {
     )]
     pub code_id: u64,
     #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub instantiate_msg: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag = "3")]
     pub sender: ::prost::alloc::string::String,

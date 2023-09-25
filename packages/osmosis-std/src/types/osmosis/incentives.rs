@@ -446,6 +446,10 @@ pub struct RewardsEstRequest {
     /// Lock IDs included in future reward estimation
     #[prost(uint64, repeated, tag = "2")]
     #[serde(alias = "lockIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub lock_ids: ::prost::alloc::vec::Vec<u64>,
     /// Upper time limit of reward estimation
     /// Lower limit is current epoch

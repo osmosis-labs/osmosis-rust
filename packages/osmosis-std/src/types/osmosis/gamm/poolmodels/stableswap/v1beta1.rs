@@ -100,6 +100,10 @@ pub struct MsgCreateStableswapPool {
     pub initial_pool_liquidity:
         ::prost::alloc::vec::Vec<super::super::super::super::super::cosmos::base::v1beta1::Coin>,
     #[prost(uint64, repeated, packed = "false", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, tag = "5")]
     pub future_pool_governor: ::prost::alloc::string::String,
@@ -157,6 +161,10 @@ pub struct MsgStableSwapAdjustScalingFactors {
     )]
     pub pool_id: u64,
     #[prost(uint64, repeated, packed = "false", tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub scaling_factors: ::prost::alloc::vec::Vec<u64>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]

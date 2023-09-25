@@ -197,22 +197,22 @@ pub fn allow_serde_vec_int_as_vec_str(s: ItemStruct) -> ItemStruct {
         .clone()
         .into_iter()
         .map(|mut field| {
-            let int_types = vec![
-                parse_quote!(vec![i8]),
-                parse_quote!(vec![i16]),
-                parse_quote!(vec![i32]),
-                parse_quote!(vec![i64]),
-                parse_quote!(vec![i128]),
-                parse_quote!(vec![isize]),
-                parse_quote!(vec![u8]),
-                parse_quote!(vec![u16]),
-                parse_quote!(vec![u32]),
-                parse_quote!(vec![u64]),
-                parse_quote!(vec![u128]),
-                parse_quote!(vec![usize]),
+            let vec_int_types = vec![
+                parse_quote!(::prost::alloc::vec::Vec<i8>),
+                parse_quote!(::prost::alloc::vec::Vec<i16>),
+                parse_quote!(::prost::alloc::vec::Vec<i32>),
+                parse_quote!(::prost::alloc::vec::Vec<i64>),
+                parse_quote!(::prost::alloc::vec::Vec<i128>),
+                parse_quote!(::prost::alloc::vec::Vec<isize>),
+                parse_quote!(::prost::alloc::vec::Vec<u8>),
+                parse_quote!(::prost::alloc::vec::Vec<u16>),
+                parse_quote!(::prost::alloc::vec::Vec<u32>),
+                parse_quote!(::prost::alloc::vec::Vec<u64>),
+                parse_quote!(::prost::alloc::vec::Vec<u128>),
+                parse_quote!(::prost::alloc::vec::Vec<usize>),
             ];
 
-            if int_types.contains(&field.ty) {
+            if vec_int_types.contains(&field.ty) {
                 let from_str: syn::Attribute = parse_quote! {
                     #[serde(
                         serialize_with = "crate::serde::as_str_vec::serialize",

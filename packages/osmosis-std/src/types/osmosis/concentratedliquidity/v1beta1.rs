@@ -1467,6 +1467,10 @@ pub struct MsgWithdrawPositionResponse {
 pub struct MsgCollectSpreadRewards {
     #[prost(uint64, repeated, packed = "false", tag = "1")]
     #[serde(alias = "positionIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub position_ids: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, tag = "2")]
     pub sender: ::prost::alloc::string::String,
@@ -1506,6 +1510,10 @@ pub struct MsgCollectSpreadRewardsResponse {
 pub struct MsgCollectIncentives {
     #[prost(uint64, repeated, packed = "false", tag = "1")]
     #[serde(alias = "positionIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub position_ids: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, tag = "2")]
     pub sender: ::prost::alloc::string::String,
@@ -1546,6 +1554,10 @@ pub struct MsgCollectIncentivesResponse {
 pub struct MsgFungifyChargedPositions {
     #[prost(uint64, repeated, packed = "false", tag = "1")]
     #[serde(alias = "positionIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub position_ids: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, tag = "2")]
     pub sender: ::prost::alloc::string::String,

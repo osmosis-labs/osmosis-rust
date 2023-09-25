@@ -19,6 +19,10 @@ pub struct Params {
     /// example, an authorized_tick_spacing of [1, 10, 30] allows for pools
     /// to be created with tick spacing of 1, 10, or 30.
     #[prost(uint64, repeated, packed = "false", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub authorized_tick_spacing: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, repeated, tag = "2")]
     pub authorized_spread_factors: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,

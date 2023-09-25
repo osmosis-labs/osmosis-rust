@@ -98,6 +98,10 @@ pub struct RouteStatistics {
     pub number_of_trades: ::prost::alloc::string::String,
     /// route is the route that was used (pool ids along the arbitrage route)
     #[prost(uint64, repeated, packed = "false", tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub route: ::prost::alloc::vec::Vec<u64>,
 }
 /// PoolWeights contains the weights of all of the different pool types. This
@@ -645,6 +649,10 @@ pub struct QueryGetProtoRevAllProfitsResponse {
 pub struct QueryGetProtoRevStatisticsByRouteRequest {
     /// route is the set of pool ids to query statistics by i.e. 1,2,3
     #[prost(uint64, repeated, packed = "false", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub route: ::prost::alloc::vec::Vec<u64>,
 }
 /// QueryGetProtoRevStatisticsByRouteResponse is response type for the

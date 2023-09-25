@@ -22,7 +22,7 @@ pub mod as_str {
 }
 
 pub mod as_str_vec {
-    use serde::{de, Deserialize, Deserializer, Serializer, Serialize};
+    use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
     use std::{fmt::Display, str::FromStr};
 
     pub fn deserialize<'de, T, D>(deserializer: D) -> Result<Vec<T>, D::Error>

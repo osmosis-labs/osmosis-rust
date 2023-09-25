@@ -29,6 +29,10 @@ pub struct Node {
 #[proto_message(type_url = "/osmosis.store.v1beta1.Child")]
 pub struct Child {
     #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub index: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag = "2")]
     pub accumulation: ::prost::alloc::string::String,
