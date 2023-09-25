@@ -38,7 +38,7 @@ pub mod as_str_vec {
             .collect()
     }
 
-    pub fn serialize<S, T>(values: &Vec<T>, serializer: S) -> Result<S::Ok, S::Error>
+    pub fn serialize<S, T>(values: &[T], serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
         T: Display,

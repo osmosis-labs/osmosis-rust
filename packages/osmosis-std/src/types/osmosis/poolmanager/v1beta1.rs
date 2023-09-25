@@ -612,6 +612,10 @@ pub struct EstimateSwapExactAmountInWithPrimitiveTypesRequest {
     pub token_in: ::prost::alloc::string::String,
     #[prost(uint64, repeated, packed = "false", tag = "3")]
     #[serde(alias = "routes_poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub routes_pool_id: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, repeated, tag = "4")]
     pub routes_token_out_denom: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
@@ -721,6 +725,10 @@ pub struct EstimateSwapExactAmountOutWithPrimitiveTypesRequest {
     pub pool_id: u64,
     #[prost(uint64, repeated, packed = "false", tag = "2")]
     #[serde(alias = "routes_poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
     pub routes_pool_id: ::prost::alloc::vec::Vec<u64>,
     #[prost(string, repeated, tag = "3")]
     pub routes_token_in_denom: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
