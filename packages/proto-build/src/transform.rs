@@ -1,20 +1,20 @@
 use heck::ToUpperCamelCase;
 use log::debug;
 use prost_types::FileDescriptorSet;
-use quote::ToTokens;
+
 use regex::Regex;
 use std::ffi::OsStr;
 use std::fs::{create_dir_all, remove_dir_all};
 use std::path::{Path, PathBuf};
 use std::{fs, io};
-use syn::{parse_quote, File, Item, ItemMod};
+use syn::{File, Item, ItemMod};
 use walkdir::WalkDir;
 
 use crate::transformers;
 
 /// Protos belonging to these Protobuf packages will be excluded
 /// (i.e. because they are sourced from `tendermint-proto`)
-const EXCLUDED_PROTO_PACKAGES: &[&str] = &["cosmos_proto", "gogoproto", "google", "tendermint"];
+const EXCLUDED_PROTO_PACKAGES: &[&str] = &["cosmos_proto", "gogoproto", "google"];
 
 pub fn copy_and_transform_all(from_dir: &Path, to_dir: &Path, descriptor: &FileDescriptorSet) {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
@@ -131,29 +131,6 @@ fn transform_items(
     ancestors: &[String],
     descriptor: &FileDescriptorSet,
 ) -> Vec<Item> {
-    // TODO: Remove this temporary hack when cosmos & tendermint code gen is supported
-    let remove_struct_fields_that_depends_on_tendermint_proto = |i: Item| match i.clone() {
-        Item::Struct(s) => {
-            let is_depending_on_tendermint = s.fields.iter().any(|field| {
-                let tt = field.ty.to_token_stream();
-                tt.to_string().contains("tendermint_proto")
-            });
-
-            if is_depending_on_tendermint {
-                let ident = s.ident;
-                Item::Struct(parse_quote! {
-                    /// NOTE: The following type is not implemented due to current limitations of code generator
-                    /// which currently has issue with tendermint_proto.
-                    /// This will be fixed in the upcoming release.
-                    #[allow(dead_code)]
-                    struct #ident {}
-                })
-            } else {
-                Item::Struct(s)
-            }
-        }
-        _ => i,
-    };
     items
         .into_iter()
         .map(|i| match i {
@@ -175,8 +152,6 @@ fn transform_items(
 
             i => i,
         })
-        // TODO: Remove this temporary hack when cosmos & tendermint code gen is supported
-        .map(remove_struct_fields_that_depends_on_tendermint_proto)
         .map(|i: Item| transform_nested_mod(i, src, ancestors, descriptor))
         .collect::<Vec<Item>>()
 }
