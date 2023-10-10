@@ -1,9 +1,138 @@
 use osmosis_std_derive::CosmwasmExt;
-/// NOTE: The following type is not implemented due to current limitations of code generator
-/// which currently has issue with tendermint_proto.
-/// This will be fixed in the upcoming release.
-#[allow(dead_code)]
-struct HistoricalInfo {}
+/// StakeAuthorization defines authorization for delegate/undelegate/redelegate.
+///
+/// Since: cosmos-sdk 0.43
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.StakeAuthorization")]
+pub struct StakeAuthorization {
+    /// max_tokens specifies the maximum amount of tokens can be delegate to a validator. If it is
+    /// empty, there is no spend limit and any amount of coins can be delegated.
+    #[prost(message, optional, tag = "1")]
+    pub max_tokens: ::core::option::Option<super::super::base::v1beta1::Coin>,
+    /// authorization_type defines one of AuthorizationType.
+    #[prost(enumeration = "AuthorizationType", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub authorization_type: i32,
+    /// validators is the oneof that represents either allow_list or deny_list
+    #[prost(oneof = "stake_authorization::Validators", tags = "2, 3")]
+    pub validators: ::core::option::Option<stake_authorization::Validators>,
+}
+/// Nested message and enum types in `StakeAuthorization`.
+pub mod stake_authorization {
+    use osmosis_std_derive::CosmwasmExt;
+    /// Validators defines list of validator addresses.
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(
+        Clone,
+        PartialEq,
+        Eq,
+        ::prost::Message,
+        ::serde::Serialize,
+        ::serde::Deserialize,
+        ::schemars::JsonSchema,
+        CosmwasmExt,
+    )]
+    #[proto_message(type_url = "/cosmos.staking.v1beta1.")]
+    pub struct Validators_ {
+        #[prost(string, repeated, tag = "1")]
+        pub address: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    }
+    /// validators is the oneof that represents either allow_list or deny_list
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(
+        Clone,
+        PartialEq,
+        Eq,
+        ::prost::Oneof,
+        ::serde::Serialize,
+        ::serde::Deserialize,
+        ::schemars::JsonSchema,
+    )]
+    pub enum Validators {
+        /// allow_list specifies list of validator addresses to whom grantee can delegate tokens on behalf of granter's
+        /// account.
+        #[prost(message, tag = "2")]
+        AllowList(Validators_),
+        /// deny_list specifies list of validator addresses to whom grantee can not delegate tokens.
+        #[prost(message, tag = "3")]
+        DenyList(Validators_),
+    }
+}
+/// AuthorizationType defines the type of staking module authorization type
+///
+/// Since: cosmos-sdk 0.43
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+#[derive(::serde::Serialize, ::serde::Deserialize, ::schemars::JsonSchema)]
+pub enum AuthorizationType {
+    /// AUTHORIZATION_TYPE_UNSPECIFIED specifies an unknown authorization type
+    Unspecified = 0,
+    /// AUTHORIZATION_TYPE_DELEGATE defines an authorization type for Msg/Delegate
+    Delegate = 1,
+    /// AUTHORIZATION_TYPE_UNDELEGATE defines an authorization type for Msg/Undelegate
+    Undelegate = 2,
+    /// AUTHORIZATION_TYPE_REDELEGATE defines an authorization type for Msg/BeginRedelegate
+    Redelegate = 3,
+}
+impl AuthorizationType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            AuthorizationType::Unspecified => "AUTHORIZATION_TYPE_UNSPECIFIED",
+            AuthorizationType::Delegate => "AUTHORIZATION_TYPE_DELEGATE",
+            AuthorizationType::Undelegate => "AUTHORIZATION_TYPE_UNDELEGATE",
+            AuthorizationType::Redelegate => "AUTHORIZATION_TYPE_REDELEGATE",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "AUTHORIZATION_TYPE_UNSPECIFIED" => Some(Self::Unspecified),
+            "AUTHORIZATION_TYPE_DELEGATE" => Some(Self::Delegate),
+            "AUTHORIZATION_TYPE_UNDELEGATE" => Some(Self::Undelegate),
+            "AUTHORIZATION_TYPE_REDELEGATE" => Some(Self::Redelegate),
+            _ => None,
+        }
+    }
+}
+/// HistoricalInfo contains header and validator information for a given block.
+/// It is stored as part of staking module's state, which persists the `n` most
+/// recent HistoricalInfo
+/// (`n` is set by the staking module's `historical_entries` parameter).
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.HistoricalInfo")]
+pub struct HistoricalInfo {
+    #[prost(message, optional, tag = "1")]
+    pub header: ::core::option::Option<super::super::super::tendermint::types::Header>,
+    #[prost(message, repeated, tag = "2")]
+    pub valset: ::prost::alloc::vec::Vec<Validator>,
+}
 /// CommissionRates defines the initial commission rates to be used for creating
 /// a validator.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -621,6 +750,633 @@ pub struct LastValidatorPower {
     )]
     pub power: i64,
 }
+/// QueryValidatorsRequest is request type for Query/Validators RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryValidatorsRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/Validators",
+    response_type = QueryValidatorsResponse
+)]
+pub struct QueryValidatorsRequest {
+    /// status enables to query for validators matching a given status.
+    #[prost(string, tag = "1")]
+    pub status: ::prost::alloc::string::String,
+    /// pagination defines an optional pagination for the request.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// QueryValidatorsResponse is response type for the Query/Validators RPC method
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryValidatorsResponse")]
+pub struct QueryValidatorsResponse {
+    /// validators contains all the queried validators.
+    #[prost(message, repeated, tag = "1")]
+    pub validators: ::prost::alloc::vec::Vec<Validator>,
+    /// pagination defines the pagination in the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+}
+/// QueryValidatorRequest is response type for the Query/Validator RPC method
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryValidatorRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/Validator",
+    response_type = QueryValidatorResponse
+)]
+pub struct QueryValidatorRequest {
+    /// validator_addr defines the validator address to query for.
+    #[prost(string, tag = "1")]
+    pub validator_addr: ::prost::alloc::string::String,
+}
+/// QueryValidatorResponse is response type for the Query/Validator RPC method
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryValidatorResponse")]
+pub struct QueryValidatorResponse {
+    /// validator defines the the validator info.
+    #[prost(message, optional, tag = "1")]
+    pub validator: ::core::option::Option<Validator>,
+}
+/// QueryValidatorDelegationsRequest is request type for the
+/// Query/ValidatorDelegations RPC method
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryValidatorDelegationsRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/ValidatorDelegations",
+    response_type = QueryValidatorDelegationsResponse
+)]
+pub struct QueryValidatorDelegationsRequest {
+    /// validator_addr defines the validator address to query for.
+    #[prost(string, tag = "1")]
+    pub validator_addr: ::prost::alloc::string::String,
+    /// pagination defines an optional pagination for the request.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// QueryValidatorDelegationsResponse is response type for the
+/// Query/ValidatorDelegations RPC method
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryValidatorDelegationsResponse")]
+pub struct QueryValidatorDelegationsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub delegation_responses: ::prost::alloc::vec::Vec<DelegationResponse>,
+    /// pagination defines the pagination in the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+}
+/// QueryValidatorUnbondingDelegationsRequest is required type for the
+/// Query/ValidatorUnbondingDelegations RPC method
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryValidatorUnbondingDelegationsRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/ValidatorUnbondingDelegations",
+    response_type = QueryValidatorUnbondingDelegationsResponse
+)]
+pub struct QueryValidatorUnbondingDelegationsRequest {
+    /// validator_addr defines the validator address to query for.
+    #[prost(string, tag = "1")]
+    pub validator_addr: ::prost::alloc::string::String,
+    /// pagination defines an optional pagination for the request.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// QueryValidatorUnbondingDelegationsResponse is response type for the
+/// Query/ValidatorUnbondingDelegations RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryValidatorUnbondingDelegationsResponse")]
+pub struct QueryValidatorUnbondingDelegationsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub unbonding_responses: ::prost::alloc::vec::Vec<UnbondingDelegation>,
+    /// pagination defines the pagination in the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+}
+/// QueryDelegationRequest is request type for the Query/Delegation RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegationRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/Delegation",
+    response_type = QueryDelegationResponse
+)]
+pub struct QueryDelegationRequest {
+    /// delegator_addr defines the delegator address to query for.
+    #[prost(string, tag = "1")]
+    pub delegator_addr: ::prost::alloc::string::String,
+    /// validator_addr defines the validator address to query for.
+    #[prost(string, tag = "2")]
+    pub validator_addr: ::prost::alloc::string::String,
+}
+/// QueryDelegationResponse is response type for the Query/Delegation RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegationResponse")]
+pub struct QueryDelegationResponse {
+    /// delegation_responses defines the delegation info of a delegation.
+    #[prost(message, optional, tag = "1")]
+    pub delegation_response: ::core::option::Option<DelegationResponse>,
+}
+/// QueryUnbondingDelegationRequest is request type for the
+/// Query/UnbondingDelegation RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryUnbondingDelegationRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/UnbondingDelegation",
+    response_type = QueryUnbondingDelegationResponse
+)]
+pub struct QueryUnbondingDelegationRequest {
+    /// delegator_addr defines the delegator address to query for.
+    #[prost(string, tag = "1")]
+    pub delegator_addr: ::prost::alloc::string::String,
+    /// validator_addr defines the validator address to query for.
+    #[prost(string, tag = "2")]
+    pub validator_addr: ::prost::alloc::string::String,
+}
+/// QueryDelegationResponse is response type for the Query/UnbondingDelegation
+/// RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryUnbondingDelegationResponse")]
+pub struct QueryUnbondingDelegationResponse {
+    /// unbond defines the unbonding information of a delegation.
+    #[prost(message, optional, tag = "1")]
+    pub unbond: ::core::option::Option<UnbondingDelegation>,
+}
+/// QueryDelegatorDelegationsRequest is request type for the
+/// Query/DelegatorDelegations RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegatorDelegationsRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/DelegatorDelegations",
+    response_type = QueryDelegatorDelegationsResponse
+)]
+pub struct QueryDelegatorDelegationsRequest {
+    /// delegator_addr defines the delegator address to query for.
+    #[prost(string, tag = "1")]
+    pub delegator_addr: ::prost::alloc::string::String,
+    /// pagination defines an optional pagination for the request.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// QueryDelegatorDelegationsResponse is response type for the
+/// Query/DelegatorDelegations RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegatorDelegationsResponse")]
+pub struct QueryDelegatorDelegationsResponse {
+    /// delegation_responses defines all the delegations' info of a delegator.
+    #[prost(message, repeated, tag = "1")]
+    pub delegation_responses: ::prost::alloc::vec::Vec<DelegationResponse>,
+    /// pagination defines the pagination in the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+}
+/// QueryDelegatorUnbondingDelegationsRequest is request type for the
+/// Query/DelegatorUnbondingDelegations RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegatorUnbondingDelegationsRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/DelegatorUnbondingDelegations",
+    response_type = QueryDelegatorUnbondingDelegationsResponse
+)]
+pub struct QueryDelegatorUnbondingDelegationsRequest {
+    /// delegator_addr defines the delegator address to query for.
+    #[prost(string, tag = "1")]
+    pub delegator_addr: ::prost::alloc::string::String,
+    /// pagination defines an optional pagination for the request.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// QueryUnbondingDelegatorDelegationsResponse is response type for the
+/// Query/UnbondingDelegatorDelegations RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegatorUnbondingDelegationsResponse")]
+pub struct QueryDelegatorUnbondingDelegationsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub unbonding_responses: ::prost::alloc::vec::Vec<UnbondingDelegation>,
+    /// pagination defines the pagination in the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+}
+/// QueryRedelegationsRequest is request type for the Query/Redelegations RPC
+/// method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryRedelegationsRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/Redelegations",
+    response_type = QueryRedelegationsResponse
+)]
+pub struct QueryRedelegationsRequest {
+    /// delegator_addr defines the delegator address to query for.
+    #[prost(string, tag = "1")]
+    pub delegator_addr: ::prost::alloc::string::String,
+    /// src_validator_addr defines the validator address to redelegate from.
+    #[prost(string, tag = "2")]
+    pub src_validator_addr: ::prost::alloc::string::String,
+    /// dst_validator_addr defines the validator address to redelegate to.
+    #[prost(string, tag = "3")]
+    pub dst_validator_addr: ::prost::alloc::string::String,
+    /// pagination defines an optional pagination for the request.
+    #[prost(message, optional, tag = "4")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// QueryRedelegationsResponse is response type for the Query/Redelegations RPC
+/// method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryRedelegationsResponse")]
+pub struct QueryRedelegationsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub redelegation_responses: ::prost::alloc::vec::Vec<RedelegationResponse>,
+    /// pagination defines the pagination in the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+}
+/// QueryDelegatorValidatorsRequest is request type for the
+/// Query/DelegatorValidators RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegatorValidatorsRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/DelegatorValidators",
+    response_type = QueryDelegatorValidatorsResponse
+)]
+pub struct QueryDelegatorValidatorsRequest {
+    /// delegator_addr defines the delegator address to query for.
+    #[prost(string, tag = "1")]
+    pub delegator_addr: ::prost::alloc::string::String,
+    /// pagination defines an optional pagination for the request.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// QueryDelegatorValidatorsResponse is response type for the
+/// Query/DelegatorValidators RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegatorValidatorsResponse")]
+pub struct QueryDelegatorValidatorsResponse {
+    /// validators defines the the validators' info of a delegator.
+    #[prost(message, repeated, tag = "1")]
+    pub validators: ::prost::alloc::vec::Vec<Validator>,
+    /// pagination defines the pagination in the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+}
+/// QueryDelegatorValidatorRequest is request type for the
+/// Query/DelegatorValidator RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegatorValidatorRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/DelegatorValidator",
+    response_type = QueryDelegatorValidatorResponse
+)]
+pub struct QueryDelegatorValidatorRequest {
+    /// delegator_addr defines the delegator address to query for.
+    #[prost(string, tag = "1")]
+    pub delegator_addr: ::prost::alloc::string::String,
+    /// validator_addr defines the validator address to query for.
+    #[prost(string, tag = "2")]
+    pub validator_addr: ::prost::alloc::string::String,
+}
+/// QueryDelegatorValidatorResponse response type for the
+/// Query/DelegatorValidator RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryDelegatorValidatorResponse")]
+pub struct QueryDelegatorValidatorResponse {
+    /// validator defines the the validator info.
+    #[prost(message, optional, tag = "1")]
+    pub validator: ::core::option::Option<Validator>,
+}
+/// QueryHistoricalInfoRequest is request type for the Query/HistoricalInfo RPC
+/// method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryHistoricalInfoRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/HistoricalInfo",
+    response_type = QueryHistoricalInfoResponse
+)]
+pub struct QueryHistoricalInfoRequest {
+    /// height defines at which height to query the historical info.
+    #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub height: i64,
+}
+/// QueryHistoricalInfoResponse is response type for the Query/HistoricalInfo RPC
+/// method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryHistoricalInfoResponse")]
+pub struct QueryHistoricalInfoResponse {
+    /// hist defines the historical info at the given height.
+    #[prost(message, optional, tag = "1")]
+    pub hist: ::core::option::Option<HistoricalInfo>,
+}
+/// QueryPoolRequest is request type for the Query/Pool RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryPoolRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/Pool",
+    response_type = QueryPoolResponse
+)]
+pub struct QueryPoolRequest {}
+/// QueryPoolResponse is response type for the Query/Pool RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryPoolResponse")]
+pub struct QueryPoolResponse {
+    /// pool defines the pool info.
+    #[prost(message, optional, tag = "1")]
+    pub pool: ::core::option::Option<Pool>,
+}
+/// QueryParamsRequest is request type for the Query/Params RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryParamsRequest")]
+#[proto_query(
+    path = "/cosmos.staking.v1beta1.Query/Params",
+    response_type = QueryParamsResponse
+)]
+pub struct QueryParamsRequest {}
+/// QueryParamsResponse is response type for the Query/Params RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.staking.v1beta1.QueryParamsResponse")]
+pub struct QueryParamsResponse {
+    /// params holds all the parameters of this module.
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+}
 /// MsgCreateValidator defines a SDK message for creating a new validator.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -820,4 +1576,140 @@ pub struct MsgUndelegate {
 pub struct MsgUndelegateResponse {
     #[prost(message, optional, tag = "1")]
     pub completion_time: ::core::option::Option<crate::shim::Timestamp>,
+}
+pub struct StakingQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> StakingQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn validators(
+        &self,
+        status: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryValidatorsResponse, cosmwasm_std::StdError> {
+        QueryValidatorsRequest { status, pagination }.query(self.querier)
+    }
+    pub fn validator(
+        &self,
+        validator_addr: ::prost::alloc::string::String,
+    ) -> Result<QueryValidatorResponse, cosmwasm_std::StdError> {
+        QueryValidatorRequest { validator_addr }.query(self.querier)
+    }
+    pub fn validator_delegations(
+        &self,
+        validator_addr: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryValidatorDelegationsResponse, cosmwasm_std::StdError> {
+        QueryValidatorDelegationsRequest {
+            validator_addr,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn validator_unbonding_delegations(
+        &self,
+        validator_addr: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryValidatorUnbondingDelegationsResponse, cosmwasm_std::StdError> {
+        QueryValidatorUnbondingDelegationsRequest {
+            validator_addr,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn delegation(
+        &self,
+        delegator_addr: ::prost::alloc::string::String,
+        validator_addr: ::prost::alloc::string::String,
+    ) -> Result<QueryDelegationResponse, cosmwasm_std::StdError> {
+        QueryDelegationRequest {
+            delegator_addr,
+            validator_addr,
+        }
+        .query(self.querier)
+    }
+    pub fn unbonding_delegation(
+        &self,
+        delegator_addr: ::prost::alloc::string::String,
+        validator_addr: ::prost::alloc::string::String,
+    ) -> Result<QueryUnbondingDelegationResponse, cosmwasm_std::StdError> {
+        QueryUnbondingDelegationRequest {
+            delegator_addr,
+            validator_addr,
+        }
+        .query(self.querier)
+    }
+    pub fn delegator_delegations(
+        &self,
+        delegator_addr: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryDelegatorDelegationsResponse, cosmwasm_std::StdError> {
+        QueryDelegatorDelegationsRequest {
+            delegator_addr,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn delegator_unbonding_delegations(
+        &self,
+        delegator_addr: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryDelegatorUnbondingDelegationsResponse, cosmwasm_std::StdError> {
+        QueryDelegatorUnbondingDelegationsRequest {
+            delegator_addr,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn redelegations(
+        &self,
+        delegator_addr: ::prost::alloc::string::String,
+        src_validator_addr: ::prost::alloc::string::String,
+        dst_validator_addr: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryRedelegationsResponse, cosmwasm_std::StdError> {
+        QueryRedelegationsRequest {
+            delegator_addr,
+            src_validator_addr,
+            dst_validator_addr,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn delegator_validators(
+        &self,
+        delegator_addr: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryDelegatorValidatorsResponse, cosmwasm_std::StdError> {
+        QueryDelegatorValidatorsRequest {
+            delegator_addr,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn delegator_validator(
+        &self,
+        delegator_addr: ::prost::alloc::string::String,
+        validator_addr: ::prost::alloc::string::String,
+    ) -> Result<QueryDelegatorValidatorResponse, cosmwasm_std::StdError> {
+        QueryDelegatorValidatorRequest {
+            delegator_addr,
+            validator_addr,
+        }
+        .query(self.querier)
+    }
+    pub fn historical_info(
+        &self,
+        height: i64,
+    ) -> Result<QueryHistoricalInfoResponse, cosmwasm_std::StdError> {
+        QueryHistoricalInfoRequest { height }.query(self.querier)
+    }
+    pub fn pool(&self) -> Result<QueryPoolResponse, cosmwasm_std::StdError> {
+        QueryPoolRequest {}.query(self.querier)
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
+    }
 }

@@ -9,3 +9,6 @@
 [submodule "wasmd"]
 	path = dependencies/wasmd
 	url = https://github.com/CosmWasm/wasmd.git
+[submodule "dependencies/cometbft"]
+	path = dependencies/cometbft
+	url = https://github.com/cometbft/cometbft.git

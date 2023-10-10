@@ -10,16 +10,6 @@ use walkdir::WalkDir;
 
 use crate::{mod_gen, transform};
 
-const UNSUPPORTED_MODULE: &[&str] = &[
-    // currently unsupported due to dependency on tendermint-proto
-    "cosmos.base.abci",
-    "cosmos.base.kv",
-    "cosmos.base.reflection",
-    "cosmos.base.store",
-    "cosmos.base.snapshots",
-    "cosmos.base.tendermint",
-];
-
 #[derive(Clone, Debug)]
 pub struct CosmosProject {
     pub name: String,
@@ -64,7 +54,6 @@ impl CodeGenerator {
             self.project.name
         );
 
-        self.exclude_unsupported_module();
         self.transform();
         self.generate_mod_file();
         self.fmt();
@@ -85,26 +74,6 @@ impl CodeGenerator {
             &self.project.version,
             &self.tmp_namespaced_dir(),
         );
-    }
-
-    fn exclude_unsupported_module(&self) {
-        for entry in WalkDir::new(self.tmp_namespaced_dir()) {
-            let entry = entry.unwrap();
-            if entry.file_type().is_file() {
-                let filename = entry
-                    .file_name()
-                    .to_os_string()
-                    .to_str()
-                    .unwrap()
-                    .to_string();
-                if UNSUPPORTED_MODULE
-                    .iter()
-                    .any(|module| filename.contains(module))
-                {
-                    fs::remove_file(entry.path()).unwrap();
-                }
-            }
-        }
     }
 
     fn generate_mod_file(&self) {
@@ -145,7 +114,8 @@ impl CodeGenerator {
     fn compile_proto(&self) {
         let buf_gen_template = self.root.join("buf.gen.yaml");
 
-        let all_related_projects = vec![self.deps.clone(), vec![self.project.clone()]].concat();
+        let mut all_related_projects = self.deps.clone();
+        all_related_projects.push(self.project.clone());
 
         info!(
             "🧪 [{}] Compiling types from protobuf definitions...",
