@@ -22,6 +22,9 @@ const WASMD_REV: &str = "v0.31.0-osmo-v16";
 /// The cometbft commit or tag to be cloned and used to build the proto files
 const COMETBFT_REV: &str = "v0.34.29";
 
+/// The ibc-go commit or tag to be cloned and used to build the proto files
+const IBC_GO_REV: &str = "v4.5.0";
+
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.
 
@@ -35,6 +38,8 @@ const OSMOSIS_DIR: &str = "../../dependencies/osmosis/";
 const WASMD_DIR: &str = "../../dependencies/wasmd/";
 /// Directory where the cometbft submodule is located
 const COMETBFT_DIR: &str = "../../dependencies/cometbft/";
+/// Directory where the ibc-go submodule is located
+const IBC_GO_DIR: &str = "../../dependencies/ibc-go/";
 
 /// A temporary directory for proto building
 const TMP_BUILD_DIR: &str = "/tmp/tmp-protobuf/";
@@ -45,6 +50,8 @@ pub fn generate() {
         git::update_submodule(COSMOS_SDK_DIR, COSMOS_SDK_REV);
         git::update_submodule(OSMOSIS_DIR, OSMOSIS_REV);
         git::update_submodule(WASMD_DIR, WASMD_REV);
+        git::update_submodule(COMETBFT_DIR, COMETBFT_REV);
+        git::update_submodule(IBC_GO_DIR, IBC_GO_REV);
     }
 
     let tmp_build_dir: PathBuf = TMP_BUILD_DIR.parse().unwrap();
@@ -69,6 +76,13 @@ pub fn generate() {
         include_mods: vec!["types".to_string()],
     };
 
+    let ibc_project = CosmosProject {
+        name: "ibc".to_string(),
+        version: IBC_GO_REV.to_string(),
+        project_dir: IBC_GO_DIR.to_string(),
+        include_mods: vec![],
+    };
+
     let cosmos_project = CosmosProject {
         name: "cosmos".to_string(),
         version: COSMOS_SDK_REV.to_string(),
@@ -80,7 +94,7 @@ pub fn generate() {
         out_dir,
         tmp_build_dir,
         osmosis_project,
-        vec![cometbft_project, cosmos_project, wasmd_project],
+        vec![ibc_project, cometbft_project, cosmos_project, wasmd_project],
     );
 
     osmosis_code_generator.generate();
