@@ -12,3 +12,6 @@
 [submodule "dependencies/cometbft"]
 	path = dependencies/cometbft
 	url = https://github.com/cometbft/cometbft.git
+[submodule "dependencies/ibc-go"]
+	path = dependencies/ibc-go
+	url = https://github.com/cosmos/ibc-go.git
