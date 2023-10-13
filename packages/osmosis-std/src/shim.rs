@@ -294,6 +294,8 @@ expand_as_any!(
     // balancer pool param has more fields
     crate::types::osmosis::gamm::v1beta1::PoolParams,
     crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::PoolParams,
+    // cosmos-sdk structs
+    crate::types::cosmos::auth::v1beta1::ModuleAccount,
 );
 
 macro_rules! impl_prost_types_exact_conversion {
