@@ -77,8 +77,8 @@ pub struct UploadCosmWasmPoolCodeAndWhiteListProposal {
     /// WASMByteCode can be raw or gzip compressed
     #[prost(bytes = "vec", tag = "3")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
 }
@@ -150,15 +150,15 @@ pub struct MigratePoolContractsProposal {
     /// Only one of new_code_id and wasm_byte_code should be set.
     #[prost(bytes = "vec", tag = "5")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
     /// MigrateMsg migrate message to be used for migrating the pool contracts.
     #[prost(bytes = "vec", tag = "6")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub migrate_msg: ::prost::alloc::vec::Vec<u8>,
 }
@@ -460,8 +460,8 @@ pub struct CosmWasmPool {
     pub code_id: u64,
     #[prost(bytes = "vec", tag = "4")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub instantiate_msg: ::prost::alloc::vec::Vec<u8>,
 }
@@ -743,8 +743,8 @@ pub struct MsgCreateCosmWasmPool {
     pub code_id: u64,
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub instantiate_msg: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag = "3")]

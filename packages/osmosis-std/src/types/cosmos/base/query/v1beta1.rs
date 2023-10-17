@@ -24,8 +24,8 @@ pub struct PageRequest {
     /// should be set.
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub key: ::prost::alloc::vec::Vec<u8>,
     /// offset is a numeric offset that can be used when key is unavailable.
@@ -81,8 +81,8 @@ pub struct PageResponse {
     /// query the next page most efficiently
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub next_key: ::prost::alloc::vec::Vec<u8>,
     /// total is total number of results available if PageRequest.count_total

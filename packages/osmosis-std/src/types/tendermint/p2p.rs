@@ -82,8 +82,8 @@ pub struct DefaultNodeInfo {
     pub version: ::prost::alloc::string::String,
     #[prost(bytes = "vec", tag = "6")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub channels: ::prost::alloc::vec::Vec<u8>,
     #[prost(string, tag = "7")]

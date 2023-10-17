@@ -278,8 +278,8 @@ pub struct CodeInfo {
     /// CodeHash is the unique identifier created by wasmvm
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub code_hash: ::prost::alloc::vec::Vec<u8>,
     /// Creator address who initially stored the code
@@ -364,8 +364,8 @@ pub struct ContractCodeHistoryEntry {
     pub updated: ::core::option::Option<AbsoluteTxPosition>,
     #[prost(bytes = "vec", tag = "4")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
 }
@@ -417,15 +417,15 @@ pub struct Model {
     /// hex-encode key to read it better (this is often ascii)
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub key: ::prost::alloc::vec::Vec<u8>,
     /// base64-encode raw value
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub value: ::prost::alloc::vec::Vec<u8>,
 }
@@ -564,8 +564,8 @@ pub struct Code {
     pub code_info: ::core::option::Option<CodeInfo>,
     #[prost(bytes = "vec", tag = "3")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub code_bytes: ::prost::alloc::vec::Vec<u8>,
     /// Pinned to wasmvm cache
@@ -611,8 +611,8 @@ pub struct Contract {
 pub struct Sequence {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub id_key: ::prost::alloc::vec::Vec<u8>,
     #[prost(uint64, tag = "2")]
@@ -659,8 +659,8 @@ pub struct MsgIbcSend {
     /// content is in here.
     #[prost(bytes = "vec", tag = "6")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
@@ -729,8 +729,8 @@ pub struct StoreCodeProposal {
     /// WASMByteCode can be raw or gzip compressed
     #[prost(bytes = "vec", tag = "4")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
     /// InstantiatePermission to apply on contract creation, optional
@@ -750,8 +750,8 @@ pub struct StoreCodeProposal {
     /// contract verification
     #[prost(bytes = "vec", tag = "11")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub code_hash: ::prost::alloc::vec::Vec<u8>,
 }
@@ -796,8 +796,8 @@ pub struct InstantiateContractProposal {
     /// Msg json encoded message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "7")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
@@ -845,8 +845,8 @@ pub struct InstantiateContract2Proposal {
     /// Msg json encode message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "7")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
@@ -855,8 +855,8 @@ pub struct InstantiateContract2Proposal {
     /// Salt is an arbitrary value provided by the sender. Size can be 1 to 64.
     #[prost(bytes = "vec", tag = "9")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub salt: ::prost::alloc::vec::Vec<u8>,
     /// FixMsg include the msg value into the hash for the predictable address.
@@ -900,8 +900,8 @@ pub struct MigrateContractProposal {
     /// Msg json encoded message to be passed to the contract on migration
     #[prost(bytes = "vec", tag = "6")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
 }
@@ -931,8 +931,8 @@ pub struct SudoContractProposal {
     /// Msg json encoded message to be passed to the contract as sudo
     #[prost(bytes = "vec", tag = "4")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
 }
@@ -966,8 +966,8 @@ pub struct ExecuteContractProposal {
     /// Msg json encoded message to be passed to the contract as execute
     #[prost(bytes = "vec", tag = "5")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
@@ -1166,8 +1166,8 @@ pub struct StoreAndInstantiateContractProposal {
     /// WASMByteCode can be raw or gzip compressed
     #[prost(bytes = "vec", tag = "4")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
     /// InstantiatePermission to apply on contract creation, optional
@@ -1185,8 +1185,8 @@ pub struct StoreAndInstantiateContractProposal {
     /// Msg json encoded message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "9")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
@@ -1203,8 +1203,8 @@ pub struct StoreAndInstantiateContractProposal {
     /// contract verification
     #[prost(bytes = "vec", tag = "13")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub code_hash: ::prost::alloc::vec::Vec<u8>,
 }
@@ -1429,8 +1429,8 @@ pub struct QueryRawContractStateRequest {
     pub address: ::prost::alloc::string::String,
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub query_data: ::prost::alloc::vec::Vec<u8>,
 }
@@ -1452,8 +1452,8 @@ pub struct QueryRawContractStateResponse {
     /// Data contains the raw store data
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
@@ -1482,8 +1482,8 @@ pub struct QuerySmartContractStateRequest {
     /// QueryData contains the query data passed to the contract
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub query_data: ::prost::alloc::vec::Vec<u8>,
 }
@@ -1505,8 +1505,8 @@ pub struct QuerySmartContractStateResponse {
     /// Data contains the json data returned from the smart contract
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
@@ -1560,8 +1560,8 @@ pub struct CodeInfoResponse {
     pub creator: ::prost::alloc::string::String,
     #[prost(bytes = "vec", tag = "3")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub data_hash: ::prost::alloc::vec::Vec<u8>,
     #[prost(message, optional, tag = "6")]
@@ -1585,8 +1585,8 @@ pub struct QueryCodeResponse {
     pub code_info: ::core::option::Option<CodeInfoResponse>,
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
@@ -1791,8 +1791,8 @@ pub struct MsgStoreCode {
     /// WASMByteCode can be raw or gzip compressed
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub wasm_byte_code: ::prost::alloc::vec::Vec<u8>,
     /// InstantiatePermission access control to apply on contract creation,
@@ -1825,8 +1825,8 @@ pub struct MsgStoreCodeResponse {
     /// Checksum is the sha256 hash of the stored code
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub checksum: ::prost::alloc::vec::Vec<u8>,
 }
@@ -1865,8 +1865,8 @@ pub struct MsgInstantiateContract {
     /// Msg json encoded message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "5")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
@@ -1908,8 +1908,8 @@ pub struct MsgInstantiateContract2 {
     /// Msg json encoded message to be passed to the contract on instantiation
     #[prost(bytes = "vec", tag = "5")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on instantiation
@@ -1918,8 +1918,8 @@ pub struct MsgInstantiateContract2 {
     /// Salt is an arbitrary value provided by the sender. Size can be 1 to 64.
     #[prost(bytes = "vec", tag = "7")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub salt: ::prost::alloc::vec::Vec<u8>,
     /// FixMsg include the msg value into the hash for the predictable address.
@@ -1947,8 +1947,8 @@ pub struct MsgInstantiateContractResponse {
     /// Data contains bytes to returned from the contract
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
@@ -1972,8 +1972,8 @@ pub struct MsgInstantiateContract2Response {
     /// Data contains bytes to returned from the contract
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
@@ -2000,8 +2000,8 @@ pub struct MsgExecuteContract {
     /// Msg json encoded message to be passed to the contract
     #[prost(bytes = "vec", tag = "3")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
     /// Funds coins that are transferred to the contract on execution
@@ -2025,8 +2025,8 @@ pub struct MsgExecuteContractResponse {
     /// Data contains bytes to returned from the contract
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }
@@ -2061,8 +2061,8 @@ pub struct MsgMigrateContract {
     /// Msg json encoded message to be passed to the contract on migration
     #[prost(bytes = "vec", tag = "4")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub msg: ::prost::alloc::vec::Vec<u8>,
 }
@@ -2084,8 +2084,8 @@ pub struct MsgMigrateContractResponse {
     /// (May be empty)
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub data: ::prost::alloc::vec::Vec<u8>,
 }

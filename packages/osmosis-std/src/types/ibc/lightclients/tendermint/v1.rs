@@ -79,8 +79,8 @@ pub struct ConsensusState {
     pub root: ::core::option::Option<super::super::super::core::commitment::v1::MerkleRoot>,
     #[prost(bytes = "vec", tag = "3")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub next_validators_hash: ::prost::alloc::vec::Vec<u8>,
 }

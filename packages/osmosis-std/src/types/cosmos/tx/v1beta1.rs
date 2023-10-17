@@ -48,16 +48,16 @@ pub struct TxRaw {
     /// representation in SignDoc.
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub body_bytes: ::prost::alloc::vec::Vec<u8>,
     /// auth_info_bytes is a protobuf serialization of an AuthInfo that matches the
     /// representation in SignDoc.
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub auth_info_bytes: ::prost::alloc::vec::Vec<u8>,
     /// signatures is a list of signatures that matches the length and order of
@@ -84,16 +84,16 @@ pub struct SignDoc {
     /// representation in TxRaw.
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub body_bytes: ::prost::alloc::vec::Vec<u8>,
     /// auth_info_bytes is a protobuf serialization of an AuthInfo that matches the
     /// representation in TxRaw.
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub auth_info_bytes: ::prost::alloc::vec::Vec<u8>,
     /// chain_id is the unique identifier of the chain this transaction targets.
@@ -418,8 +418,8 @@ pub struct BroadcastTxRequest {
     /// tx_bytes is the raw transaction.
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub tx_bytes: ::prost::alloc::vec::Vec<u8>,
     #[prost(enumeration = "BroadcastMode", tag = "2")]
@@ -473,8 +473,8 @@ pub struct SimulateRequest {
     /// Since: cosmos-sdk 0.43
     #[prost(bytes = "vec", tag = "2")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub tx_bytes: ::prost::alloc::vec::Vec<u8>,
 }
