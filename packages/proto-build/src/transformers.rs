@@ -202,7 +202,7 @@ pub fn allow_serde_vec_int_as_vec_str(s: ItemStruct) -> ItemStruct {
                 parse_quote!(::prost::alloc::vec::Vec<i64>),
                 parse_quote!(::prost::alloc::vec::Vec<i128>),
                 parse_quote!(::prost::alloc::vec::Vec<isize>),
-                parse_quote!(::prost::alloc::vec::Vec<u8>),
+                // parse_quote!(::prost::alloc::vec::Vec<u8>), -- this is not included because it is used for bytes and has it's own rule
                 parse_quote!(::prost::alloc::vec::Vec<u16>),
                 parse_quote!(::prost::alloc::vec::Vec<u32>),
                 parse_quote!(::prost::alloc::vec::Vec<u64>),
@@ -215,6 +215,35 @@ pub fn allow_serde_vec_int_as_vec_str(s: ItemStruct) -> ItemStruct {
                     #[serde(
                         serialize_with = "crate::serde::as_str_vec::serialize",
                         deserialize_with = "crate::serde::as_str_vec::deserialize"
+                    )]
+                };
+                field.attrs.append(&mut vec![from_str]);
+                field
+            } else {
+                field
+            }
+        })
+        .collect::<Vec<syn::Field>>();
+
+    let fields_named: syn::FieldsNamed = parse_quote! {
+        { #(#fields_vec,)* }
+    };
+    let fields = syn::Fields::Named(fields_named);
+
+    syn::ItemStruct { fields, ..s }
+}
+
+pub fn allow_serde_vec_u8_as_base64_encoded_string(s: ItemStruct) -> ItemStruct {
+    let fields_vec = s
+        .fields
+        .clone()
+        .into_iter()
+        .map(|mut field| {
+            if field.ty == parse_quote!(::prost::alloc::vec::Vec<u8>) {
+                let from_str: syn::Attribute = parse_quote! {
+                    #[serde(
+                        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+                        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
                     )]
                 };
                 field.attrs.append(&mut vec![from_str]);

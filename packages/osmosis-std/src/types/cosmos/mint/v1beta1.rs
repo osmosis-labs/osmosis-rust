@@ -150,8 +150,8 @@ pub struct QueryInflationResponse {
     /// inflation is the current minting inflation value.
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub inflation: ::prost::alloc::vec::Vec<u8>,
 }
@@ -192,8 +192,8 @@ pub struct QueryAnnualProvisionsResponse {
     /// annual_provisions is the current minting annual provisions value.
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str_vec::serialize",
-        deserialize_with = "crate::serde::as_str_vec::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub annual_provisions: ::prost::alloc::vec::Vec<u8>,
 }
