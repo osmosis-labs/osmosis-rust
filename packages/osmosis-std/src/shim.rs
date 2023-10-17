@@ -294,6 +294,15 @@ expand_as_any!(
     // balancer pool param has more fields
     crate::types::osmosis::gamm::v1beta1::PoolParams,
     crate::types::osmosis::gamm::poolmodels::stableswap::v1beta1::PoolParams,
+    // accounts have distincted structure
+    crate::types::cosmos::auth::v1beta1::BaseAccount,
+    crate::types::cosmos::auth::v1beta1::ModuleAccount,
+    // pubkey required for base account
+    // it can't be distinced by structure
+    // so deserialing it back might not work properly
+    crate::types::cosmos::crypto::secp256k1::PubKey,
+    crate::types::cosmos::crypto::secp256r1::PubKey,
+    crate::types::cosmos::crypto::ed25519::PubKey,
 );
 
 macro_rules! impl_prost_types_exact_conversion {
