@@ -850,6 +850,8 @@ pub struct LiquidityNetInDirectionResponse {
     pub current_tick: i64,
     #[prost(string, tag = "3")]
     pub current_liquidity: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub current_sqrt_price: ::prost::alloc::string::String,
 }
 /// =============================== LiquidityPerTickRange
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1251,6 +1253,66 @@ pub struct GetTotalLiquidityResponse {
     #[prost(message, repeated, tag = "1")]
     pub total_liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
 }
+/// =============================== NumNextInitializedTicks
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.NumNextInitializedTicksRequest")]
+#[proto_query(
+    path = "/osmosis.concentratedliquidity.v1beta1.Query/NumNextInitializedTicks",
+    response_type = NumNextInitializedTicksResponse
+)]
+pub struct NumNextInitializedTicksRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    #[prost(string, tag = "2")]
+    pub token_in_denom: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub num_next_initialized_ticks: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.concentratedliquidity.v1beta1.NumNextInitializedTicksResponse"
+)]
+pub struct NumNextInitializedTicksResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub liquidity_depths: ::prost::alloc::vec::Vec<TickLiquidityNet>,
+    #[prost(int64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub current_tick: i64,
+    #[prost(string, tag = "3")]
+    pub current_liquidity: ::prost::alloc::string::String,
+}
 /// ===================== MsgCreatePosition
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -1585,6 +1647,45 @@ pub struct MsgFungifyChargedPositionsResponse {
     )]
     pub new_position_id: u64,
 }
+/// ===================== MsgTransferPositions
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgTransferPositions")]
+pub struct MsgTransferPositions {
+    #[prost(uint64, repeated, packed = "false", tag = "1")]
+    #[serde(alias = "positionIDs")]
+    #[serde(
+        serialize_with = "crate::serde::as_str_vec::serialize",
+        deserialize_with = "crate::serde::as_str_vec::deserialize"
+    )]
+    pub position_ids: ::prost::alloc::vec::Vec<u64>,
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub new_owner: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.MsgTransferPositionsResponse")]
+pub struct MsgTransferPositionsResponse {}
 pub struct ConcentratedliquidityQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
@@ -1708,5 +1809,18 @@ impl<'a, Q: cosmwasm_std::CustomQuery> ConcentratedliquidityQuerier<'a, Q> {
     }
     pub fn get_total_liquidity(&self) -> Result<GetTotalLiquidityResponse, cosmwasm_std::StdError> {
         GetTotalLiquidityRequest {}.query(self.querier)
+    }
+    pub fn num_next_initialized_ticks(
+        &self,
+        pool_id: u64,
+        token_in_denom: ::prost::alloc::string::String,
+        num_next_initialized_ticks: u64,
+    ) -> Result<NumNextInitializedTicksResponse, cosmwasm_std::StdError> {
+        NumNextInitializedTicksRequest {
+            pool_id,
+            token_in_denom,
+            num_next_initialized_ticks,
+        }
+        .query(self.querier)
     }
 }

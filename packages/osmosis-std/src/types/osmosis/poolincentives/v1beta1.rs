@@ -117,9 +117,25 @@ pub struct PoolToGauge {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.PoolToGauges")]
-pub struct PoolToGauges {
+#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.AnyPoolToInternalGauges")]
+pub struct AnyPoolToInternalGauges {
     #[prost(message, repeated, tag = "2")]
+    pub pool_to_gauge: ::prost::alloc::vec::Vec<PoolToGauge>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolincentives.v1beta1.ConcentratedPoolToNoLockGauges")]
+pub struct ConcentratedPoolToNoLockGauges {
+    #[prost(message, repeated, tag = "1")]
     pub pool_to_gauge: ::prost::alloc::vec::Vec<PoolToGauge>,
 }
 /// GenesisState defines the pool incentives module's genesis state.
@@ -143,8 +159,16 @@ pub struct GenesisState {
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
     #[prost(message, optional, tag = "3")]
     pub distr_info: ::core::option::Option<DistrInfo>,
+    /// any_pool_to_internal_gauges defines the gauges for any pool to internal
+    /// pool. For every pool type (e.g. LP, Concentrated, etc), there is one such
+    /// link
     #[prost(message, optional, tag = "4")]
-    pub pool_to_gauges: ::core::option::Option<PoolToGauges>,
+    pub any_pool_to_internal_gauges: ::core::option::Option<AnyPoolToInternalGauges>,
+    /// concentrated_pool_to_no_lock_gauges defines the no lock gauges for
+    /// concentrated pool. This only exists between concentrated pool and no lock
+    /// gauges. Both external and internal gauges are included.
+    #[prost(message, optional, tag = "5")]
+    pub concentrated_pool_to_no_lock_gauges: ::core::option::Option<ConcentratedPoolToNoLockGauges>,
 }
 /// ReplacePoolIncentivesProposal is a gov Content type for updating the pool
 /// incentives. If a ReplacePoolIncentivesProposal passes, the proposal’s records

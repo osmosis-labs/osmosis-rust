@@ -134,6 +134,7 @@ pub enum LockQueryType {
     ByDuration = 0,
     ByTime = 1,
     NoLock = 2,
+    ByGroup = 3,
 }
 impl LockQueryType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -145,6 +146,7 @@ impl LockQueryType {
             LockQueryType::ByDuration => "ByDuration",
             LockQueryType::ByTime => "ByTime",
             LockQueryType::NoLock => "NoLock",
+            LockQueryType::ByGroup => "ByGroup",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -153,6 +155,7 @@ impl LockQueryType {
             "ByDuration" => Some(Self::ByDuration),
             "ByTime" => Some(Self::ByTime),
             "NoLock" => Some(Self::NoLock),
+            "ByGroup" => Some(Self::ByGroup),
             _ => None,
         }
     }

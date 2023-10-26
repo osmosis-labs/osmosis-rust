@@ -14,10 +14,16 @@ use proto_build::{
 const COSMOS_SDK_REV: &str = "osmosis-main";
 
 /// The osmosis commit or tag to be cloned and used to build the proto files
-const OSMOSIS_REV: &str = "v17.0.0-rc0";
+const OSMOSIS_REV: &str = "v20.1.0";
 
 /// The wasmd commit or tag to be cloned and used to build the proto files
 const WASMD_REV: &str = "v0.31.0-osmo-v16";
+
+/// The cometbft commit or tag to be cloned and used to build the proto files
+const COMETBFT_REV: &str = "v0.34.29";
+
+/// The ibc-go commit or tag to be cloned and used to build the proto files
+const IBC_GO_REV: &str = "v4.5.0";
 
 // All paths must end with a / and either be absolute or include a ./ to reference the current
 // working directory.
@@ -30,6 +36,10 @@ const COSMOS_SDK_DIR: &str = "../../dependencies/cosmos-sdk/";
 const OSMOSIS_DIR: &str = "../../dependencies/osmosis/";
 /// Directory where the wasmd submodule is located
 const WASMD_DIR: &str = "../../dependencies/wasmd/";
+/// Directory where the cometbft submodule is located
+const COMETBFT_DIR: &str = "../../dependencies/cometbft/";
+/// Directory where the ibc-go submodule is located
+const IBC_GO_DIR: &str = "../../dependencies/ibc-go/";
 
 /// A temporary directory for proto building
 const TMP_BUILD_DIR: &str = "/tmp/tmp-protobuf/";
@@ -40,6 +50,8 @@ pub fn generate() {
         git::update_submodule(COSMOS_SDK_DIR, COSMOS_SDK_REV);
         git::update_submodule(OSMOSIS_DIR, OSMOSIS_REV);
         git::update_submodule(WASMD_DIR, WASMD_REV);
+        git::update_submodule(COMETBFT_DIR, COMETBFT_REV);
+        git::update_submodule(IBC_GO_DIR, IBC_GO_REV);
     }
 
     let tmp_build_dir: PathBuf = TMP_BUILD_DIR.parse().unwrap();
@@ -57,28 +69,32 @@ pub fn generate() {
         project_dir: WASMD_DIR.to_string(),
         include_mods: vec![],
     };
+    let cometbft_project = CosmosProject {
+        name: "tendermint".to_string(),
+        version: COMETBFT_REV.to_string(),
+        project_dir: COMETBFT_DIR.to_string(),
+        include_mods: vec!["types".to_string()],
+    };
+
+    let ibc_project = CosmosProject {
+        name: "ibc".to_string(),
+        version: IBC_GO_REV.to_string(),
+        project_dir: IBC_GO_DIR.to_string(),
+        include_mods: vec![],
+    };
+
     let cosmos_project = CosmosProject {
         name: "cosmos".to_string(),
         version: COSMOS_SDK_REV.to_string(),
         project_dir: COSMOS_SDK_DIR.to_string(),
-        include_mods: vec![
-            "auth".to_string(),
-            "authz".to_string(),
-            "bank".to_string(),
-            "base".to_string(),
-            "gov".to_string(),
-            "feegrant".to_string(),
-            "staking/v1beta1/genesis.proto".to_string(),
-            "staking/v1beta1/staking.proto".to_string(),
-            "staking/v1beta1/tx.proto".to_string(),
-        ],
+        include_mods: vec![],
     };
 
     let osmosis_code_generator = CodeGenerator::new(
         out_dir,
         tmp_build_dir,
         osmosis_project,
-        vec![cosmos_project, wasmd_project],
+        vec![ibc_project, cometbft_project, cosmos_project, wasmd_project],
     );
 
     osmosis_code_generator.generate();

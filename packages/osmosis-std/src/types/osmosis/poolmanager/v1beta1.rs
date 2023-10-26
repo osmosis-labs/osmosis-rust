@@ -262,6 +262,15 @@ pub struct TakerFeeParams {
     /// the community pool.
     #[prost(string, tag = "5")]
     pub community_pool_denom_to_swap_non_whitelisted_assets_to: ::prost::alloc::string::String,
+    /// reduced_fee_whitelist is a list of addresses that are
+    /// allowed to pay a reduce taker fee when performing a swap
+    /// (i.e. swap without paying the taker fee).
+    /// It is intended to be used for integrators who meet qualifying factors
+    /// that are approved by governance.
+    /// Initially, the taker fee is allowed to be bypassed completely. However
+    /// In the future, we will charge a reduced taker fee instead of no fee at all.
+    #[prost(string, repeated, tag = "6")]
+    pub reduced_fee_whitelist: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// TakerFeeDistributionPercentage defines what percent of the taker fee category
 /// gets distributed to the available categories.
@@ -1022,6 +1031,175 @@ pub struct TotalLiquidityResponse {
     #[prost(message, repeated, tag = "1")]
     pub liquidity: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
 }
+/// =============================== TotalVolumeForPool
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TotalVolumeForPoolRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/TotalVolumeForPool",
+    response_type = TotalVolumeForPoolResponse
+)]
+pub struct TotalVolumeForPoolRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TotalVolumeForPoolResponse")]
+pub struct TotalVolumeForPoolResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub volume: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+/// =============================== TradingPairTakerFee
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TradingPairTakerFeeRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/TradingPairTakerFee",
+    response_type = TradingPairTakerFeeResponse
+)]
+pub struct TradingPairTakerFeeRequest {
+    #[prost(string, tag = "1")]
+    pub denom_0: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub denom_1: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TradingPairTakerFeeResponse")]
+pub struct TradingPairTakerFeeResponse {
+    #[prost(string, tag = "1")]
+    pub taker_fee: ::prost::alloc::string::String,
+}
+/// EstimateTradeBasedOnPriceImpactRequest represents a request to estimate a
+/// trade for Balancer/StableSwap/Concentrated liquidity pool types based on the
+/// given parameters.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.EstimateTradeBasedOnPriceImpactRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/EstimateTradeBasedOnPriceImpact",
+    response_type = EstimateTradeBasedOnPriceImpactResponse
+)]
+pub struct EstimateTradeBasedOnPriceImpactRequest {
+    /// from_coin is the total amount of tokens that the user wants to sell.
+    #[prost(message, optional, tag = "1")]
+    pub from_coin: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    /// to_coin_denom is the denom identifier of the token that the user wants to
+    /// buy.
+    #[prost(string, tag = "2")]
+    pub to_coin_denom: ::prost::alloc::string::String,
+    /// pool_id is the identifier of the liquidity pool that the trade will occur
+    /// on.
+    #[prost(uint64, tag = "3")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    /// max_price_impact is the maximum percentage that the user is willing
+    /// to affect the price of the liquidity pool.
+    #[prost(string, tag = "4")]
+    pub max_price_impact: ::prost::alloc::string::String,
+    /// external_price is an optional external price that the user can enter.
+    /// It adjusts the MaxPriceImpact as the SpotPrice of a pool can be changed at
+    /// any time.
+    #[prost(string, tag = "5")]
+    pub external_price: ::prost::alloc::string::String,
+}
+/// EstimateTradeBasedOnPriceImpactResponse represents the response data
+/// for an estimated trade based on price impact. If a trade fails to be
+/// estimated the response would be 0,0 for input_coin and output_coin and will
+/// not error.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.EstimateTradeBasedOnPriceImpactResponse")]
+pub struct EstimateTradeBasedOnPriceImpactResponse {
+    /// input_coin is the actual input amount that would be tradeable
+    /// under the specified price impact.
+    #[prost(message, optional, tag = "1")]
+    pub input_coin: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+    /// output_coin is the amount of tokens of the ToCoinDenom type
+    /// that will be received for the actual InputCoin trade.
+    #[prost(message, optional, tag = "2")]
+    pub output_coin: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TrackedVolume")]
+pub struct TrackedVolume {
+    #[prost(message, repeated, tag = "1")]
+    pub amount: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
 pub struct PoolmanagerQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }
@@ -1144,5 +1322,35 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
     }
     pub fn total_liquidity(&self) -> Result<TotalLiquidityResponse, cosmwasm_std::StdError> {
         TotalLiquidityRequest {}.query(self.querier)
+    }
+    pub fn total_volume_for_pool(
+        &self,
+        pool_id: u64,
+    ) -> Result<TotalVolumeForPoolResponse, cosmwasm_std::StdError> {
+        TotalVolumeForPoolRequest { pool_id }.query(self.querier)
+    }
+    pub fn trading_pair_taker_fee(
+        &self,
+        denom_0: ::prost::alloc::string::String,
+        denom_1: ::prost::alloc::string::String,
+    ) -> Result<TradingPairTakerFeeResponse, cosmwasm_std::StdError> {
+        TradingPairTakerFeeRequest { denom_0, denom_1 }.query(self.querier)
+    }
+    pub fn estimate_trade_based_on_price_impact(
+        &self,
+        from_coin: ::core::option::Option<super::super::super::cosmos::base::v1beta1::Coin>,
+        to_coin_denom: ::prost::alloc::string::String,
+        pool_id: u64,
+        max_price_impact: ::prost::alloc::string::String,
+        external_price: ::prost::alloc::string::String,
+    ) -> Result<EstimateTradeBasedOnPriceImpactResponse, cosmwasm_std::StdError> {
+        EstimateTradeBasedOnPriceImpactRequest {
+            from_coin,
+            to_coin_denom,
+            pool_id,
+            max_price_impact,
+            external_price,
+        }
+        .query(self.querier)
     }
 }

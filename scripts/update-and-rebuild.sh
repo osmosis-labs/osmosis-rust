@@ -18,13 +18,6 @@ fi
 ## Update and rebuild osmosis-std ##
 ####################################
 
-
-if [[ -n "${SKIP_GIT_UPDATE:-}" ]]; then
-  echo '[SKIP] SKIP_GIT_UPDATE is set, skipping git update'
-  exit 0
-fi
-
-
 # update revision in proto-build main.rs
 PROTO_BUILD_MAIN_RS="$SCRIPT_DIR/../packages/proto-build/src/main.rs"
 
@@ -40,6 +33,11 @@ cd "$SCRIPT_DIR/../packages/proto-build/" && cargo run -- --update-deps
 ## Update git revision if there is    ##
 ## any change                         ##
 ########################################
+
+if [[ -n "${SKIP_GIT_UPDATE:-}" ]]; then
+  echo '[SKIP] SKIP_GIT_UPDATE is set, skipping git update'
+  exit 0
+fi
 
 # if dirty or untracked file exists
 if [[ $(git diff --stat) != '' ||  $(git ls-files  --exclude-standard  --others) ]]; then
