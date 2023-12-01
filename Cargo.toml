@@ -1,2 +1,3 @@
 [workspace]
 members = ["packages/*", "tests/*"]
+resolver = "2"
