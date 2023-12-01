@@ -15,6 +15,7 @@ pub struct AuthenticationRequest {
     pub sign_mode_tx_data: SignModeTxData,
     pub tx_data: TxData,
     pub signature_data: SignatureData,
+    pub simulate: bool,
 }
 
 #[cw_serde]
@@ -31,7 +32,6 @@ pub struct TxData {
     pub timeout_height: u64,
     pub msgs: Vec<Any>,
     pub memo: String,
-    pub simulate: bool,
 }
 
 #[cw_serde]
@@ -41,9 +41,50 @@ pub struct SignatureData {
 }
 
 #[cw_serde]
+pub struct TrackRequest {
+    pub account: Addr,
+    pub msg: Any,
+}
+
+#[cw_serde]
+pub struct ConfirmExecutionRequest {
+    pub account: Addr,
+    pub msg: Any,
+}
+
+#[cw_serde]
 #[serde(tag = "type", content = "content")]
-enum AuthenticationResult {
+pub enum AuthenticationResult {
     Authenticated,
     NotAuthenticated,
     Rejected { msg: String },
+}
+
+impl Into<cosmwasm_std::Binary> for AuthenticationResult {
+    fn into(self) -> cosmwasm_std::Binary {
+        cosmwasm_std::Binary::from(
+            serde_json_wasm::to_string(&self)
+                .expect("Failed to serialize AuthenticationResult")
+                .as_bytes()
+                .to_vec(),
+        )
+    }
+}
+
+#[cw_serde]
+#[serde(tag = "type", content = "content")]
+pub enum ConfirmationResult {
+    Confirm,
+    Block { msg: String },
+}
+
+impl Into<cosmwasm_std::Binary> for ConfirmationResult {
+    fn into(self) -> cosmwasm_std::Binary {
+        cosmwasm_std::Binary::from(
+            serde_json_wasm::to_string(&self)
+                .expect("Failed to serialize ConfirmationResult")
+                .as_bytes()
+                .to_vec(),
+        )
+    }
 }
