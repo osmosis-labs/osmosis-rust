@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crypto.secp256r1.PubKey")]
+#[proto_message(type_url = "/cosmos.crypto.secp256r1.")]
 pub struct PubKey {
     /// Point on secp256r1 curve in a compressed representation as specified in section
     /// 4.3.6 of ANSI X9.62: <https://webstore.ansi.org/standards/ascx9/ansix9621998>
@@ -34,7 +34,7 @@ pub struct PubKey {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crypto.secp256r1.PrivKey")]
+#[proto_message(type_url = "/cosmos.crypto.secp256r1.")]
 pub struct PrivKey {
     /// secret number serialized using big-endian encoding
     #[prost(bytes = "vec", tag = "1")]

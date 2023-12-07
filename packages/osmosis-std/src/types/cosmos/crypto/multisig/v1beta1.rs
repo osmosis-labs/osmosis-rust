@@ -13,7 +13,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crypto.multisig.v1beta1.MultiSignature")]
+#[proto_message(type_url = "/cosmos.crypto.multisig.v1beta1.")]
 pub struct MultiSignature {
     #[prost(bytes = "vec", repeated, tag = "1")]
     pub signatures: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
@@ -33,7 +33,7 @@ pub struct MultiSignature {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crypto.multisig.v1beta1.CompactBitArray")]
+#[proto_message(type_url = "/cosmos.crypto.multisig.v1beta1.")]
 pub struct CompactBitArray {
     #[prost(uint32, tag = "1")]
     #[serde(

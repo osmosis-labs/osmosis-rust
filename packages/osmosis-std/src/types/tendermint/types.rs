@@ -157,7 +157,7 @@ pub struct BlockId {
     #[prost(message, optional, tag = "2")]
     pub part_set_header: ::core::option::Option<PartSetHeader>,
 }
-/// Header defines the structure of a Tendermint block header.
+/// Header defines the structure of a block header.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -674,16 +674,6 @@ pub struct BlockParams {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub max_gas: i64,
-    /// Minimum time increment between consecutive blocks (in milliseconds) If the
-    /// block header timestamp is ahead of the system clock, decrease this value.
-    ///
-    /// Not exposed to the application.
-    #[prost(int64, tag = "3")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub time_iota_ms: i64,
 }
 /// EvidenceParams determine how we handle evidence of malfeasance.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -763,7 +753,7 @@ pub struct VersionParams {
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
-    pub app_version: u64,
+    pub app: u64,
 }
 /// HashedParams is a subset of ConsensusParams.
 ///
@@ -933,4 +923,25 @@ pub struct Block {
     pub evidence: ::core::option::Option<EvidenceList>,
     #[prost(message, optional, tag = "4")]
     pub last_commit: ::core::option::Option<Commit>,
+}
+
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.EventDataRoundState")]
+pub struct EventDataRoundState {
+    #[prost(int64, tag = "1")]
+    pub height: i64,
+    #[prost(int32, tag = "2")]
+    pub round: i32,
+    #[prost(string, tag = "3")]
+    pub step: String,
 }

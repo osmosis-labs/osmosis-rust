@@ -1,4 +1,51 @@
 use osmosis_std_derive::CosmwasmExt;
+/// Allocation defines the spend limit for a particular port and channel
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/ibc.applications.transfer.v1.Allocation")]
+pub struct Allocation {
+    /// the port on which the packet will be sent
+    #[prost(string, tag = "1")]
+    pub source_port: ::prost::alloc::string::String,
+    /// the channel by which the packet will be sent
+    #[prost(string, tag = "2")]
+    pub source_channel: ::prost::alloc::string::String,
+    /// spend limitation on the channel
+    #[prost(message, repeated, tag = "3")]
+    pub spend_limit:
+        ::prost::alloc::vec::Vec<super::super::super::super::cosmos::base::v1beta1::Coin>,
+    /// allow list of receivers, an empty allow list permits any receiver address
+    #[prost(string, repeated, tag = "4")]
+    pub allow_list: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+/// TransferAuthorization allows the grantee to spend up to spend_limit coins from
+/// the granter's account for ibc transfer on a specific channel
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/ibc.applications.transfer.v1.TransferAuthorization")]
+pub struct TransferAuthorization {
+    /// port and channel amounts
+    #[prost(message, repeated, tag = "1")]
+    pub allocations: ::prost::alloc::vec::Vec<Allocation>,
+}
 /// DenomTrace contains the base denomination for ICS20 fungible tokens and the
 /// source tracing information path.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -69,6 +116,11 @@ pub struct GenesisState {
     pub denom_traces: ::prost::alloc::vec::Vec<DenomTrace>,
     #[prost(message, optional, tag = "3")]
     pub params: ::core::option::Option<Params>,
+    /// total_escrowed contains the total amount of tokens escrowed
+    /// by the transfer module
+    #[prost(message, repeated, tag = "4")]
+    pub total_escrowed:
+        ::prost::alloc::vec::Vec<super::super::super::super::cosmos::base::v1beta1::Coin>,
 }
 /// QueryDenomTraceRequest is the request type for the Query/DenomTrace RPC
 /// method
@@ -284,6 +336,44 @@ pub struct QueryEscrowAddressResponse {
     #[prost(string, tag = "1")]
     pub escrow_address: ::prost::alloc::string::String,
 }
+/// QueryTotalEscrowForDenomRequest is the request type for TotalEscrowForDenom RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/ibc.applications.transfer.v1.QueryTotalEscrowForDenomRequest")]
+#[proto_query(
+    path = "/ibc.applications.transfer.v1.Query/TotalEscrowForDenom",
+    response_type = QueryTotalEscrowForDenomResponse
+)]
+pub struct QueryTotalEscrowForDenomRequest {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+}
+/// QueryTotalEscrowForDenomResponse is the response type for TotalEscrowForDenom RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/ibc.applications.transfer.v1.QueryTotalEscrowForDenomResponse")]
+pub struct QueryTotalEscrowForDenomResponse {
+    #[prost(message, optional, tag = "1")]
+    pub amount: ::core::option::Option<super::super::super::super::cosmos::base::v1beta1::Coin>,
+}
 /// MsgTransfer defines a msg to transfer fungible tokens (i.e Coins) between
 /// ICS20 enabled chains. See ICS Spec here:
 /// <https://github.com/cosmos/ibc/tree/master/spec/app/ics-020-fungible-token-transfer#data-structures>
@@ -360,12 +450,6 @@ impl<'a, Q: cosmwasm_std::CustomQuery> TransferQuerier<'a, Q> {
     pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
         Self { querier }
     }
-    pub fn denom_trace(
-        &self,
-        hash: ::prost::alloc::string::String,
-    ) -> Result<QueryDenomTraceResponse, cosmwasm_std::StdError> {
-        QueryDenomTraceRequest { hash }.query(self.querier)
-    }
     pub fn denom_traces(
         &self,
         pagination: ::core::option::Option<
@@ -373,6 +457,12 @@ impl<'a, Q: cosmwasm_std::CustomQuery> TransferQuerier<'a, Q> {
         >,
     ) -> Result<QueryDenomTracesResponse, cosmwasm_std::StdError> {
         QueryDenomTracesRequest { pagination }.query(self.querier)
+    }
+    pub fn denom_trace(
+        &self,
+        hash: ::prost::alloc::string::String,
+    ) -> Result<QueryDenomTraceResponse, cosmwasm_std::StdError> {
+        QueryDenomTraceRequest { hash }.query(self.querier)
     }
     pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
         QueryParamsRequest {}.query(self.querier)
@@ -393,5 +483,11 @@ impl<'a, Q: cosmwasm_std::CustomQuery> TransferQuerier<'a, Q> {
             channel_id,
         }
         .query(self.querier)
+    }
+    pub fn total_escrow_for_denom(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QueryTotalEscrowForDenomResponse, cosmwasm_std::StdError> {
+        QueryTotalEscrowForDenomRequest { denom }.query(self.querier)
     }
 }

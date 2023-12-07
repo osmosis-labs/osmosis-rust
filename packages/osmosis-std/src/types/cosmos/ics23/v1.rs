@@ -30,7 +30,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.ExistenceProof")]
+#[proto_message(type_url = "/cosmos.ics23.v1.ExistenceProof")]
 pub struct ExistenceProof {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -64,7 +64,7 @@ pub struct ExistenceProof {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.NonExistenceProof")]
+#[proto_message(type_url = "/cosmos.ics23.v1.NonExistenceProof")]
 pub struct NonExistenceProof {
     /// TODO: remove this as unnecessary??? we prove a range
     #[prost(bytes = "vec", tag = "1")]
@@ -91,7 +91,7 @@ pub struct NonExistenceProof {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.CommitmentProof")]
+#[proto_message(type_url = "/cosmos.ics23.v1.CommitmentProof")]
 pub struct CommitmentProof {
     #[prost(oneof = "commitment_proof::Proof", tags = "1, 2, 3, 4")]
     pub proof: ::core::option::Option<commitment_proof::Proof>,
@@ -146,7 +146,7 @@ pub mod commitment_proof {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.LeafOp")]
+#[proto_message(type_url = "/cosmos.ics23.v1.LeafOp")]
 pub struct LeafOp {
     #[prost(enumeration = "HashOp", tag = "1")]
     #[serde(
@@ -208,7 +208,7 @@ pub struct LeafOp {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.InnerOp")]
+#[proto_message(type_url = "/cosmos.ics23.v1.InnerOp")]
 pub struct InnerOp {
     #[prost(enumeration = "HashOp", tag = "1")]
     #[serde(
@@ -251,7 +251,7 @@ pub struct InnerOp {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.ProofSpec")]
+#[proto_message(type_url = "/cosmos.ics23.v1.ProofSpec")]
 pub struct ProofSpec {
     /// any field in the ExistenceProof must be the same as in this spec.
     /// except Prefix, which is just the first bytes of prefix (spec can be longer)
@@ -273,6 +273,11 @@ pub struct ProofSpec {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub min_depth: i32,
+    /// prehash_key_before_comparison is a flag that indicates whether to use the
+    /// prehash_key specified by LeafOp to compare lexical ordering of keys for
+    /// non-existence proofs.
+    #[prost(bool, tag = "5")]
+    pub prehash_key_before_comparison: bool,
 }
 ///
 /// InnerSpec contains all store-specific structure info to determine if two proofs from a
@@ -294,7 +299,7 @@ pub struct ProofSpec {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.InnerSpec")]
+#[proto_message(type_url = "/cosmos.ics23.v1.InnerSpec")]
 pub struct InnerSpec {
     /// Child order is the ordering of the children node, must count from 0
     /// iavl tree is [0, 1] (left then right)
@@ -351,7 +356,7 @@ pub struct InnerSpec {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.BatchProof")]
+#[proto_message(type_url = "/cosmos.ics23.v1.BatchProof")]
 pub struct BatchProof {
     #[prost(message, repeated, tag = "1")]
     pub entries: ::prost::alloc::vec::Vec<BatchEntry>,
@@ -368,7 +373,7 @@ pub struct BatchProof {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.BatchEntry")]
+#[proto_message(type_url = "/cosmos.ics23.v1.BatchEntry")]
 pub struct BatchEntry {
     #[prost(oneof = "batch_entry::Proof", tags = "1, 2")]
     pub proof: ::core::option::Option<batch_entry::Proof>,
@@ -404,7 +409,7 @@ pub mod batch_entry {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.CompressedBatchProof")]
+#[proto_message(type_url = "/cosmos.ics23.v1.CompressedBatchProof")]
 pub struct CompressedBatchProof {
     #[prost(message, repeated, tag = "1")]
     pub entries: ::prost::alloc::vec::Vec<CompressedBatchEntry>,
@@ -423,7 +428,7 @@ pub struct CompressedBatchProof {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.CompressedBatchEntry")]
+#[proto_message(type_url = "/cosmos.ics23.v1.CompressedBatchEntry")]
 pub struct CompressedBatchEntry {
     #[prost(oneof = "compressed_batch_entry::Proof", tags = "1, 2")]
     pub proof: ::core::option::Option<compressed_batch_entry::Proof>,
@@ -459,7 +464,7 @@ pub mod compressed_batch_entry {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.CompressedExistenceProof")]
+#[proto_message(type_url = "/cosmos.ics23.v1.CompressedExistenceProof")]
 pub struct CompressedExistenceProof {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -494,7 +499,7 @@ pub struct CompressedExistenceProof {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/ics23.CompressedNonExistenceProof")]
+#[proto_message(type_url = "/cosmos.ics23.v1.CompressedNonExistenceProof")]
 pub struct CompressedNonExistenceProof {
     /// TODO: remove this as unnecessary??? we prove a range
     #[prost(bytes = "vec", tag = "1")]
@@ -520,6 +525,7 @@ pub enum HashOp {
     Ripemd160 = 4,
     /// ripemd160(sha256(x))
     Bitcoin = 5,
+    Sha512256 = 6,
 }
 impl HashOp {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -534,6 +540,7 @@ impl HashOp {
             HashOp::Keccak => "KECCAK",
             HashOp::Ripemd160 => "RIPEMD160",
             HashOp::Bitcoin => "BITCOIN",
+            HashOp::Sha512256 => "SHA512_256",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -545,6 +552,7 @@ impl HashOp {
             "KECCAK" => Some(Self::Keccak),
             "RIPEMD160" => Some(Self::Ripemd160),
             "BITCOIN" => Some(Self::Bitcoin),
+            "SHA512_256" => Some(Self::Sha512256),
             _ => None,
         }
     }

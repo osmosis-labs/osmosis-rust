@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.store.v1beta1.CommitInfo")]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
 pub struct CommitInfo {
     #[prost(int64, tag = "1")]
     #[serde(
@@ -38,7 +38,7 @@ pub struct CommitInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.store.v1beta1.StoreInfo")]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
 pub struct StoreInfo {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -46,7 +46,7 @@ pub struct StoreInfo {
     #[serde(alias = "commitID")]
     pub commit_id: ::core::option::Option<CommitId>,
 }
-/// CommitID defines the committment information when a specific store is
+/// CommitID defines the commitment information when a specific store is
 /// committed.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -59,7 +59,7 @@ pub struct StoreInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.store.v1beta1.CommitID")]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
 pub struct CommitId {
     #[prost(int64, tag = "1")]
     #[serde(
@@ -90,7 +90,7 @@ pub struct CommitId {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.store.v1beta1.StoreKVPair")]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
 pub struct StoreKvPair {
     /// the store key for the KVStore this pair originates from
     #[prost(string, tag = "1")]
@@ -110,4 +110,64 @@ pub struct StoreKvPair {
         deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub value: ::prost::alloc::vec::Vec<u8>,
+}
+/// BlockMetadata contains all the abci event data of a block
+/// the file streamer dump them into files together with the state changes.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
+pub struct BlockMetadata {
+    #[prost(message, optional, tag = "1")]
+    pub request_begin_block:
+        ::core::option::Option<super::super::super::super::tendermint::abci::RequestBeginBlock>,
+    #[prost(message, optional, tag = "2")]
+    pub response_begin_block:
+        ::core::option::Option<super::super::super::super::tendermint::abci::ResponseBeginBlock>,
+    #[prost(message, repeated, tag = "3")]
+    pub deliver_txs: ::prost::alloc::vec::Vec<block_metadata::DeliverTx>,
+    #[prost(message, optional, tag = "4")]
+    pub request_end_block:
+        ::core::option::Option<super::super::super::super::tendermint::abci::RequestEndBlock>,
+    #[prost(message, optional, tag = "5")]
+    pub response_end_block:
+        ::core::option::Option<super::super::super::super::tendermint::abci::ResponseEndBlock>,
+    #[prost(message, optional, tag = "6")]
+    pub response_commit:
+        ::core::option::Option<super::super::super::super::tendermint::abci::ResponseCommit>,
+}
+/// Nested message and enum types in `BlockMetadata`.
+pub mod block_metadata {
+    use osmosis_std_derive::CosmwasmExt;
+    /// DeliverTx encapulate deliver tx request and response.
+    #[allow(clippy::derive_partial_eq_without_eq)]
+    #[derive(
+        Clone,
+        PartialEq,
+        Eq,
+        ::prost::Message,
+        ::serde::Serialize,
+        ::serde::Deserialize,
+        ::schemars::JsonSchema,
+        CosmwasmExt,
+    )]
+    #[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
+    pub struct DeliverTx {
+        #[prost(message, optional, tag = "1")]
+        pub request: ::core::option::Option<
+            super::super::super::super::super::tendermint::abci::RequestDeliverTx,
+        >,
+        #[prost(message, optional, tag = "2")]
+        pub response: ::core::option::Option<
+            super::super::super::super::super::tendermint::abci::ResponseDeliverTx,
+        >,
+    }
 }

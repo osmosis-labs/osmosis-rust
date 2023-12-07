@@ -894,6 +894,12 @@ pub struct LiquidityPerTickRangeRequest {
 pub struct LiquidityPerTickRangeResponse {
     #[prost(message, repeated, tag = "1")]
     pub liquidity: ::prost::alloc::vec::Vec<LiquidityDepthWithRange>,
+    #[prost(int64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub bucket_index: i64,
 }
 /// ===================== QueryClaimableSpreadRewards
 #[allow(clippy::derive_partial_eq_without_eq)]

@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.Tx")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct Tx {
     /// body is the processable content of the transaction
     #[prost(message, optional, tag = "1")]
@@ -42,7 +42,7 @@ pub struct Tx {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.TxRaw")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct TxRaw {
     /// body_bytes is a protobuf serialization of a TxBody that matches the
     /// representation in SignDoc.
@@ -78,7 +78,7 @@ pub struct TxRaw {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.SignDoc")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct SignDoc {
     /// body_bytes is protobuf serialization of a TxBody that matches the
     /// representation in TxRaw.
@@ -110,6 +110,63 @@ pub struct SignDoc {
     )]
     pub account_number: u64,
 }
+/// SignDocDirectAux is the type used for generating sign bytes for
+/// SIGN_MODE_DIRECT_AUX.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct SignDocDirectAux {
+    /// body_bytes is protobuf serialization of a TxBody that matches the
+    /// representation in TxRaw.
+    #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub body_bytes: ::prost::alloc::vec::Vec<u8>,
+    /// public_key is the public key of the signing account.
+    #[prost(message, optional, tag = "2")]
+    pub public_key: ::core::option::Option<crate::shim::Any>,
+    /// chain_id is the identifier of the chain this transaction targets.
+    /// It prevents signed transactions from being used on another chain by an
+    /// attacker.
+    #[prost(string, tag = "3")]
+    #[serde(alias = "chainID")]
+    pub chain_id: ::prost::alloc::string::String,
+    /// account_number is the account number of the account in state.
+    #[prost(uint64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub account_number: u64,
+    /// sequence is the sequence number of the signing account.
+    #[prost(uint64, tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub sequence: u64,
+    /// Tip is the optional tip used for transactions fees paid in another denom.
+    /// It should be left empty if the signer is not the tipper for this
+    /// transaction.
+    ///
+    /// This field is ignored if the chain didn't enable tips, i.e. didn't add the
+    /// `TipDecorator` in its posthandler.
+    #[prost(message, optional, tag = "6")]
+    pub tip: ::core::option::Option<Tip>,
+}
 /// TxBody is the body of a transaction that all signers sign over.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -122,7 +179,7 @@ pub struct SignDoc {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.TxBody")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct TxBody {
     /// messages is a list of messages to be executed. The required signers of
     /// those messages define the number and order of elements in AuthInfo's
@@ -170,7 +227,7 @@ pub struct TxBody {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.AuthInfo")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct AuthInfo {
     /// signer_infos defines the signing modes for the required signers. The number
     /// and order of elements must match the required signers from TxBody's
@@ -184,6 +241,14 @@ pub struct AuthInfo {
     /// of the signers. This can be estimated via simulation.
     #[prost(message, optional, tag = "2")]
     pub fee: ::core::option::Option<Fee>,
+    /// Tip is the optional tip used for transactions fees paid in another denom.
+    ///
+    /// This field is ignored if the chain didn't enable tips, i.e. didn't add the
+    /// `TipDecorator` in its posthandler.
+    ///
+    /// Since: cosmos-sdk 0.46
+    #[prost(message, optional, tag = "3")]
+    pub tip: ::core::option::Option<Tip>,
 }
 /// SignerInfo describes the public key and signing mode of a single top-level
 /// signer.
@@ -198,7 +263,7 @@ pub struct AuthInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.SignerInfo")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct SignerInfo {
     /// public_key is the public key of the signer. It is optional for accounts
     /// that already exist in state. If unset, the verifier can use the required \
@@ -231,7 +296,7 @@ pub struct SignerInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.ModeInfo")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct ModeInfo {
     /// sum is the oneof that specifies whether this represents a single or nested
     /// multisig signer
@@ -255,7 +320,7 @@ pub mod mode_info {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.tx.v1beta1.ModeInfo.Single")]
+    #[proto_message(type_url = "/cosmos.tx.v1beta1.")]
     pub struct Single {
         /// mode is the signing mode of the single signer
         #[prost(enumeration = "super::super::signing::v1beta1::SignMode", tag = "1")]
@@ -277,7 +342,7 @@ pub mod mode_info {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.tx.v1beta1.ModeInfo.Multi")]
+    #[proto_message(type_url = "/cosmos.tx.v1beta1.")]
     pub struct Multi {
         /// bitarray specifies which keys within the multisig are signing
         #[prost(message, optional, tag = "1")]
@@ -323,7 +388,7 @@ pub mod mode_info {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.Fee")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct Fee {
     /// amount is the amount of coins to be paid as a fee
     #[prost(message, repeated, tag = "1")]
@@ -347,6 +412,73 @@ pub struct Fee {
     #[prost(string, tag = "4")]
     pub granter: ::prost::alloc::string::String,
 }
+/// Tip is the tip used for meta-transactions.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct Tip {
+    /// amount is the amount of the tip
+    #[prost(message, repeated, tag = "1")]
+    pub amount: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+    /// tipper is the address of the account paying for the tip
+    #[prost(string, tag = "2")]
+    pub tipper: ::prost::alloc::string::String,
+}
+/// AuxSignerData is the intermediary format that an auxiliary signer (e.g. a
+/// tipper) builds and sends to the fee payer (who will build and broadcast the
+/// actual tx). AuxSignerData is not a valid tx in itself, and will be rejected
+/// by the node if sent directly as-is.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct AuxSignerData {
+    /// address is the bech32-encoded address of the auxiliary signer. If using
+    /// AuxSignerData across different chains, the bech32 prefix of the target
+    /// chain (where the final transaction is broadcasted) should be used.
+    #[prost(string, tag = "1")]
+    pub address: ::prost::alloc::string::String,
+    /// sign_doc is the SIGN_MODE_DIRECT_AUX sign doc that the auxiliary signer
+    /// signs. Note: we use the same sign doc even if we're signing with
+    /// LEGACY_AMINO_JSON.
+    #[prost(message, optional, tag = "2")]
+    pub sign_doc: ::core::option::Option<SignDocDirectAux>,
+    /// mode is the signing mode of the single signer.
+    #[prost(enumeration = "super::signing::v1beta1::SignMode", tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub mode: i32,
+    /// sig is the signature of the sign doc.
+    #[prost(bytes = "vec", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub sig: ::prost::alloc::vec::Vec<u8>,
+}
 /// GetTxsEventRequest is the request type for the Service.TxsByEvents
 /// RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -360,12 +492,14 @@ pub struct Fee {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.GetTxsEventRequest")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct GetTxsEventRequest {
     /// events is the list of transaction event type.
     #[prost(string, repeated, tag = "1")]
     pub events: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// pagination defines an pagination for the request.
+    /// pagination defines a pagination for the request.
+    /// Deprecated post v0.46.x: use page and limit instead.
+    #[deprecated]
     #[prost(message, optional, tag = "2")]
     pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
     #[prost(enumeration = "OrderBy", tag = "3")]
@@ -374,6 +508,21 @@ pub struct GetTxsEventRequest {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub order_by: i32,
+    /// page is the page number to query, starts at 1. If not provided, will default to first page.
+    #[prost(uint64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub page: u64,
+    /// limit is the total number of results to be returned in the result page.
+    /// If left empty it will default to a value to be set by each app.
+    #[prost(uint64, tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub limit: u64,
 }
 /// GetTxsEventResponse is the response type for the Service.TxsByEvents
 /// RPC method.
@@ -388,7 +537,7 @@ pub struct GetTxsEventRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.GetTxsEventResponse")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct GetTxsEventResponse {
     /// txs is the list of queried transactions.
     #[prost(message, repeated, tag = "1")]
@@ -396,9 +545,18 @@ pub struct GetTxsEventResponse {
     /// tx_responses is the list of queried TxResponses.
     #[prost(message, repeated, tag = "2")]
     pub tx_responses: ::prost::alloc::vec::Vec<super::super::base::abci::v1beta1::TxResponse>,
-    /// pagination defines an pagination for the response.
+    /// pagination defines a pagination for the response.
+    /// Deprecated post v0.46.x: use total instead.
+    #[deprecated]
     #[prost(message, optional, tag = "3")]
     pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+    /// total is total number of results available
+    #[prost(uint64, tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub total: u64,
 }
 /// BroadcastTxRequest is the request type for the Service.BroadcastTxRequest
 /// RPC method.
@@ -413,7 +571,7 @@ pub struct GetTxsEventResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.BroadcastTxRequest")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct BroadcastTxRequest {
     /// tx_bytes is the raw transaction.
     #[prost(bytes = "vec", tag = "1")]
@@ -442,7 +600,7 @@ pub struct BroadcastTxRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.BroadcastTxResponse")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct BroadcastTxResponse {
     /// tx_response is the queried TxResponses.
     #[prost(message, optional, tag = "1")]
@@ -461,7 +619,7 @@ pub struct BroadcastTxResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.SimulateRequest")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct SimulateRequest {
     /// tx is the transaction to simulate.
     /// Deprecated. Send raw tx bytes instead.
@@ -491,7 +649,7 @@ pub struct SimulateRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.SimulateResponse")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct SimulateResponse {
     /// gas_info is the information about gas used in the simulation.
     #[prost(message, optional, tag = "1")]
@@ -513,7 +671,7 @@ pub struct SimulateResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.GetTxRequest")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct GetTxRequest {
     /// hash is the tx hash to query, encoded as a hex string.
     #[prost(string, tag = "1")]
@@ -531,7 +689,7 @@ pub struct GetTxRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.GetTxResponse")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
 pub struct GetTxResponse {
     /// tx is the queried transaction.
     #[prost(message, optional, tag = "1")]
@@ -539,6 +697,242 @@ pub struct GetTxResponse {
     /// tx_response is the queried TxResponses.
     #[prost(message, optional, tag = "2")]
     pub tx_response: ::core::option::Option<super::super::base::abci::v1beta1::TxResponse>,
+}
+/// GetBlockWithTxsRequest is the request type for the Service.GetBlockWithTxs
+/// RPC method.
+///
+/// Since: cosmos-sdk 0.45.2
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct GetBlockWithTxsRequest {
+    /// height is the height of the block to query.
+    #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub height: i64,
+    /// pagination defines a pagination for the request.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// GetBlockWithTxsResponse is the response type for the Service.GetBlockWithTxs method.
+///
+/// Since: cosmos-sdk 0.45.2
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct GetBlockWithTxsResponse {
+    /// txs are the transactions in the block.
+    #[prost(message, repeated, tag = "1")]
+    pub txs: ::prost::alloc::vec::Vec<Tx>,
+    #[prost(message, optional, tag = "2")]
+    #[serde(alias = "blockID")]
+    pub block_id: ::core::option::Option<super::super::super::tendermint::types::BlockId>,
+    #[prost(message, optional, tag = "3")]
+    pub block: ::core::option::Option<super::super::super::tendermint::types::Block>,
+    /// pagination defines a pagination for the response.
+    #[prost(message, optional, tag = "4")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+}
+/// TxDecodeRequest is the request type for the Service.TxDecode
+/// RPC method.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct TxDecodeRequest {
+    /// tx_bytes is the raw transaction.
+    #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub tx_bytes: ::prost::alloc::vec::Vec<u8>,
+}
+/// TxDecodeResponse is the response type for the
+/// Service.TxDecode method.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct TxDecodeResponse {
+    /// tx is the decoded transaction.
+    #[prost(message, optional, tag = "1")]
+    pub tx: ::core::option::Option<Tx>,
+}
+/// TxEncodeRequest is the request type for the Service.TxEncode
+/// RPC method.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct TxEncodeRequest {
+    /// tx is the transaction to encode.
+    #[prost(message, optional, tag = "1")]
+    pub tx: ::core::option::Option<Tx>,
+}
+/// TxEncodeResponse is the response type for the
+/// Service.TxEncode method.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct TxEncodeResponse {
+    /// tx_bytes is the encoded transaction bytes.
+    #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub tx_bytes: ::prost::alloc::vec::Vec<u8>,
+}
+/// TxEncodeAminoRequest is the request type for the Service.TxEncodeAmino
+/// RPC method.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct TxEncodeAminoRequest {
+    #[prost(string, tag = "1")]
+    pub amino_json: ::prost::alloc::string::String,
+}
+/// TxEncodeAminoResponse is the response type for the Service.TxEncodeAmino
+/// RPC method.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct TxEncodeAminoResponse {
+    #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub amino_binary: ::prost::alloc::vec::Vec<u8>,
+}
+/// TxDecodeAminoRequest is the request type for the Service.TxDecodeAmino
+/// RPC method.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct TxDecodeAminoRequest {
+    #[prost(bytes = "vec", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub amino_binary: ::prost::alloc::vec::Vec<u8>,
+}
+/// TxDecodeAminoResponse is the response type for the Service.TxDecodeAmino
+/// RPC method.
+///
+/// Since: cosmos-sdk 0.47
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+pub struct TxDecodeAminoResponse {
+    #[prost(string, tag = "1")]
+    pub amino_json: ::prost::alloc::string::String,
 }
 /// OrderBy defines the sorting order
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -581,8 +975,8 @@ impl OrderBy {
 pub enum BroadcastMode {
     /// zero-value for mode ordering
     Unspecified = 0,
-    /// BROADCAST_MODE_BLOCK defines a tx broadcasting mode where the client waits for
-    /// the tx to be committed in a block.
+    /// DEPRECATED: use BROADCAST_MODE_SYNC instead,
+    /// BROADCAST_MODE_BLOCK is not supported by the SDK from v0.47.x onwards.
     Block = 1,
     /// BROADCAST_MODE_SYNC defines a tx broadcasting mode where the client waits for
     /// a CheckTx execution response only.

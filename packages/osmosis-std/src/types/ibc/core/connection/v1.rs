@@ -552,6 +552,42 @@ pub struct QueryConnectionConsensusStateResponse {
     #[prost(message, optional, tag = "4")]
     pub proof_height: ::core::option::Option<super::super::client::v1::Height>,
 }
+/// QueryConnectionParamsRequest is the request type for the Query/ConnectionParams RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/ibc.core.connection.v1.QueryConnectionParamsRequest")]
+#[proto_query(
+    path = "/ibc.core.connection.v1.Query/ConnectionParams",
+    response_type = QueryConnectionParamsResponse
+)]
+pub struct QueryConnectionParamsRequest {}
+/// QueryConnectionParamsResponse is the response type for the Query/ConnectionParams RPC method.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/ibc.core.connection.v1.QueryConnectionParamsResponse")]
+pub struct QueryConnectionParamsResponse {
+    /// params defines the parameters of the module.
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+}
 /// MsgConnectionOpenInit defines the msg sent by an account on Chain A to
 /// initialize a connection with Chain B.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -661,6 +697,13 @@ pub struct MsgConnectionOpenTry {
     pub consensus_height: ::core::option::Option<super::super::client::v1::Height>,
     #[prost(string, tag = "12")]
     pub signer: ::prost::alloc::string::String,
+    /// optional proof data for host state machines that are unable to introspect their own consensus state
+    #[prost(bytes = "vec", tag = "13")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub host_consensus_state_proof: ::prost::alloc::vec::Vec<u8>,
 }
 /// MsgConnectionOpenTryResponse defines the Msg/ConnectionOpenTry response type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -729,6 +772,13 @@ pub struct MsgConnectionOpenAck {
     pub consensus_height: ::core::option::Option<super::super::client::v1::Height>,
     #[prost(string, tag = "10")]
     pub signer: ::prost::alloc::string::String,
+    /// optional proof data for host state machines that are unable to introspect their own consensus state
+    #[prost(bytes = "vec", tag = "11")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub host_consensus_state_proof: ::prost::alloc::vec::Vec<u8>,
 }
 /// MsgConnectionOpenAckResponse defines the Msg/ConnectionOpenAck response type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -834,5 +884,10 @@ impl<'a, Q: cosmwasm_std::CustomQuery> ConnectionQuerier<'a, Q> {
             revision_height,
         }
         .query(self.querier)
+    }
+    pub fn connection_params(
+        &self,
+    ) -> Result<QueryConnectionParamsResponse, cosmwasm_std::StdError> {
+        QueryConnectionParamsRequest {}.query(self.querier)
     }
 }

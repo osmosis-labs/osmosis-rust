@@ -154,144 +154,6 @@ impl PoolType {
         }
     }
 }
-/// Params holds parameters for the poolmanager module
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.Params")]
-pub struct Params {
-    #[prost(message, repeated, tag = "1")]
-    pub pool_creation_fee:
-        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
-    /// taker_fee_params is the container of taker fee parameters.
-    #[prost(message, optional, tag = "2")]
-    pub taker_fee_params: ::core::option::Option<TakerFeeParams>,
-    /// authorized_quote_denoms is a list of quote denoms that can be used as
-    /// token1 when creating a concentrated pool. We limit the quote assets to a
-    /// small set for the purposes of having convinient price increments stemming
-    /// from tick to price conversion. These increments are in a human readable
-    /// magnitude only for token1 as a quote. For limit orders in the future, this
-    /// will be a desirable property in terms of UX as to allow users to set limit
-    /// orders at prices in terms of token1 (quote asset) that are easy to reason
-    /// about.
-    #[prost(string, repeated, tag = "3")]
-    pub authorized_quote_denoms: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-/// GenesisState defines the poolmanager module's genesis state.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.GenesisState")]
-pub struct GenesisState {
-    /// the next_pool_id
-    #[prost(uint64, tag = "1")]
-    #[serde(alias = "next_poolID")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub next_pool_id: u64,
-    /// params is the container of poolmanager parameters.
-    #[prost(message, optional, tag = "2")]
-    pub params: ::core::option::Option<Params>,
-    /// pool_routes is the container of the mappings from pool id to pool type.
-    #[prost(message, repeated, tag = "3")]
-    pub pool_routes: ::prost::alloc::vec::Vec<ModuleRoute>,
-}
-/// TakerFeeParams consolidates the taker fee parameters for the poolmanager.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeeParams")]
-pub struct TakerFeeParams {
-    /// default_taker_fee is the fee used when creating a new pool that doesn't
-    /// fall under a custom pool taker fee or stableswap taker fee category.
-    #[prost(string, tag = "1")]
-    pub default_taker_fee: ::prost::alloc::string::String,
-    /// osmo_taker_fee_distribution defines the distribution of taker fees
-    /// generated in OSMO. As of this writing, it has two catagories:
-    /// - staking_rewards: the percent of the taker fee that gets distributed to
-    ///    stakers.
-    /// - community_pool: the percent of the taker fee that gets sent to the
-    ///    community pool.
-    #[prost(message, optional, tag = "2")]
-    pub osmo_taker_fee_distribution: ::core::option::Option<TakerFeeDistributionPercentage>,
-    /// non_osmo_taker_fee_distribution defines the distribution of taker fees
-    /// generated in non-OSMO. As of this writing, it has two categories:
-    /// - staking_rewards: the percent of the taker fee that gets swapped to OSMO
-    ///    and then distirbuted to stakers.
-    /// - community_pool: the percent of the taker fee that gets sent to the
-    ///    community pool. Note: If the non-OSMO asset is an authorized_quote_denom,
-    ///    that denom is sent directly to the community pool. Otherwise, it is
-    ///    swapped to the community_pool_denom_to_swap_non_whitelisted_assets_to and
-    ///    then sent to the community pool as that denom.
-    #[prost(message, optional, tag = "3")]
-    pub non_osmo_taker_fee_distribution: ::core::option::Option<TakerFeeDistributionPercentage>,
-    /// admin_addresses is a list of addresses that are allowed to set and remove
-    /// custom taker fees for denom pairs. Governance also has the ability to set
-    /// and remove custom taker fees for denom pairs, but with the normal
-    /// governance delay.
-    #[prost(string, repeated, tag = "4")]
-    pub admin_addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// community_pool_denom_to_swap_non_whitelisted_assets_to is the denom that
-    /// non-whitelisted taker fees will be swapped to before being sent to
-    /// the community pool.
-    #[prost(string, tag = "5")]
-    pub community_pool_denom_to_swap_non_whitelisted_assets_to: ::prost::alloc::string::String,
-    /// reduced_fee_whitelist is a list of addresses that are
-    /// allowed to pay a reduce taker fee when performing a swap
-    /// (i.e. swap without paying the taker fee).
-    /// It is intended to be used for integrators who meet qualifying factors
-    /// that are approved by governance.
-    /// Initially, the taker fee is allowed to be bypassed completely. However
-    /// In the future, we will charge a reduced taker fee instead of no fee at all.
-    #[prost(string, repeated, tag = "6")]
-    pub reduced_fee_whitelist: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-/// TakerFeeDistributionPercentage defines what percent of the taker fee category
-/// gets distributed to the available categories.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeeDistributionPercentage")]
-pub struct TakerFeeDistributionPercentage {
-    #[prost(string, tag = "1")]
-    pub staking_rewards: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub community_pool: ::prost::alloc::string::String,
-}
 /// ===================== MsgSwapExactAmountIn
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -505,6 +367,204 @@ pub struct DenomPairTakerFee {
     #[prost(string, tag = "3")]
     pub taker_fee: ::prost::alloc::string::String,
 }
+/// Params holds parameters for the poolmanager module
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.Params")]
+pub struct Params {
+    #[prost(message, repeated, tag = "1")]
+    pub pool_creation_fee:
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    /// taker_fee_params is the container of taker fee parameters.
+    #[prost(message, optional, tag = "2")]
+    pub taker_fee_params: ::core::option::Option<TakerFeeParams>,
+    /// authorized_quote_denoms is a list of quote denoms that can be used as
+    /// token1 when creating a concentrated pool. We limit the quote assets to a
+    /// small set for the purposes of having convinient price increments stemming
+    /// from tick to price conversion. These increments are in a human readable
+    /// magnitude only for token1 as a quote. For limit orders in the future, this
+    /// will be a desirable property in terms of UX as to allow users to set limit
+    /// orders at prices in terms of token1 (quote asset) that are easy to reason
+    /// about.
+    #[prost(string, repeated, tag = "3")]
+    pub authorized_quote_denoms: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+/// GenesisState defines the poolmanager module's genesis state.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.GenesisState")]
+pub struct GenesisState {
+    /// the next_pool_id
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "next_poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub next_pool_id: u64,
+    /// params is the container of poolmanager parameters.
+    #[prost(message, optional, tag = "2")]
+    pub params: ::core::option::Option<Params>,
+    /// pool_routes is the container of the mappings from pool id to pool type.
+    #[prost(message, repeated, tag = "3")]
+    pub pool_routes: ::prost::alloc::vec::Vec<ModuleRoute>,
+    /// KVStore state
+    #[prost(message, optional, tag = "4")]
+    pub taker_fees_tracker: ::core::option::Option<TakerFeesTracker>,
+    #[prost(message, repeated, tag = "5")]
+    pub pool_volumes: ::prost::alloc::vec::Vec<PoolVolume>,
+    #[prost(message, repeated, tag = "6")]
+    pub denom_pair_taker_fee_store: ::prost::alloc::vec::Vec<DenomPairTakerFee>,
+}
+/// TakerFeeParams consolidates the taker fee parameters for the poolmanager.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeeParams")]
+pub struct TakerFeeParams {
+    /// default_taker_fee is the fee used when creating a new pool that doesn't
+    /// fall under a custom pool taker fee or stableswap taker fee category.
+    #[prost(string, tag = "1")]
+    pub default_taker_fee: ::prost::alloc::string::String,
+    /// osmo_taker_fee_distribution defines the distribution of taker fees
+    /// generated in OSMO. As of this writing, it has two catagories:
+    /// - staking_rewards: the percent of the taker fee that gets distributed to
+    ///    stakers.
+    /// - community_pool: the percent of the taker fee that gets sent to the
+    ///    community pool.
+    #[prost(message, optional, tag = "2")]
+    pub osmo_taker_fee_distribution: ::core::option::Option<TakerFeeDistributionPercentage>,
+    /// non_osmo_taker_fee_distribution defines the distribution of taker fees
+    /// generated in non-OSMO. As of this writing, it has two categories:
+    /// - staking_rewards: the percent of the taker fee that gets swapped to OSMO
+    ///    and then distirbuted to stakers.
+    /// - community_pool: the percent of the taker fee that gets sent to the
+    ///    community pool. Note: If the non-OSMO asset is an authorized_quote_denom,
+    ///    that denom is sent directly to the community pool. Otherwise, it is
+    ///    swapped to the community_pool_denom_to_swap_non_whitelisted_assets_to and
+    ///    then sent to the community pool as that denom.
+    #[prost(message, optional, tag = "3")]
+    pub non_osmo_taker_fee_distribution: ::core::option::Option<TakerFeeDistributionPercentage>,
+    /// admin_addresses is a list of addresses that are allowed to set and remove
+    /// custom taker fees for denom pairs. Governance also has the ability to set
+    /// and remove custom taker fees for denom pairs, but with the normal
+    /// governance delay.
+    #[prost(string, repeated, tag = "4")]
+    pub admin_addresses: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// community_pool_denom_to_swap_non_whitelisted_assets_to is the denom that
+    /// non-whitelisted taker fees will be swapped to before being sent to
+    /// the community pool.
+    #[prost(string, tag = "5")]
+    pub community_pool_denom_to_swap_non_whitelisted_assets_to: ::prost::alloc::string::String,
+    /// reduced_fee_whitelist is a list of addresses that are
+    /// allowed to pay a reduce taker fee when performing a swap
+    /// (i.e. swap without paying the taker fee).
+    /// It is intended to be used for integrators who meet qualifying factors
+    /// that are approved by governance.
+    /// Initially, the taker fee is allowed to be bypassed completely. However
+    /// In the future, we will charge a reduced taker fee instead of no fee at all.
+    #[prost(string, repeated, tag = "6")]
+    pub reduced_fee_whitelist: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+/// TakerFeeDistributionPercentage defines what percent of the taker fee category
+/// gets distributed to the available categories.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeeDistributionPercentage")]
+pub struct TakerFeeDistributionPercentage {
+    #[prost(string, tag = "1")]
+    pub staking_rewards: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub community_pool: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeesTracker")]
+pub struct TakerFeesTracker {
+    #[prost(message, repeated, tag = "1")]
+    pub taker_fees_to_stakers:
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(message, repeated, tag = "2")]
+    pub taker_fees_to_community_pool:
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(int64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub height_accounting_starts_from: i64,
+}
+/// PoolVolume stores the KVStore entries for each pool's volume, which
+/// is used in export/import genesis.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.PoolVolume")]
+pub struct PoolVolume {
+    /// pool_id is the id of the pool.
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+    /// pool_volume is the cumulative volume of the pool.
+    #[prost(message, repeated, tag = "2")]
+    pub pool_volume: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
 /// DenomPairTakerFeeProposal is a type for adding/removing a custom taker fee(s)
 /// for one or more denom pairs.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -579,6 +639,7 @@ pub struct ParamsResponse {
     response_type = EstimateSwapExactAmountInResponse
 )]
 pub struct EstimateSwapExactAmountInRequest {
+    #[deprecated]
     #[prost(uint64, tag = "2")]
     #[serde(alias = "poolID")]
     #[serde(
@@ -610,6 +671,7 @@ pub struct EstimateSwapExactAmountInRequest {
     response_type = EstimateSwapExactAmountInResponse
 )]
 pub struct EstimateSwapExactAmountInWithPrimitiveTypesRequest {
+    #[deprecated]
     #[prost(uint64, tag = "1")]
     #[serde(alias = "poolID")]
     #[serde(
@@ -694,6 +756,7 @@ pub struct EstimateSwapExactAmountInResponse {
     response_type = EstimateSwapExactAmountOutResponse
 )]
 pub struct EstimateSwapExactAmountOutRequest {
+    #[deprecated]
     #[prost(uint64, tag = "2")]
     #[serde(alias = "poolID")]
     #[serde(
@@ -725,6 +788,7 @@ pub struct EstimateSwapExactAmountOutRequest {
     response_type = EstimateSwapExactAmountOutResponse
 )]
 pub struct EstimateSwapExactAmountOutWithPrimitiveTypesRequest {
+    #[deprecated]
     #[prost(uint64, tag = "1")]
     #[serde(alias = "poolID")]
     #[serde(
@@ -905,6 +969,45 @@ pub struct AllPoolsResponse {
     #[prost(message, repeated, tag = "1")]
     pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
 }
+/// =======================================================
+/// ListPoolsByDenomRequest
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.ListPoolsByDenomRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/ListPoolsByDenom",
+    response_type = ListPoolsByDenomResponse
+)]
+pub struct ListPoolsByDenomRequest {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.ListPoolsByDenomResponse")]
+pub struct ListPoolsByDenomResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub pools: ::prost::alloc::vec::Vec<crate::shim::Any>,
+}
+/// ==========================================================
 /// SpotPriceRequest defines the gRPC request structure for a SpotPrice
 /// query.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1300,6 +1403,12 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
     }
     pub fn all_pools(&self) -> Result<AllPoolsResponse, cosmwasm_std::StdError> {
         AllPoolsRequest {}.query(self.querier)
+    }
+    pub fn list_pools_by_denom(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<ListPoolsByDenomResponse, cosmwasm_std::StdError> {
+        ListPoolsByDenomRequest { denom }.query(self.querier)
     }
     pub fn spot_price(
         &self,

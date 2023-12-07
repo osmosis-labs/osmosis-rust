@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.Snapshot")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
 pub struct Snapshot {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -52,13 +52,15 @@ pub struct Snapshot {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.Metadata")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
 pub struct Metadata {
     /// SHA-256 chunk hashes
     #[prost(bytes = "vec", repeated, tag = "1")]
     pub chunk_hashes: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
 }
 /// SnapshotItem is an item contained in a rootmulti.Store snapshot.
+///
+/// Since: cosmos-sdk 0.46
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -70,10 +72,10 @@ pub struct Metadata {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotItem")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
 pub struct SnapshotItem {
     /// item is the specific type of snapshot item.
-    #[prost(oneof = "snapshot_item::Item", tags = "1, 2, 3, 4, 5")]
+    #[prost(oneof = "snapshot_item::Item", tags = "1, 2, 3, 4, 5, 6")]
     pub item: ::core::option::Option<snapshot_item::Item>,
 }
 /// Nested message and enum types in `SnapshotItem`.
@@ -100,10 +102,14 @@ pub mod snapshot_item {
         #[prost(message, tag = "4")]
         ExtensionPayload(super::SnapshotExtensionPayload),
         #[prost(message, tag = "5")]
-        AppVersion(super::SnapshotAppVersion),
+        Kv(super::SnapshotKvItem),
+        #[prost(message, tag = "6")]
+        Schema(super::SnapshotSchema),
     }
 }
 /// SnapshotStoreItem contains metadata about a snapshotted store.
+///
+/// Since: cosmos-sdk 0.46
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -115,12 +121,14 @@ pub mod snapshot_item {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotStoreItem")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
 pub struct SnapshotStoreItem {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
 }
 /// SnapshotIAVLItem is an exported IAVL node.
+///
+/// Since: cosmos-sdk 0.46
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -132,7 +140,7 @@ pub struct SnapshotStoreItem {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotIAVLItem")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
 pub struct SnapshotIavlItem {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -162,6 +170,8 @@ pub struct SnapshotIavlItem {
     pub height: i32,
 }
 /// SnapshotExtensionMeta contains metadata about an external snapshotter.
+///
+/// Since: cosmos-sdk 0.46
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -173,7 +183,7 @@ pub struct SnapshotIavlItem {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotExtensionMeta")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
 pub struct SnapshotExtensionMeta {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -185,6 +195,8 @@ pub struct SnapshotExtensionMeta {
     pub format: u32,
 }
 /// SnapshotExtensionPayload contains payloads of an external snapshotter.
+///
+/// Since: cosmos-sdk 0.46
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -196,7 +208,7 @@ pub struct SnapshotExtensionMeta {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotExtensionPayload")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
 pub struct SnapshotExtensionPayload {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -205,7 +217,10 @@ pub struct SnapshotExtensionPayload {
     )]
     pub payload: ::prost::alloc::vec::Vec<u8>,
 }
-/// SnapshotAppVersion contains the app version.
+/// SnapshotKVItem is an exported Key/Value Pair
+///
+/// Since: cosmos-sdk 0.46
+/// Deprecated: This message was part of store/v2alpha1 which has been deleted from v0.47.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -217,12 +232,38 @@ pub struct SnapshotExtensionPayload {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotAppVersion")]
-pub struct SnapshotAppVersion {
-    #[prost(uint64, tag = "1")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+pub struct SnapshotKvItem {
+    #[prost(bytes = "vec", tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
-    pub version: u64,
+    pub key: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub value: ::prost::alloc::vec::Vec<u8>,
+}
+/// SnapshotSchema is an exported schema of smt store
+///
+/// Since: cosmos-sdk 0.46
+/// Deprecated: This message was part of store/v2alpha1 which has been deleted from v0.47.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+pub struct SnapshotSchema {
+    #[prost(bytes = "vec", repeated, tag = "1")]
+    pub keys: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
 }

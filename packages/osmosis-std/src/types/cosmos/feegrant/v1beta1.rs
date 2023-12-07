@@ -1,5 +1,5 @@
 use osmosis_std_derive::CosmwasmExt;
-/// BasicAllowance implements Allowance with a one-time grant of tokens
+/// BasicAllowance implements Allowance with a one-time grant of coins
 /// that optionally expires. The grantee can use up to SpendLimit to cover fees.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -12,10 +12,10 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.BasicAllowance")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct BasicAllowance {
-    /// spend_limit specifies the maximum amount of tokens that can be spent
-    /// by this allowance and will be updated as tokens are spent. If it is
+    /// spend_limit specifies the maximum amount of coins that can be spent
+    /// by this allowance and will be updated as coins are spent. If it is
     /// empty, there is no spend limit and any amount of coins can be spent.
     #[prost(message, repeated, tag = "1")]
     pub spend_limit: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
@@ -36,7 +36,7 @@ pub struct BasicAllowance {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.PeriodicAllowance")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct PeriodicAllowance {
     /// basic specifies a struct of `BasicAllowance`
     #[prost(message, optional, tag = "1")]
@@ -70,9 +70,9 @@ pub struct PeriodicAllowance {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.AllowedMsgAllowance")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct AllowedMsgAllowance {
-    /// allowance can be any of basic and filtered fee allowance.
+    /// allowance can be any of basic and periodic fee allowance.
     #[prost(message, optional, tag = "1")]
     pub allowance: ::core::option::Option<crate::shim::Any>,
     /// allowed_messages are the messages for which the grantee has the access.
@@ -91,7 +91,7 @@ pub struct AllowedMsgAllowance {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.Grant")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct Grant {
     /// granter is the address of the user granting an allowance of their funds.
     #[prost(string, tag = "1")]
@@ -99,7 +99,7 @@ pub struct Grant {
     /// grantee is the address of the user being granted an allowance of another user's funds.
     #[prost(string, tag = "2")]
     pub grantee: ::prost::alloc::string::String,
-    /// allowance can be any of basic and filtered fee allowance.
+    /// allowance can be any of basic, periodic, allowed fee allowance.
     #[prost(message, optional, tag = "3")]
     pub allowance: ::core::option::Option<crate::shim::Any>,
 }
@@ -115,7 +115,7 @@ pub struct Grant {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.GenesisState")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct GenesisState {
     #[prost(message, repeated, tag = "1")]
     pub allowances: ::prost::alloc::vec::Vec<Grant>,
@@ -132,11 +132,7 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.QueryAllowanceRequest")]
-#[proto_query(
-    path = "/cosmos.feegrant.v1beta1.Query/Allowance",
-    response_type = QueryAllowanceResponse
-)]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct QueryAllowanceRequest {
     /// granter is the address of the user granting an allowance of their funds.
     #[prost(string, tag = "1")]
@@ -157,7 +153,7 @@ pub struct QueryAllowanceRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.QueryAllowanceResponse")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct QueryAllowanceResponse {
     /// allowance is a allowance granted for grantee by granter.
     #[prost(message, optional, tag = "1")]
@@ -175,11 +171,7 @@ pub struct QueryAllowanceResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.QueryAllowancesRequest")]
-#[proto_query(
-    path = "/cosmos.feegrant.v1beta1.Query/Allowances",
-    response_type = QueryAllowancesResponse
-)]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct QueryAllowancesRequest {
     #[prost(string, tag = "1")]
     pub grantee: ::prost::alloc::string::String,
@@ -199,9 +191,54 @@ pub struct QueryAllowancesRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.QueryAllowancesResponse")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct QueryAllowancesResponse {
     /// allowances are allowance's granted for grantee by granter.
+    #[prost(message, repeated, tag = "1")]
+    pub allowances: ::prost::alloc::vec::Vec<Grant>,
+    /// pagination defines an pagination for the response.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageResponse>,
+}
+/// QueryAllowancesByGranterRequest is the request type for the Query/AllowancesByGranter RPC method.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
+pub struct QueryAllowancesByGranterRequest {
+    #[prost(string, tag = "1")]
+    pub granter: ::prost::alloc::string::String,
+    /// pagination defines an pagination for the request.
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+}
+/// QueryAllowancesByGranterResponse is the response type for the Query/AllowancesByGranter RPC method.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
+pub struct QueryAllowancesByGranterResponse {
+    /// allowances that have been issued by the granter.
     #[prost(message, repeated, tag = "1")]
     pub allowances: ::prost::alloc::vec::Vec<Grant>,
     /// pagination defines an pagination for the response.
@@ -221,7 +258,7 @@ pub struct QueryAllowancesResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.MsgGrantAllowance")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct MsgGrantAllowance {
     /// granter is the address of the user granting an allowance of their funds.
     #[prost(string, tag = "1")]
@@ -229,7 +266,7 @@ pub struct MsgGrantAllowance {
     /// grantee is the address of the user being granted an allowance of another user's funds.
     #[prost(string, tag = "2")]
     pub grantee: ::prost::alloc::string::String,
-    /// allowance can be any of basic and filtered fee allowance.
+    /// allowance can be any of basic, periodic, allowed fee allowance.
     #[prost(message, optional, tag = "3")]
     pub allowance: ::core::option::Option<crate::shim::Any>,
 }
@@ -245,7 +282,7 @@ pub struct MsgGrantAllowance {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.MsgGrantAllowanceResponse")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct MsgGrantAllowanceResponse {}
 /// MsgRevokeAllowance removes any existing Allowance from Granter to Grantee.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -259,7 +296,7 @@ pub struct MsgGrantAllowanceResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.MsgRevokeAllowance")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct MsgRevokeAllowance {
     /// granter is the address of the user granting an allowance of their funds.
     #[prost(string, tag = "1")]
@@ -280,31 +317,5 @@ pub struct MsgRevokeAllowance {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.feegrant.v1beta1.MsgRevokeAllowanceResponse")]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.")]
 pub struct MsgRevokeAllowanceResponse {}
-pub struct FeegrantQuerier<'a, Q: cosmwasm_std::CustomQuery> {
-    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
-}
-impl<'a, Q: cosmwasm_std::CustomQuery> FeegrantQuerier<'a, Q> {
-    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
-        Self { querier }
-    }
-    pub fn allowance(
-        &self,
-        granter: ::prost::alloc::string::String,
-        grantee: ::prost::alloc::string::String,
-    ) -> Result<QueryAllowanceResponse, cosmwasm_std::StdError> {
-        QueryAllowanceRequest { granter, grantee }.query(self.querier)
-    }
-    pub fn allowances(
-        &self,
-        grantee: ::prost::alloc::string::String,
-        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
-    ) -> Result<QueryAllowancesResponse, cosmwasm_std::StdError> {
-        QueryAllowancesRequest {
-            grantee,
-            pagination,
-        }
-        .query(self.querier)
-    }
-}

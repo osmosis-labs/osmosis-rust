@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.BaseVestingAccount")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct BaseVestingAccount {
     #[prost(message, optional, tag = "1")]
     pub base_account: ::core::option::Option<super::super::auth::v1beta1::BaseAccount>,
@@ -22,6 +22,7 @@ pub struct BaseVestingAccount {
     pub delegated_free: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
     #[prost(message, repeated, tag = "4")]
     pub delegated_vesting: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+    /// Vesting end time, as unix timestamp (in seconds).
     #[prost(int64, tag = "5")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
@@ -42,10 +43,11 @@ pub struct BaseVestingAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.ContinuousVestingAccount")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct ContinuousVestingAccount {
     #[prost(message, optional, tag = "1")]
     pub base_vesting_account: ::core::option::Option<BaseVestingAccount>,
+    /// Vesting start time, as unix timestamp (in seconds).
     #[prost(int64, tag = "2")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
@@ -67,7 +69,7 @@ pub struct ContinuousVestingAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.DelayedVestingAccount")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct DelayedVestingAccount {
     #[prost(message, optional, tag = "1")]
     pub base_vesting_account: ::core::option::Option<BaseVestingAccount>,
@@ -84,8 +86,9 @@ pub struct DelayedVestingAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.Period")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct Period {
+    /// Period duration in seconds.
     #[prost(int64, tag = "1")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
@@ -108,7 +111,7 @@ pub struct Period {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.PeriodicVestingAccount")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct PeriodicVestingAccount {
     #[prost(message, optional, tag = "1")]
     pub base_vesting_account: ::core::option::Option<BaseVestingAccount>,
@@ -137,7 +140,7 @@ pub struct PeriodicVestingAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.PermanentLockedAccount")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct PermanentLockedAccount {
     #[prost(message, optional, tag = "1")]
     pub base_vesting_account: ::core::option::Option<BaseVestingAccount>,
@@ -157,7 +160,7 @@ pub struct PermanentLockedAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.ClawbackVestingAccount")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct ClawbackVestingAccount {
     #[prost(message, optional, tag = "1")]
     pub base_vesting_account: ::core::option::Option<BaseVestingAccount>,
@@ -190,7 +193,7 @@ pub struct ClawbackVestingAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.MsgCreateVestingAccount")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct MsgCreateVestingAccount {
     #[prost(string, tag = "1")]
     pub from_address: ::prost::alloc::string::String,
@@ -198,6 +201,7 @@ pub struct MsgCreateVestingAccount {
     pub to_address: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "3")]
     pub amount: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+    /// end of vesting as unix time (in seconds).
     #[prost(int64, tag = "4")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
@@ -219,8 +223,96 @@ pub struct MsgCreateVestingAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.MsgCreateVestingAccountResponse")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct MsgCreateVestingAccountResponse {}
+/// MsgCreatePermanentLockedAccount defines a message that enables creating a permanent
+/// locked account.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
+pub struct MsgCreatePermanentLockedAccount {
+    #[prost(string, tag = "1")]
+    pub from_address: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub to_address: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub amount: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
+}
+/// MsgCreatePermanentLockedAccountResponse defines the Msg/CreatePermanentLockedAccount response type.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
+pub struct MsgCreatePermanentLockedAccountResponse {}
+/// MsgCreateVestingAccount defines a message that enables creating a vesting
+/// account.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
+pub struct MsgCreatePeriodicVestingAccount {
+    #[prost(string, tag = "1")]
+    pub from_address: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub to_address: ::prost::alloc::string::String,
+    /// start of vesting as unix time (in seconds).
+    #[prost(int64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub start_time: i64,
+    #[prost(message, repeated, tag = "4")]
+    pub vesting_periods: ::prost::alloc::vec::Vec<Period>,
+}
+/// MsgCreateVestingAccountResponse defines the Msg/CreatePeriodicVestingAccount
+/// response type.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
+pub struct MsgCreatePeriodicVestingAccountResponse {}
 /// MsgCreateClawbackVestingAccount defines a message that enables creating a ClawbackVestingAccount.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -233,7 +325,7 @@ pub struct MsgCreateVestingAccountResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.MsgCreateClawbackVestingAccount")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct MsgCreateClawbackVestingAccount {
     /// from_address specifies the account to provide the funds and sign the
     /// clawback request
@@ -276,7 +368,7 @@ pub struct MsgCreateClawbackVestingAccount {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.MsgCreateClawbackVestingAccountResponse")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct MsgCreateClawbackVestingAccountResponse {}
 /// MsgClawback defines a message that removes unvested tokens from a
 /// ClawbackVestingAccount.
@@ -291,7 +383,7 @@ pub struct MsgCreateClawbackVestingAccountResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.MsgClawback")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct MsgClawback {
     /// funder_address is the address which funded the account
     #[prost(string, tag = "1")]
@@ -317,5 +409,5 @@ pub struct MsgClawback {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.vesting.v1beta1.MsgClawbackResponse")]
+#[proto_message(type_url = "/cosmos.vesting.v1beta1.")]
 pub struct MsgClawbackResponse {}

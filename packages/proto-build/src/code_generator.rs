@@ -16,8 +16,8 @@ pub struct CosmosProject {
     pub version: String,
     pub project_dir: String,
 
-    /// determines which modules to include from the project
-    pub include_mods: Vec<String>,
+    /// determines which modules to exclude from the project
+    pub exclude_mods: Vec<String>,
 }
 
 pub struct CodeGenerator {
@@ -112,10 +112,10 @@ impl CodeGenerator {
     }
 
     fn compile_proto(&self) {
-        let buf_gen_template = self.root.join("buf.gen.yaml");
-
         let mut all_related_projects = self.deps.clone();
         all_related_projects.push(self.project.clone());
+
+        let buf_gen_template = self.root.join("buf.gen.yaml");
 
         info!(
             "🧪 [{}] Compiling types from protobuf definitions...",
@@ -125,17 +125,21 @@ impl CodeGenerator {
         // Compile proto files for each file in `protos` variable
         // `buf generate —template {<buf_gen_template} <proto_file>`
         for project in all_related_projects {
-            let buf_root = WalkDir::new(&self.root.join(&project.project_dir))
-                .into_iter()
-                .filter_map(|e| e.ok())
-                .find(|e| {
-                    e.file_name()
-                        .to_str()
-                        .map(|s| s == "buf.yaml" || s == "buf.yml")
-                        .unwrap_or(false)
-                })
-                .map(|e| e.path().parent().unwrap().to_path_buf())
-                .unwrap();
+            let buf_root = if project.name == "cosmos" || project.name == "ics23" {
+                self.root.join(&project.project_dir).join("proto")
+            } else {
+                WalkDir::new(&self.root.join(&project.project_dir))
+                    .into_iter()
+                    .filter_map(|e| e.ok())
+                    .find(|e| {
+                        e.file_name()
+                            .to_str()
+                            .map(|s| s == "buf.yaml" || s == "buf.yml")
+                            .unwrap_or(false)
+                    })
+                    .map(|e| e.path().parent().unwrap().to_path_buf())
+                    .unwrap()
+            };
 
             let proto_path = &self.root.join(&project.project_dir).join("proto");
 
@@ -147,10 +151,10 @@ impl CodeGenerator {
                 .arg("--output")
                 .arg(self.tmp_namespaced_dir().to_string_lossy().to_string());
 
-            if !project.include_mods.is_empty() {
-                for include_mod in project.include_mods.clone() {
-                    cmd.arg("--path")
-                        .arg(proto_path.join(project.name.clone()).join(include_mod));
+            if !project.exclude_mods.is_empty() {
+                for excluded_mod in project.exclude_mods.clone() {
+                    cmd.arg("--exclude-path")
+                        .arg(proto_path.join(project.name.clone()).join(excluded_mod));
                 }
             }
 
@@ -175,8 +179,8 @@ impl CodeGenerator {
                 .arg("-o")
                 .arg(descriptor_file.to_string_lossy().to_string());
 
-            if !project.include_mods.is_empty() {
-                for include_mod in project.include_mods {
+            if !project.exclude_mods.is_empty() {
+                for include_mod in project.exclude_mods {
                     cmd.arg("--path")
                         .arg(proto_path.join(project.name.clone()).join(include_mod));
                 }

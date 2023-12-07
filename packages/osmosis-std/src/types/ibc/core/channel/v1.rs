@@ -1330,6 +1330,9 @@ pub struct MsgChannelOpenTry {
 pub struct MsgChannelOpenTryResponse {
     #[prost(string, tag = "1")]
     pub version: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    #[serde(alias = "channelID")]
+    pub channel_id: ::prost::alloc::string::String,
 }
 /// MsgChannelOpenAck defines a msg sent by a Relayer to Chain A to acknowledge
 /// the change of channel state to TRYOPEN on Chain B.

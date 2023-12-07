@@ -59,4 +59,10 @@ pub struct Params {
     #[prost(string, repeated, tag = "7")]
     pub unrestricted_pool_creator_whitelist:
         ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(uint64, tag = "8")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub hook_gas_limit: u64,
 }

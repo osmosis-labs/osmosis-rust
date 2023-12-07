@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.GenericAuthorization")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct GenericAuthorization {
     /// Msg, identified by it's type URL, to grant unrestricted permissions to execute
     #[prost(string, tag = "1")]
@@ -31,10 +31,13 @@ pub struct GenericAuthorization {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.Grant")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct Grant {
     #[prost(message, optional, tag = "1")]
     pub authorization: ::core::option::Option<crate::shim::Any>,
+    /// time when the grant will expire and will be pruned. If null, then the grant
+    /// doesn't have a time expiration (other conditions  in `authorization`
+    /// may apply to invalidate the grant)
     #[prost(message, optional, tag = "2")]
     pub expiration: ::core::option::Option<crate::shim::Timestamp>,
 }
@@ -51,7 +54,7 @@ pub struct Grant {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.GrantAuthorization")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct GrantAuthorization {
     #[prost(string, tag = "1")]
     pub granter: ::prost::alloc::string::String,
@@ -61,6 +64,24 @@ pub struct GrantAuthorization {
     pub authorization: ::core::option::Option<crate::shim::Any>,
     #[prost(message, optional, tag = "4")]
     pub expiration: ::core::option::Option<crate::shim::Timestamp>,
+}
+/// GrantQueueItem contains the list of TypeURL of a sdk.Msg.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
+pub struct GrantQueueItem {
+    /// msg_type_urls contains the list of TypeURL of a sdk.Msg.
+    #[prost(string, repeated, tag = "1")]
+    pub msg_type_urls: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// EventGrant is emitted on Msg/Grant
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -74,7 +95,7 @@ pub struct GrantAuthorization {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.EventGrant")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct EventGrant {
     /// Msg type URL for which an autorization is granted
     #[prost(string, tag = "2")]
@@ -98,7 +119,7 @@ pub struct EventGrant {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.EventRevoke")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct EventRevoke {
     /// Msg type URL for which an autorization is revoked
     #[prost(string, tag = "2")]
@@ -122,7 +143,7 @@ pub struct EventRevoke {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.GenesisState")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct GenesisState {
     #[prost(message, repeated, tag = "1")]
     pub authorization: ::prost::alloc::vec::Vec<GrantAuthorization>,
@@ -139,11 +160,7 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGrantsRequest")]
-#[proto_query(
-    path = "/cosmos.authz.v1beta1.Query/Grants",
-    response_type = QueryGrantsResponse
-)]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct QueryGrantsRequest {
     #[prost(string, tag = "1")]
     pub granter: ::prost::alloc::string::String,
@@ -168,7 +185,7 @@ pub struct QueryGrantsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGrantsResponse")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct QueryGrantsResponse {
     /// authorizations is a list of grants granted for grantee by granter.
     #[prost(message, repeated, tag = "1")]
@@ -189,11 +206,7 @@ pub struct QueryGrantsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGranterGrantsRequest")]
-#[proto_query(
-    path = "/cosmos.authz.v1beta1.Query/GranterGrants",
-    response_type = QueryGranterGrantsResponse
-)]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct QueryGranterGrantsRequest {
     #[prost(string, tag = "1")]
     pub granter: ::prost::alloc::string::String,
@@ -213,7 +226,7 @@ pub struct QueryGranterGrantsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGranterGrantsResponse")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct QueryGranterGrantsResponse {
     /// grants is a list of grants granted by the granter.
     #[prost(message, repeated, tag = "1")]
@@ -234,11 +247,7 @@ pub struct QueryGranterGrantsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGranteeGrantsRequest")]
-#[proto_query(
-    path = "/cosmos.authz.v1beta1.Query/GranteeGrants",
-    response_type = QueryGranteeGrantsResponse
-)]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct QueryGranteeGrantsRequest {
     #[prost(string, tag = "1")]
     pub grantee: ::prost::alloc::string::String,
@@ -258,7 +267,7 @@ pub struct QueryGranteeGrantsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.QueryGranteeGrantsResponse")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct QueryGranteeGrantsResponse {
     /// grants is a list of grants granted to the grantee.
     #[prost(message, repeated, tag = "1")]
@@ -280,7 +289,7 @@ pub struct QueryGranteeGrantsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.MsgGrant")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct MsgGrant {
     #[prost(string, tag = "1")]
     pub granter: ::prost::alloc::string::String,
@@ -301,7 +310,7 @@ pub struct MsgGrant {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.MsgExecResponse")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct MsgExecResponse {
     #[prost(bytes = "vec", repeated, tag = "1")]
     pub results: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
@@ -320,11 +329,11 @@ pub struct MsgExecResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.MsgExec")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct MsgExec {
     #[prost(string, tag = "1")]
     pub grantee: ::prost::alloc::string::String,
-    /// Authorization Msg requests to execute. Each msg must implement Authorization interface
+    /// Execute Msg.
     /// The x/authz will try to find a grant matching (msg.signers\[0\], grantee, MsgTypeURL(msg))
     /// triple and validate it.
     #[prost(message, repeated, tag = "2")]
@@ -342,7 +351,7 @@ pub struct MsgExec {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.MsgGrantResponse")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct MsgGrantResponse {}
 /// MsgRevoke revokes any authorization with the provided sdk.Msg type on the
 /// granter's account with that has been granted to the grantee.
@@ -357,7 +366,7 @@ pub struct MsgGrantResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.MsgRevoke")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct MsgRevoke {
     #[prost(string, tag = "1")]
     pub granter: ::prost::alloc::string::String,
@@ -378,50 +387,5 @@ pub struct MsgRevoke {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.authz.v1beta1.MsgRevokeResponse")]
+#[proto_message(type_url = "/cosmos.authz.v1beta1.")]
 pub struct MsgRevokeResponse {}
-pub struct AuthzQuerier<'a, Q: cosmwasm_std::CustomQuery> {
-    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
-}
-impl<'a, Q: cosmwasm_std::CustomQuery> AuthzQuerier<'a, Q> {
-    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
-        Self { querier }
-    }
-    pub fn grants(
-        &self,
-        granter: ::prost::alloc::string::String,
-        grantee: ::prost::alloc::string::String,
-        msg_type_url: ::prost::alloc::string::String,
-        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
-    ) -> Result<QueryGrantsResponse, cosmwasm_std::StdError> {
-        QueryGrantsRequest {
-            granter,
-            grantee,
-            msg_type_url,
-            pagination,
-        }
-        .query(self.querier)
-    }
-    pub fn granter_grants(
-        &self,
-        granter: ::prost::alloc::string::String,
-        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
-    ) -> Result<QueryGranterGrantsResponse, cosmwasm_std::StdError> {
-        QueryGranterGrantsRequest {
-            granter,
-            pagination,
-        }
-        .query(self.querier)
-    }
-    pub fn grantee_grants(
-        &self,
-        grantee: ::prost::alloc::string::String,
-        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
-    ) -> Result<QueryGranteeGrantsResponse, cosmwasm_std::StdError> {
-        QueryGranteeGrantsRequest {
-            grantee,
-            pagination,
-        }
-        .query(self.querier)
-    }
-}

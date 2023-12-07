@@ -326,6 +326,49 @@ pub struct BaseDenom {
     #[prost(string, tag = "2")]
     pub step_size: ::prost::alloc::string::String,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.AllProtocolRevenue")]
+pub struct AllProtocolRevenue {
+    #[prost(message, optional, tag = "1")]
+    pub taker_fees_tracker:
+        ::core::option::Option<super::super::poolmanager::v1beta1::TakerFeesTracker>,
+    #[prost(message, optional, tag = "2")]
+    pub tx_fees_tracker: ::core::option::Option<super::super::txfees::v1beta1::TxFeesTracker>,
+    #[prost(message, optional, tag = "3")]
+    pub cyclic_arb_tracker: ::core::option::Option<CyclicArbTracker>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.CyclicArbTracker")]
+pub struct CyclicArbTracker {
+    #[prost(message, repeated, tag = "1")]
+    pub cyclic_arb: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(int64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub height_accounting_starts_from: i64,
+}
 /// Params defines the parameters for the module.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -428,6 +471,8 @@ pub struct GenesisState {
     /// consumption of a swap on a given pool type.
     #[prost(message, optional, tag = "13")]
     pub info_by_pool_type: ::core::option::Option<InfoByPoolType>,
+    #[prost(message, optional, tag = "14")]
+    pub cyclic_arb_tracker: ::core::option::Option<CyclicArbTracker>,
 }
 /// SetProtoRevEnabledProposal is a gov Content type to update whether the
 /// protorev module is enabled
@@ -1085,6 +1130,39 @@ pub struct QueryGetProtoRevPoolResponse {
     )]
     pub pool_id: u64,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetAllProtocolRevenueRequest")]
+#[proto_query(
+    path = "/osmosis.protorev.v1beta1.Query/GetAllProtocolRevenue",
+    response_type = QueryGetAllProtocolRevenueResponse
+)]
+pub struct QueryGetAllProtocolRevenueRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.QueryGetAllProtocolRevenueResponse")]
+pub struct QueryGetAllProtocolRevenueResponse {
+    #[prost(message, optional, tag = "1")]
+    pub all_protocol_revenue: ::core::option::Option<AllProtocolRevenue>,
+}
 /// MsgSetHotRoutes defines the Msg/SetHotRoutes request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -1398,5 +1476,10 @@ impl<'a, Q: cosmwasm_std::CustomQuery> ProtorevQuerier<'a, Q> {
             other_denom,
         }
         .query(self.querier)
+    }
+    pub fn get_all_protocol_revenue(
+        &self,
+    ) -> Result<QueryGetAllProtocolRevenueResponse, cosmwasm_std::StdError> {
+        QueryGetAllProtocolRevenueRequest {}.query(self.querier)
     }
 }

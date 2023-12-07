@@ -984,6 +984,44 @@ pub struct UserConcentratedSuperfluidPositionsUndelegatingResponse {
     #[prost(message, repeated, tag = "1")]
     pub cl_pool_user_position_records: ::prost::alloc::vec::Vec<ConcentratedPoolUserPositionRecord>,
 }
+/// THIS QUERY IS TEMPORARY
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.QueryRestSupplyRequest")]
+#[proto_query(
+    path = "/osmosis.superfluid.Query/RestSupply",
+    response_type = QueryRestSupplyResponse
+)]
+pub struct QueryRestSupplyRequest {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.superfluid.QueryRestSupplyResponse")]
+pub struct QueryRestSupplyResponse {
+    /// amount is the supply of the coin.
+    #[prost(message, optional, tag = "1")]
+    pub amount: ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -1601,5 +1639,11 @@ impl<'a, Q: cosmwasm_std::CustomQuery> SuperfluidQuerier<'a, Q> {
     {
         UserConcentratedSuperfluidPositionsUndelegatingRequest { delegator_address }
             .query(self.querier)
+    }
+    pub fn rest_supply(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QueryRestSupplyResponse, cosmwasm_std::StdError> {
+        QueryRestSupplyRequest { denom }.query(self.querier)
     }
 }

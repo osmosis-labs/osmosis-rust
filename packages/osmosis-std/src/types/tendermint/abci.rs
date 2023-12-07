@@ -14,7 +14,7 @@ use osmosis_std_derive::CosmwasmExt;
 pub struct Request {
     #[prost(
         oneof = "request::Value",
-        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15"
+        tags = "1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17"
     )]
     pub value: ::core::option::Option<request::Value>,
 }
@@ -38,8 +38,6 @@ pub mod request {
         Flush(super::RequestFlush),
         #[prost(message, tag = "3")]
         Info(super::RequestInfo),
-        #[prost(message, tag = "4")]
-        SetOption(super::RequestSetOption),
         #[prost(message, tag = "5")]
         InitChain(super::RequestInitChain),
         #[prost(message, tag = "6")]
@@ -62,6 +60,10 @@ pub mod request {
         LoadSnapshotChunk(super::RequestLoadSnapshotChunk),
         #[prost(message, tag = "15")]
         ApplySnapshotChunk(super::RequestApplySnapshotChunk),
+        #[prost(message, tag = "16")]
+        PrepareProposal(super::RequestPrepareProposal),
+        #[prost(message, tag = "17")]
+        ProcessProposal(super::RequestProcessProposal),
     }
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -120,25 +122,8 @@ pub struct RequestInfo {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub p2p_version: u64,
-}
-/// nondeterministic
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.abci.RequestSetOption")]
-pub struct RequestSetOption {
-    #[prost(string, tag = "1")]
-    pub key: ::prost::alloc::string::String,
-    #[prost(string, tag = "2")]
-    pub value: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub abci_version: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -159,7 +144,7 @@ pub struct RequestInitChain {
     #[serde(alias = "chainID")]
     pub chain_id: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "3")]
-    pub consensus_params: ::core::option::Option<ConsensusParams>,
+    pub consensus_params: ::core::option::Option<super::types::ConsensusParams>,
     #[prost(message, repeated, tag = "4")]
     pub validators: ::prost::alloc::vec::Vec<ValidatorUpdate>,
     #[prost(bytes = "vec", tag = "5")]
@@ -227,9 +212,9 @@ pub struct RequestBeginBlock {
     #[prost(message, optional, tag = "2")]
     pub header: ::core::option::Option<super::types::Header>,
     #[prost(message, optional, tag = "3")]
-    pub last_commit_info: ::core::option::Option<LastCommitInfo>,
+    pub last_commit_info: ::core::option::Option<CommitInfo>,
     #[prost(message, repeated, tag = "4")]
-    pub byzantine_validators: ::prost::alloc::vec::Vec<Evidence>,
+    pub byzantine_validators: ::prost::alloc::vec::Vec<Misbehavior>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -422,11 +407,109 @@ pub struct RequestApplySnapshotChunk {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
+#[proto_message(type_url = "/tendermint.abci.RequestPrepareProposal")]
+pub struct RequestPrepareProposal {
+    /// the modified transactions cannot exceed this size.
+    #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_tx_bytes: i64,
+    /// txs is an array of transactions that will be included in a block,
+    /// sent to the app for possible modifications.
+    #[prost(bytes = "vec", repeated, tag = "2")]
+    pub txs: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
+    #[prost(message, optional, tag = "3")]
+    pub local_last_commit: ::core::option::Option<ExtendedCommitInfo>,
+    #[prost(message, repeated, tag = "4")]
+    pub misbehavior: ::prost::alloc::vec::Vec<Misbehavior>,
+    #[prost(int64, tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub height: i64,
+    #[prost(message, optional, tag = "6")]
+    pub time: ::core::option::Option<crate::shim::Timestamp>,
+    #[prost(bytes = "vec", tag = "7")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub next_validators_hash: ::prost::alloc::vec::Vec<u8>,
+    /// address of the public key of the validator proposing the block.
+    #[prost(bytes = "vec", tag = "8")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub proposer_address: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.abci.RequestProcessProposal")]
+pub struct RequestProcessProposal {
+    #[prost(bytes = "vec", repeated, tag = "1")]
+    pub txs: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
+    #[prost(message, optional, tag = "2")]
+    pub proposed_last_commit: ::core::option::Option<CommitInfo>,
+    #[prost(message, repeated, tag = "3")]
+    pub misbehavior: ::prost::alloc::vec::Vec<Misbehavior>,
+    /// hash is the merkle root hash of the fields of the proposed block.
+    #[prost(bytes = "vec", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub hash: ::prost::alloc::vec::Vec<u8>,
+    #[prost(int64, tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub height: i64,
+    #[prost(message, optional, tag = "6")]
+    pub time: ::core::option::Option<crate::shim::Timestamp>,
+    #[prost(bytes = "vec", tag = "7")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub next_validators_hash: ::prost::alloc::vec::Vec<u8>,
+    /// address of the public key of the original proposer of the block.
+    #[prost(bytes = "vec", tag = "8")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub proposer_address: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto_message(type_url = "/tendermint.abci.Response")]
 pub struct Response {
     #[prost(
         oneof = "response::Value",
-        tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16"
+        tags = "1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18"
     )]
     pub value: ::core::option::Option<response::Value>,
 }
@@ -452,8 +535,6 @@ pub mod response {
         Flush(super::ResponseFlush),
         #[prost(message, tag = "4")]
         Info(super::ResponseInfo),
-        #[prost(message, tag = "5")]
-        SetOption(super::ResponseSetOption),
         #[prost(message, tag = "6")]
         InitChain(super::ResponseInitChain),
         #[prost(message, tag = "7")]
@@ -476,6 +557,10 @@ pub mod response {
         LoadSnapshotChunk(super::ResponseLoadSnapshotChunk),
         #[prost(message, tag = "16")]
         ApplySnapshotChunk(super::ResponseApplySnapshotChunk),
+        #[prost(message, tag = "17")]
+        PrepareProposal(super::ResponsePrepareProposal),
+        #[prost(message, tag = "18")]
+        ProcessProposal(super::ResponseProcessProposal),
     }
 }
 /// nondeterministic
@@ -560,32 +645,6 @@ pub struct ResponseInfo {
     )]
     pub last_block_app_hash: ::prost::alloc::vec::Vec<u8>,
 }
-/// nondeterministic
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.abci.ResponseSetOption")]
-pub struct ResponseSetOption {
-    #[prost(uint32, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub code: u32,
-    /// bytes data = 2;
-    #[prost(string, tag = "3")]
-    pub log: ::prost::alloc::string::String,
-    #[prost(string, tag = "4")]
-    pub info: ::prost::alloc::string::String,
-}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -600,7 +659,7 @@ pub struct ResponseSetOption {
 #[proto_message(type_url = "/tendermint.abci.ResponseInitChain")]
 pub struct ResponseInitChain {
     #[prost(message, optional, tag = "1")]
-    pub consensus_params: ::core::option::Option<ConsensusParams>,
+    pub consensus_params: ::core::option::Option<super::types::ConsensusParams>,
     #[prost(message, repeated, tag = "2")]
     pub validators: ::prost::alloc::vec::Vec<ValidatorUpdate>,
     #[prost(bytes = "vec", tag = "3")]
@@ -729,6 +788,18 @@ pub struct ResponseCheckTx {
     pub events: ::prost::alloc::vec::Vec<Event>,
     #[prost(string, tag = "8")]
     pub codespace: ::prost::alloc::string::String,
+    #[prost(string, tag = "9")]
+    pub sender: ::prost::alloc::string::String,
+    #[prost(int64, tag = "10")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub priority: i64,
+    /// mempool_error is set by CometBFT.
+    /// ABCI applictions creating a ResponseCheckTX should not set mempool_error.
+    #[prost(string, tag = "11")]
+    pub mempool_error: ::prost::alloc::string::String,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -773,6 +844,7 @@ pub struct ResponseDeliverTx {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub gas_used: i64,
+    /// nondeterministic
     #[prost(message, repeated, tag = "7")]
     pub events: ::prost::alloc::vec::Vec<Event>,
     #[prost(string, tag = "8")]
@@ -794,7 +866,7 @@ pub struct ResponseEndBlock {
     #[prost(message, repeated, tag = "1")]
     pub validator_updates: ::prost::alloc::vec::Vec<ValidatorUpdate>,
     #[prost(message, optional, tag = "2")]
-    pub consensus_param_updates: ::core::option::Option<ConsensusParams>,
+    pub consensus_param_updates: ::core::option::Option<super::types::ConsensusParams>,
     #[prost(message, repeated, tag = "3")]
     pub events: ::prost::alloc::vec::Vec<Event>,
 }
@@ -1009,8 +1081,6 @@ pub mod response_apply_snapshot_chunk {
         }
     }
 }
-/// ConsensusParams contains all consensus-relevant parameters
-/// that can be adjusted by the abci app
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -1022,45 +1092,10 @@ pub mod response_apply_snapshot_chunk {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/tendermint.abci.ConsensusParams")]
-pub struct ConsensusParams {
-    #[prost(message, optional, tag = "1")]
-    pub block: ::core::option::Option<BlockParams>,
-    #[prost(message, optional, tag = "2")]
-    pub evidence: ::core::option::Option<super::types::EvidenceParams>,
-    #[prost(message, optional, tag = "3")]
-    pub validator: ::core::option::Option<super::types::ValidatorParams>,
-    #[prost(message, optional, tag = "4")]
-    pub version: ::core::option::Option<super::types::VersionParams>,
-}
-/// BlockParams contains limits on the block size.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.abci.BlockParams")]
-pub struct BlockParams {
-    /// Note: must be greater than 0
-    #[prost(int64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_bytes: i64,
-    /// Note: must be greater or equal to -1
-    #[prost(int64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_gas: i64,
+#[proto_message(type_url = "/tendermint.abci.ResponsePrepareProposal")]
+pub struct ResponsePrepareProposal {
+    #[prost(bytes = "vec", repeated, tag = "1")]
+    pub txs: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -1073,8 +1108,62 @@ pub struct BlockParams {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/tendermint.abci.LastCommitInfo")]
-pub struct LastCommitInfo {
+#[proto_message(type_url = "/tendermint.abci.ResponseProcessProposal")]
+pub struct ResponseProcessProposal {
+    #[prost(enumeration = "response_process_proposal::ProposalStatus", tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub status: i32,
+}
+/// Nested message and enum types in `ResponseProcessProposal`.
+pub mod response_process_proposal {
+    use osmosis_std_derive::CosmwasmExt;
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+    #[repr(i32)]
+    #[derive(::serde::Serialize, ::serde::Deserialize, ::schemars::JsonSchema)]
+    pub enum ProposalStatus {
+        Unknown = 0,
+        Accept = 1,
+        Reject = 2,
+    }
+    impl ProposalStatus {
+        /// String value of the enum field names used in the ProtoBuf definition.
+        ///
+        /// The values are not transformed in any way and thus are considered stable
+        /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+        pub fn as_str_name(&self) -> &'static str {
+            match self {
+                ProposalStatus::Unknown => "UNKNOWN",
+                ProposalStatus::Accept => "ACCEPT",
+                ProposalStatus::Reject => "REJECT",
+            }
+        }
+        /// Creates an enum from field names used in the ProtoBuf definition.
+        pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+            match value {
+                "UNKNOWN" => Some(Self::Unknown),
+                "ACCEPT" => Some(Self::Accept),
+                "REJECT" => Some(Self::Reject),
+                _ => None,
+            }
+        }
+    }
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.abci.CommitInfo")]
+pub struct CommitInfo {
     #[prost(int32, tag = "1")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
@@ -1083,6 +1172,31 @@ pub struct LastCommitInfo {
     pub round: i32,
     #[prost(message, repeated, tag = "2")]
     pub votes: ::prost::alloc::vec::Vec<VoteInfo>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.abci.ExtendedCommitInfo")]
+pub struct ExtendedCommitInfo {
+    /// The round at which the block proposer decided in the previous height.
+    #[prost(int32, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub round: i32,
+    /// List of validators' addresses in the last validator set with their voting
+    /// information, including vote extensions.
+    #[prost(message, repeated, tag = "2")]
+    pub votes: ::prost::alloc::vec::Vec<ExtendedVoteInfo>,
 }
 /// Event allows application developers to attach additional information to
 /// ResponseBeginBlock, ResponseEndBlock, ResponseCheckTx and ResponseDeliverTx.
@@ -1119,18 +1233,10 @@ pub struct Event {
 )]
 #[proto_message(type_url = "/tendermint.abci.EventAttribute")]
 pub struct EventAttribute {
-    #[prost(bytes = "vec", tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
-        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
-    )]
-    pub key: ::prost::alloc::vec::Vec<u8>,
-    #[prost(bytes = "vec", tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
-        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
-    )]
-    pub value: ::prost::alloc::vec::Vec<u8>,
+    #[prost(string, tag = "1")]
+    pub key: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub value: ::prost::alloc::string::String,
     /// nondeterministic
     #[prost(bool, tag = "3")]
     pub index: bool,
@@ -1256,9 +1362,34 @@ pub struct VoteInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/tendermint.abci.Evidence")]
-pub struct Evidence {
-    #[prost(enumeration = "EvidenceType", tag = "1")]
+#[proto_message(type_url = "/tendermint.abci.ExtendedVoteInfo")]
+pub struct ExtendedVoteInfo {
+    #[prost(message, optional, tag = "1")]
+    pub validator: ::core::option::Option<Validator>,
+    #[prost(bool, tag = "2")]
+    pub signed_last_block: bool,
+    /// Reserved for future use
+    #[prost(bytes = "vec", tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub vote_extension: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.abci.Misbehavior")]
+pub struct Misbehavior {
+    #[prost(enumeration = "MisbehaviorType", tag = "1")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
         deserialize_with = "crate::serde::as_str::deserialize"
@@ -1366,21 +1497,21 @@ impl CheckTxType {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 #[derive(::serde::Serialize, ::serde::Deserialize, ::schemars::JsonSchema)]
-pub enum EvidenceType {
+pub enum MisbehaviorType {
     Unknown = 0,
     DuplicateVote = 1,
     LightClientAttack = 2,
 }
-impl EvidenceType {
+impl MisbehaviorType {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            EvidenceType::Unknown => "UNKNOWN",
-            EvidenceType::DuplicateVote => "DUPLICATE_VOTE",
-            EvidenceType::LightClientAttack => "LIGHT_CLIENT_ATTACK",
+            MisbehaviorType::Unknown => "UNKNOWN",
+            MisbehaviorType::DuplicateVote => "DUPLICATE_VOTE",
+            MisbehaviorType::LightClientAttack => "LIGHT_CLIENT_ATTACK",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.

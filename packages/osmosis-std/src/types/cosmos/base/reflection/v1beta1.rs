@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v1beta1.ListAllInterfacesRequest")]
+#[proto_message(type_url = "/cosmos.base.reflection.v1beta1.")]
 pub struct ListAllInterfacesRequest {}
 /// ListAllInterfacesResponse is the response type of the ListAllInterfaces RPC.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -25,7 +25,7 @@ pub struct ListAllInterfacesRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v1beta1.ListAllInterfacesResponse")]
+#[proto_message(type_url = "/cosmos.base.reflection.v1beta1.")]
 pub struct ListAllInterfacesResponse {
     /// interface_names is an array of all the registered interfaces.
     #[prost(string, repeated, tag = "1")]
@@ -44,7 +44,7 @@ pub struct ListAllInterfacesResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v1beta1.ListImplementationsRequest")]
+#[proto_message(type_url = "/cosmos.base.reflection.v1beta1.")]
 pub struct ListImplementationsRequest {
     /// interface_name defines the interface to query the implementations for.
     #[prost(string, tag = "1")]
@@ -63,7 +63,7 @@ pub struct ListImplementationsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v1beta1.ListImplementationsResponse")]
+#[proto_message(type_url = "/cosmos.base.reflection.v1beta1.")]
 pub struct ListImplementationsResponse {
     #[prost(string, repeated, tag = "1")]
     pub implementation_message_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,

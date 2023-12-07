@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.params.v1beta1.ParameterChangeProposal")]
+#[proto_message(type_url = "/cosmos.params.v1beta1.")]
 pub struct ParameterChangeProposal {
     #[prost(string, tag = "1")]
     pub title: ::prost::alloc::string::String,
@@ -33,7 +33,7 @@ pub struct ParameterChangeProposal {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.params.v1beta1.ParamChange")]
+#[proto_message(type_url = "/cosmos.params.v1beta1.")]
 pub struct ParamChange {
     #[prost(string, tag = "1")]
     pub subspace: ::prost::alloc::string::String,
@@ -54,11 +54,7 @@ pub struct ParamChange {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.params.v1beta1.QueryParamsRequest")]
-#[proto_query(
-    path = "/cosmos.params.v1beta1.Query/Params",
-    response_type = QueryParamsResponse
-)]
+#[proto_message(type_url = "/cosmos.params.v1beta1.")]
 pub struct QueryParamsRequest {
     /// subspace defines the module to query the parameter for.
     #[prost(string, tag = "1")]
@@ -79,24 +75,68 @@ pub struct QueryParamsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.params.v1beta1.QueryParamsResponse")]
+#[proto_message(type_url = "/cosmos.params.v1beta1.")]
 pub struct QueryParamsResponse {
     /// param defines the queried parameter.
     #[prost(message, optional, tag = "1")]
     pub param: ::core::option::Option<ParamChange>,
 }
-pub struct ParamsQuerier<'a, Q: cosmwasm_std::CustomQuery> {
-    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+/// QuerySubspacesRequest defines a request type for querying for all registered
+/// subspaces and all keys for a subspace.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.params.v1beta1.")]
+pub struct QuerySubspacesRequest {}
+/// QuerySubspacesResponse defines the response types for querying for all
+/// registered subspaces and all keys for a subspace.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.params.v1beta1.")]
+pub struct QuerySubspacesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub subspaces: ::prost::alloc::vec::Vec<Subspace>,
 }
-impl<'a, Q: cosmwasm_std::CustomQuery> ParamsQuerier<'a, Q> {
-    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
-        Self { querier }
-    }
-    pub fn params(
-        &self,
-        subspace: ::prost::alloc::string::String,
-        key: ::prost::alloc::string::String,
-    ) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
-        QueryParamsRequest { subspace, key }.query(self.querier)
-    }
+/// Subspace defines a parameter subspace name and all the keys that exist for
+/// the subspace.
+///
+/// Since: cosmos-sdk 0.46
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.params.v1beta1.")]
+pub struct Subspace {
+    #[prost(string, tag = "1")]
+    pub subspace: ::prost::alloc::string::String,
+    #[prost(string, repeated, tag = "2")]
+    pub keys: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }

@@ -182,7 +182,9 @@ pub struct Height {
 )]
 #[proto_message(type_url = "/ibc.core.client.v1.Params")]
 pub struct Params {
-    /// allowed_clients defines the list of allowed client state types.
+    /// allowed_clients defines the list of allowed client state types which can be created
+    /// and interacted with. If a client type is removed from the allowed clients list, usage
+    /// of this client will be disabled until it is added again to the list.
     #[prost(string, repeated, tag = "1")]
     pub allowed_clients: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
@@ -750,7 +752,7 @@ pub struct MsgCreateClient {
 #[proto_message(type_url = "/ibc.core.client.v1.MsgCreateClientResponse")]
 pub struct MsgCreateClientResponse {}
 /// MsgUpdateClient defines an sdk.Msg to update a IBC client state using
-/// the given header.
+/// the given client message.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -768,9 +770,9 @@ pub struct MsgUpdateClient {
     #[prost(string, tag = "1")]
     #[serde(alias = "clientID")]
     pub client_id: ::prost::alloc::string::String,
-    /// header to update the light client
+    /// client message to update the light client
     #[prost(message, optional, tag = "2")]
-    pub header: ::core::option::Option<crate::shim::Any>,
+    pub client_message: ::core::option::Option<crate::shim::Any>,
     /// signer address
     #[prost(string, tag = "3")]
     pub signer: ::prost::alloc::string::String,
@@ -849,6 +851,7 @@ pub struct MsgUpgradeClient {
 pub struct MsgUpgradeClientResponse {}
 /// MsgSubmitMisbehaviour defines an sdk.Msg type that submits Evidence for
 /// light client misbehaviour.
+/// Warning: DEPRECATED
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -863,13 +866,16 @@ pub struct MsgUpgradeClientResponse {}
 #[proto_message(type_url = "/ibc.core.client.v1.MsgSubmitMisbehaviour")]
 pub struct MsgSubmitMisbehaviour {
     /// client unique identifier
+    #[deprecated]
     #[prost(string, tag = "1")]
     #[serde(alias = "clientID")]
     pub client_id: ::prost::alloc::string::String,
     /// misbehaviour used for freezing the light client
+    #[deprecated]
     #[prost(message, optional, tag = "2")]
     pub misbehaviour: ::core::option::Option<crate::shim::Any>,
     /// signer address
+    #[deprecated]
     #[prost(string, tag = "3")]
     pub signer: ::prost::alloc::string::String,
 }
