@@ -1,6 +1,6 @@
 [package]
 name = "osmosis-authenticators"
-version = "0.22.0-alpha.1"
+version = "0.22.0-alpha.2"
 description = "utilities for writing osmosis authenticators"
 authors = ["osmosis-contributors"]
 edition = "2021"

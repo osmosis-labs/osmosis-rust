@@ -37,7 +37,7 @@ pub struct TxData {
 #[cw_serde]
 pub struct SignatureData {
     pub signers: Vec<Addr>,
-    pub signatures: Vec<String>,
+    pub signatures: Vec<Binary>,
 }
 
 #[cw_serde]
