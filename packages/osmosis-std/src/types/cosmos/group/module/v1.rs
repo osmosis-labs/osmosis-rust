@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.module.v1.")]
+#[proto_message(type_url = "/cosmos.group.module.v1.Module")]
 pub struct Module {
     /// max_execution_period defines the max duration after a proposal's voting period ends that members can send a MsgExec
     /// to execute the proposal.

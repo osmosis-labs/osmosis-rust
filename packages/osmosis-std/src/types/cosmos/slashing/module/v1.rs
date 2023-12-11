@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.module.v1.")]
+#[proto_message(type_url = "/cosmos.slashing.module.v1.Module")]
 pub struct Module {
     /// authority defines the custom module authority. If not set, defaults to the governance module.
     #[prost(string, tag = "1")]

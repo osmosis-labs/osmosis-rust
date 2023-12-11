@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.auth.module.v1.")]
+#[proto_message(type_url = "/cosmos.auth.module.v1.Module")]
 pub struct Module {
     /// bech32_prefix is the bech32 account prefix for the app.
     #[prost(string, tag = "1")]
@@ -35,7 +35,7 @@ pub struct Module {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.auth.module.v1.")]
+#[proto_message(type_url = "/cosmos.auth.module.v1.ModuleAccountPermission")]
 pub struct ModuleAccountPermission {
     /// account is the name of the module.
     #[prost(string, tag = "1")]

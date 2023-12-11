@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.Snapshot")]
 pub struct Snapshot {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -52,7 +52,7 @@ pub struct Snapshot {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.Metadata")]
 pub struct Metadata {
     /// SHA-256 chunk hashes
     #[prost(bytes = "vec", repeated, tag = "1")]
@@ -72,7 +72,7 @@ pub struct Metadata {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotItem")]
 pub struct SnapshotItem {
     /// item is the specific type of snapshot item.
     #[prost(oneof = "snapshot_item::Item", tags = "1, 2, 3, 4, 5, 6")]
@@ -121,7 +121,7 @@ pub mod snapshot_item {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotStoreItem")]
 pub struct SnapshotStoreItem {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -140,7 +140,7 @@ pub struct SnapshotStoreItem {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotIAVLItem")]
 pub struct SnapshotIavlItem {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -183,7 +183,7 @@ pub struct SnapshotIavlItem {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotExtensionMeta")]
 pub struct SnapshotExtensionMeta {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -208,7 +208,7 @@ pub struct SnapshotExtensionMeta {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotExtensionPayload")]
 pub struct SnapshotExtensionPayload {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -232,7 +232,8 @@ pub struct SnapshotExtensionPayload {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotKVItem")]
+#[deprecated]
 pub struct SnapshotKvItem {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -262,7 +263,8 @@ pub struct SnapshotKvItem {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.snapshots.v1beta1.SnapshotSchema")]
+#[deprecated]
 pub struct SnapshotSchema {
     #[prost(bytes = "vec", repeated, tag = "1")]
     pub keys: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,

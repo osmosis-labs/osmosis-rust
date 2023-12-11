@@ -11,7 +11,11 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.GetRequest")]
+#[proto_query(
+    path = "/cosmos.orm.query.v1alpha1.Query/Get",
+    response_type = GetResponse
+)]
 pub struct GetRequest {
     /// message_name is the fully-qualified message name of the ORM table being queried.
     #[prost(string, tag = "1")]
@@ -39,7 +43,7 @@ pub struct GetRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.GetResponse")]
 pub struct GetResponse {
     /// result is the result of the get query. If no value is found, the gRPC
     /// status code NOT_FOUND will be returned.
@@ -58,7 +62,11 @@ pub struct GetResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.ListRequest")]
+#[proto_query(
+    path = "/cosmos.orm.query.v1alpha1.Query/List",
+    response_type = ListResponse
+)]
 pub struct ListRequest {
     /// message_name is the fully-qualified message name of the ORM table being queried.
     #[prost(string, tag = "1")]
@@ -91,7 +99,7 @@ pub mod list_request {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.orm.query.v1alpha1.")]
+    #[proto_message(type_url = "/cosmos.orm.query.v1alpha1.ListRequest.Prefix")]
     pub struct Prefix {
         /// values specifies the index values for the prefix query.
         /// It is valid to special a partial prefix with fewer values than
@@ -111,7 +119,7 @@ pub mod list_request {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.orm.query.v1alpha1.")]
+    #[proto_message(type_url = "/cosmos.orm.query.v1alpha1.ListRequest.Range")]
     pub struct Range {
         /// start specifies the starting index values for the range query.
         /// It is valid to provide fewer values than the number of fields in the
@@ -158,7 +166,7 @@ pub mod list_request {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.ListResponse")]
 pub struct ListResponse {
     /// results are the results of the query.
     #[prost(message, repeated, tag = "1")]
@@ -179,7 +187,7 @@ pub struct ListResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.orm.query.v1alpha1.IndexValue")]
 pub struct IndexValue {
     /// value specifies the index value
     #[prost(oneof = "index_value::Value", tags = "1, 2, 3, 4, 5, 6, 7, 8")]
@@ -226,5 +234,41 @@ pub mod index_value {
         /// duration specifies a value for a duration index field.
         #[prost(message, tag = "8")]
         Duration(crate::shim::Duration),
+    }
+}
+pub struct V1alpha1Querier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> V1alpha1Querier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn get(
+        &self,
+        message_name: ::prost::alloc::string::String,
+        index: ::prost::alloc::string::String,
+        values: ::prost::alloc::vec::Vec<IndexValue>,
+    ) -> Result<GetResponse, cosmwasm_std::StdError> {
+        GetRequest {
+            message_name,
+            index,
+            values,
+        }
+        .query(self.querier)
+    }
+    pub fn list(
+        &self,
+        message_name: ::prost::alloc::string::String,
+        index: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::super::base::query::v1beta1::PageRequest>,
+        query: ::core::option::Option<list_request::Query>,
+    ) -> Result<ListResponse, cosmwasm_std::StdError> {
+        ListRequest {
+            message_name,
+            index,
+            pagination,
+            query,
+        }
+        .query(self.querier)
     }
 }

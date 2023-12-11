@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.Block")]
 pub struct Block {
     #[prost(message, optional, tag = "1")]
     pub header: ::core::option::Option<Header>,
@@ -36,7 +36,7 @@ pub struct Block {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.Header")]
 pub struct Header {
     /// basic block info
     #[prost(message, optional, tag = "1")]
@@ -139,7 +139,7 @@ pub struct Header {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightRequest")]
 pub struct GetValidatorSetByHeightRequest {
     #[prost(int64, tag = "1")]
     #[serde(
@@ -163,7 +163,7 @@ pub struct GetValidatorSetByHeightRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightResponse")]
 pub struct GetValidatorSetByHeightResponse {
     #[prost(int64, tag = "1")]
     #[serde(
@@ -189,7 +189,7 @@ pub struct GetValidatorSetByHeightResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetLatestValidatorSetRequest")]
 pub struct GetLatestValidatorSetRequest {
     /// pagination defines an pagination for the request.
     #[prost(message, optional, tag = "1")]
@@ -207,7 +207,7 @@ pub struct GetLatestValidatorSetRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetLatestValidatorSetResponse")]
 pub struct GetLatestValidatorSetResponse {
     #[prost(int64, tag = "1")]
     #[serde(
@@ -233,7 +233,7 @@ pub struct GetLatestValidatorSetResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.Validator")]
 pub struct Validator {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
@@ -264,7 +264,7 @@ pub struct Validator {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetBlockByHeightRequest")]
 pub struct GetBlockByHeightRequest {
     #[prost(int64, tag = "1")]
     #[serde(
@@ -285,7 +285,7 @@ pub struct GetBlockByHeightRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetBlockByHeightResponse")]
 pub struct GetBlockByHeightResponse {
     #[prost(message, optional, tag = "1")]
     #[serde(alias = "blockID")]
@@ -309,7 +309,7 @@ pub struct GetBlockByHeightResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetLatestBlockRequest")]
 pub struct GetLatestBlockRequest {}
 /// GetLatestBlockResponse is the response type for the Query/GetLatestBlock RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -323,7 +323,7 @@ pub struct GetLatestBlockRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetLatestBlockResponse")]
 pub struct GetLatestBlockResponse {
     #[prost(message, optional, tag = "1")]
     #[serde(alias = "blockID")]
@@ -347,7 +347,7 @@ pub struct GetLatestBlockResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetSyncingRequest")]
 pub struct GetSyncingRequest {}
 /// GetSyncingResponse is the response type for the Query/GetSyncing RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -361,7 +361,7 @@ pub struct GetSyncingRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetSyncingResponse")]
 pub struct GetSyncingResponse {
     #[prost(bool, tag = "1")]
     pub syncing: bool,
@@ -378,7 +378,7 @@ pub struct GetSyncingResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetNodeInfoRequest")]
 pub struct GetNodeInfoRequest {}
 /// GetNodeInfoResponse is the response type for the Query/GetNodeInfo RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -392,7 +392,7 @@ pub struct GetNodeInfoRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.GetNodeInfoResponse")]
 pub struct GetNodeInfoResponse {
     #[prost(message, optional, tag = "1")]
     pub default_node_info:
@@ -412,7 +412,7 @@ pub struct GetNodeInfoResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.VersionInfo")]
 pub struct VersionInfo {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -444,7 +444,7 @@ pub struct VersionInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.Module")]
 pub struct Module {
     /// module path
     #[prost(string, tag = "1")]
@@ -468,7 +468,7 @@ pub struct Module {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.ABCIQueryRequest")]
 pub struct AbciQueryRequest {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -502,7 +502,7 @@ pub struct AbciQueryRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.ABCIQueryResponse")]
 pub struct AbciQueryResponse {
     #[prost(uint32, tag = "1")]
     #[serde(
@@ -561,7 +561,7 @@ pub struct AbciQueryResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.ProofOp")]
 pub struct ProofOp {
     #[prost(string, tag = "1")]
     pub r#type: ::prost::alloc::string::String,
@@ -592,7 +592,7 @@ pub struct ProofOp {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.tendermint.v1beta1.ProofOps")]
 pub struct ProofOps {
     #[prost(message, repeated, tag = "1")]
     pub ops: ::prost::alloc::vec::Vec<ProofOp>,

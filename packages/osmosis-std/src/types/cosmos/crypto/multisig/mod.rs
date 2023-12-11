@@ -14,7 +14,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crypto.multisig.")]
+#[proto_message(type_url = "/cosmos.crypto.multisig.LegacyAminoPubKey")]
 pub struct LegacyAminoPubKey {
     #[prost(uint32, tag = "1")]
     #[serde(

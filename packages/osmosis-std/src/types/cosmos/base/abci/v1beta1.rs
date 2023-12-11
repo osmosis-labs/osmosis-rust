@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.TxResponse")]
 pub struct TxResponse {
     /// The block height
     #[prost(int64, tag = "1")]
@@ -90,7 +90,7 @@ pub struct TxResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.ABCIMessageLog")]
 pub struct AbciMessageLog {
     #[prost(uint32, tag = "1")]
     #[serde(
@@ -118,7 +118,7 @@ pub struct AbciMessageLog {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.StringEvent")]
 pub struct StringEvent {
     #[prost(string, tag = "1")]
     pub r#type: ::prost::alloc::string::String,
@@ -138,7 +138,7 @@ pub struct StringEvent {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.Attribute")]
 pub struct Attribute {
     #[prost(string, tag = "1")]
     pub key: ::prost::alloc::string::String,
@@ -157,7 +157,7 @@ pub struct Attribute {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.GasInfo")]
 pub struct GasInfo {
     /// GasWanted is the maximum units of work we allow this tx to perform.
     #[prost(uint64, tag = "1")]
@@ -186,7 +186,7 @@ pub struct GasInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.Result")]
 pub struct Result {
     /// Data is any data returned from message or handler execution. It MUST be
     /// length prefixed in order to separate data from multiple message executions.
@@ -225,7 +225,7 @@ pub struct Result {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.SimulationResponse")]
 pub struct SimulationResponse {
     #[prost(message, optional, tag = "1")]
     pub gas_info: ::core::option::Option<GasInfo>,
@@ -245,7 +245,8 @@ pub struct SimulationResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.MsgData")]
+#[deprecated]
 pub struct MsgData {
     #[prost(string, tag = "1")]
     pub msg_type: ::prost::alloc::string::String,
@@ -269,7 +270,7 @@ pub struct MsgData {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.TxMsgData")]
 pub struct TxMsgData {
     /// data field is deprecated and not populated.
     #[deprecated]
@@ -293,7 +294,7 @@ pub struct TxMsgData {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.abci.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.abci.v1beta1.SearchTxsResult")]
 pub struct SearchTxsResult {
     /// Count of all txs
     #[prost(uint64, tag = "1")]

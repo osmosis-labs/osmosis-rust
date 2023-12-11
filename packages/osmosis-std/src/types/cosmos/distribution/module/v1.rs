@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.module.v1.")]
+#[proto_message(type_url = "/cosmos.distribution.module.v1.Module")]
 pub struct Module {
     #[prost(string, tag = "1")]
     pub fee_collector_name: ::prost::alloc::string::String,

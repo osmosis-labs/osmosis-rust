@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.Minter")]
 pub struct Minter {
     /// current annual inflation rate
     #[prost(string, tag = "1")]
@@ -32,7 +32,7 @@ pub struct Minter {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.Params")]
 pub struct Params {
     /// type of coin to mint
     #[prost(string, tag = "1")]
@@ -69,7 +69,7 @@ pub struct Params {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// minter is a space for holding current inflation information.
     #[prost(message, optional, tag = "1")]
@@ -90,7 +90,11 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.QueryParamsRequest")]
+#[proto_query(
+    path = "/cosmos.mint.v1beta1.Query/Params",
+    response_type = QueryParamsResponse
+)]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -104,7 +108,7 @@ pub struct QueryParamsRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.QueryParamsResponse")]
 pub struct QueryParamsResponse {
     /// params defines the parameters of the module.
     #[prost(message, optional, tag = "1")]
@@ -122,7 +126,11 @@ pub struct QueryParamsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.QueryInflationRequest")]
+#[proto_query(
+    path = "/cosmos.mint.v1beta1.Query/Inflation",
+    response_type = QueryInflationResponse
+)]
 pub struct QueryInflationRequest {}
 /// QueryInflationResponse is the response type for the Query/Inflation RPC
 /// method.
@@ -137,7 +145,7 @@ pub struct QueryInflationRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.QueryInflationResponse")]
 pub struct QueryInflationResponse {
     /// inflation is the current minting inflation value.
     #[prost(bytes = "vec", tag = "1")]
@@ -160,7 +168,11 @@ pub struct QueryInflationResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.QueryAnnualProvisionsRequest")]
+#[proto_query(
+    path = "/cosmos.mint.v1beta1.Query/AnnualProvisions",
+    response_type = QueryAnnualProvisionsResponse
+)]
 pub struct QueryAnnualProvisionsRequest {}
 /// QueryAnnualProvisionsResponse is the response type for the
 /// Query/AnnualProvisions RPC method.
@@ -175,7 +187,7 @@ pub struct QueryAnnualProvisionsRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.QueryAnnualProvisionsResponse")]
 pub struct QueryAnnualProvisionsResponse {
     /// annual_provisions is the current minting annual provisions value.
     #[prost(bytes = "vec", tag = "1")]
@@ -199,7 +211,7 @@ pub struct QueryAnnualProvisionsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.MsgUpdateParams")]
 pub struct MsgUpdateParams {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -225,5 +237,24 @@ pub struct MsgUpdateParams {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.mint.v1beta1.")]
+#[proto_message(type_url = "/cosmos.mint.v1beta1.MsgUpdateParamsResponse")]
 pub struct MsgUpdateParamsResponse {}
+pub struct MintQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> MintQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
+    }
+    pub fn inflation(&self) -> Result<QueryInflationResponse, cosmwasm_std::StdError> {
+        QueryInflationRequest {}.query(self.querier)
+    }
+    pub fn annual_provisions(
+        &self,
+    ) -> Result<QueryAnnualProvisionsResponse, cosmwasm_std::StdError> {
+        QueryAnnualProvisionsRequest {}.query(self.querier)
+    }
+}

@@ -15,7 +15,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crypto.ed25519.")]
+#[proto_message(type_url = "/cosmos.crypto.ed25519.PubKey")]
 pub struct PubKey {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -37,7 +37,7 @@ pub struct PubKey {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crypto.ed25519.")]
+#[proto_message(type_url = "/cosmos.crypto.ed25519.PrivKey")]
 pub struct PrivKey {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(

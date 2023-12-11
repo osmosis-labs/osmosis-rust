@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crypto.hd.v1.")]
+#[proto_message(type_url = "/cosmos.crypto.hd.v1.BIP44Params")]
 pub struct Bip44Params {
     /// purpose is a constant set to 44' (or 0x8000002C) following the BIP43 recommendation
     #[prost(uint32, tag = "1")]

@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.genutil.v1beta1.")]
+#[proto_message(type_url = "/cosmos.genutil.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// gen_txs defines the genesis transactions.
     #[prost(bytes = "vec", repeated, tag = "1")]

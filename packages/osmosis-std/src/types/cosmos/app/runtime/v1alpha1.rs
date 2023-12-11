@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.runtime.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.runtime.v1alpha1.Module")]
 pub struct Module {
     /// app_name is the name of the app.
     #[prost(string, tag = "1")]
@@ -54,7 +54,7 @@ pub struct Module {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.runtime.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.runtime.v1alpha1.StoreKeyConfig")]
 pub struct StoreKeyConfig {
     /// name of the module to override the store key of
     #[prost(string, tag = "1")]

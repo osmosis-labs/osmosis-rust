@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.config.v1.")]
+#[proto_message(type_url = "/cosmos.tx.config.v1.Config")]
 pub struct Config {
     /// skip_ante_handler defines whether the ante handler registration should be skipped in case an app wants to override
     /// this functionality.

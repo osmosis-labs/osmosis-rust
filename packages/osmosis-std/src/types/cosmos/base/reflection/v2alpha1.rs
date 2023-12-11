@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.AppDescriptor")]
 pub struct AppDescriptor {
     /// AuthnDescriptor provides information on how to authenticate transactions on the application
     /// NOTE: experimental and subject to change in future releases.
@@ -45,7 +45,7 @@ pub struct AppDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.TxDescriptor")]
 pub struct TxDescriptor {
     /// fullname is the protobuf fullname of the raw transaction type (for instance the tx.Tx type)
     /// it is not meant to support polymorphism of transaction types, it is supposed to be used by
@@ -69,7 +69,7 @@ pub struct TxDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.AuthnDescriptor")]
 pub struct AuthnDescriptor {
     /// sign_modes defines the supported signature algorithm
     #[prost(message, repeated, tag = "1")]
@@ -90,7 +90,7 @@ pub struct AuthnDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.SigningModeDescriptor")]
 pub struct SigningModeDescriptor {
     /// name defines the unique name of the signing mode
     #[prost(string, tag = "1")]
@@ -119,7 +119,7 @@ pub struct SigningModeDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.ChainDescriptor")]
 pub struct ChainDescriptor {
     /// id is the chain id
     #[prost(string, tag = "1")]
@@ -138,7 +138,7 @@ pub struct ChainDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.CodecDescriptor")]
 pub struct CodecDescriptor {
     /// interfaces is a list of the registerted interfaces descriptors
     #[prost(message, repeated, tag = "1")]
@@ -156,7 +156,7 @@ pub struct CodecDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.InterfaceDescriptor")]
 pub struct InterfaceDescriptor {
     /// fullname is the name of the interface
     #[prost(string, tag = "1")]
@@ -181,7 +181,7 @@ pub struct InterfaceDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.InterfaceImplementerDescriptor")]
 pub struct InterfaceImplementerDescriptor {
     /// fullname is the protobuf queryable name of the interface implementer
     #[prost(string, tag = "1")]
@@ -206,7 +206,7 @@ pub struct InterfaceImplementerDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.InterfaceAcceptingMessageDescriptor")]
 pub struct InterfaceAcceptingMessageDescriptor {
     /// fullname is the protobuf fullname of the type containing the interface
     #[prost(string, tag = "1")]
@@ -229,7 +229,7 @@ pub struct InterfaceAcceptingMessageDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.ConfigurationDescriptor")]
 pub struct ConfigurationDescriptor {
     /// bech32_account_address_prefix is the account address prefix
     #[prost(string, tag = "1")]
@@ -247,7 +247,7 @@ pub struct ConfigurationDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.MsgDescriptor")]
 pub struct MsgDescriptor {
     /// msg_type_url contains the TypeURL of a sdk.Msg.
     #[prost(string, tag = "1")]
@@ -265,7 +265,7 @@ pub struct MsgDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetAuthnDescriptorRequest")]
 pub struct GetAuthnDescriptorRequest {}
 /// GetAuthnDescriptorResponse is the response returned by the GetAuthnDescriptor RPC
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -279,7 +279,7 @@ pub struct GetAuthnDescriptorRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetAuthnDescriptorResponse")]
 pub struct GetAuthnDescriptorResponse {
     /// authn describes how to authenticate to the application when sending transactions
     #[prost(message, optional, tag = "1")]
@@ -297,7 +297,7 @@ pub struct GetAuthnDescriptorResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetChainDescriptorRequest")]
 pub struct GetChainDescriptorRequest {}
 /// GetChainDescriptorResponse is the response returned by the GetChainDescriptor RPC
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -311,7 +311,7 @@ pub struct GetChainDescriptorRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetChainDescriptorResponse")]
 pub struct GetChainDescriptorResponse {
     /// chain describes application chain information
     #[prost(message, optional, tag = "1")]
@@ -329,7 +329,7 @@ pub struct GetChainDescriptorResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetCodecDescriptorRequest")]
 pub struct GetCodecDescriptorRequest {}
 /// GetCodecDescriptorResponse is the response returned by the GetCodecDescriptor RPC
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -343,7 +343,7 @@ pub struct GetCodecDescriptorRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetCodecDescriptorResponse")]
 pub struct GetCodecDescriptorResponse {
     /// codec describes the application codec such as registered interfaces and implementations
     #[prost(message, optional, tag = "1")]
@@ -361,7 +361,7 @@ pub struct GetCodecDescriptorResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetConfigurationDescriptorRequest")]
 pub struct GetConfigurationDescriptorRequest {}
 /// GetConfigurationDescriptorResponse is the response returned by the GetConfigurationDescriptor RPC
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -375,7 +375,7 @@ pub struct GetConfigurationDescriptorRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetConfigurationDescriptorResponse")]
 pub struct GetConfigurationDescriptorResponse {
     /// config describes the application's sdk.Config
     #[prost(message, optional, tag = "1")]
@@ -393,7 +393,7 @@ pub struct GetConfigurationDescriptorResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetQueryServicesDescriptorRequest")]
 pub struct GetQueryServicesDescriptorRequest {}
 /// GetQueryServicesDescriptorResponse is the response returned by the GetQueryServicesDescriptor RPC
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -407,7 +407,7 @@ pub struct GetQueryServicesDescriptorRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetQueryServicesDescriptorResponse")]
 pub struct GetQueryServicesDescriptorResponse {
     /// queries provides information on the available queryable services
     #[prost(message, optional, tag = "1")]
@@ -425,7 +425,7 @@ pub struct GetQueryServicesDescriptorResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetTxDescriptorRequest")]
 pub struct GetTxDescriptorRequest {}
 /// GetTxDescriptorResponse is the response returned by the GetTxDescriptor RPC
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -439,7 +439,7 @@ pub struct GetTxDescriptorRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.GetTxDescriptorResponse")]
 pub struct GetTxDescriptorResponse {
     /// tx provides information on msgs that can be forwarded to the application
     /// alongside the accepted transaction protobuf type
@@ -458,7 +458,7 @@ pub struct GetTxDescriptorResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.QueryServicesDescriptor")]
 pub struct QueryServicesDescriptor {
     /// query_services is a list of cosmos-sdk QueryServiceDescriptor
     #[prost(message, repeated, tag = "1")]
@@ -476,7 +476,7 @@ pub struct QueryServicesDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.QueryServiceDescriptor")]
 pub struct QueryServiceDescriptor {
     /// fullname is the protobuf fullname of the service descriptor
     #[prost(string, tag = "1")]
@@ -502,7 +502,7 @@ pub struct QueryServiceDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.")]
+#[proto_message(type_url = "/cosmos.base.reflection.v2alpha1.QueryMethodDescriptor")]
 pub struct QueryMethodDescriptor {
     /// name is the protobuf name (not fullname) of the method
     #[prost(string, tag = "1")]

@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.gov.module.v1.")]
+#[proto_message(type_url = "/cosmos.gov.module.v1.Module")]
 pub struct Module {
     /// max_metadata_len defines the maximum proposal metadata length.
     /// Defaults to 255 if not explicitly set.

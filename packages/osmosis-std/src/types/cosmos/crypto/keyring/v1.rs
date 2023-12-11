@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crypto.keyring.v1.")]
+#[proto_message(type_url = "/cosmos.crypto.keyring.v1.Record")]
 pub struct Record {
     /// name represents a name of Record
     #[prost(string, tag = "1")]
@@ -39,7 +39,7 @@ pub mod record {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.crypto.keyring.v1.")]
+    #[proto_message(type_url = "/cosmos.crypto.keyring.v1.Record.Local")]
     pub struct Local {
         #[prost(message, optional, tag = "1")]
         pub priv_key: ::core::option::Option<crate::shim::Any>,
@@ -56,7 +56,7 @@ pub mod record {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.crypto.keyring.v1.")]
+    #[proto_message(type_url = "/cosmos.crypto.keyring.v1.Record.Ledger")]
     pub struct Ledger {
         #[prost(message, optional, tag = "1")]
         pub path: ::core::option::Option<super::super::super::hd::v1::Bip44Params>,
@@ -73,7 +73,7 @@ pub mod record {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.crypto.keyring.v1.")]
+    #[proto_message(type_url = "/cosmos.crypto.keyring.v1.Record.Multi")]
     pub struct Multi {}
     /// Offline item
     #[allow(clippy::derive_partial_eq_without_eq)]
@@ -87,7 +87,7 @@ pub mod record {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.crypto.keyring.v1.")]
+    #[proto_message(type_url = "/cosmos.crypto.keyring.v1.Record.Offline")]
     pub struct Offline {}
     /// Record contains one of the following items
     #[allow(clippy::derive_partial_eq_without_eq)]

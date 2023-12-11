@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.Params")]
 pub struct Params {
     #[prost(string, tag = "1")]
     pub community_tax: ::prost::alloc::string::String,
@@ -51,7 +51,7 @@ pub struct Params {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorHistoricalRewards")]
 pub struct ValidatorHistoricalRewards {
     #[prost(message, repeated, tag = "1")]
     pub cumulative_reward_ratio: ::prost::alloc::vec::Vec<super::super::base::v1beta1::DecCoin>,
@@ -76,7 +76,7 @@ pub struct ValidatorHistoricalRewards {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorCurrentRewards")]
 pub struct ValidatorCurrentRewards {
     #[prost(message, repeated, tag = "1")]
     pub rewards: ::prost::alloc::vec::Vec<super::super::base::v1beta1::DecCoin>,
@@ -100,7 +100,7 @@ pub struct ValidatorCurrentRewards {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorAccumulatedCommission")]
 pub struct ValidatorAccumulatedCommission {
     #[prost(message, repeated, tag = "1")]
     pub commission: ::prost::alloc::vec::Vec<super::super::base::v1beta1::DecCoin>,
@@ -118,7 +118,7 @@ pub struct ValidatorAccumulatedCommission {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorOutstandingRewards")]
 pub struct ValidatorOutstandingRewards {
     #[prost(message, repeated, tag = "1")]
     pub rewards: ::prost::alloc::vec::Vec<super::super::base::v1beta1::DecCoin>,
@@ -138,7 +138,7 @@ pub struct ValidatorOutstandingRewards {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorSlashEvent")]
 pub struct ValidatorSlashEvent {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -161,7 +161,7 @@ pub struct ValidatorSlashEvent {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorSlashEvents")]
 pub struct ValidatorSlashEvents {
     #[prost(message, repeated, tag = "1")]
     pub validator_slash_events: ::prost::alloc::vec::Vec<ValidatorSlashEvent>,
@@ -178,7 +178,7 @@ pub struct ValidatorSlashEvents {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.FeePool")]
 pub struct FeePool {
     #[prost(message, repeated, tag = "1")]
     pub community_pool: ::prost::alloc::vec::Vec<super::super::base::v1beta1::DecCoin>,
@@ -202,7 +202,8 @@ pub struct FeePool {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.CommunityPoolSpendProposal")]
+#[deprecated]
 pub struct CommunityPoolSpendProposal {
     #[prost(string, tag = "1")]
     pub title: ::prost::alloc::string::String,
@@ -230,7 +231,7 @@ pub struct CommunityPoolSpendProposal {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.DelegatorStartingInfo")]
 pub struct DelegatorStartingInfo {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -260,7 +261,7 @@ pub struct DelegatorStartingInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.DelegationDelegatorReward")]
 pub struct DelegationDelegatorReward {
     #[prost(string, tag = "1")]
     pub validator_address: ::prost::alloc::string::String,
@@ -280,7 +281,7 @@ pub struct DelegationDelegatorReward {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.CommunityPoolSpendProposalWithDeposit")]
 pub struct CommunityPoolSpendProposalWithDeposit {
     #[prost(string, tag = "1")]
     pub title: ::prost::alloc::string::String,
@@ -307,7 +308,7 @@ pub struct CommunityPoolSpendProposalWithDeposit {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.DelegatorWithdrawInfo")]
 pub struct DelegatorWithdrawInfo {
     /// delegator_address is the address of the delegator.
     #[prost(string, tag = "1")]
@@ -328,7 +329,7 @@ pub struct DelegatorWithdrawInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorOutstandingRewardsRecord")]
 pub struct ValidatorOutstandingRewardsRecord {
     /// validator_address is the address of the validator.
     #[prost(string, tag = "1")]
@@ -350,7 +351,7 @@ pub struct ValidatorOutstandingRewardsRecord {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorAccumulatedCommissionRecord")]
 pub struct ValidatorAccumulatedCommissionRecord {
     /// validator_address is the address of the validator.
     #[prost(string, tag = "1")]
@@ -372,7 +373,7 @@ pub struct ValidatorAccumulatedCommissionRecord {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorHistoricalRewardsRecord")]
 pub struct ValidatorHistoricalRewardsRecord {
     /// validator_address is the address of the validator.
     #[prost(string, tag = "1")]
@@ -400,7 +401,7 @@ pub struct ValidatorHistoricalRewardsRecord {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorCurrentRewardsRecord")]
 pub struct ValidatorCurrentRewardsRecord {
     /// validator_address is the address of the validator.
     #[prost(string, tag = "1")]
@@ -421,7 +422,7 @@ pub struct ValidatorCurrentRewardsRecord {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.DelegatorStartingInfoRecord")]
 pub struct DelegatorStartingInfoRecord {
     /// delegator_address is the address of the delegator.
     #[prost(string, tag = "1")]
@@ -445,7 +446,7 @@ pub struct DelegatorStartingInfoRecord {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.ValidatorSlashEventRecord")]
 pub struct ValidatorSlashEventRecord {
     /// validator_address is the address of the validator.
     #[prost(string, tag = "1")]
@@ -480,7 +481,7 @@ pub struct ValidatorSlashEventRecord {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// params defines all the parameters of the module.
     #[prost(message, optional, tag = "1")]
@@ -526,7 +527,11 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryParamsRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/Params",
+    response_type = QueryParamsResponse
+)]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -540,7 +545,7 @@ pub struct QueryParamsRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryParamsResponse")]
 pub struct QueryParamsResponse {
     /// params defines the parameters of the module.
     #[prost(message, optional, tag = "1")]
@@ -558,7 +563,11 @@ pub struct QueryParamsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryValidatorDistributionInfoRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/ValidatorDistributionInfo",
+    response_type = QueryValidatorDistributionInfoResponse
+)]
 pub struct QueryValidatorDistributionInfoRequest {
     /// validator_address defines the validator address to query for.
     #[prost(string, tag = "1")]
@@ -576,7 +585,7 @@ pub struct QueryValidatorDistributionInfoRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryValidatorDistributionInfoResponse")]
 pub struct QueryValidatorDistributionInfoResponse {
     /// operator_address defines the validator operator address.
     #[prost(string, tag = "1")]
@@ -601,7 +610,11 @@ pub struct QueryValidatorDistributionInfoResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/ValidatorOutstandingRewards",
+    response_type = QueryValidatorOutstandingRewardsResponse
+)]
 pub struct QueryValidatorOutstandingRewardsRequest {
     /// validator_address defines the validator address to query for.
     #[prost(string, tag = "1")]
@@ -620,7 +633,7 @@ pub struct QueryValidatorOutstandingRewardsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryValidatorOutstandingRewardsResponse")]
 pub struct QueryValidatorOutstandingRewardsResponse {
     #[prost(message, optional, tag = "1")]
     pub rewards: ::core::option::Option<ValidatorOutstandingRewards>,
@@ -638,7 +651,11 @@ pub struct QueryValidatorOutstandingRewardsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryValidatorCommissionRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/ValidatorCommission",
+    response_type = QueryValidatorCommissionResponse
+)]
 pub struct QueryValidatorCommissionRequest {
     /// validator_address defines the validator address to query for.
     #[prost(string, tag = "1")]
@@ -657,7 +674,7 @@ pub struct QueryValidatorCommissionRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryValidatorCommissionResponse")]
 pub struct QueryValidatorCommissionResponse {
     /// commission defines the commission the validator received.
     #[prost(message, optional, tag = "1")]
@@ -676,7 +693,11 @@ pub struct QueryValidatorCommissionResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryValidatorSlashesRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/ValidatorSlashes",
+    response_type = QueryValidatorSlashesResponse
+)]
 pub struct QueryValidatorSlashesRequest {
     /// validator_address defines the validator address to query for.
     #[prost(string, tag = "1")]
@@ -712,7 +733,7 @@ pub struct QueryValidatorSlashesRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryValidatorSlashesResponse")]
 pub struct QueryValidatorSlashesResponse {
     /// slashes defines the slashes the validator received.
     #[prost(message, repeated, tag = "1")]
@@ -734,7 +755,11 @@ pub struct QueryValidatorSlashesResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryDelegationRewardsRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/DelegationRewards",
+    response_type = QueryDelegationRewardsResponse
+)]
 pub struct QueryDelegationRewardsRequest {
     /// delegator_address defines the delegator address to query for.
     #[prost(string, tag = "1")]
@@ -756,7 +781,7 @@ pub struct QueryDelegationRewardsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryDelegationRewardsResponse")]
 pub struct QueryDelegationRewardsResponse {
     /// rewards defines the rewards accrued by a delegation.
     #[prost(message, repeated, tag = "1")]
@@ -775,7 +800,11 @@ pub struct QueryDelegationRewardsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryDelegationTotalRewardsRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/DelegationTotalRewards",
+    response_type = QueryDelegationTotalRewardsResponse
+)]
 pub struct QueryDelegationTotalRewardsRequest {
     /// delegator_address defines the delegator address to query for.
     #[prost(string, tag = "1")]
@@ -794,7 +823,7 @@ pub struct QueryDelegationTotalRewardsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryDelegationTotalRewardsResponse")]
 pub struct QueryDelegationTotalRewardsResponse {
     /// rewards defines all the rewards accrued by a delegator.
     #[prost(message, repeated, tag = "1")]
@@ -816,7 +845,11 @@ pub struct QueryDelegationTotalRewardsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryDelegatorValidatorsRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/DelegatorValidators",
+    response_type = QueryDelegatorValidatorsResponse
+)]
 pub struct QueryDelegatorValidatorsRequest {
     /// delegator_address defines the delegator address to query for.
     #[prost(string, tag = "1")]
@@ -835,7 +868,7 @@ pub struct QueryDelegatorValidatorsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryDelegatorValidatorsResponse")]
 pub struct QueryDelegatorValidatorsResponse {
     /// validators defines the validators a delegator is delegating for.
     #[prost(string, repeated, tag = "1")]
@@ -854,7 +887,11 @@ pub struct QueryDelegatorValidatorsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/DelegatorWithdrawAddress",
+    response_type = QueryDelegatorWithdrawAddressResponse
+)]
 pub struct QueryDelegatorWithdrawAddressRequest {
     /// delegator_address defines the delegator address to query for.
     #[prost(string, tag = "1")]
@@ -873,7 +910,7 @@ pub struct QueryDelegatorWithdrawAddressRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryDelegatorWithdrawAddressResponse")]
 pub struct QueryDelegatorWithdrawAddressResponse {
     /// withdraw_address defines the delegator address to query for.
     #[prost(string, tag = "1")]
@@ -892,7 +929,11 @@ pub struct QueryDelegatorWithdrawAddressResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryCommunityPoolRequest")]
+#[proto_query(
+    path = "/cosmos.distribution.v1beta1.Query/CommunityPool",
+    response_type = QueryCommunityPoolResponse
+)]
 pub struct QueryCommunityPoolRequest {}
 /// QueryCommunityPoolResponse is the response type for the Query/CommunityPool
 /// RPC method.
@@ -907,7 +948,7 @@ pub struct QueryCommunityPoolRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.QueryCommunityPoolResponse")]
 pub struct QueryCommunityPoolResponse {
     /// pool defines community pool's coins.
     #[prost(message, repeated, tag = "1")]
@@ -926,7 +967,7 @@ pub struct QueryCommunityPoolResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgSetWithdrawAddress")]
 pub struct MsgSetWithdrawAddress {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -946,7 +987,7 @@ pub struct MsgSetWithdrawAddress {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgSetWithdrawAddressResponse")]
 pub struct MsgSetWithdrawAddressResponse {}
 /// MsgWithdrawDelegatorReward represents delegation withdrawal to a delegator
 /// from a single validator.
@@ -961,7 +1002,7 @@ pub struct MsgSetWithdrawAddressResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward")]
 pub struct MsgWithdrawDelegatorReward {
     #[prost(string, tag = "1")]
     pub delegator_address: ::prost::alloc::string::String,
@@ -981,7 +1022,7 @@ pub struct MsgWithdrawDelegatorReward {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorRewardResponse")]
 pub struct MsgWithdrawDelegatorRewardResponse {
     /// Since: cosmos-sdk 0.46
     #[prost(message, repeated, tag = "1")]
@@ -1000,7 +1041,7 @@ pub struct MsgWithdrawDelegatorRewardResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission")]
 pub struct MsgWithdrawValidatorCommission {
     #[prost(string, tag = "1")]
     pub validator_address: ::prost::alloc::string::String,
@@ -1018,7 +1059,7 @@ pub struct MsgWithdrawValidatorCommission {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommissionResponse")]
 pub struct MsgWithdrawValidatorCommissionResponse {
     /// Since: cosmos-sdk 0.46
     #[prost(message, repeated, tag = "1")]
@@ -1037,7 +1078,7 @@ pub struct MsgWithdrawValidatorCommissionResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgFundCommunityPool")]
 pub struct MsgFundCommunityPool {
     #[prost(message, repeated, tag = "1")]
     pub amount: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
@@ -1056,7 +1097,7 @@ pub struct MsgFundCommunityPool {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgFundCommunityPoolResponse")]
 pub struct MsgFundCommunityPoolResponse {}
 /// MsgUpdateParams is the Msg/UpdateParams request type.
 ///
@@ -1072,7 +1113,7 @@ pub struct MsgFundCommunityPoolResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgUpdateParams")]
 pub struct MsgUpdateParams {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -1098,7 +1139,7 @@ pub struct MsgUpdateParams {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgUpdateParamsResponse")]
 pub struct MsgUpdateParamsResponse {}
 /// MsgCommunityPoolSpend defines a message for sending tokens from the community
 /// pool to another account. This message is typically executed via a governance
@@ -1116,7 +1157,7 @@ pub struct MsgUpdateParamsResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgCommunityPoolSpend")]
 pub struct MsgCommunityPoolSpend {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -1141,5 +1182,81 @@ pub struct MsgCommunityPoolSpend {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.distribution.v1beta1.")]
+#[proto_message(type_url = "/cosmos.distribution.v1beta1.MsgCommunityPoolSpendResponse")]
 pub struct MsgCommunityPoolSpendResponse {}
+pub struct DistributionQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> DistributionQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
+    }
+    pub fn validator_distribution_info(
+        &self,
+        validator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryValidatorDistributionInfoResponse, cosmwasm_std::StdError> {
+        QueryValidatorDistributionInfoRequest { validator_address }.query(self.querier)
+    }
+    pub fn validator_outstanding_rewards(
+        &self,
+        validator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryValidatorOutstandingRewardsResponse, cosmwasm_std::StdError> {
+        QueryValidatorOutstandingRewardsRequest { validator_address }.query(self.querier)
+    }
+    pub fn validator_commission(
+        &self,
+        validator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryValidatorCommissionResponse, cosmwasm_std::StdError> {
+        QueryValidatorCommissionRequest { validator_address }.query(self.querier)
+    }
+    pub fn validator_slashes(
+        &self,
+        validator_address: ::prost::alloc::string::String,
+        starting_height: u64,
+        ending_height: u64,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryValidatorSlashesResponse, cosmwasm_std::StdError> {
+        QueryValidatorSlashesRequest {
+            validator_address,
+            starting_height,
+            ending_height,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn delegation_rewards(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+        validator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryDelegationRewardsResponse, cosmwasm_std::StdError> {
+        QueryDelegationRewardsRequest {
+            delegator_address,
+            validator_address,
+        }
+        .query(self.querier)
+    }
+    pub fn delegation_total_rewards(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryDelegationTotalRewardsResponse, cosmwasm_std::StdError> {
+        QueryDelegationTotalRewardsRequest { delegator_address }.query(self.querier)
+    }
+    pub fn delegator_validators(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryDelegatorValidatorsResponse, cosmwasm_std::StdError> {
+        QueryDelegatorValidatorsRequest { delegator_address }.query(self.querier)
+    }
+    pub fn delegator_withdraw_address(
+        &self,
+        delegator_address: ::prost::alloc::string::String,
+    ) -> Result<QueryDelegatorWithdrawAddressResponse, cosmwasm_std::StdError> {
+        QueryDelegatorWithdrawAddressRequest { delegator_address }.query(self.querier)
+    }
+    pub fn community_pool(&self) -> Result<QueryCommunityPoolResponse, cosmwasm_std::StdError> {
+        QueryCommunityPoolRequest {}.query(self.querier)
+    }
+}

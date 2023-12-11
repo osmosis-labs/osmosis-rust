@@ -14,7 +14,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.SendAuthorization")]
 pub struct SendAuthorization {
     #[prost(message, repeated, tag = "1")]
     pub spend_limit: ::prost::alloc::vec::Vec<super::super::base::v1beta1::Coin>,
@@ -223,7 +223,7 @@ pub struct Metadata {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// params defines all the parameters of the module.
     #[prost(message, optional, tag = "1")]
@@ -257,7 +257,7 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.Balance")]
 pub struct Balance {
     /// address is the address of the balance holder.
     #[prost(string, tag = "1")]
@@ -278,7 +278,11 @@ pub struct Balance {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryBalanceRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/Balance",
+    response_type = QueryBalanceResponse
+)]
 pub struct QueryBalanceRequest {
     /// address is the address to query balances for.
     #[prost(string, tag = "1")]
@@ -299,7 +303,7 @@ pub struct QueryBalanceRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryBalanceResponse")]
 pub struct QueryBalanceResponse {
     /// balance is the balance of the coin.
     #[prost(message, optional, tag = "1")]
@@ -317,7 +321,11 @@ pub struct QueryBalanceResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryAllBalancesRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/AllBalances",
+    response_type = QueryAllBalancesResponse
+)]
 pub struct QueryAllBalancesRequest {
     /// address is the address to query balances for.
     #[prost(string, tag = "1")]
@@ -339,7 +347,7 @@ pub struct QueryAllBalancesRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryAllBalancesResponse")]
 pub struct QueryAllBalancesResponse {
     /// balances is the balances of all the coins.
     #[prost(message, repeated, tag = "1")]
@@ -363,7 +371,11 @@ pub struct QueryAllBalancesResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySpendableBalancesRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/SpendableBalances",
+    response_type = QuerySpendableBalancesResponse
+)]
 pub struct QuerySpendableBalancesRequest {
     /// address is the address to query spendable balances for.
     #[prost(string, tag = "1")]
@@ -387,7 +399,7 @@ pub struct QuerySpendableBalancesRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySpendableBalancesResponse")]
 pub struct QuerySpendableBalancesResponse {
     /// balances is the spendable balances of all the coins.
     #[prost(message, repeated, tag = "1")]
@@ -411,7 +423,11 @@ pub struct QuerySpendableBalancesResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySpendableBalanceByDenomRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/SpendableBalanceByDenom",
+    response_type = QuerySpendableBalanceByDenomResponse
+)]
 pub struct QuerySpendableBalanceByDenomRequest {
     /// address is the address to query balances for.
     #[prost(string, tag = "1")]
@@ -435,7 +451,7 @@ pub struct QuerySpendableBalanceByDenomRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySpendableBalanceByDenomResponse")]
 pub struct QuerySpendableBalanceByDenomResponse {
     /// balance is the balance of the coin.
     #[prost(message, optional, tag = "1")]
@@ -454,7 +470,11 @@ pub struct QuerySpendableBalanceByDenomResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryTotalSupplyRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/TotalSupply",
+    response_type = QueryTotalSupplyResponse
+)]
 pub struct QueryTotalSupplyRequest {
     /// pagination defines an optional pagination for the request.
     ///
@@ -475,7 +495,7 @@ pub struct QueryTotalSupplyRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryTotalSupplyResponse")]
 pub struct QueryTotalSupplyResponse {
     /// supply is the supply of the coins
     #[prost(message, repeated, tag = "1")]
@@ -498,7 +518,11 @@ pub struct QueryTotalSupplyResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySupplyOfRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/SupplyOf",
+    response_type = QuerySupplyOfResponse
+)]
 pub struct QuerySupplyOfRequest {
     /// denom is the coin denom to query balances for.
     #[prost(string, tag = "1")]
@@ -516,7 +540,7 @@ pub struct QuerySupplyOfRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySupplyOfResponse")]
 pub struct QuerySupplyOfResponse {
     /// amount is the supply of the coin.
     #[prost(message, optional, tag = "1")]
@@ -535,7 +559,11 @@ pub struct QuerySupplyOfResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryTotalSupplyWithoutOffsetRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/TotalSupplyWithoutOffset",
+    response_type = QueryTotalSupplyWithoutOffsetResponse
+)]
 pub struct QueryTotalSupplyWithoutOffsetRequest {
     /// pagination defines an optional pagination for the request.
     ///
@@ -556,7 +584,7 @@ pub struct QueryTotalSupplyWithoutOffsetRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryTotalSupplyWithoutOffsetResponse")]
 pub struct QueryTotalSupplyWithoutOffsetResponse {
     /// supply is the supply of the coins
     #[prost(message, repeated, tag = "1")]
@@ -579,7 +607,11 @@ pub struct QueryTotalSupplyWithoutOffsetResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySupplyOfWithoutOffsetRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/SupplyOfWithoutOffset",
+    response_type = QuerySupplyOfWithoutOffsetResponse
+)]
 pub struct QuerySupplyOfWithoutOffsetRequest {
     /// denom is the coin denom to query balances for.
     #[prost(string, tag = "1")]
@@ -597,7 +629,7 @@ pub struct QuerySupplyOfWithoutOffsetRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySupplyOfWithoutOffsetResponse")]
 pub struct QuerySupplyOfWithoutOffsetResponse {
     /// amount is the supply of the coin.
     #[prost(message, optional, tag = "1")]
@@ -615,7 +647,11 @@ pub struct QuerySupplyOfWithoutOffsetResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryParamsRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/Params",
+    response_type = QueryParamsResponse
+)]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse defines the response type for querying x/bank parameters.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -629,7 +665,7 @@ pub struct QueryParamsRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryParamsResponse")]
 pub struct QueryParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
@@ -646,7 +682,11 @@ pub struct QueryParamsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryDenomsMetadataRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/DenomsMetadata",
+    response_type = QueryDenomsMetadataResponse
+)]
 pub struct QueryDenomsMetadataRequest {
     /// pagination defines an optional pagination for the request.
     #[prost(message, optional, tag = "1")]
@@ -665,7 +705,7 @@ pub struct QueryDenomsMetadataRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryDenomsMetadataResponse")]
 pub struct QueryDenomsMetadataResponse {
     /// metadata provides the client information for all the registered tokens.
     #[prost(message, repeated, tag = "1")]
@@ -686,7 +726,11 @@ pub struct QueryDenomsMetadataResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryDenomMetadataRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/DenomMetadata",
+    response_type = QueryDenomMetadataResponse
+)]
 pub struct QueryDenomMetadataRequest {
     /// denom is the coin denom to query the metadata for.
     #[prost(string, tag = "1")]
@@ -705,7 +749,7 @@ pub struct QueryDenomMetadataRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryDenomMetadataResponse")]
 pub struct QueryDenomMetadataResponse {
     /// metadata describes and provides all the client information for the requested token.
     #[prost(message, optional, tag = "1")]
@@ -725,7 +769,11 @@ pub struct QueryDenomMetadataResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryDenomOwnersRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/DenomOwners",
+    response_type = QueryDenomOwnersResponse
+)]
 pub struct QueryDenomOwnersRequest {
     /// denom defines the coin denomination to query all account holders for.
     #[prost(string, tag = "1")]
@@ -750,7 +798,7 @@ pub struct QueryDenomOwnersRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.DenomOwner")]
 pub struct DenomOwner {
     /// address defines the address that owns a particular denomination.
     #[prost(string, tag = "1")]
@@ -773,7 +821,7 @@ pub struct DenomOwner {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QueryDenomOwnersResponse")]
 pub struct QueryDenomOwnersResponse {
     #[prost(message, repeated, tag = "1")]
     pub denom_owners: ::prost::alloc::vec::Vec<DenomOwner>,
@@ -795,7 +843,11 @@ pub struct QueryDenomOwnersResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySendEnabledRequest")]
+#[proto_query(
+    path = "/cosmos.bank.v1beta1.Query/SendEnabled",
+    response_type = QuerySendEnabledResponse
+)]
 pub struct QuerySendEnabledRequest {
     /// denoms is the specific denoms you want look up. Leave empty to get all entries.
     #[prost(string, repeated, tag = "1")]
@@ -819,7 +871,7 @@ pub struct QuerySendEnabledRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.QuerySendEnabledResponse")]
 pub struct QuerySendEnabledResponse {
     #[prost(message, repeated, tag = "1")]
     pub send_enabled: ::prost::alloc::vec::Vec<SendEnabled>,
@@ -840,7 +892,7 @@ pub struct QuerySendEnabledResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSend")]
 pub struct MsgSend {
     #[prost(string, tag = "1")]
     pub from_address: ::prost::alloc::string::String,
@@ -861,7 +913,7 @@ pub struct MsgSend {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSendResponse")]
 pub struct MsgSendResponse {}
 /// MsgMultiSend represents an arbitrary multi-in, multi-out send message.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -875,7 +927,7 @@ pub struct MsgSendResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSend")]
 pub struct MsgMultiSend {
     /// Inputs, despite being `repeated`, only allows one sender input. This is
     /// checked in MsgMultiSend's ValidateBasic.
@@ -896,7 +948,7 @@ pub struct MsgMultiSend {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgMultiSendResponse")]
 pub struct MsgMultiSendResponse {}
 /// MsgUpdateParams is the Msg/UpdateParams request type.
 ///
@@ -912,7 +964,7 @@ pub struct MsgMultiSendResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgUpdateParams")]
 pub struct MsgUpdateParams {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -938,7 +990,7 @@ pub struct MsgUpdateParams {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgUpdateParamsResponse")]
 pub struct MsgUpdateParamsResponse {}
 /// MsgSetSendEnabled is the Msg/SetSendEnabled request type.
 ///
@@ -958,7 +1010,7 @@ pub struct MsgUpdateParamsResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSetSendEnabled")]
 pub struct MsgSetSendEnabled {
     #[prost(string, tag = "1")]
     pub authority: ::prost::alloc::string::String,
@@ -986,5 +1038,102 @@ pub struct MsgSetSendEnabled {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.v1beta1.")]
+#[proto_message(type_url = "/cosmos.bank.v1beta1.MsgSetSendEnabledResponse")]
 pub struct MsgSetSendEnabledResponse {}
+pub struct BankQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> BankQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn balance(
+        &self,
+        address: ::prost::alloc::string::String,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QueryBalanceResponse, cosmwasm_std::StdError> {
+        QueryBalanceRequest { address, denom }.query(self.querier)
+    }
+    pub fn all_balances(
+        &self,
+        address: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryAllBalancesResponse, cosmwasm_std::StdError> {
+        QueryAllBalancesRequest {
+            address,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn spendable_balances(
+        &self,
+        address: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QuerySpendableBalancesResponse, cosmwasm_std::StdError> {
+        QuerySpendableBalancesRequest {
+            address,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn spendable_balance_by_denom(
+        &self,
+        address: ::prost::alloc::string::String,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QuerySpendableBalanceByDenomResponse, cosmwasm_std::StdError> {
+        QuerySpendableBalanceByDenomRequest { address, denom }.query(self.querier)
+    }
+    pub fn total_supply(
+        &self,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryTotalSupplyResponse, cosmwasm_std::StdError> {
+        QueryTotalSupplyRequest { pagination }.query(self.querier)
+    }
+    pub fn supply_of(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QuerySupplyOfResponse, cosmwasm_std::StdError> {
+        QuerySupplyOfRequest { denom }.query(self.querier)
+    }
+    pub fn total_supply_without_offset(
+        &self,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryTotalSupplyWithoutOffsetResponse, cosmwasm_std::StdError> {
+        QueryTotalSupplyWithoutOffsetRequest { pagination }.query(self.querier)
+    }
+    pub fn supply_of_without_offset(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QuerySupplyOfWithoutOffsetResponse, cosmwasm_std::StdError> {
+        QuerySupplyOfWithoutOffsetRequest { denom }.query(self.querier)
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
+    }
+    pub fn denom_metadata(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<QueryDenomMetadataResponse, cosmwasm_std::StdError> {
+        QueryDenomMetadataRequest { denom }.query(self.querier)
+    }
+    pub fn denoms_metadata(
+        &self,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryDenomsMetadataResponse, cosmwasm_std::StdError> {
+        QueryDenomsMetadataRequest { pagination }.query(self.querier)
+    }
+    pub fn denom_owners(
+        &self,
+        denom: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryDenomOwnersResponse, cosmwasm_std::StdError> {
+        QueryDenomOwnersRequest { denom, pagination }.query(self.querier)
+    }
+    pub fn send_enabled(
+        &self,
+        denoms: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QuerySendEnabledResponse, cosmwasm_std::StdError> {
+        QuerySendEnabledRequest { denoms, pagination }.query(self.querier)
+    }
+}

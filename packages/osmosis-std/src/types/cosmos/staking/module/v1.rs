@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.staking.module.v1.")]
+#[proto_message(type_url = "/cosmos.staking.module.v1.Module")]
 pub struct Module {
     /// hooks_order specifies the order of staking hooks and should be a list
     /// of module names which provide a staking hooks instance. If no order is

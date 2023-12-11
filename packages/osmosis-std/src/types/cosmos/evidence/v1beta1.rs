@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.evidence.v1beta1.")]
+#[proto_message(type_url = "/cosmos.evidence.v1beta1.Equivocation")]
 pub struct Equivocation {
     /// height is the equivocation height.
     #[prost(int64, tag = "1")]
@@ -47,7 +47,7 @@ pub struct Equivocation {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.evidence.v1beta1.")]
+#[proto_message(type_url = "/cosmos.evidence.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// evidence defines all the evidence at genesis.
     #[prost(message, repeated, tag = "1")]
@@ -65,7 +65,11 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.evidence.v1beta1.")]
+#[proto_message(type_url = "/cosmos.evidence.v1beta1.QueryEvidenceRequest")]
+#[proto_query(
+    path = "/cosmos.evidence.v1beta1.Query/Evidence",
+    response_type = QueryEvidenceResponse
+)]
 pub struct QueryEvidenceRequest {
     /// evidence_hash defines the hash of the requested evidence.
     /// Deprecated: Use hash, a HEX encoded string, instead.
@@ -94,7 +98,7 @@ pub struct QueryEvidenceRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.evidence.v1beta1.")]
+#[proto_message(type_url = "/cosmos.evidence.v1beta1.QueryEvidenceResponse")]
 pub struct QueryEvidenceResponse {
     /// evidence returns the requested evidence.
     #[prost(message, optional, tag = "1")]
@@ -113,7 +117,11 @@ pub struct QueryEvidenceResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.evidence.v1beta1.")]
+#[proto_message(type_url = "/cosmos.evidence.v1beta1.QueryAllEvidenceRequest")]
+#[proto_query(
+    path = "/cosmos.evidence.v1beta1.Query/AllEvidence",
+    response_type = QueryAllEvidenceResponse
+)]
 pub struct QueryAllEvidenceRequest {
     /// pagination defines an optional pagination for the request.
     #[prost(message, optional, tag = "1")]
@@ -132,7 +140,7 @@ pub struct QueryAllEvidenceRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.evidence.v1beta1.")]
+#[proto_message(type_url = "/cosmos.evidence.v1beta1.QueryAllEvidenceResponse")]
 pub struct QueryAllEvidenceResponse {
     /// evidence returns all evidences.
     #[prost(message, repeated, tag = "1")]
@@ -154,7 +162,7 @@ pub struct QueryAllEvidenceResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.evidence.v1beta1.")]
+#[proto_message(type_url = "/cosmos.evidence.v1beta1.MsgSubmitEvidence")]
 pub struct MsgSubmitEvidence {
     /// submitter is the signer account address of evidence.
     #[prost(string, tag = "1")]
@@ -175,7 +183,7 @@ pub struct MsgSubmitEvidence {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.evidence.v1beta1.")]
+#[proto_message(type_url = "/cosmos.evidence.v1beta1.MsgSubmitEvidenceResponse")]
 pub struct MsgSubmitEvidenceResponse {
     /// hash defines the hash of the evidence.
     #[prost(bytes = "vec", tag = "4")]
@@ -184,4 +192,29 @@ pub struct MsgSubmitEvidenceResponse {
         deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub hash: ::prost::alloc::vec::Vec<u8>,
+}
+pub struct EvidenceQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> EvidenceQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn evidence(
+        &self,
+        evidence_hash: ::prost::alloc::vec::Vec<u8>,
+        hash: ::prost::alloc::string::String,
+    ) -> Result<QueryEvidenceResponse, cosmwasm_std::StdError> {
+        QueryEvidenceRequest {
+            evidence_hash,
+            hash,
+        }
+        .query(self.querier)
+    }
+    pub fn all_evidence(
+        &self,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryAllEvidenceResponse, cosmwasm_std::StdError> {
+        QueryAllEvidenceRequest { pagination }.query(self.querier)
+    }
 }

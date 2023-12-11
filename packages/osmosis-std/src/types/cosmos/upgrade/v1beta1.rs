@@ -139,7 +139,11 @@ pub struct ModuleVersion {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryCurrentPlanRequest")]
+#[proto_query(
+    path = "/cosmos.upgrade.v1beta1.Query/CurrentPlan",
+    response_type = QueryCurrentPlanResponse
+)]
 pub struct QueryCurrentPlanRequest {}
 /// QueryCurrentPlanResponse is the response type for the Query/CurrentPlan RPC
 /// method.
@@ -154,7 +158,7 @@ pub struct QueryCurrentPlanRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryCurrentPlanResponse")]
 pub struct QueryCurrentPlanResponse {
     /// plan is the current upgrade plan.
     #[prost(message, optional, tag = "1")]
@@ -173,7 +177,11 @@ pub struct QueryCurrentPlanResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryAppliedPlanRequest")]
+#[proto_query(
+    path = "/cosmos.upgrade.v1beta1.Query/AppliedPlan",
+    response_type = QueryAppliedPlanResponse
+)]
 pub struct QueryAppliedPlanRequest {
     /// name is the name of the applied plan to query for.
     #[prost(string, tag = "1")]
@@ -192,7 +200,7 @@ pub struct QueryAppliedPlanRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryAppliedPlanResponse")]
 pub struct QueryAppliedPlanResponse {
     /// height is the block height at which the plan was applied.
     #[prost(int64, tag = "1")]
@@ -215,7 +223,12 @@ pub struct QueryAppliedPlanResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryUpgradedConsensusStateRequest")]
+#[proto_query(
+    path = "/cosmos.upgrade.v1beta1.Query/UpgradedConsensusState",
+    response_type = QueryUpgradedConsensusStateResponse
+)]
+#[deprecated]
 pub struct QueryUpgradedConsensusStateRequest {
     /// last height of the current chain must be sent in request
     /// as this is the height under which next consensus state is stored
@@ -239,7 +252,8 @@ pub struct QueryUpgradedConsensusStateRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryUpgradedConsensusStateResponse")]
+#[deprecated]
 pub struct QueryUpgradedConsensusStateResponse {
     /// Since: cosmos-sdk 0.43
     #[prost(bytes = "vec", tag = "2")]
@@ -264,7 +278,11 @@ pub struct QueryUpgradedConsensusStateResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryModuleVersionsRequest")]
+#[proto_query(
+    path = "/cosmos.upgrade.v1beta1.Query/ModuleVersions",
+    response_type = QueryModuleVersionsResponse
+)]
 pub struct QueryModuleVersionsRequest {
     /// module_name is a field to query a specific module
     /// consensus version from state. Leaving this empty will
@@ -287,7 +305,7 @@ pub struct QueryModuleVersionsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryModuleVersionsResponse")]
 pub struct QueryModuleVersionsResponse {
     /// module_versions is a list of module names with their consensus versions.
     #[prost(message, repeated, tag = "1")]
@@ -307,7 +325,11 @@ pub struct QueryModuleVersionsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryAuthorityRequest")]
+#[proto_query(
+    path = "/cosmos.upgrade.v1beta1.Query/Authority",
+    response_type = QueryAuthorityResponse
+)]
 pub struct QueryAuthorityRequest {}
 /// QueryAuthorityResponse is the response type for Query/Authority
 ///
@@ -323,7 +345,7 @@ pub struct QueryAuthorityRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.QueryAuthorityResponse")]
 pub struct QueryAuthorityResponse {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
@@ -342,7 +364,7 @@ pub struct QueryAuthorityResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade")]
 pub struct MsgSoftwareUpgrade {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -365,7 +387,7 @@ pub struct MsgSoftwareUpgrade {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.MsgSoftwareUpgradeResponse")]
 pub struct MsgSoftwareUpgradeResponse {}
 /// MsgCancelUpgrade is the Msg/CancelUpgrade request type.
 ///
@@ -381,7 +403,7 @@ pub struct MsgSoftwareUpgradeResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.MsgCancelUpgrade")]
 pub struct MsgCancelUpgrade {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -401,5 +423,38 @@ pub struct MsgCancelUpgrade {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.upgrade.v1beta1.")]
+#[proto_message(type_url = "/cosmos.upgrade.v1beta1.MsgCancelUpgradeResponse")]
 pub struct MsgCancelUpgradeResponse {}
+pub struct UpgradeQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> UpgradeQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn current_plan(&self) -> Result<QueryCurrentPlanResponse, cosmwasm_std::StdError> {
+        QueryCurrentPlanRequest {}.query(self.querier)
+    }
+    pub fn applied_plan(
+        &self,
+        name: ::prost::alloc::string::String,
+    ) -> Result<QueryAppliedPlanResponse, cosmwasm_std::StdError> {
+        QueryAppliedPlanRequest { name }.query(self.querier)
+    }
+    #[deprecated]
+    pub fn upgraded_consensus_state(
+        &self,
+        last_height: i64,
+    ) -> Result<QueryUpgradedConsensusStateResponse, cosmwasm_std::StdError> {
+        QueryUpgradedConsensusStateRequest { last_height }.query(self.querier)
+    }
+    pub fn module_versions(
+        &self,
+        module_name: ::prost::alloc::string::String,
+    ) -> Result<QueryModuleVersionsResponse, cosmwasm_std::StdError> {
+        QueryModuleVersionsRequest { module_name }.query(self.querier)
+    }
+    pub fn authority(&self) -> Result<QueryAuthorityResponse, cosmwasm_std::StdError> {
+        QueryAuthorityRequest {}.query(self.querier)
+    }
+}

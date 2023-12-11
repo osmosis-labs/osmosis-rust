@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crisis.v1beta1.")]
+#[proto_message(type_url = "/cosmos.crisis.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// constant_fee is the fee used to verify the invariant in the crisis
     /// module.
@@ -30,7 +30,7 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crisis.v1beta1.")]
+#[proto_message(type_url = "/cosmos.crisis.v1beta1.MsgVerifyInvariant")]
 pub struct MsgVerifyInvariant {
     /// sender is the account address of private key to send coins to fee collector account.
     #[prost(string, tag = "1")]
@@ -54,7 +54,7 @@ pub struct MsgVerifyInvariant {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crisis.v1beta1.")]
+#[proto_message(type_url = "/cosmos.crisis.v1beta1.MsgVerifyInvariantResponse")]
 pub struct MsgVerifyInvariantResponse {}
 /// MsgUpdateParams is the Msg/UpdateParams request type.
 ///
@@ -70,7 +70,7 @@ pub struct MsgVerifyInvariantResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crisis.v1beta1.")]
+#[proto_message(type_url = "/cosmos.crisis.v1beta1.MsgUpdateParams")]
 pub struct MsgUpdateParams {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -94,5 +94,5 @@ pub struct MsgUpdateParams {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.crisis.v1beta1.")]
+#[proto_message(type_url = "/cosmos.crisis.v1beta1.MsgUpdateParamsResponse")]
 pub struct MsgUpdateParamsResponse {}

@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.v1alpha1.ModuleDescriptor")]
 pub struct ModuleDescriptor {
     /// go_import names the package that should be imported by an app to load the
     /// module in the runtime module registry. It is required to make debugging
@@ -46,7 +46,7 @@ pub struct ModuleDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.v1alpha1.PackageReference")]
 pub struct PackageReference {
     /// name is the fully-qualified name of the package.
     #[prost(string, tag = "1")]
@@ -106,7 +106,7 @@ pub struct PackageReference {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.v1alpha1.MigrateFromInfo")]
 pub struct MigrateFromInfo {
     /// module is the fully-qualified protobuf name of the module config object
     /// for the previous module version, ex: "cosmos.group.module.v1.Module".
@@ -131,7 +131,7 @@ pub struct MigrateFromInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.v1alpha1.Config")]
 pub struct Config {
     /// modules are the module configurations for the app.
     #[prost(message, repeated, tag = "1")]
@@ -154,7 +154,7 @@ pub struct Config {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.v1alpha1.ModuleConfig")]
 pub struct ModuleConfig {
     /// name is the unique name of the module within the app. It should be a name
     /// that persists between different versions of a module so that modules
@@ -190,7 +190,7 @@ pub struct ModuleConfig {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.v1alpha1.GolangBinding")]
 pub struct GolangBinding {
     /// interface_type is the interface type which will be bound to a specific implementation type
     #[prost(string, tag = "1")]
@@ -211,7 +211,11 @@ pub struct GolangBinding {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.v1alpha1.QueryConfigRequest")]
+#[proto_query(
+    path = "/cosmos.app.v1alpha1.Query/Config",
+    response_type = QueryConfigResponse
+)]
 pub struct QueryConfigRequest {}
 /// QueryConfigRequest is the Query/Config response type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -225,9 +229,20 @@ pub struct QueryConfigRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.app.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.app.v1alpha1.QueryConfigResponse")]
 pub struct QueryConfigResponse {
     /// config is the current app config.
     #[prost(message, optional, tag = "1")]
     pub config: ::core::option::Option<Config>,
+}
+pub struct V1alpha1Querier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> V1alpha1Querier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn config(&self) -> Result<QueryConfigResponse, cosmwasm_std::StdError> {
+        QueryConfigRequest {}.query(self.querier)
+    }
 }

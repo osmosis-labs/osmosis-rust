@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.v1.")]
+#[proto_message(type_url = "/cosmos.orm.v1.TableDescriptor")]
 pub struct TableDescriptor {
     /// primary_key defines the primary key for the table.
     #[prost(message, optional, tag = "1")]
@@ -42,7 +42,7 @@ pub struct TableDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.v1.")]
+#[proto_message(type_url = "/cosmos.orm.v1.PrimaryKeyDescriptor")]
 pub struct PrimaryKeyDescriptor {
     /// fields is a comma-separated list of fields in the primary key. Spaces are
     /// not allowed. Supported field types, their encodings, and any applicable constraints
@@ -94,7 +94,7 @@ pub struct PrimaryKeyDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.v1.")]
+#[proto_message(type_url = "/cosmos.orm.v1.SecondaryIndexDescriptor")]
 pub struct SecondaryIndexDescriptor {
     /// fields is a comma-separated list of fields in the index. The supported
     /// field types are the same as those for PrimaryKeyDescriptor.fields.
@@ -133,7 +133,7 @@ pub struct SecondaryIndexDescriptor {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.v1.")]
+#[proto_message(type_url = "/cosmos.orm.v1.SingletonDescriptor")]
 pub struct SingletonDescriptor {
     /// id is a non-zero integer ID that must be unique within the
     /// tables and singletons in this file. It may be deprecated in the future when this

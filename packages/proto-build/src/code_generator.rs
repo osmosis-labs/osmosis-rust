@@ -181,7 +181,7 @@ impl CodeGenerator {
 
             if !project.exclude_mods.is_empty() {
                 for include_mod in project.exclude_mods {
-                    cmd.arg("--path")
+                    cmd.arg("--exclude-path")
                         .arg(proto_path.join(project.name.clone()).join(include_mod));
                 }
             }

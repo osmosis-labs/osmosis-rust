@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.kv.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.kv.v1beta1.Pairs")]
 pub struct Pairs {
     #[prost(message, repeated, tag = "1")]
     pub pairs: ::prost::alloc::vec::Vec<Pair>,
@@ -28,7 +28,7 @@ pub struct Pairs {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.kv.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.kv.v1beta1.Pair")]
 pub struct Pair {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(

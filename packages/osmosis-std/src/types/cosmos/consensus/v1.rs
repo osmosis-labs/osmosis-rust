@@ -11,7 +11,11 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.consensus.v1.")]
+#[proto_message(type_url = "/cosmos.consensus.v1.QueryParamsRequest")]
+#[proto_query(
+    path = "/cosmos.consensus.v1.Query/Params",
+    response_type = QueryParamsResponse
+)]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse defines the response type for querying x/consensus parameters.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -25,7 +29,7 @@ pub struct QueryParamsRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.consensus.v1.")]
+#[proto_message(type_url = "/cosmos.consensus.v1.QueryParamsResponse")]
 pub struct QueryParamsResponse {
     /// params are the tendermint consensus params stored in the consensus module.
     /// Please note that `params.version` is not populated in this response, it is
@@ -45,7 +49,7 @@ pub struct QueryParamsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.consensus.v1.")]
+#[proto_message(type_url = "/cosmos.consensus.v1.MsgUpdateParams")]
 pub struct MsgUpdateParams {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -75,5 +79,16 @@ pub struct MsgUpdateParams {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.consensus.v1.")]
+#[proto_message(type_url = "/cosmos.consensus.v1.MsgUpdateParamsResponse")]
 pub struct MsgUpdateParamsResponse {}
+pub struct ConsensusQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> ConsensusQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
+    }
+}

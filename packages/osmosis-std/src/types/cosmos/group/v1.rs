@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.Member")]
 pub struct Member {
     /// address is the member's account address.
     #[prost(string, tag = "1")]
@@ -41,7 +41,7 @@ pub struct Member {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MemberRequest")]
 pub struct MemberRequest {
     /// address is the member's account address.
     #[prost(string, tag = "1")]
@@ -70,7 +70,7 @@ pub struct MemberRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.ThresholdDecisionPolicy")]
 pub struct ThresholdDecisionPolicy {
     /// threshold is the minimum weighted sum of `YES` votes that must be met or
     /// exceeded for a proposal to succeed.
@@ -97,7 +97,7 @@ pub struct ThresholdDecisionPolicy {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.PercentageDecisionPolicy")]
 pub struct PercentageDecisionPolicy {
     /// percentage is the minimum percentage of the weighted sum of `YES` votes must
     /// meet for a proposal to succeed.
@@ -119,7 +119,7 @@ pub struct PercentageDecisionPolicy {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.DecisionPolicyWindows")]
 pub struct DecisionPolicyWindows {
     /// voting_period is the duration from submission of a proposal to the end of voting period
     /// Within this times votes can be submitted with MsgVote.
@@ -151,7 +151,7 @@ pub struct DecisionPolicyWindows {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.GroupInfo")]
 pub struct GroupInfo {
     /// id is the unique ID of the group.
     #[prost(uint64, tag = "1")]
@@ -196,7 +196,7 @@ pub struct GroupInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.GroupMember")]
 pub struct GroupMember {
     /// group_id is the unique ID of the group.
     #[prost(uint64, tag = "1")]
@@ -222,7 +222,7 @@ pub struct GroupMember {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.GroupPolicyInfo")]
 pub struct GroupPolicyInfo {
     /// address is the account address of group policy.
     #[prost(string, tag = "1")]
@@ -273,7 +273,7 @@ pub struct GroupPolicyInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.Proposal")]
 pub struct Proposal {
     /// id is the unique id of the proposal.
     #[prost(uint64, tag = "1")]
@@ -368,7 +368,7 @@ pub struct Proposal {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.TallyResult")]
 pub struct TallyResult {
     /// yes_count is the weighted sum of yes votes.
     #[prost(string, tag = "1")]
@@ -395,7 +395,7 @@ pub struct TallyResult {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.Vote")]
 pub struct Vote {
     /// proposal is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -565,7 +565,7 @@ impl ProposalExecutorResult {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventCreateGroup")]
 pub struct EventCreateGroup {
     /// group_id is the unique ID of the group.
     #[prost(uint64, tag = "1")]
@@ -588,7 +588,7 @@ pub struct EventCreateGroup {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventUpdateGroup")]
 pub struct EventUpdateGroup {
     /// group_id is the unique ID of the group.
     #[prost(uint64, tag = "1")]
@@ -611,7 +611,7 @@ pub struct EventUpdateGroup {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventCreateGroupPolicy")]
 pub struct EventCreateGroupPolicy {
     /// address is the account address of the group policy.
     #[prost(string, tag = "1")]
@@ -629,7 +629,7 @@ pub struct EventCreateGroupPolicy {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventUpdateGroupPolicy")]
 pub struct EventUpdateGroupPolicy {
     /// address is the account address of the group policy.
     #[prost(string, tag = "1")]
@@ -647,7 +647,7 @@ pub struct EventUpdateGroupPolicy {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventSubmitProposal")]
 pub struct EventSubmitProposal {
     /// proposal_id is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -670,7 +670,7 @@ pub struct EventSubmitProposal {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventWithdrawProposal")]
 pub struct EventWithdrawProposal {
     /// proposal_id is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -693,7 +693,7 @@ pub struct EventWithdrawProposal {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventVote")]
 pub struct EventVote {
     /// proposal_id is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -716,7 +716,7 @@ pub struct EventVote {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventExec")]
 pub struct EventExec {
     /// proposal_id is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -749,7 +749,7 @@ pub struct EventExec {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventLeaveGroup")]
 pub struct EventLeaveGroup {
     /// group_id is the unique ID of the group.
     #[prost(uint64, tag = "1")]
@@ -775,7 +775,7 @@ pub struct EventLeaveGroup {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.EventProposalPruned")]
 pub struct EventProposalPruned {
     /// proposal_id is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -808,7 +808,7 @@ pub struct EventProposalPruned {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.GenesisState")]
 pub struct GenesisState {
     /// group_seq is the group table orm.Sequence,
     /// it is used to get the next group ID.
@@ -862,7 +862,11 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupInfoRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/GroupInfo",
+    response_type = QueryGroupInfoResponse
+)]
 pub struct QueryGroupInfoRequest {
     /// group_id is the unique ID of the group.
     #[prost(uint64, tag = "1")]
@@ -885,7 +889,7 @@ pub struct QueryGroupInfoRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupInfoResponse")]
 pub struct QueryGroupInfoResponse {
     /// info is the GroupInfo of the group.
     #[prost(message, optional, tag = "1")]
@@ -903,7 +907,11 @@ pub struct QueryGroupInfoResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupPolicyInfoRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/GroupPolicyInfo",
+    response_type = QueryGroupPolicyInfoResponse
+)]
 pub struct QueryGroupPolicyInfoRequest {
     /// address is the account address of the group policy.
     #[prost(string, tag = "1")]
@@ -921,7 +929,7 @@ pub struct QueryGroupPolicyInfoRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupPolicyInfoResponse")]
 pub struct QueryGroupPolicyInfoResponse {
     /// info is the GroupPolicyInfo of the group policy.
     #[prost(message, optional, tag = "1")]
@@ -939,7 +947,11 @@ pub struct QueryGroupPolicyInfoResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupMembersRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/GroupMembers",
+    response_type = QueryGroupMembersResponse
+)]
 pub struct QueryGroupMembersRequest {
     /// group_id is the unique ID of the group.
     #[prost(uint64, tag = "1")]
@@ -965,7 +977,7 @@ pub struct QueryGroupMembersRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupMembersResponse")]
 pub struct QueryGroupMembersResponse {
     /// members are the members of the group with given group_id.
     #[prost(message, repeated, tag = "1")]
@@ -986,7 +998,11 @@ pub struct QueryGroupMembersResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupsByAdminRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/GroupsByAdmin",
+    response_type = QueryGroupsByAdminResponse
+)]
 pub struct QueryGroupsByAdminRequest {
     /// admin is the account address of a group's admin.
     #[prost(string, tag = "1")]
@@ -1007,7 +1023,7 @@ pub struct QueryGroupsByAdminRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupsByAdminResponse")]
 pub struct QueryGroupsByAdminResponse {
     /// groups are the groups info with the provided admin.
     #[prost(message, repeated, tag = "1")]
@@ -1028,7 +1044,11 @@ pub struct QueryGroupsByAdminResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupPoliciesByGroupRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/GroupPoliciesByGroup",
+    response_type = QueryGroupPoliciesByGroupResponse
+)]
 pub struct QueryGroupPoliciesByGroupRequest {
     /// group_id is the unique ID of the group policy's group.
     #[prost(uint64, tag = "1")]
@@ -1054,7 +1074,7 @@ pub struct QueryGroupPoliciesByGroupRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupPoliciesByGroupResponse")]
 pub struct QueryGroupPoliciesByGroupResponse {
     /// group_policies are the group policies info associated with the provided group.
     #[prost(message, repeated, tag = "1")]
@@ -1075,7 +1095,11 @@ pub struct QueryGroupPoliciesByGroupResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupPoliciesByAdminRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/GroupPoliciesByAdmin",
+    response_type = QueryGroupPoliciesByAdminResponse
+)]
 pub struct QueryGroupPoliciesByAdminRequest {
     /// admin is the admin address of the group policy.
     #[prost(string, tag = "1")]
@@ -1096,7 +1120,7 @@ pub struct QueryGroupPoliciesByAdminRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupPoliciesByAdminResponse")]
 pub struct QueryGroupPoliciesByAdminResponse {
     /// group_policies are the group policies info with provided admin.
     #[prost(message, repeated, tag = "1")]
@@ -1117,7 +1141,11 @@ pub struct QueryGroupPoliciesByAdminResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryProposalRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/Proposal",
+    response_type = QueryProposalResponse
+)]
 pub struct QueryProposalRequest {
     /// proposal_id is the unique ID of a proposal.
     #[prost(uint64, tag = "1")]
@@ -1140,7 +1168,7 @@ pub struct QueryProposalRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryProposalResponse")]
 pub struct QueryProposalResponse {
     /// proposal is the proposal info.
     #[prost(message, optional, tag = "1")]
@@ -1158,7 +1186,11 @@ pub struct QueryProposalResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryProposalsByGroupPolicyRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/ProposalsByGroupPolicy",
+    response_type = QueryProposalsByGroupPolicyResponse
+)]
 pub struct QueryProposalsByGroupPolicyRequest {
     /// address is the account address of the group policy related to proposals.
     #[prost(string, tag = "1")]
@@ -1179,7 +1211,7 @@ pub struct QueryProposalsByGroupPolicyRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryProposalsByGroupPolicyResponse")]
 pub struct QueryProposalsByGroupPolicyResponse {
     /// proposals are the proposals with given group policy.
     #[prost(message, repeated, tag = "1")]
@@ -1200,7 +1232,11 @@ pub struct QueryProposalsByGroupPolicyResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryVoteByProposalVoterRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/VoteByProposalVoter",
+    response_type = QueryVoteByProposalVoterResponse
+)]
 pub struct QueryVoteByProposalVoterRequest {
     /// proposal_id is the unique ID of a proposal.
     #[prost(uint64, tag = "1")]
@@ -1226,7 +1262,7 @@ pub struct QueryVoteByProposalVoterRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryVoteByProposalVoterResponse")]
 pub struct QueryVoteByProposalVoterResponse {
     /// vote is the vote with given proposal_id and voter.
     #[prost(message, optional, tag = "1")]
@@ -1244,7 +1280,11 @@ pub struct QueryVoteByProposalVoterResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryVotesByProposalRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/VotesByProposal",
+    response_type = QueryVotesByProposalResponse
+)]
 pub struct QueryVotesByProposalRequest {
     /// proposal_id is the unique ID of a proposal.
     #[prost(uint64, tag = "1")]
@@ -1270,7 +1310,7 @@ pub struct QueryVotesByProposalRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryVotesByProposalResponse")]
 pub struct QueryVotesByProposalResponse {
     /// votes are the list of votes for given proposal_id.
     #[prost(message, repeated, tag = "1")]
@@ -1291,7 +1331,11 @@ pub struct QueryVotesByProposalResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryVotesByVoterRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/VotesByVoter",
+    response_type = QueryVotesByVoterResponse
+)]
 pub struct QueryVotesByVoterRequest {
     /// voter is a proposal voter account address.
     #[prost(string, tag = "1")]
@@ -1312,7 +1356,7 @@ pub struct QueryVotesByVoterRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryVotesByVoterResponse")]
 pub struct QueryVotesByVoterResponse {
     /// votes are the list of votes by given voter.
     #[prost(message, repeated, tag = "1")]
@@ -1333,7 +1377,11 @@ pub struct QueryVotesByVoterResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupsByMemberRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/GroupsByMember",
+    response_type = QueryGroupsByMemberResponse
+)]
 pub struct QueryGroupsByMemberRequest {
     /// address is the group member address.
     #[prost(string, tag = "1")]
@@ -1354,7 +1402,7 @@ pub struct QueryGroupsByMemberRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupsByMemberResponse")]
 pub struct QueryGroupsByMemberResponse {
     /// groups are the groups info with the provided group member.
     #[prost(message, repeated, tag = "1")]
@@ -1375,7 +1423,11 @@ pub struct QueryGroupsByMemberResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryTallyResultRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/TallyResult",
+    response_type = QueryTallyResultResponse
+)]
 pub struct QueryTallyResultRequest {
     /// proposal_id is the unique id of a proposal.
     #[prost(uint64, tag = "1")]
@@ -1398,7 +1450,7 @@ pub struct QueryTallyResultRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryTallyResultResponse")]
 pub struct QueryTallyResultResponse {
     /// tally defines the requested tally.
     #[prost(message, optional, tag = "1")]
@@ -1418,7 +1470,11 @@ pub struct QueryTallyResultResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupsRequest")]
+#[proto_query(
+    path = "/cosmos.group.v1.Query/Groups",
+    response_type = QueryGroupsResponse
+)]
 pub struct QueryGroupsRequest {
     /// pagination defines an optional pagination for the request.
     #[prost(message, optional, tag = "2")]
@@ -1438,7 +1494,7 @@ pub struct QueryGroupsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.QueryGroupsResponse")]
 pub struct QueryGroupsResponse {
     /// `groups` is all the groups present in state.
     #[prost(message, repeated, tag = "1")]
@@ -1459,7 +1515,7 @@ pub struct QueryGroupsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgCreateGroup")]
 pub struct MsgCreateGroup {
     /// admin is the account address of the group admin.
     #[prost(string, tag = "1")]
@@ -1483,7 +1539,7 @@ pub struct MsgCreateGroup {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgCreateGroupResponse")]
 pub struct MsgCreateGroupResponse {
     /// group_id is the unique ID of the newly created group.
     #[prost(uint64, tag = "1")]
@@ -1506,7 +1562,7 @@ pub struct MsgCreateGroupResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupMembers")]
 pub struct MsgUpdateGroupMembers {
     /// admin is the account address of the group admin.
     #[prost(string, tag = "1")]
@@ -1536,7 +1592,7 @@ pub struct MsgUpdateGroupMembers {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupMembersResponse")]
 pub struct MsgUpdateGroupMembersResponse {}
 /// MsgUpdateGroupAdmin is the Msg/UpdateGroupAdmin request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1550,7 +1606,7 @@ pub struct MsgUpdateGroupMembersResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupAdmin")]
 pub struct MsgUpdateGroupAdmin {
     /// admin is the current account address of the group admin.
     #[prost(string, tag = "1")]
@@ -1579,7 +1635,7 @@ pub struct MsgUpdateGroupAdmin {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupAdminResponse")]
 pub struct MsgUpdateGroupAdminResponse {}
 /// MsgUpdateGroupMetadata is the Msg/UpdateGroupMetadata request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1593,7 +1649,7 @@ pub struct MsgUpdateGroupAdminResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupMetadata")]
 pub struct MsgUpdateGroupMetadata {
     /// admin is the account address of the group admin.
     #[prost(string, tag = "1")]
@@ -1622,7 +1678,7 @@ pub struct MsgUpdateGroupMetadata {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupMetadataResponse")]
 pub struct MsgUpdateGroupMetadataResponse {}
 /// MsgCreateGroupPolicy is the Msg/CreateGroupPolicy request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1636,7 +1692,7 @@ pub struct MsgUpdateGroupMetadataResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgCreateGroupPolicy")]
 pub struct MsgCreateGroupPolicy {
     /// admin is the account address of the group admin.
     #[prost(string, tag = "1")]
@@ -1668,7 +1724,7 @@ pub struct MsgCreateGroupPolicy {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgCreateGroupPolicyResponse")]
 pub struct MsgCreateGroupPolicyResponse {
     /// address is the account address of the newly created group policy.
     #[prost(string, tag = "1")]
@@ -1686,7 +1742,7 @@ pub struct MsgCreateGroupPolicyResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupPolicyAdmin")]
 pub struct MsgUpdateGroupPolicyAdmin {
     /// admin is the account address of the group admin.
     #[prost(string, tag = "1")]
@@ -1710,7 +1766,7 @@ pub struct MsgUpdateGroupPolicyAdmin {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupPolicyAdminResponse")]
 pub struct MsgUpdateGroupPolicyAdminResponse {}
 /// MsgCreateGroupWithPolicy is the Msg/CreateGroupWithPolicy request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1724,7 +1780,7 @@ pub struct MsgUpdateGroupPolicyAdminResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgCreateGroupWithPolicy")]
 pub struct MsgCreateGroupWithPolicy {
     /// admin is the account address of the group and group policy admin.
     #[prost(string, tag = "1")]
@@ -1758,7 +1814,7 @@ pub struct MsgCreateGroupWithPolicy {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgCreateGroupWithPolicyResponse")]
 pub struct MsgCreateGroupWithPolicyResponse {
     /// group_id is the unique ID of the newly created group with policy.
     #[prost(uint64, tag = "1")]
@@ -1784,7 +1840,7 @@ pub struct MsgCreateGroupWithPolicyResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupPolicyDecisionPolicy")]
 pub struct MsgUpdateGroupPolicyDecisionPolicy {
     /// admin is the account address of the group admin.
     #[prost(string, tag = "1")]
@@ -1808,7 +1864,7 @@ pub struct MsgUpdateGroupPolicyDecisionPolicy {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupPolicyDecisionPolicyResponse")]
 pub struct MsgUpdateGroupPolicyDecisionPolicyResponse {}
 /// MsgUpdateGroupPolicyMetadata is the Msg/UpdateGroupPolicyMetadata request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1822,7 +1878,7 @@ pub struct MsgUpdateGroupPolicyDecisionPolicyResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupPolicyMetadata")]
 pub struct MsgUpdateGroupPolicyMetadata {
     /// admin is the account address of the group admin.
     #[prost(string, tag = "1")]
@@ -1846,7 +1902,7 @@ pub struct MsgUpdateGroupPolicyMetadata {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgUpdateGroupPolicyMetadataResponse")]
 pub struct MsgUpdateGroupPolicyMetadataResponse {}
 /// MsgSubmitProposal is the Msg/SubmitProposal request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1860,7 +1916,7 @@ pub struct MsgUpdateGroupPolicyMetadataResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgSubmitProposal")]
 pub struct MsgSubmitProposal {
     /// group_policy_address is the account address of group policy.
     #[prost(string, tag = "1")]
@@ -1907,7 +1963,7 @@ pub struct MsgSubmitProposal {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgSubmitProposalResponse")]
 pub struct MsgSubmitProposalResponse {
     /// proposal is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -1930,7 +1986,7 @@ pub struct MsgSubmitProposalResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgWithdrawProposal")]
 pub struct MsgWithdrawProposal {
     /// proposal is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -1956,7 +2012,7 @@ pub struct MsgWithdrawProposal {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgWithdrawProposalResponse")]
 pub struct MsgWithdrawProposalResponse {}
 /// MsgVote is the Msg/Vote request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1970,7 +2026,7 @@ pub struct MsgWithdrawProposalResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgVote")]
 pub struct MsgVote {
     /// proposal is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -2014,7 +2070,7 @@ pub struct MsgVote {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgVoteResponse")]
 pub struct MsgVoteResponse {}
 /// MsgExec is the Msg/Exec request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -2028,7 +2084,7 @@ pub struct MsgVoteResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgExec")]
 pub struct MsgExec {
     /// proposal is the unique ID of the proposal.
     #[prost(uint64, tag = "1")]
@@ -2054,7 +2110,7 @@ pub struct MsgExec {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgExecResponse")]
 pub struct MsgExecResponse {
     /// result is the final result of the proposal execution.
     #[prost(enumeration = "ProposalExecutorResult", tag = "2")]
@@ -2076,7 +2132,7 @@ pub struct MsgExecResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgLeaveGroup")]
 pub struct MsgLeaveGroup {
     /// address is the account address of the group member.
     #[prost(string, tag = "1")]
@@ -2102,7 +2158,7 @@ pub struct MsgLeaveGroup {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.group.v1.")]
+#[proto_message(type_url = "/cosmos.group.v1.MsgLeaveGroupResponse")]
 pub struct MsgLeaveGroupResponse {}
 /// Exec defines modes of execution of a proposal on creation or on new vote.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
@@ -2136,5 +2192,126 @@ impl Exec {
             "EXEC_TRY" => Some(Self::Try),
             _ => None,
         }
+    }
+}
+pub struct GroupQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> GroupQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn group_info(
+        &self,
+        group_id: u64,
+    ) -> Result<QueryGroupInfoResponse, cosmwasm_std::StdError> {
+        QueryGroupInfoRequest { group_id }.query(self.querier)
+    }
+    pub fn group_policy_info(
+        &self,
+        address: ::prost::alloc::string::String,
+    ) -> Result<QueryGroupPolicyInfoResponse, cosmwasm_std::StdError> {
+        QueryGroupPolicyInfoRequest { address }.query(self.querier)
+    }
+    pub fn group_members(
+        &self,
+        group_id: u64,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryGroupMembersResponse, cosmwasm_std::StdError> {
+        QueryGroupMembersRequest {
+            group_id,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn groups_by_admin(
+        &self,
+        admin: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryGroupsByAdminResponse, cosmwasm_std::StdError> {
+        QueryGroupsByAdminRequest { admin, pagination }.query(self.querier)
+    }
+    pub fn group_policies_by_group(
+        &self,
+        group_id: u64,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryGroupPoliciesByGroupResponse, cosmwasm_std::StdError> {
+        QueryGroupPoliciesByGroupRequest {
+            group_id,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn group_policies_by_admin(
+        &self,
+        admin: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryGroupPoliciesByAdminResponse, cosmwasm_std::StdError> {
+        QueryGroupPoliciesByAdminRequest { admin, pagination }.query(self.querier)
+    }
+    pub fn proposal(
+        &self,
+        proposal_id: u64,
+    ) -> Result<QueryProposalResponse, cosmwasm_std::StdError> {
+        QueryProposalRequest { proposal_id }.query(self.querier)
+    }
+    pub fn proposals_by_group_policy(
+        &self,
+        address: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryProposalsByGroupPolicyResponse, cosmwasm_std::StdError> {
+        QueryProposalsByGroupPolicyRequest {
+            address,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn vote_by_proposal_voter(
+        &self,
+        proposal_id: u64,
+        voter: ::prost::alloc::string::String,
+    ) -> Result<QueryVoteByProposalVoterResponse, cosmwasm_std::StdError> {
+        QueryVoteByProposalVoterRequest { proposal_id, voter }.query(self.querier)
+    }
+    pub fn votes_by_proposal(
+        &self,
+        proposal_id: u64,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryVotesByProposalResponse, cosmwasm_std::StdError> {
+        QueryVotesByProposalRequest {
+            proposal_id,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn votes_by_voter(
+        &self,
+        voter: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryVotesByVoterResponse, cosmwasm_std::StdError> {
+        QueryVotesByVoterRequest { voter, pagination }.query(self.querier)
+    }
+    pub fn groups_by_member(
+        &self,
+        address: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryGroupsByMemberResponse, cosmwasm_std::StdError> {
+        QueryGroupsByMemberRequest {
+            address,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn tally_result(
+        &self,
+        proposal_id: u64,
+    ) -> Result<QueryTallyResultResponse, cosmwasm_std::StdError> {
+        QueryTallyResultRequest { proposal_id }.query(self.querier)
+    }
+    pub fn groups(
+        &self,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryGroupsResponse, cosmwasm_std::StdError> {
+        QueryGroupsRequest { pagination }.query(self.querier)
     }
 }

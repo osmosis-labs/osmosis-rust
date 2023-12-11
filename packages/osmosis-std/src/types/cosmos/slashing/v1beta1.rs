@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.ValidatorSigningInfo")]
 pub struct ValidatorSigningInfo {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
@@ -60,7 +60,7 @@ pub struct ValidatorSigningInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.Params")]
 pub struct Params {
     #[prost(int64, tag = "1")]
     #[serde(
@@ -101,7 +101,7 @@ pub struct Params {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// params defines all the parameters of the module.
     #[prost(message, optional, tag = "1")]
@@ -127,7 +127,7 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.SigningInfo")]
 pub struct SigningInfo {
     /// address is the validator address.
     #[prost(string, tag = "1")]
@@ -149,7 +149,7 @@ pub struct SigningInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.ValidatorMissedBlocks")]
 pub struct ValidatorMissedBlocks {
     /// address is the validator address.
     #[prost(string, tag = "1")]
@@ -170,7 +170,7 @@ pub struct ValidatorMissedBlocks {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.MissedBlock")]
 pub struct MissedBlock {
     /// index is the height at which the block was missed.
     #[prost(int64, tag = "1")]
@@ -195,7 +195,11 @@ pub struct MissedBlock {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.QueryParamsRequest")]
+#[proto_query(
+    path = "/cosmos.slashing.v1beta1.Query/Params",
+    response_type = QueryParamsResponse
+)]
 pub struct QueryParamsRequest {}
 /// QueryParamsResponse is the response type for the Query/Params RPC method
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -209,7 +213,7 @@ pub struct QueryParamsRequest {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.QueryParamsResponse")]
 pub struct QueryParamsResponse {
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
@@ -227,7 +231,11 @@ pub struct QueryParamsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.QuerySigningInfoRequest")]
+#[proto_query(
+    path = "/cosmos.slashing.v1beta1.Query/SigningInfo",
+    response_type = QuerySigningInfoResponse
+)]
 pub struct QuerySigningInfoRequest {
     /// cons_address is the address to query signing info of
     #[prost(string, tag = "1")]
@@ -246,7 +254,7 @@ pub struct QuerySigningInfoRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.QuerySigningInfoResponse")]
 pub struct QuerySigningInfoResponse {
     /// val_signing_info is the signing info of requested val cons address
     #[prost(message, optional, tag = "1")]
@@ -265,7 +273,11 @@ pub struct QuerySigningInfoResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.QuerySigningInfosRequest")]
+#[proto_query(
+    path = "/cosmos.slashing.v1beta1.Query/SigningInfos",
+    response_type = QuerySigningInfosResponse
+)]
 pub struct QuerySigningInfosRequest {
     #[prost(message, optional, tag = "1")]
     pub pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
@@ -283,7 +295,7 @@ pub struct QuerySigningInfosRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.QuerySigningInfosResponse")]
 pub struct QuerySigningInfosResponse {
     /// info is the signing info of all validators
     #[prost(message, repeated, tag = "1")]
@@ -303,7 +315,7 @@ pub struct QuerySigningInfosResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.MsgUnjail")]
 pub struct MsgUnjail {
     #[prost(string, tag = "1")]
     pub validator_addr: ::prost::alloc::string::String,
@@ -320,7 +332,7 @@ pub struct MsgUnjail {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.MsgUnjailResponse")]
 pub struct MsgUnjailResponse {}
 /// MsgUpdateParams is the Msg/UpdateParams request type.
 ///
@@ -336,7 +348,7 @@ pub struct MsgUnjailResponse {}
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.MsgUpdateParams")]
 pub struct MsgUpdateParams {
     /// authority is the address that controls the module (defaults to x/gov unless overwritten).
     #[prost(string, tag = "1")]
@@ -362,5 +374,28 @@ pub struct MsgUpdateParams {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.slashing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.slashing.v1beta1.MsgUpdateParamsResponse")]
 pub struct MsgUpdateParamsResponse {}
+pub struct SlashingQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> SlashingQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
+        QueryParamsRequest {}.query(self.querier)
+    }
+    pub fn signing_info(
+        &self,
+        cons_address: ::prost::alloc::string::String,
+    ) -> Result<QuerySigningInfoResponse, cosmwasm_std::StdError> {
+        QuerySigningInfoRequest { cons_address }.query(self.querier)
+    }
+    pub fn signing_infos(
+        &self,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QuerySigningInfosResponse, cosmwasm_std::StdError> {
+        QuerySigningInfosRequest { pagination }.query(self.querier)
+    }
+}

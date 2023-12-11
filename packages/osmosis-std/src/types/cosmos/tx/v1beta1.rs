@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.Tx")]
 pub struct Tx {
     /// body is the processable content of the transaction
     #[prost(message, optional, tag = "1")]
@@ -42,7 +42,7 @@ pub struct Tx {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxRaw")]
 pub struct TxRaw {
     /// body_bytes is a protobuf serialization of a TxBody that matches the
     /// representation in SignDoc.
@@ -78,7 +78,7 @@ pub struct TxRaw {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.SignDoc")]
 pub struct SignDoc {
     /// body_bytes is protobuf serialization of a TxBody that matches the
     /// representation in TxRaw.
@@ -125,7 +125,7 @@ pub struct SignDoc {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.SignDocDirectAux")]
 pub struct SignDocDirectAux {
     /// body_bytes is protobuf serialization of a TxBody that matches the
     /// representation in TxRaw.
@@ -179,7 +179,7 @@ pub struct SignDocDirectAux {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxBody")]
 pub struct TxBody {
     /// messages is a list of messages to be executed. The required signers of
     /// those messages define the number and order of elements in AuthInfo's
@@ -227,7 +227,7 @@ pub struct TxBody {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.AuthInfo")]
 pub struct AuthInfo {
     /// signer_infos defines the signing modes for the required signers. The number
     /// and order of elements must match the required signers from TxBody's
@@ -263,7 +263,7 @@ pub struct AuthInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.SignerInfo")]
 pub struct SignerInfo {
     /// public_key is the public key of the signer. It is optional for accounts
     /// that already exist in state. If unset, the verifier can use the required \
@@ -296,7 +296,7 @@ pub struct SignerInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.ModeInfo")]
 pub struct ModeInfo {
     /// sum is the oneof that specifies whether this represents a single or nested
     /// multisig signer
@@ -320,7 +320,7 @@ pub mod mode_info {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+    #[proto_message(type_url = "/cosmos.tx.v1beta1.ModeInfo.Single")]
     pub struct Single {
         /// mode is the signing mode of the single signer
         #[prost(enumeration = "super::super::signing::v1beta1::SignMode", tag = "1")]
@@ -342,7 +342,7 @@ pub mod mode_info {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+    #[proto_message(type_url = "/cosmos.tx.v1beta1.ModeInfo.Multi")]
     pub struct Multi {
         /// bitarray specifies which keys within the multisig are signing
         #[prost(message, optional, tag = "1")]
@@ -388,7 +388,7 @@ pub mod mode_info {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.Fee")]
 pub struct Fee {
     /// amount is the amount of coins to be paid as a fee
     #[prost(message, repeated, tag = "1")]
@@ -426,7 +426,7 @@ pub struct Fee {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.Tip")]
 pub struct Tip {
     /// amount is the amount of the tip
     #[prost(message, repeated, tag = "1")]
@@ -452,7 +452,7 @@ pub struct Tip {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.AuxSignerData")]
 pub struct AuxSignerData {
     /// address is the bech32-encoded address of the auxiliary signer. If using
     /// AuxSignerData across different chains, the bech32 prefix of the target
@@ -492,7 +492,7 @@ pub struct AuxSignerData {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.GetTxsEventRequest")]
 pub struct GetTxsEventRequest {
     /// events is the list of transaction event type.
     #[prost(string, repeated, tag = "1")]
@@ -537,7 +537,7 @@ pub struct GetTxsEventRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.GetTxsEventResponse")]
 pub struct GetTxsEventResponse {
     /// txs is the list of queried transactions.
     #[prost(message, repeated, tag = "1")]
@@ -571,7 +571,7 @@ pub struct GetTxsEventResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.BroadcastTxRequest")]
 pub struct BroadcastTxRequest {
     /// tx_bytes is the raw transaction.
     #[prost(bytes = "vec", tag = "1")]
@@ -600,7 +600,7 @@ pub struct BroadcastTxRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.BroadcastTxResponse")]
 pub struct BroadcastTxResponse {
     /// tx_response is the queried TxResponses.
     #[prost(message, optional, tag = "1")]
@@ -619,7 +619,7 @@ pub struct BroadcastTxResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.SimulateRequest")]
 pub struct SimulateRequest {
     /// tx is the transaction to simulate.
     /// Deprecated. Send raw tx bytes instead.
@@ -649,7 +649,7 @@ pub struct SimulateRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.SimulateResponse")]
 pub struct SimulateResponse {
     /// gas_info is the information about gas used in the simulation.
     #[prost(message, optional, tag = "1")]
@@ -671,7 +671,7 @@ pub struct SimulateResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.GetTxRequest")]
 pub struct GetTxRequest {
     /// hash is the tx hash to query, encoded as a hex string.
     #[prost(string, tag = "1")]
@@ -689,7 +689,7 @@ pub struct GetTxRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.GetTxResponse")]
 pub struct GetTxResponse {
     /// tx is the queried transaction.
     #[prost(message, optional, tag = "1")]
@@ -713,7 +713,7 @@ pub struct GetTxResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.GetBlockWithTxsRequest")]
 pub struct GetBlockWithTxsRequest {
     /// height is the height of the block to query.
     #[prost(int64, tag = "1")]
@@ -740,7 +740,7 @@ pub struct GetBlockWithTxsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.GetBlockWithTxsResponse")]
 pub struct GetBlockWithTxsResponse {
     /// txs are the transactions in the block.
     #[prost(message, repeated, tag = "1")]
@@ -769,7 +769,7 @@ pub struct GetBlockWithTxsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxDecodeRequest")]
 pub struct TxDecodeRequest {
     /// tx_bytes is the raw transaction.
     #[prost(bytes = "vec", tag = "1")]
@@ -794,7 +794,7 @@ pub struct TxDecodeRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxDecodeResponse")]
 pub struct TxDecodeResponse {
     /// tx is the decoded transaction.
     #[prost(message, optional, tag = "1")]
@@ -815,7 +815,7 @@ pub struct TxDecodeResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxEncodeRequest")]
 pub struct TxEncodeRequest {
     /// tx is the transaction to encode.
     #[prost(message, optional, tag = "1")]
@@ -836,7 +836,7 @@ pub struct TxEncodeRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxEncodeResponse")]
 pub struct TxEncodeResponse {
     /// tx_bytes is the encoded transaction bytes.
     #[prost(bytes = "vec", tag = "1")]
@@ -861,7 +861,7 @@ pub struct TxEncodeResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxEncodeAminoRequest")]
 pub struct TxEncodeAminoRequest {
     #[prost(string, tag = "1")]
     pub amino_json: ::prost::alloc::string::String,
@@ -881,7 +881,7 @@ pub struct TxEncodeAminoRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxEncodeAminoResponse")]
 pub struct TxEncodeAminoResponse {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -905,7 +905,7 @@ pub struct TxEncodeAminoResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxDecodeAminoRequest")]
 pub struct TxDecodeAminoRequest {
     #[prost(bytes = "vec", tag = "1")]
     #[serde(
@@ -929,7 +929,7 @@ pub struct TxDecodeAminoRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.v1beta1.TxDecodeAminoResponse")]
 pub struct TxDecodeAminoResponse {
     #[prost(string, tag = "1")]
     pub amino_json: ::prost::alloc::string::String,

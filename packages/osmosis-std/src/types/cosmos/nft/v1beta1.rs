@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.EventSend")]
 pub struct EventSend {
     /// class_id associated with the nft
     #[prost(string, tag = "1")]
@@ -40,7 +40,7 @@ pub struct EventSend {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.EventMint")]
 pub struct EventMint {
     /// class_id associated with the nft
     #[prost(string, tag = "1")]
@@ -66,7 +66,7 @@ pub struct EventMint {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.EventBurn")]
 pub struct EventBurn {
     /// class_id associated with the nft
     #[prost(string, tag = "1")]
@@ -92,7 +92,7 @@ pub struct EventBurn {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.Class")]
 pub struct Class {
     /// id defines the unique identifier of the NFT classification, similar to the contract address of ERC721
     #[prost(string, tag = "1")]
@@ -129,7 +129,7 @@ pub struct Class {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.NFT")]
 pub struct Nft {
     /// class_id associated with the NFT, similar to the contract address of ERC721
     #[prost(string, tag = "1")]
@@ -161,7 +161,7 @@ pub struct Nft {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.GenesisState")]
 pub struct GenesisState {
     /// class defines the class of the nft type.
     #[prost(message, repeated, tag = "1")]
@@ -182,7 +182,7 @@ pub struct GenesisState {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.Entry")]
 pub struct Entry {
     /// owner is the owner address of the following nft
     #[prost(string, tag = "1")]
@@ -203,7 +203,11 @@ pub struct Entry {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryBalanceRequest")]
+#[proto_query(
+    path = "/cosmos.nft.v1beta1.Query/Balance",
+    response_type = QueryBalanceResponse
+)]
 pub struct QueryBalanceRequest {
     /// class_id associated with the nft
     #[prost(string, tag = "1")]
@@ -225,7 +229,7 @@ pub struct QueryBalanceRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryBalanceResponse")]
 pub struct QueryBalanceResponse {
     /// amount is the number of all NFTs of a given class owned by the owner
     #[prost(uint64, tag = "1")]
@@ -247,7 +251,11 @@ pub struct QueryBalanceResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryOwnerRequest")]
+#[proto_query(
+    path = "/cosmos.nft.v1beta1.Query/Owner",
+    response_type = QueryOwnerResponse
+)]
 pub struct QueryOwnerRequest {
     /// class_id associated with the nft
     #[prost(string, tag = "1")]
@@ -270,7 +278,7 @@ pub struct QueryOwnerRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryOwnerResponse")]
 pub struct QueryOwnerResponse {
     /// owner is the owner address of the nft
     #[prost(string, tag = "1")]
@@ -288,7 +296,11 @@ pub struct QueryOwnerResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QuerySupplyRequest")]
+#[proto_query(
+    path = "/cosmos.nft.v1beta1.Query/Supply",
+    response_type = QuerySupplyResponse
+)]
 pub struct QuerySupplyRequest {
     /// class_id associated with the nft
     #[prost(string, tag = "1")]
@@ -307,7 +319,7 @@ pub struct QuerySupplyRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QuerySupplyResponse")]
 pub struct QuerySupplyResponse {
     /// amount is the number of all NFTs from the given class
     #[prost(uint64, tag = "1")]
@@ -329,7 +341,11 @@ pub struct QuerySupplyResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryNFTsRequest")]
+#[proto_query(
+    path = "/cosmos.nft.v1beta1.Query/NFTs",
+    response_type = QueryNfTsResponse
+)]
 pub struct QueryNfTsRequest {
     /// class_id associated with the nft
     #[prost(string, tag = "1")]
@@ -354,7 +370,7 @@ pub struct QueryNfTsRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryNFTsResponse")]
 pub struct QueryNfTsResponse {
     /// NFT defines the NFT
     #[prost(message, repeated, tag = "1")]
@@ -375,7 +391,8 @@ pub struct QueryNfTsResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryNFTRequest")]
+#[proto_query(path = "/cosmos.nft.v1beta1.Query/NFT", response_type = QueryNftResponse)]
 pub struct QueryNftRequest {
     /// class_id associated with the nft
     #[prost(string, tag = "1")]
@@ -398,7 +415,7 @@ pub struct QueryNftRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryNFTResponse")]
 pub struct QueryNftResponse {
     /// owner is the owner address of the nft
     #[prost(message, optional, tag = "1")]
@@ -416,7 +433,11 @@ pub struct QueryNftResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryClassRequest")]
+#[proto_query(
+    path = "/cosmos.nft.v1beta1.Query/Class",
+    response_type = QueryClassResponse
+)]
 pub struct QueryClassRequest {
     /// class_id associated with the nft
     #[prost(string, tag = "1")]
@@ -435,7 +456,7 @@ pub struct QueryClassRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryClassResponse")]
 pub struct QueryClassResponse {
     /// class defines the class of the nft type.
     #[prost(message, optional, tag = "1")]
@@ -453,7 +474,11 @@ pub struct QueryClassResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryClassesRequest")]
+#[proto_query(
+    path = "/cosmos.nft.v1beta1.Query/Classes",
+    response_type = QueryClassesResponse
+)]
 pub struct QueryClassesRequest {
     /// pagination defines an optional pagination for the request.
     #[prost(message, optional, tag = "1")]
@@ -471,7 +496,7 @@ pub struct QueryClassesRequest {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.QueryClassesResponse")]
 pub struct QueryClassesResponse {
     /// class defines the class of the nft type.
     #[prost(message, repeated, tag = "1")]
@@ -492,7 +517,7 @@ pub struct QueryClassesResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.MsgSend")]
 pub struct MsgSend {
     /// class_id defines the unique identifier of the nft classification, similar to the contract address of ERC721
     #[prost(string, tag = "1")]
@@ -521,5 +546,65 @@ pub struct MsgSend {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.nft.v1beta1.")]
+#[proto_message(type_url = "/cosmos.nft.v1beta1.MsgSendResponse")]
 pub struct MsgSendResponse {}
+pub struct NftQuerier<'a, Q: cosmwasm_std::CustomQuery> {
+    querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
+}
+impl<'a, Q: cosmwasm_std::CustomQuery> NftQuerier<'a, Q> {
+    pub fn new(querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>) -> Self {
+        Self { querier }
+    }
+    pub fn balance(
+        &self,
+        class_id: ::prost::alloc::string::String,
+        owner: ::prost::alloc::string::String,
+    ) -> Result<QueryBalanceResponse, cosmwasm_std::StdError> {
+        QueryBalanceRequest { class_id, owner }.query(self.querier)
+    }
+    pub fn owner(
+        &self,
+        class_id: ::prost::alloc::string::String,
+        id: ::prost::alloc::string::String,
+    ) -> Result<QueryOwnerResponse, cosmwasm_std::StdError> {
+        QueryOwnerRequest { class_id, id }.query(self.querier)
+    }
+    pub fn supply(
+        &self,
+        class_id: ::prost::alloc::string::String,
+    ) -> Result<QuerySupplyResponse, cosmwasm_std::StdError> {
+        QuerySupplyRequest { class_id }.query(self.querier)
+    }
+    pub fn nf_ts(
+        &self,
+        class_id: ::prost::alloc::string::String,
+        owner: ::prost::alloc::string::String,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryNfTsResponse, cosmwasm_std::StdError> {
+        QueryNfTsRequest {
+            class_id,
+            owner,
+            pagination,
+        }
+        .query(self.querier)
+    }
+    pub fn nft(
+        &self,
+        class_id: ::prost::alloc::string::String,
+        id: ::prost::alloc::string::String,
+    ) -> Result<QueryNftResponse, cosmwasm_std::StdError> {
+        QueryNftRequest { class_id, id }.query(self.querier)
+    }
+    pub fn class(
+        &self,
+        class_id: ::prost::alloc::string::String,
+    ) -> Result<QueryClassResponse, cosmwasm_std::StdError> {
+        QueryClassRequest { class_id }.query(self.querier)
+    }
+    pub fn classes(
+        &self,
+        pagination: ::core::option::Option<super::super::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryClassesResponse, cosmwasm_std::StdError> {
+        QueryClassesRequest { pagination }.query(self.querier)
+    }
+}

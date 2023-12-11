@@ -13,5 +13,5 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.module.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.orm.module.v1alpha1.Module")]
 pub struct Module {}

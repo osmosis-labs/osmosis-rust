@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.capability.module.v1.")]
+#[proto_message(type_url = "/cosmos.capability.module.v1.Module")]
 pub struct Module {
     /// seal_keeper defines if keeper.Seal() will run on BeginBlock() to prevent further modules from creating a scoped
     /// keeper. For more details check x/capability/keeper.go.

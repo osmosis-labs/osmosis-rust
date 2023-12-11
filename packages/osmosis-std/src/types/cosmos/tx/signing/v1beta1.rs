@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.signing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.signing.v1beta1.SignatureDescriptors")]
 pub struct SignatureDescriptors {
     /// signatures are the signature descriptors
     #[prost(message, repeated, tag = "1")]
@@ -32,7 +32,7 @@ pub struct SignatureDescriptors {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.tx.signing.v1beta1.")]
+#[proto_message(type_url = "/cosmos.tx.signing.v1beta1.SignatureDescriptor")]
 pub struct SignatureDescriptor {
     /// public_key is the public key of the signer
     #[prost(message, optional, tag = "1")]
@@ -64,7 +64,7 @@ pub mod signature_descriptor {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.tx.signing.v1beta1.")]
+    #[proto_message(type_url = "/cosmos.tx.signing.v1beta1.SignatureDescriptor.Data")]
     pub struct Data {
         /// sum is the oneof that specifies whether this represents single or multi-signature data
         #[prost(oneof = "data::Sum", tags = "1, 2")]
@@ -85,7 +85,7 @@ pub mod signature_descriptor {
             ::schemars::JsonSchema,
             CosmwasmExt,
         )]
-        #[proto_message(type_url = "/cosmos.tx.signing.v1beta1.")]
+        #[proto_message(type_url = "/cosmos.tx.signing.v1beta1.SignatureDescriptor.Data.Single")]
         pub struct Single {
             /// mode is the signing mode of the single signer
             #[prost(enumeration = "super::super::SignMode", tag = "1")]
@@ -114,7 +114,7 @@ pub mod signature_descriptor {
             ::schemars::JsonSchema,
             CosmwasmExt,
         )]
-        #[proto_message(type_url = "/cosmos.tx.signing.v1beta1.")]
+        #[proto_message(type_url = "/cosmos.tx.signing.v1beta1.SignatureDescriptor.Data.Multi")]
         pub struct Multi {
             /// bitarray specifies which keys within the multisig are signing
             #[prost(message, optional, tag = "1")]

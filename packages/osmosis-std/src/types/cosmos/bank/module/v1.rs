@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.bank.module.v1.")]
+#[proto_message(type_url = "/cosmos.bank.module.v1.Module")]
 pub struct Module {
     /// blocked_module_accounts configures exceptional module accounts which should be blocked from receiving funds.
     /// If left empty it defaults to the list of account names supplied in the auth module configuration as

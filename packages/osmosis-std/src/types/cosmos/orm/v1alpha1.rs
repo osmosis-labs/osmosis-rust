@@ -11,7 +11,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.orm.v1alpha1.")]
+#[proto_message(type_url = "/cosmos.orm.v1alpha1.ModuleSchemaDescriptor")]
 pub struct ModuleSchemaDescriptor {
     #[prost(message, repeated, tag = "1")]
     pub schema_file: ::prost::alloc::vec::Vec<module_schema_descriptor::FileEntry>,
@@ -39,7 +39,7 @@ pub mod module_schema_descriptor {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.orm.v1alpha1.")]
+    #[proto_message(type_url = "/cosmos.orm.v1alpha1.ModuleSchemaDescriptor.FileEntry")]
     pub struct FileEntry {
         /// id is a prefix that will be varint encoded and prepended to all the
         /// table keys specified in the file's tables.

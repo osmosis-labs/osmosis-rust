@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.CommitInfo")]
 pub struct CommitInfo {
     #[prost(int64, tag = "1")]
     #[serde(
@@ -38,7 +38,7 @@ pub struct CommitInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.StoreInfo")]
 pub struct StoreInfo {
     #[prost(string, tag = "1")]
     pub name: ::prost::alloc::string::String,
@@ -59,7 +59,7 @@ pub struct StoreInfo {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.CommitID")]
 pub struct CommitId {
     #[prost(int64, tag = "1")]
     #[serde(
@@ -90,7 +90,7 @@ pub struct CommitId {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.StoreKVPair")]
 pub struct StoreKvPair {
     /// the store key for the KVStore this pair originates from
     #[prost(string, tag = "1")]
@@ -124,7 +124,7 @@ pub struct StoreKvPair {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
+#[proto_message(type_url = "/cosmos.base.store.v1beta1.BlockMetadata")]
 pub struct BlockMetadata {
     #[prost(message, optional, tag = "1")]
     pub request_begin_block:
@@ -159,7 +159,7 @@ pub mod block_metadata {
         ::schemars::JsonSchema,
         CosmwasmExt,
     )]
-    #[proto_message(type_url = "/cosmos.base.store.v1beta1.")]
+    #[proto_message(type_url = "/cosmos.base.store.v1beta1.BlockMetadata.DeliverTx")]
     pub struct DeliverTx {
         #[prost(message, optional, tag = "1")]
         pub request: ::core::option::Option<
