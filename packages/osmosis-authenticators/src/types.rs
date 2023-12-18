@@ -16,6 +16,7 @@ pub struct AuthenticationRequest {
     pub tx_data: TxData,
     pub signature_data: SignatureData,
     pub simulate: bool,
+    pub authenticator_params: Option<Binary>,
 }
 
 #[cw_serde]
