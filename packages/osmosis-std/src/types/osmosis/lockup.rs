@@ -65,7 +65,7 @@ pub struct PeriodLock {
 )]
 #[proto_message(type_url = "/osmosis.lockup.QueryCondition")]
 pub struct QueryCondition {
-    /// LockQueryType is a type of lock query, ByLockDuration | ByLockTime
+    /// LockQueryType is a type of lock query, ByLockDuration | ByLockTime | NoLockTime
     #[prost(enumeration = "LockQueryType", tag = "1")]
     #[serde(
         serialize_with = "crate::serde::as_str::serialize",
