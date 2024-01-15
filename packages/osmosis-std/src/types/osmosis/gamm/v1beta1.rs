@@ -1230,7 +1230,7 @@ pub struct QuerySpotPriceRequest {
     response_type = QueryPoolsWithFilterResponse
 )]
 pub struct QueryPoolsWithFilterRequest {
-    /// String of the coins in single string seperated by comma. Ex)
+    /// String of the coins in single string separated by comma. Ex)
     /// 10uatom,100uosmo
     #[prost(string, tag = "1")]
     pub min_liquidity: ::prost::alloc::string::String,

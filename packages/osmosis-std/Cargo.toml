@@ -3,7 +3,8 @@ description = "Standard library for Osmosis with CosmWasm support included"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 name = "osmosis-std"
-version = "0.21.0"
+repository = "https://github.com/osmosis-labs/osmosis-rust/"
+version = "0.22.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

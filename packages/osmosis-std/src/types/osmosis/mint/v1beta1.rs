@@ -144,7 +144,7 @@ pub struct GenesisState {
     /// minter is an abstraction for holding current rewards information.
     #[prost(message, optional, tag = "1")]
     pub minter: ::core::option::Option<Minter>,
-    /// params defines all the paramaters of the mint module.
+    /// params defines all the parameters of the mint module.
     #[prost(message, optional, tag = "2")]
     pub params: ::core::option::Option<Params>,
     /// reduction_started_epoch is the first epoch in which the reduction of mint

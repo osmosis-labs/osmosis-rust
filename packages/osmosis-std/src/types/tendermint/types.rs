@@ -924,7 +924,6 @@ pub struct Block {
     #[prost(message, optional, tag = "4")]
     pub last_commit: ::core::option::Option<Commit>,
 }
-
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
