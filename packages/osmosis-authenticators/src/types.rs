@@ -8,6 +8,18 @@ pub struct Any {
 }
 
 #[cw_serde]
+pub struct OnAuthenticatorAddedRequest {
+    account: Addr,
+    authenticator_params: Option<Binary>,
+}
+
+#[cw_serde]
+pub struct OnAuthenticatorRemovedRequest {
+    account: Addr,
+    authenticator_params: Option<Binary>,
+}
+
+#[cw_serde]
 pub struct AuthenticationRequest {
     pub account: Addr,
     pub msg: Any,
@@ -45,12 +57,14 @@ pub struct SignatureData {
 pub struct TrackRequest {
     pub account: Addr,
     pub msg: Any,
+    pub authenticator_params: Option<Binary>,
 }
 
 #[cw_serde]
 pub struct ConfirmExecutionRequest {
     pub account: Addr,
     pub msg: Any,
+    pub authenticator_params: Option<Binary>,
 }
 
 #[cw_serde]
