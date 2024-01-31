@@ -9,14 +9,14 @@ pub struct Any {
 
 #[cw_serde]
 pub struct OnAuthenticatorAddedRequest {
-    account: Addr,
-    authenticator_params: Option<Binary>,
+    pub account: Addr,
+    pub authenticator_params: Option<Binary>,
 }
 
 #[cw_serde]
 pub struct OnAuthenticatorRemovedRequest {
-    account: Addr,
-    authenticator_params: Option<Binary>,
+    pub account: Addr,
+    pub authenticator_params: Option<Binary>,
 }
 
 #[cw_serde]
