@@ -37,8 +37,7 @@ pub struct TokenPairArbRoutes {
 )]
 #[proto_message(type_url = "/osmosis.protorev.v1beta1.Route")]
 pub struct Route {
-    /// The pool IDs that are traversed in the directed cyclic graph (traversed
-    /// left
+    /// The pool IDs that are travered in the directed cyclic graph (traversed left
     /// -> right)
     #[prost(message, repeated, tag = "1")]
     pub trades: ::prost::alloc::vec::Vec<Trade>,
@@ -343,6 +342,8 @@ pub struct AllProtocolRevenue {
     #[prost(message, optional, tag = "1")]
     pub taker_fees_tracker:
         ::core::option::Option<super::super::poolmanager::v1beta1::TakerFeesTracker>,
+    #[prost(message, optional, tag = "2")]
+    pub tx_fees_tracker: ::core::option::Option<super::super::txfees::v1beta1::TxFeesTracker>,
     #[prost(message, optional, tag = "3")]
     pub cyclic_arb_tracker: ::core::option::Option<CyclicArbTracker>,
 }

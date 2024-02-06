@@ -30,7 +30,7 @@ pub struct QuerySpotPriceRequest {
     #[prost(string, tag = "3")]
     pub quote_asset_denom: ::prost::alloc::string::String,
 }
-/// Deprecated: please use alternate in x/poolmanager
+/// Depreacted: please use alternate in x/poolmanager
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,

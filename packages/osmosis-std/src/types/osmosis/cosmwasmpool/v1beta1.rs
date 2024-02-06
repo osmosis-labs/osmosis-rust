@@ -495,7 +495,7 @@ pub struct CosmWasmPool {
 )]
 #[proto_message(type_url = "/osmosis.cosmwasmpool.v1beta1.GetSwapFeeQueryMsg")]
 pub struct GetSwapFeeQueryMsg {
-    /// get_swap_fee is the query structure to get swap fee.
+    /// get_swap_fee is the query strcuture to get swap fee.
     #[prost(message, optional, tag = "1")]
     pub get_swap_fee: ::core::option::Option<EmptyStruct>,
 }

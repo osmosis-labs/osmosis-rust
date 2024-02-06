@@ -1,4 +1,5 @@
 pub mod accum;
+pub mod authenticator;
 pub mod concentratedliquidity;
 pub mod cosmwasmpool;
 pub mod downtimedetector;

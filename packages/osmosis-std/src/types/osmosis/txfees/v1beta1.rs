@@ -44,6 +44,31 @@ pub struct GenesisState {
     pub basedenom: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "2")]
     pub feetokens: ::prost::alloc::vec::Vec<FeeToken>,
+    /// KVStore state
+    #[prost(message, optional, tag = "3")]
+    pub tx_fees_tracker: ::core::option::Option<TxFeesTracker>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.TxFeesTracker")]
+pub struct TxFeesTracker {
+    #[prost(message, repeated, tag = "1")]
+    pub tx_fees: ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+    #[prost(int64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub height_accounting_starts_from: i64,
 }
 /// UpdateFeeTokenProposal is a gov Content type for adding new whitelisted fee
 /// token(s). It must specify a denom along with gamm pool ID to use as a spot

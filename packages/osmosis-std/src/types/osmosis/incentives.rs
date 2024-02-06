@@ -292,7 +292,7 @@ pub struct GenesisState {
     #[prost(message, repeated, tag = "2")]
     pub gauges: ::prost::alloc::vec::Vec<Gauge>,
     /// lockable_durations are all lockup durations that gauges can be locked for
-    /// in order to receive incentives
+    /// in order to recieve incentives
     #[prost(message, repeated, tag = "3")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
     /// last_gauge_id is what the gauge number will increment from when creating
@@ -674,7 +674,7 @@ pub struct RewardsEstRequest {
 )]
 #[proto_message(type_url = "/osmosis.incentives.RewardsEstResponse")]
 pub struct RewardsEstResponse {
-    /// Estimated coin rewards that will be received at provided address
+    /// Estimated coin rewards that will be recieved at provided address
     /// from specified locks between current time and end epoch
     #[prost(message, repeated, tag = "1")]
     pub coins: ::prost::alloc::vec::Vec<super::super::cosmos::base::v1beta1::Coin>,
@@ -709,7 +709,7 @@ pub struct QueryLockableDurationsRequest {}
 )]
 #[proto_message(type_url = "/osmosis.incentives.QueryLockableDurationsResponse")]
 pub struct QueryLockableDurationsResponse {
-    /// Time durations that users can lock coins for in order to receive rewards
+    /// Time durations that users can lock coins for in order to recieve rewards
     #[prost(message, repeated, tag = "1")]
     pub lockable_durations: ::prost::alloc::vec::Vec<crate::shim::Duration>,
 }

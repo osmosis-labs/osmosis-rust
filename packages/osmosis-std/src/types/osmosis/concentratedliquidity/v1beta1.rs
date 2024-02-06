@@ -349,7 +349,7 @@ pub struct GenesisState {
     /// params are all the parameters of the module
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<super::Params>,
-    /// pool data containing serialized pool struct and ticks.
+    /// pool data containining serialized pool struct and ticks.
     #[prost(message, repeated, tag = "2")]
     pub pool_data: ::prost::alloc::vec::Vec<PoolData>,
     #[prost(message, repeated, tag = "3")]
