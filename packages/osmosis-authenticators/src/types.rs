@@ -4,8 +4,7 @@ use cosmwasm_std::{Addr, Binary};
 #[cw_serde]
 pub struct Any {
     pub type_url: String,
-    pub value: String,               // encodeded as json
-    pub bytes: cosmwasm_std::Binary, // original proto bytes
+    pub value: cosmwasm_std::Binary,
 }
 
 #[cw_serde]
