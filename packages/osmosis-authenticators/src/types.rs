@@ -21,6 +21,7 @@ pub struct OnAuthenticatorRemovedRequest {
 
 #[cw_serde]
 pub struct AuthenticationRequest {
+    pub authenticator_id: u64,
     pub account: Addr,
     pub msg: Any,
     pub signature: Binary,
