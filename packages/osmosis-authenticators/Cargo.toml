@@ -4,7 +4,7 @@ description = "utilities for writing osmosis authenticators"
 edition = "2021"
 license = "MIT"
 name = "osmosis-authenticators"
-version = "0.22.0-alpha.9"
+version = "0.22.0-alpha.10"
 
 [dependencies]
 cosmwasm-schema = "1.1.3"

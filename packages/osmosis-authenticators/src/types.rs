@@ -56,6 +56,7 @@ pub struct SignatureData {
 
 #[cw_serde]
 pub struct TrackRequest {
+    pub authenticator_id: u64,
     pub account: Addr,
     pub msg: Any,
     pub authenticator_params: Option<Binary>,
@@ -63,6 +64,7 @@ pub struct TrackRequest {
 
 #[cw_serde]
 pub struct ConfirmExecutionRequest {
+    pub authenticator_id: u64,
     pub account: Addr,
     pub msg: Any,
     pub authenticator_params: Option<Binary>,
