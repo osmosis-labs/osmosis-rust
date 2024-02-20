@@ -21,7 +21,7 @@ pub struct OnAuthenticatorRemovedRequest {
 
 #[cw_serde]
 pub struct AuthenticationRequest {
-    pub authenticator_id: u64,
+    pub authenticator_id: String,
     pub account: Addr,
     pub msg: Any,
     pub signature: Binary,
@@ -56,7 +56,7 @@ pub struct SignatureData {
 
 #[cw_serde]
 pub struct TrackRequest {
-    pub authenticator_id: u64,
+    pub authenticator_id: String,
     pub account: Addr,
     pub msg: Any,
     pub authenticator_params: Option<Binary>,
