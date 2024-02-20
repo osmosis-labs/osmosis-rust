@@ -64,7 +64,7 @@ pub struct TrackRequest {
 
 #[cw_serde]
 pub struct ConfirmExecutionRequest {
-    pub authenticator_id: u64,
+    pub authenticator_id: String,
     pub account: Addr,
     pub msg: Any,
     pub authenticator_params: Option<Binary>,
