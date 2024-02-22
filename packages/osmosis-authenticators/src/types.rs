@@ -10,12 +10,14 @@ pub struct Any {
 #[cw_serde]
 pub struct OnAuthenticatorAddedRequest {
     pub account: Addr,
+    pub authenticator_id: String,
     pub authenticator_params: Option<Binary>,
 }
 
 #[cw_serde]
 pub struct OnAuthenticatorRemovedRequest {
     pub account: Addr,
+    pub authenticator_id: String,
     pub authenticator_params: Option<Binary>,
 }
 
