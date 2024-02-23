@@ -26,6 +26,7 @@ pub struct AuthenticationRequest {
     pub authenticator_id: String,
     pub account: Addr,
     pub msg: Any,
+    pub msg_index: u64,
     pub signature: Binary,
     pub sign_mode_tx_data: SignModeTxData,
     pub tx_data: TxData,
@@ -61,6 +62,7 @@ pub struct TrackRequest {
     pub authenticator_id: String,
     pub account: Addr,
     pub msg: Any,
+    pub msg_index: u64,
     pub authenticator_params: Option<Binary>,
 }
 
@@ -69,6 +71,7 @@ pub struct ConfirmExecutionRequest {
     pub authenticator_id: String,
     pub account: Addr,
     pub msg: Any,
+    pub msg_index: u64,
     pub authenticator_params: Option<Binary>,
 }
 
