@@ -239,12 +239,6 @@ mod tests {
 
     #[test]
     fn test_sudo_msg() {
-        let t = AuthenticatorSudoMsg::OnAuthenticatorAdded(OnAuthenticatorAddedRequest {
-            account: Addr::unchecked("account"),
-            authenticator_id: "authenticator_id".to_string(),
-            authenticator_params: Some(Binary::from(vec![0x01, 0x02, 0x03])),
-        });
-
         has_json_schema_impl::<AuthenticatorSudoMsg>();
     }
 
