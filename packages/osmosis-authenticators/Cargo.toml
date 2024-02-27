@@ -9,8 +9,10 @@ version = "0.22.0-alpha.15"
 [dependencies]
 cosmwasm-schema = "1.1.3"
 cosmwasm-std = {version = "1.4"}
-serde-json-wasm = "1.0.0"
 sha2 = "0.10.8"
+
+[dev-dependencies]
+serde_json = "1.0.114"
 
 [package.metadata]
 documentation = "https://docs.rs/osmosis_authenticators"
