@@ -1,3 +1,4 @@
+use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, Binary};
 
 use crate::cw_serde_struct_allow_unknown_fields;
@@ -71,6 +72,15 @@ cw_serde_struct_allow_unknown_fields! {
         pub type_url: String,
         pub value: cosmwasm_std::Binary,
     }
+}
+
+#[cw_serde]
+pub enum AuthenticatorSudoMsg {
+    OnAuthenticatorAdded(OnAuthenticatorAddedRequest),
+    OnAuthenticatorRemoved(OnAuthenticatorRemovedRequest),
+    Authentication(AuthenticationRequest),
+    Track(TrackRequest),
+    ConfirmExecution(ConfirmExecutionRequest),
 }
 
 #[cfg(test)]
@@ -225,6 +235,17 @@ mod tests {
 
         assert_eq!(t, with_unknown_field(t.clone()));
         has_json_schema_impl::<ConfirmExecutionRequest>();
+    }
+
+    #[test]
+    fn test_sudo_msg() {
+        let t = AuthenticatorSudoMsg::OnAuthenticatorAdded(OnAuthenticatorAddedRequest {
+            account: Addr::unchecked("account"),
+            authenticator_id: "authenticator_id".to_string(),
+            authenticator_params: Some(Binary::from(vec![0x01, 0x02, 0x03])),
+        });
+
+        has_json_schema_impl::<AuthenticatorSudoMsg>();
     }
 
     fn with_unknown_field<
