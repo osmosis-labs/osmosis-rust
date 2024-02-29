@@ -81,7 +81,7 @@ cw_serde_struct_allow_unknown_fields! {
 pub enum AuthenticatorSudoMsg {
     OnAuthenticatorAdded(OnAuthenticatorAddedRequest),
     OnAuthenticatorRemoved(OnAuthenticatorRemovedRequest),
-    Authentication(AuthenticationRequest),
+    Authenticate(AuthenticationRequest),
     Track(TrackRequest),
     ConfirmExecution(ConfirmExecutionRequest),
 }
