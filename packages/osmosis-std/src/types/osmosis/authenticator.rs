@@ -19,8 +19,8 @@ pub struct Params {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub maximum_unauthenticated_gas: u64,
-    #[prost(string, tag = "2")]
-    pub cosigner_contract: ::prost::alloc::string::String,
+    #[prost(bool, tag = "2")]
+    pub are_smart_accounts_active: bool,
 }
 /// AccountAuthenticator represents a foundational model for all authenticators.
 /// It provides extensibility by allowing concrete types to interpret and
@@ -291,14 +291,14 @@ pub struct MsgRemoveAuthenticatorResponse {
 )]
 #[proto_message(type_url = "/osmosis.authenticator.TxExtension")]
 pub struct TxExtension {
-    /// selected_authenticators holds indices for the chosen authenticators per
-    /// message.
-    #[prost(int32, repeated, tag = "1")]
+    /// selected_authenticators holds the authenticator_id for the chosen
+    /// authenticator per message.
+    #[prost(uint64, repeated, tag = "1")]
     #[serde(
         serialize_with = "crate::serde::as_str_vec::serialize",
         deserialize_with = "crate::serde::as_str_vec::deserialize"
     )]
-    pub selected_authenticators: ::prost::alloc::vec::Vec<i32>,
+    pub selected_authenticators: ::prost::alloc::vec::Vec<u64>,
 }
 pub struct AuthenticatorQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,

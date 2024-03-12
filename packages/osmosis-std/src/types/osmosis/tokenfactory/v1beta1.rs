@@ -64,7 +64,7 @@ pub struct Params {
 )]
 #[proto_message(type_url = "/osmosis.tokenfactory.v1beta1.GenesisState")]
 pub struct GenesisState {
-    /// params defines the paramaters of the module.
+    /// params defines the parameters of the module.
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
     #[prost(message, repeated, tag = "2")]

@@ -152,7 +152,7 @@ pub struct ConcentratedPoolToNoLockGauges {
 )]
 #[proto_message(type_url = "/osmosis.poolincentives.v1beta1.GenesisState")]
 pub struct GenesisState {
-    /// params defines all the paramaters of the module.
+    /// params defines all the parameters of the module.
     #[prost(message, optional, tag = "1")]
     pub params: ::core::option::Option<Params>,
     #[prost(message, repeated, tag = "2")]
