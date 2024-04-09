@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Binary};
+use cosmwasm_std::{Addr, Binary, Coin};
 
 use crate::cw_serde_struct_allow_unknown_fields;
 
@@ -22,6 +22,8 @@ cw_serde_struct_allow_unknown_fields! {
         pub authenticator_id: String,
         pub account: Addr,
         pub fee_payer: Addr,
+        pub fee_granter: Option<Addr>,
+        pub fee: Vec<Coin>,
         pub msg: Any,
         pub msg_index: u64,
         pub signature: Binary,
@@ -36,6 +38,8 @@ cw_serde_struct_allow_unknown_fields! {
         pub authenticator_id: String,
         pub account: Addr,
         pub fee_payer: Addr,
+        pub fee_granter: Option<Addr>,
+        pub fee: Vec<Coin>,
         pub msg: Any,
         pub msg_index: u64,
         pub authenticator_params: Option<Binary>,
@@ -45,6 +49,8 @@ cw_serde_struct_allow_unknown_fields! {
         pub authenticator_id: String,
         pub account: Addr,
         pub fee_payer: Addr,
+        pub fee_granter: Option<Addr>,
+        pub fee: Vec<Coin>,
         pub msg: Any,
         pub msg_index: u64,
         pub authenticator_params: Option<Binary>,
@@ -134,6 +140,8 @@ mod tests {
             authenticator_id: "authenticator_id".to_string(),
             account: Addr::unchecked("account"),
             fee_payer: Addr::unchecked("fee_payer"),
+            fee_granter: None,
+            fee: vec![Coin::new(1000, "uosmo")],
             msg: Any {
                 type_url: "type_url".to_string(),
                 value: Binary::from(vec![0x01, 0x02, 0x03]),
@@ -213,6 +221,8 @@ mod tests {
             authenticator_id: "authenticator_id".to_string(),
             account: Addr::unchecked("account"),
             fee_payer: Addr::unchecked("fee_payer"),
+            fee_granter: None,
+            fee: vec![Coin::new(1000, "uosmo")],
             msg: Any {
                 type_url: "type_url".to_string(),
                 value: Binary::from(vec![0x01, 0x02, 0x03]),
@@ -231,6 +241,8 @@ mod tests {
             authenticator_id: "authenticator_id".to_string(),
             account: Addr::unchecked("account"),
             fee_payer: Addr::unchecked("fee_payer"),
+            fee_granter: None,
+            fee: vec![Coin::new(1000, "uosmo")],
             msg: Any {
                 type_url: "type_url".to_string(),
                 value: Binary::from(vec![0x01, 0x02, 0x03]),
