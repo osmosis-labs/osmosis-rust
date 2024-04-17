@@ -368,6 +368,13 @@ pub struct GenesisState {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub next_incentive_record_id: u64,
+    #[prost(uint64, tag = "6")]
+    #[serde(alias = "incentives_accumulator_poolID_migration_threshold")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub incentives_accumulator_pool_id_migration_threshold: u64,
 }
 /// In original struct of Accum object, store.KVStore is stored together.
 /// For handling genesis, we do not need to include store.KVStore since we use
@@ -653,6 +660,47 @@ pub struct PositionByIdRequest {
 pub struct PositionByIdResponse {
     #[prost(message, optional, tag = "1")]
     pub position: ::core::option::Option<FullPositionBreakdown>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.NumPoolPositionsRequest")]
+pub struct NumPoolPositionsRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.concentratedliquidity.v1beta1.NumPoolPositionsResponse")]
+pub struct NumPoolPositionsResponse {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub position_count: u64,
 }
 /// =============================== Pools
 #[allow(clippy::derive_partial_eq_without_eq)]

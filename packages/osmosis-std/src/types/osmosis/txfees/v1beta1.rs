@@ -26,6 +26,23 @@ pub struct FeeToken {
     )]
     pub pool_id: u64,
 }
+/// Params holds parameters for the txfees module
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.Params")]
+pub struct Params {
+    #[prost(string, repeated, tag = "1")]
+    pub whitelisted_fee_token_setters: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
 /// GenesisState defines the txfees module's genesis state.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -44,6 +61,9 @@ pub struct GenesisState {
     pub basedenom: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "2")]
     pub feetokens: ::prost::alloc::vec::Vec<FeeToken>,
+    /// params is the container of txfees parameters.
+    #[prost(message, optional, tag = "4")]
+    pub params: ::core::option::Option<Params>,
 }
 /// UpdateFeeTokenProposal is a gov Content type for adding new whitelisted fee
 /// token(s). It must specify a denom along with gamm pool ID to use as a spot
@@ -257,6 +277,38 @@ pub struct QueryEipBaseFeeResponse {
     #[prost(string, tag = "1")]
     pub base_fee: ::prost::alloc::string::String,
 }
+/// ===================== MsgSetFeeTokens
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.MsgSetFeeTokens")]
+pub struct MsgSetFeeTokens {
+    #[prost(message, repeated, tag = "1")]
+    pub fee_tokens: ::prost::alloc::vec::Vec<FeeToken>,
+    #[prost(string, tag = "2")]
+    pub sender: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.txfees.v1beta1.MsgSetFeeTokensResponse")]
+pub struct MsgSetFeeTokensResponse {}
 pub struct TxfeesQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }

@@ -112,6 +112,22 @@ pub struct Params {
     /// other users.
     #[prost(string, repeated, tag = "3")]
     pub unrestricted_creator_whitelist: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// internal_uptime is the uptime used for internal incentives on pools that
+    /// use NoLock gauges (currently only Concentrated Liquidity pools).
+    ///
+    /// Since Group gauges route through internal gauges, this parameter affects
+    /// the uptime of those incentives as well (i.e. distributions through volume
+    /// splitting incentives will use this uptime).
+    #[prost(message, optional, tag = "4")]
+    pub internal_uptime: ::core::option::Option<crate::shim::Duration>,
+    /// min_value_for_distribution is the minimum amount a token must be worth
+    /// in order to be eligible for distribution. If the token is worth
+    /// less than this amount (or the route between the two denoms is not
+    /// registered), it will not be distributed and is forfeited to the remaining
+    /// distributees that are eligible.
+    #[prost(message, optional, tag = "5")]
+    pub min_value_for_distribution:
+        ::core::option::Option<super::super::cosmos::base::v1beta1::Coin>,
 }
 /// Note that while both InternalGaugeInfo and InternalGaugeRecord could
 /// technically be replaced by DistrInfo and DistrRecord from the pool-incentives

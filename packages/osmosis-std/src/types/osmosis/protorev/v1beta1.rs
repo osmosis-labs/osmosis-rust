@@ -327,6 +327,24 @@ pub struct BaseDenom {
     #[prost(string, tag = "2")]
     pub step_size: ::prost::alloc::string::String,
 }
+/// BaseDenoms represents all of the base denoms that the module uses for its
+/// arbitrage trades.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.protorev.v1beta1.BaseDenoms")]
+pub struct BaseDenoms {
+    #[prost(message, repeated, tag = "1")]
+    pub base_denoms: ::prost::alloc::vec::Vec<BaseDenom>,
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -413,13 +431,6 @@ pub struct GenesisState {
     /// highest liquidity method.
     #[prost(message, repeated, tag = "3")]
     pub base_denoms: ::prost::alloc::vec::Vec<BaseDenom>,
-    /// The pool weights that are being used to calculate the weight (compute cost)
-    /// of each route.
-    ///
-    /// DEPRECATED: This field is deprecated and will be removed in the next
-    /// release. It is replaced by the `info_by_pool_type` field.
-    #[prost(message, optional, tag = "4")]
-    pub pool_weights: ::core::option::Option<PoolWeights>,
     /// The number of days since module genesis.
     #[prost(uint64, tag = "5")]
     #[serde(
