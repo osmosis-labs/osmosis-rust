@@ -1,5 +1,4 @@
 pub mod accum;
-pub mod bridge;
 pub mod concentratedliquidity;
 pub mod cosmwasmpool;
 pub mod downtimedetector;
@@ -13,6 +12,7 @@ pub mod mint;
 pub mod poolincentives;
 pub mod poolmanager;
 pub mod protorev;
+pub mod smartaccount;
 pub mod store;
 pub mod superfluid;
 pub mod tokenfactory;
