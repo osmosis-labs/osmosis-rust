@@ -201,6 +201,51 @@ pub struct GetAuthenticatorsResponse {
     #[prost(message, repeated, tag = "1")]
     pub account_authenticators: ::prost::alloc::vec::Vec<AccountAuthenticator>,
 }
+/// MsgGetAuthenticatorRequest defines the Msg/GetAuthenticator request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.smartaccount.v1beta1.GetAuthenticatorRequest")]
+#[proto_query(
+    path = "/osmosis.smartaccount.v1beta1.Query/GetAuthenticator",
+    response_type = GetAuthenticatorResponse
+)]
+pub struct GetAuthenticatorRequest {
+    #[prost(string, tag = "1")]
+    pub account: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(alias = "authenticatorID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub authenticator_id: u64,
+}
+/// MsgGetAuthenticatorResponse defines the Msg/GetAuthenticator response type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.smartaccount.v1beta1.GetAuthenticatorResponse")]
+pub struct GetAuthenticatorResponse {
+    #[prost(message, optional, tag = "1")]
+    pub account_authenticator: ::core::option::Option<AccountAuthenticator>,
+}
 /// MsgAddAuthenticatorRequest defines the Msg/AddAuthenticator request type.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -350,6 +395,17 @@ impl<'a, Q: cosmwasm_std::CustomQuery> SmartaccountQuerier<'a, Q> {
     }
     pub fn params(&self) -> Result<QueryParamsResponse, cosmwasm_std::StdError> {
         QueryParamsRequest {}.query(self.querier)
+    }
+    pub fn get_authenticator(
+        &self,
+        account: ::prost::alloc::string::String,
+        authenticator_id: u64,
+    ) -> Result<GetAuthenticatorResponse, cosmwasm_std::StdError> {
+        GetAuthenticatorRequest {
+            account,
+            authenticator_id,
+        }
+        .query(self.querier)
     }
     pub fn get_authenticators(
         &self,
