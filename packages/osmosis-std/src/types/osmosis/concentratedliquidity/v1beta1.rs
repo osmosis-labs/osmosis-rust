@@ -375,6 +375,13 @@ pub struct GenesisState {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub incentives_accumulator_pool_id_migration_threshold: u64,
+    #[prost(uint64, tag = "7")]
+    #[serde(alias = "spread_factor_poolID_migration_threshold")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub spread_factor_pool_id_migration_threshold: u64,
 }
 /// In original struct of Accum object, store.KVStore is stored together.
 /// For handling genesis, we do not need to include store.KVStore since we use

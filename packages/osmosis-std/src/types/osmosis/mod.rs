@@ -1,5 +1,4 @@
 pub mod accum;
-pub mod bridge;
 pub mod concentratedliquidity;
 pub mod cosmwasmpool;
 pub mod downtimedetector;
