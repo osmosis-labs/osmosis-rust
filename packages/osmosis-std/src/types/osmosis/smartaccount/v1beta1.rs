@@ -61,7 +61,7 @@ pub struct AccountAuthenticator {
     /// and ensuring precise data retrieval from the storage layer.
     #[prost(string, tag = "2")]
     pub r#type: ::prost::alloc::string::String,
-    /// Data is a versatile field used in conjunction with the specific type of
+    /// Config is a versatile field used in conjunction with the specific type of
     /// account authenticator to facilitate complex authentication processes.
     /// The interpretation of this field is overloaded, enabling multiple
     /// authenticators to utilize it for their respective purposes.
@@ -70,7 +70,7 @@ pub struct AccountAuthenticator {
         serialize_with = "crate::serde::as_base64_encoded_string::serialize",
         deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
-    pub data: ::prost::alloc::vec::Vec<u8>,
+    pub config: ::prost::alloc::vec::Vec<u8>,
 }
 /// AuthenticatorData represents a genesis exported account with Authenticators.
 /// The address is used as the key, and the account authenticators are stored in
@@ -92,8 +92,7 @@ pub struct AuthenticatorData {
     #[prost(string, tag = "1")]
     pub address: ::prost::alloc::string::String,
     /// authenticators are the account's authenticators, these can be multiple
-    /// types including SignatureVerificationAuthenticator, AllOfAuthenticators and
-    /// CosmWasmAuthenticators.
+    /// types including SignatureVerification, AllOfs, CosmWasmAuthenticators, etc
     #[prost(message, repeated, tag = "2")]
     pub authenticators: ::prost::alloc::vec::Vec<AccountAuthenticator>,
 }

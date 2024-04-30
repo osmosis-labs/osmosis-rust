@@ -924,23 +924,3 @@ pub struct Block {
     #[prost(message, optional, tag = "4")]
     pub last_commit: ::core::option::Option<Commit>,
 }
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.types.EventDataRoundState")]
-pub struct EventDataRoundState {
-    #[prost(int64, tag = "1")]
-    pub height: i64,
-    #[prost(int32, tag = "2")]
-    pub round: i32,
-    #[prost(string, tag = "3")]
-    pub step: String,
-}
