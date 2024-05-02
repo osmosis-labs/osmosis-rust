@@ -80,12 +80,8 @@ pub struct PageResponse {
     /// next_key is the key to be passed to PageRequest.key to
     /// query the next page most efficiently. It will be empty if
     /// there are no more results.
-    #[prost(bytes = "vec", tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
-        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
-    )]
-    pub next_key: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bytes = "vec", optional, tag = "1")]
+    pub next_key: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
     /// total is total number of results available if PageRequest.count_total
     /// was set, its value is undefined otherwise
     #[prost(uint64, tag = "2")]
