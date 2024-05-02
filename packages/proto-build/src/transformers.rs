@@ -757,6 +757,10 @@ mod tests {
         let input: ItemStruct = parse_quote! {
             pub struct PageResponse {
                 #[prost(bytes = "vec", tag = "1")]
+                #[serde(
+                    serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+                    deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+                )]
                 pub next_key: ::prost::alloc::vec::Vec<u8>,
             }
         };
@@ -766,6 +770,10 @@ mod tests {
         let expected: ItemStruct = parse_quote! {
             pub struct PageResponse {
                 #[prost(bytes = "vec", optional, tag = "1")]
+                #[serde(
+                    serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+                    deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+                )]
                 pub next_key: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
             }
         };
