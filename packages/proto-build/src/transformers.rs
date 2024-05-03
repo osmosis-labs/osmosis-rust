@@ -328,6 +328,48 @@ pub fn make_next_key_optional(mut s: ItemStruct) -> ItemStruct {
     s
 }
 
+pub fn allow_serde_option_vec_u8_as_base64_encoded_string(s: syn::ItemStruct) -> syn::ItemStruct {
+    let fields_vec = s.fields
+        .clone()
+        .into_iter()
+        .map(|mut field| {
+            if let syn::Type::Path(type_path) = &field.ty {
+                if let Some(segment) = type_path.path.segments.last() {
+                    if segment.ident == "Option" {
+                        if let syn::PathArguments::AngleBracketed(args) = &segment.arguments {
+                            if let Some(arg) = args.args.first() {
+                                if let syn::GenericArgument::Type(inner_ty) = arg {
+                                    if let syn::Type::Path(inner_path) = inner_ty {
+                                        if let Some(inner_segment) = inner_path.path.segments.last() {
+                                            if inner_segment.ident == "Vec" {
+                                                let from_str: syn::Attribute = parse_quote! {
+                                                    #[serde(
+                                                        serialize_with = "crate::serde::as_option_base64_encoded_string::serialize",
+                                                        deserialize_with = "crate::serde::as_option_base64_encoded_string::deserialize"
+                                                    )]
+                                                };
+                                                field.attrs.push(from_str);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            field
+        })
+        .collect::<Vec<syn::Field>>();
+
+    let fields_named: syn::FieldsNamed = parse_quote! {
+        { #(#fields_vec,)* }
+    };
+    let fields = syn::Fields::Named(fields_named);
+
+    syn::ItemStruct { fields, ..s }
+}
+
 // ====== helpers ======
 
 fn get_query_attr(
@@ -757,10 +799,6 @@ mod tests {
         let input: ItemStruct = parse_quote! {
             pub struct PageResponse {
                 #[prost(bytes = "vec", tag = "1")]
-                #[serde(
-                    serialize_with = "crate::serde::as_base64_encoded_string::serialize",
-                    deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
-                )]
                 pub next_key: ::prost::alloc::vec::Vec<u8>,
             }
         };
@@ -770,9 +808,30 @@ mod tests {
         let expected: ItemStruct = parse_quote! {
             pub struct PageResponse {
                 #[prost(bytes = "vec", optional, tag = "1")]
+                pub next_key: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
+            }
+        };
+
+        assert_ast_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_allow_serde_option_vec_u8_as_base64_encoded_string() {
+        let input: ItemStruct = parse_quote! {
+            pub struct PageResponse {
+                #[prost(bytes = "vec", optional, tag = "1")]
+                pub next_key: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
+            }
+        };
+
+        let result = allow_serde_option_vec_u8_as_base64_encoded_string(input);
+
+        let expected: ItemStruct = parse_quote! {
+            pub struct PageResponse {
+                #[prost(bytes = "vec", optional, tag = "1")]
                 #[serde(
-                    serialize_with = "crate::serde::as_base64_encoded_string::serialize",
-                    deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+                    serialize_with = "crate::serde::as_option_base64_encoded_string::serialize",
+                    deserialize_with = "crate::serde::as_option_base64_encoded_string::deserialize"
                 )]
                 pub next_key: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
             }

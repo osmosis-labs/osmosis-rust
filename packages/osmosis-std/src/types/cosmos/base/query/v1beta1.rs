@@ -82,8 +82,8 @@ pub struct PageResponse {
     /// there are no more results.
     #[prost(bytes = "vec", optional, tag = "1")]
     #[serde(
-        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
-        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+        serialize_with = "crate::serde::as_option_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_option_base64_encoded_string::deserialize"
     )]
     pub next_key: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
     /// total is total number of results available if PageRequest.count_total
