@@ -303,6 +303,31 @@ pub fn serde_alias_id_with_uppercased(s: ItemStruct) -> ItemStruct {
 
     syn::ItemStruct { fields, ..s }
 }
+
+pub fn make_next_key_optional(mut s: ItemStruct) -> ItemStruct {
+    if s.ident == "PageResponse" {
+        if let Fields::Named(ref mut fields_named) = s.fields {
+            for field in fields_named.named.iter_mut() {
+                if let Some(ident) = &field.ident {
+                    if ident == "next_key" {
+                        field.ty =
+                            parse_quote!(::core::option::Option<::prost::alloc::vec::Vec<u8>>);
+                        for attr in field.attrs.iter_mut() {
+                            if attr.path.is_ident("prost") {
+                                *attr = parse_quote! {
+                                    #[prost(bytes = "vec", optional, tag = "1")]
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    s
+}
+
 // ====== helpers ======
 
 fn get_query_attr(
@@ -721,6 +746,35 @@ mod tests {
                 pub denom: ::prost::alloc::string::String,
                 #[serde(alias = "poolID")]
                 pub pool_id: u64,
+            }
+        };
+
+        assert_ast_eq!(result, expected);
+    }
+
+    #[test]
+    fn test_make_next_key_optional() {
+        let input: ItemStruct = parse_quote! {
+            pub struct PageResponse {
+                #[prost(bytes = "vec", tag = "1")]
+                #[serde(
+                    serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+                    deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+                )]
+                pub next_key: ::prost::alloc::vec::Vec<u8>,
+            }
+        };
+
+        let result = make_next_key_optional(input);
+
+        let expected: ItemStruct = parse_quote! {
+            pub struct PageResponse {
+                #[prost(bytes = "vec", optional, tag = "1")]
+                #[serde(
+                    serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+                    deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+                )]
+                pub next_key: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
             }
         };
 
