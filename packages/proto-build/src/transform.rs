@@ -138,6 +138,9 @@ fn transform_items(
                 let s = transformers::add_derive_eq_struct(&s);
                 let s = transformers::append_attrs_struct(src, &s, descriptor);
                 let s = transformers::serde_alias_id_with_uppercased(s);
+                let s = transformers::allow_serde_vec_u8_as_base64_encoded_string(s);
+                // A hack to make Pagination::next_key optional.
+                // Remove if [this PR](https://github.com/cosmos/cosmos-sdk/pull/20246) is merged and released
                 let s = transformers::make_next_key_optional(s);
                 let s = transformers::allow_serde_option_vec_u8_as_base64_encoded_string(s);
                 let s = transformers::allow_serde_vec_u8_as_base64_encoded_string(s);
