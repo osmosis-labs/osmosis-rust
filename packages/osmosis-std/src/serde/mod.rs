@@ -69,3 +69,34 @@ pub mod as_base64_encoded_string {
         Binary(values.to_vec()).to_base64().serialize(serializer)
     }
 }
+
+pub mod as_option_base64_encoded_string {
+    use cosmwasm_std::Binary;
+    use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<Option<Vec<u8>>, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let encoded_string: Option<String> = Option::deserialize(deserializer)?;
+        match encoded_string {
+            Some(s) => Binary::from_base64(&s)
+                .map(|b| Some(b.to_vec()))
+                .map_err(de::Error::custom),
+            None => Ok(None),
+        }
+    }
+
+    pub fn serialize<S>(value: &Option<Vec<u8>>, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match value {
+            Some(vec) => {
+                let encoded_string = Binary(vec.clone()).to_base64();
+                encoded_string.serialize(serializer)
+            }
+            None => serializer.serialize_none(),
+        }
+    }
+}
