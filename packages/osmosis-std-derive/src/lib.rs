@@ -84,7 +84,7 @@ pub fn derive_cosmwasm_ext(input: TokenStream) -> TokenStream {
 
         impl From<#ident> for cosmwasm_std::Binary {
             fn from(msg: #ident) -> Self {
-                cosmwasm_std::Binary(msg.to_proto_bytes())
+                cosmwasm_std::Binary::new(msg.to_proto_bytes())
             }
         }
 
