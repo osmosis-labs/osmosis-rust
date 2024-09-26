@@ -26,6 +26,10 @@ pub struct Allocation {
     /// allow list of receivers, an empty allow list permits any receiver address
     #[prost(string, repeated, tag = "4")]
     pub allow_list: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// allow list of memo strings, an empty list prohibits all memo strings;
+    /// a list only with "*" permits any memo string
+    #[prost(string, repeated, tag = "5")]
+    pub allowed_packet_data: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// TransferAuthorization allows the grantee to spend up to spend_limit coins from
 /// the granter's account for ibc transfer on a specific channel
@@ -443,6 +447,44 @@ pub struct MsgTransferResponse {
     )]
     pub sequence: u64,
 }
+/// MsgUpdateParams is the Msg/UpdateParams request type.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/ibc.applications.transfer.v1.MsgUpdateParams")]
+pub struct MsgUpdateParams {
+    /// signer address
+    #[prost(string, tag = "1")]
+    pub signer: ::prost::alloc::string::String,
+    /// params defines the transfer parameters to update.
+    ///
+    /// NOTE: All parameters must be supplied.
+    #[prost(message, optional, tag = "2")]
+    pub params: ::core::option::Option<Params>,
+}
+/// MsgUpdateParamsResponse defines the response structure for executing a
+/// MsgUpdateParams message.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/ibc.applications.transfer.v1.MsgUpdateParamsResponse")]
+pub struct MsgUpdateParamsResponse {}
 pub struct TransferQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }

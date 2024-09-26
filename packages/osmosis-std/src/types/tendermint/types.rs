@@ -1,4 +1,200 @@
 use osmosis_std_derive::CosmwasmExt;
+/// ConsensusParams contains consensus critical parameters that determine the
+/// validity of blocks.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.ConsensusParams")]
+pub struct ConsensusParams {
+    #[prost(message, optional, tag = "1")]
+    pub block: ::core::option::Option<BlockParams>,
+    #[prost(message, optional, tag = "2")]
+    pub evidence: ::core::option::Option<EvidenceParams>,
+    #[prost(message, optional, tag = "3")]
+    pub validator: ::core::option::Option<ValidatorParams>,
+    #[prost(message, optional, tag = "4")]
+    pub version: ::core::option::Option<VersionParams>,
+    #[prost(message, optional, tag = "5")]
+    pub abci: ::core::option::Option<AbciParams>,
+}
+/// BlockParams contains limits on the block size.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.BlockParams")]
+pub struct BlockParams {
+    /// Max block size, in bytes.
+    /// Note: must be greater than 0
+    #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_bytes: i64,
+    /// Max gas per block.
+    /// Note: must be greater or equal to -1
+    #[prost(int64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_gas: i64,
+}
+/// EvidenceParams determine how we handle evidence of malfeasance.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.EvidenceParams")]
+pub struct EvidenceParams {
+    /// Max age of evidence, in blocks.
+    ///
+    /// The basic formula for calculating this is: MaxAgeDuration / {average block
+    /// time}.
+    #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_age_num_blocks: i64,
+    /// Max age of evidence, in time.
+    ///
+    /// It should correspond with an app's "unbonding period" or other similar
+    /// mechanism for handling [Nothing-At-Stake
+    /// attacks](<https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-is-the-nothing-at-stake-problem-and-how-can-it-be-fixed>).
+    #[prost(message, optional, tag = "2")]
+    pub max_age_duration: ::core::option::Option<crate::shim::Duration>,
+    /// This sets the maximum size of total evidence in bytes that can be committed in a single block.
+    /// and should fall comfortably under the max block bytes.
+    /// Default is 1048576 or 1MB
+    #[prost(int64, tag = "3")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub max_bytes: i64,
+}
+/// ValidatorParams restrict the public key types validators can use.
+/// NOTE: uses ABCI pubkey naming, not Amino names.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.ValidatorParams")]
+pub struct ValidatorParams {
+    #[prost(string, repeated, tag = "1")]
+    pub pub_key_types: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+/// VersionParams contains the ABCI application version.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.VersionParams")]
+pub struct VersionParams {
+    #[prost(uint64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub app: u64,
+}
+/// HashedParams is a subset of ConsensusParams.
+///
+/// It is hashed into the Header.ConsensusHash.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.HashedParams")]
+pub struct HashedParams {
+    #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub block_max_bytes: i64,
+    #[prost(int64, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub block_max_gas: i64,
+}
+/// ABCIParams configure functionality specific to the Application Blockchain Interface.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.ABCIParams")]
+pub struct AbciParams {
+    /// vote_extensions_enable_height configures the first height during which
+    /// vote extensions will be enabled. During this specified height, and for all
+    /// subsequent heights, precommit messages that do not contain valid extension data
+    /// will be considered invalid. Prior to this height, vote extensions will not
+    /// be used or accepted by validators on the network.
+    ///
+    /// Once enabled, vote extensions will be created by the application in ExtendVote,
+    /// passed to the application for validation in VerifyVoteExtension and given
+    /// to the application to use when proposing a block during PrepareProposal.
+    #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub vote_extensions_enable_height: i64,
+}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -78,6 +274,44 @@ pub struct SimpleValidator {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub voting_power: i64,
+}
+/// BlockIdFlag indicates which BlockID the signature is for
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+#[derive(::serde::Serialize, ::serde::Deserialize, ::schemars::JsonSchema)]
+pub enum BlockIdFlag {
+    /// indicates an error condition
+    Unknown = 0,
+    /// the vote was not received
+    Absent = 1,
+    /// voted for the block that received the majority
+    Commit = 2,
+    /// voted for nil
+    Nil = 3,
+}
+impl BlockIdFlag {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            BlockIdFlag::Unknown => "BLOCK_ID_FLAG_UNKNOWN",
+            BlockIdFlag::Absent => "BLOCK_ID_FLAG_ABSENT",
+            BlockIdFlag::Commit => "BLOCK_ID_FLAG_COMMIT",
+            BlockIdFlag::Nil => "BLOCK_ID_FLAG_NIL",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "BLOCK_ID_FLAG_UNKNOWN" => Some(Self::Unknown),
+            "BLOCK_ID_FLAG_ABSENT" => Some(Self::Absent),
+            "BLOCK_ID_FLAG_COMMIT" => Some(Self::Commit),
+            "BLOCK_ID_FLAG_NIL" => Some(Self::Nil),
+            _ => None,
+        }
+    }
 }
 /// PartsetHeader
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -279,7 +513,7 @@ pub struct Data {
     #[prost(bytes = "vec", repeated, tag = "1")]
     pub txs: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
 }
-/// Vote represents a prevote, precommit, or commit vote from validators for
+/// Vote represents a prevote or precommit vote from validators for
 /// consensus.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -330,12 +564,31 @@ pub struct Vote {
         deserialize_with = "crate::serde::as_str::deserialize"
     )]
     pub validator_index: i32,
+    /// Vote signature by the validator if they participated in consensus for the
+    /// associated block.
     #[prost(bytes = "vec", tag = "8")]
     #[serde(
         serialize_with = "crate::serde::as_base64_encoded_string::serialize",
         deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub signature: ::prost::alloc::vec::Vec<u8>,
+    /// Vote extension provided by the application. Only valid for precommit
+    /// messages.
+    #[prost(bytes = "vec", tag = "9")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub extension: ::prost::alloc::vec::Vec<u8>,
+    /// Vote extension signature by the validator if they participated in
+    /// consensus for the associated block.
+    /// Only valid for precommit messages.
+    #[prost(bytes = "vec", tag = "10")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub extension_signature: ::prost::alloc::vec::Vec<u8>,
 }
 /// Commit contains the evidence that a block was committed by a set of validators.
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -404,6 +657,89 @@ pub struct CommitSig {
         deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
     )]
     pub signature: ::prost::alloc::vec::Vec<u8>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.ExtendedCommit")]
+pub struct ExtendedCommit {
+    #[prost(int64, tag = "1")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub height: i64,
+    #[prost(int32, tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub round: i32,
+    #[prost(message, optional, tag = "3")]
+    #[serde(alias = "blockID")]
+    pub block_id: ::core::option::Option<BlockId>,
+    #[prost(message, repeated, tag = "4")]
+    pub extended_signatures: ::prost::alloc::vec::Vec<ExtendedCommitSig>,
+}
+/// ExtendedCommitSig retains all the same fields as CommitSig but adds vote
+/// extension-related fields. We use two signatures to ensure backwards compatibility.
+/// That is the digest of the original signature is still the same in prior versions
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/tendermint.types.ExtendedCommitSig")]
+pub struct ExtendedCommitSig {
+    #[prost(enumeration = "BlockIdFlag", tag = "1")]
+    #[serde(alias = "blockID_flag")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub block_id_flag: i32,
+    #[prost(bytes = "vec", tag = "2")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub validator_address: ::prost::alloc::vec::Vec<u8>,
+    #[prost(message, optional, tag = "3")]
+    pub timestamp: ::core::option::Option<crate::shim::Timestamp>,
+    #[prost(bytes = "vec", tag = "4")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub signature: ::prost::alloc::vec::Vec<u8>,
+    /// Vote extension data
+    #[prost(bytes = "vec", tag = "5")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub extension: ::prost::alloc::vec::Vec<u8>,
+    /// Vote extension signature
+    #[prost(bytes = "vec", tag = "6")]
+    #[serde(
+        serialize_with = "crate::serde::as_base64_encoded_string::serialize",
+        deserialize_with = "crate::serde::as_base64_encoded_string::deserialize"
+    )]
+    pub extension_signature: ::prost::alloc::vec::Vec<u8>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -550,40 +886,6 @@ pub struct TxProof {
     #[prost(message, optional, tag = "3")]
     pub proof: ::core::option::Option<super::crypto::Proof>,
 }
-/// BlockIdFlag indicates which BlcokID the signature is for
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-#[derive(::serde::Serialize, ::serde::Deserialize, ::schemars::JsonSchema)]
-pub enum BlockIdFlag {
-    Unknown = 0,
-    Absent = 1,
-    Commit = 2,
-    Nil = 3,
-}
-impl BlockIdFlag {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            BlockIdFlag::Unknown => "BLOCK_ID_FLAG_UNKNOWN",
-            BlockIdFlag::Absent => "BLOCK_ID_FLAG_ABSENT",
-            BlockIdFlag::Commit => "BLOCK_ID_FLAG_COMMIT",
-            BlockIdFlag::Nil => "BLOCK_ID_FLAG_NIL",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "BLOCK_ID_FLAG_UNKNOWN" => Some(Self::Unknown),
-            "BLOCK_ID_FLAG_ABSENT" => Some(Self::Absent),
-            "BLOCK_ID_FLAG_COMMIT" => Some(Self::Commit),
-            "BLOCK_ID_FLAG_NIL" => Some(Self::Nil),
-            _ => None,
-        }
-    }
-}
 /// SignedMsgType is a type of signed message in the consensus.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -619,170 +921,6 @@ impl SignedMsgType {
             _ => None,
         }
     }
-}
-/// ConsensusParams contains consensus critical parameters that determine the
-/// validity of blocks.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.types.ConsensusParams")]
-pub struct ConsensusParams {
-    #[prost(message, optional, tag = "1")]
-    pub block: ::core::option::Option<BlockParams>,
-    #[prost(message, optional, tag = "2")]
-    pub evidence: ::core::option::Option<EvidenceParams>,
-    #[prost(message, optional, tag = "3")]
-    pub validator: ::core::option::Option<ValidatorParams>,
-    #[prost(message, optional, tag = "4")]
-    pub version: ::core::option::Option<VersionParams>,
-}
-/// BlockParams contains limits on the block size.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.types.BlockParams")]
-pub struct BlockParams {
-    /// Max block size, in bytes.
-    /// Note: must be greater than 0
-    #[prost(int64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_bytes: i64,
-    /// Max gas per block.
-    /// Note: must be greater or equal to -1
-    #[prost(int64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_gas: i64,
-}
-/// EvidenceParams determine how we handle evidence of malfeasance.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.types.EvidenceParams")]
-pub struct EvidenceParams {
-    /// Max age of evidence, in blocks.
-    ///
-    /// The basic formula for calculating this is: MaxAgeDuration / {average block
-    /// time}.
-    #[prost(int64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_age_num_blocks: i64,
-    /// Max age of evidence, in time.
-    ///
-    /// It should correspond with an app's "unbonding period" or other similar
-    /// mechanism for handling [Nothing-At-Stake
-    /// attacks](<https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-is-the-nothing-at-stake-problem-and-how-can-it-be-fixed>).
-    #[prost(message, optional, tag = "2")]
-    pub max_age_duration: ::core::option::Option<crate::shim::Duration>,
-    /// This sets the maximum size of total evidence in bytes that can be committed in a single block.
-    /// and should fall comfortably under the max block bytes.
-    /// Default is 1048576 or 1MB
-    #[prost(int64, tag = "3")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub max_bytes: i64,
-}
-/// ValidatorParams restrict the public key types validators can use.
-/// NOTE: uses ABCI pubkey naming, not Amino names.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.types.ValidatorParams")]
-pub struct ValidatorParams {
-    #[prost(string, repeated, tag = "1")]
-    pub pub_key_types: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-/// VersionParams contains the ABCI application version.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.types.VersionParams")]
-pub struct VersionParams {
-    #[prost(uint64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub app: u64,
-}
-/// HashedParams is a subset of ConsensusParams.
-///
-/// It is hashed into the Header.ConsensusHash.
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(
-    Clone,
-    PartialEq,
-    Eq,
-    ::prost::Message,
-    ::serde::Serialize,
-    ::serde::Deserialize,
-    ::schemars::JsonSchema,
-    CosmwasmExt,
-)]
-#[proto_message(type_url = "/tendermint.types.HashedParams")]
-pub struct HashedParams {
-    #[prost(int64, tag = "1")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub block_max_bytes: i64,
-    #[prost(int64, tag = "2")]
-    #[serde(
-        serialize_with = "crate::serde::as_str::serialize",
-        deserialize_with = "crate::serde::as_str::deserialize"
-    )]
-    pub block_max_gas: i64,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(

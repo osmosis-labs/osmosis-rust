@@ -401,7 +401,7 @@ pub struct ModuleToDistributeCoinsResponse {
     response_type = GaugeByIdResponse
 )]
 pub struct GaugeByIdRequest {
-    /// Gague ID being queried
+    /// Gauge ID being queried
     #[prost(uint64, tag = "1")]
     #[serde(alias = "ID")]
     #[serde(
@@ -423,7 +423,7 @@ pub struct GaugeByIdRequest {
 )]
 #[proto_message(type_url = "/osmosis.incentives.GaugeByIDResponse")]
 pub struct GaugeByIdResponse {
-    /// Gauge that corresponds to provided gague ID
+    /// Gauge that corresponds to provided gauge ID
     #[prost(message, optional, tag = "1")]
     pub gauge: ::core::option::Option<Gauge>,
 }
@@ -500,7 +500,7 @@ pub struct ActiveGaugesRequest {
 )]
 #[proto_message(type_url = "/osmosis.incentives.ActiveGaugesResponse")]
 pub struct ActiveGaugesResponse {
-    /// Active gagues only
+    /// Active gauges only
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
     /// Pagination defines pagination for the response
@@ -525,7 +525,7 @@ pub struct ActiveGaugesResponse {
     response_type = ActiveGaugesPerDenomResponse
 )]
 pub struct ActiveGaugesPerDenomRequest {
-    /// Desired denom when querying active gagues
+    /// Desired denom when querying active gauges
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     /// Pagination defines pagination for the request
@@ -545,7 +545,7 @@ pub struct ActiveGaugesPerDenomRequest {
 )]
 #[proto_message(type_url = "/osmosis.incentives.ActiveGaugesPerDenomResponse")]
 pub struct ActiveGaugesPerDenomResponse {
-    /// Active gagues that match denom in query
+    /// Active gauges that match denom in query
     #[prost(message, repeated, tag = "1")]
     pub data: ::prost::alloc::vec::Vec<Gauge>,
     /// Pagination defines pagination for the response
@@ -612,7 +612,7 @@ pub struct UpcomingGaugesResponse {
     response_type = UpcomingGaugesPerDenomResponse
 )]
 pub struct UpcomingGaugesPerDenomRequest {
-    /// Filter for upcoming gagues that match specific denom
+    /// Filter for upcoming gauges that match specific denom
     #[prost(string, tag = "1")]
     pub denom: ::prost::alloc::string::String,
     /// Pagination defines pagination for the request
@@ -632,7 +632,7 @@ pub struct UpcomingGaugesPerDenomRequest {
 )]
 #[proto_message(type_url = "/osmosis.incentives.UpcomingGaugesPerDenomResponse")]
 pub struct UpcomingGaugesPerDenomResponse {
-    /// Upcoming gagues that match denom in query
+    /// Upcoming gauges that match denom in query
     #[prost(message, repeated, tag = "1")]
     pub upcoming_gauges: ::prost::alloc::vec::Vec<Gauge>,
     /// Pagination defines pagination for the response
@@ -933,7 +933,37 @@ pub struct GaugeWeight {
     #[prost(string, tag = "2")]
     pub weight_ratio: ::prost::alloc::string::String,
 }
-/// MsgCreateGauge creates a gague to distribute rewards to users
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.ParamsRequest")]
+#[proto_query(path = "/osmosis.incentives.Query/Params", response_type = ParamsResponse)]
+pub struct ParamsRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.ParamsResponse")]
+pub struct ParamsResponse {
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+}
+/// MsgCreateGauge creates a gauge to distribute rewards to users
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -1193,5 +1223,8 @@ impl<'a, Q: cosmwasm_std::CustomQuery> IncentivesQuerier<'a, Q> {
         group_gauge_id: u64,
     ) -> Result<QueryCurrentWeightByGroupGaugeIdResponse, cosmwasm_std::StdError> {
         QueryCurrentWeightByGroupGaugeIdRequest { group_gauge_id }.query(self.querier)
+    }
+    pub fn params(&self) -> Result<ParamsResponse, cosmwasm_std::StdError> {
+        ParamsRequest {}.query(self.querier)
     }
 }

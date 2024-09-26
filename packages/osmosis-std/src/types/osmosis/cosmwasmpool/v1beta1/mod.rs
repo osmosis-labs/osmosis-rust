@@ -1,3 +1,4 @@
+pub mod model;
 use osmosis_std_derive::CosmwasmExt;
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(

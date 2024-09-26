@@ -11,19 +11,19 @@ use proto_build::{
 };
 
 /// The Cosmos SDK commit or tag to be cloned and used to build the proto files
-const COSMOS_SDK_REV: &str = "v0.47.5-osmo";
+const COSMOS_SDK_REV: &str = "v0.50.6-v26-osmo-2";
 
 /// The osmosis commit or tag to be cloned and used to build the proto files
-const OSMOSIS_REV: &str = "v25.0.0";
+const OSMOSIS_REV: &str = "v26.0.1";
 
 /// The wasmd commit or tag to be cloned and used to build the proto files
-const WASMD_REV: &str = "v0.45.0-osmo";
+const WASMD_REV: &str = "v0.53.0";
 
 /// The cometbft commit or tag to be cloned and used to build the proto files
-const COMETBFT_REV: &str = "v0.37.2";
+const COMETBFT_REV: &str = "v0.38.11-v26-osmo-1";
 
 /// The ibc-go commit or tag to be cloned and used to build the proto files
-const IBC_GO_REV: &str = "v7.3.1";
+const IBC_GO_REV: &str = "v8.4.0";
 
 /// The ics23 commit or tag to be cloned and used to build the proto files
 ///

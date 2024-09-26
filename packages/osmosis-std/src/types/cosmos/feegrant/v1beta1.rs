@@ -331,6 +331,42 @@ pub struct MsgRevokeAllowance {
 )]
 #[proto_message(type_url = "/cosmos.feegrant.v1beta1.MsgRevokeAllowanceResponse")]
 pub struct MsgRevokeAllowanceResponse {}
+/// MsgPruneAllowances prunes expired fee allowances.
+///
+/// Since cosmos-sdk 0.50
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.MsgPruneAllowances")]
+pub struct MsgPruneAllowances {
+    /// pruner is the address of the user pruning expired allowances.
+    #[prost(string, tag = "1")]
+    pub pruner: ::prost::alloc::string::String,
+}
+/// MsgPruneAllowancesResponse defines the Msg/PruneAllowancesResponse response type.
+///
+/// Since cosmos-sdk 0.50
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/cosmos.feegrant.v1beta1.MsgPruneAllowancesResponse")]
+pub struct MsgPruneAllowancesResponse {}
 pub struct FeegrantQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }

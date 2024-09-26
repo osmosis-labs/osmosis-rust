@@ -1,4 +1,4 @@
-use cosmwasm_std::{from_binary, to_binary};
+use cosmwasm_std::{from_json, to_json_binary};
 use osmosis_std_derive::CosmwasmExt;
 use prost::Message;
 
@@ -43,9 +43,9 @@ fn test_additional_fields_does_not_break_but_cause_lossy_json_deserialization() 
         unlocking_lock_id: 1,
     };
 
-    // to_binary() and from_binary() is using `serde_json_wasm` under the hood.
-    let serialized = to_binary(&response).unwrap();
-    let deserialized: MsgBeginUnlockingResponse = from_binary(&serialized).unwrap();
+    // to_json_binary() and from_json() is using `serde_json_wasm` under the hood.
+    let serialized = to_json_binary(&response).unwrap();
+    let deserialized: MsgBeginUnlockingResponse = from_json(&serialized.as_slice()).unwrap();
 
     // lossy deserialization
     assert_eq!(deserialized, MsgBeginUnlockingResponse { success: true });

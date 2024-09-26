@@ -262,7 +262,7 @@ pub struct MsgAddAuthenticator {
     #[prost(string, tag = "1")]
     pub sender: ::prost::alloc::string::String,
     #[prost(string, tag = "2")]
-    pub r#type: ::prost::alloc::string::String,
+    pub authenticator_type: ::prost::alloc::string::String,
     #[prost(bytes = "vec", tag = "3")]
     #[serde(
         serialize_with = "crate::serde::as_base64_encoded_string::serialize",

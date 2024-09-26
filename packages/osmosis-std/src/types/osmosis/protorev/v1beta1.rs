@@ -361,6 +361,10 @@ pub struct AllProtocolRevenue {
     #[prost(message, optional, tag = "1")]
     pub taker_fees_tracker:
         ::core::option::Option<super::super::poolmanager::v1beta1::TakerFeesTracker>,
+    /// DEPRECATED
+    #[deprecated]
+    #[prost(message, optional, tag = "2")]
+    pub tx_fees_tracker: ::core::option::Option<super::super::txfees::v1beta1::TxFeesTracker>,
     #[prost(message, optional, tag = "3")]
     pub cyclic_arb_tracker: ::core::option::Option<CyclicArbTracker>,
 }
@@ -431,6 +435,12 @@ pub struct GenesisState {
     /// highest liquidity method.
     #[prost(message, repeated, tag = "3")]
     pub base_denoms: ::prost::alloc::vec::Vec<BaseDenom>,
+    /// DEPRECATED: pool_weights are weights that are being used to calculate the
+    /// compute cost of each route. This field is deprecated.
+    /// It is replaced by the `info_by_pool_type` field.
+    #[deprecated]
+    #[prost(message, optional, tag = "4")]
+    pub pool_weights: ::core::option::Option<PoolWeights>,
     /// The number of days since module genesis.
     #[prost(uint64, tag = "5")]
     #[serde(

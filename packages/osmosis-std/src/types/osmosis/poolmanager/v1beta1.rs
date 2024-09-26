@@ -345,6 +345,93 @@ pub struct MsgSetDenomPairTakerFeeResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
 }
+/// ===================== MsgSetTakerFeeShareAgreementForDenom
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.MsgSetTakerFeeShareAgreementForDenom")]
+pub struct MsgSetTakerFeeShareAgreementForDenom {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    /// denom is the denom that the taker fee share agreement is being set for.
+    /// Ex. If this is set to "nBTC", then any trade route that includes "nBTC"
+    /// will have the skim_percent skimmed from the taker fees and sent to the
+    /// skim_address.
+    #[prost(string, tag = "2")]
+    pub denom: ::prost::alloc::string::String,
+    /// skim_percent is the percentage of taker fees that will be skimmed for the
+    /// bridge provider, in the event that the bridge provider's denom is included
+    /// in the swap route.
+    #[prost(string, tag = "3")]
+    pub skim_percent: ::prost::alloc::string::String,
+    /// skim_address is the address belonging to the respective bridge provider
+    /// that the skimmed taker fees will be sent to at the end of each epoch.
+    #[prost(string, tag = "4")]
+    pub skim_address: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.poolmanager.v1beta1.MsgSetTakerFeeShareAgreementForDenomResponse"
+)]
+pub struct MsgSetTakerFeeShareAgreementForDenomResponse {}
+/// ===================== MsgSetRegisteredAlloyedPool
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.MsgSetRegisteredAlloyedPool")]
+pub struct MsgSetRegisteredAlloyedPool {
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
+    /// pool_id is the id of the pool that is being registered as an alloyed pool.
+    /// Only alloyed pools that intend to be used in taker fee revenue sharing
+    /// should be registered.
+    #[prost(uint64, tag = "2")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.MsgSetRegisteredAlloyedPoolResponse")]
+pub struct MsgSetRegisteredAlloyedPoolResponse {}
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
@@ -358,14 +445,21 @@ pub struct MsgSetDenomPairTakerFeeResponse {
 )]
 #[proto_message(type_url = "/osmosis.poolmanager.v1beta1.DenomPairTakerFee")]
 pub struct DenomPairTakerFee {
-    /// denom0 and denom1 get automatically lexigographically sorted
-    /// when being stored, so the order of input here does not matter.
+    /// DEPRECATED: Now that we are using uni-directional trading pairs, we are
+    /// using tokenInDenom and tokenOutDenom instead of denom0 and denom1 to
+    /// prevent confusion.
+    #[deprecated]
     #[prost(string, tag = "1")]
     pub denom0: ::prost::alloc::string::String,
+    #[deprecated]
     #[prost(string, tag = "2")]
     pub denom1: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub taker_fee: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub token_in_denom: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub token_out_denom: ::prost::alloc::string::String,
 }
 /// Params holds parameters for the poolmanager module
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -587,6 +681,91 @@ pub struct DenomPairTakerFeeProposal {
     #[prost(message, repeated, tag = "3")]
     pub denom_pair_taker_fee: ::prost::alloc::vec::Vec<DenomPairTakerFee>,
 }
+/// TakerFeeShareAgreement represents the agreement between the Osmosis protocol
+/// and a specific denom to share a certain percent of taker fees generated in
+/// any route that contains said denom. For example, if the agreement specifies a
+/// 10% skim_percent, this means 10% of the taker fees generated in a swap route
+/// containing the specified denom will be sent to the address specified
+/// in the skim_address field at the end of each epoch. These skim_percents are
+/// additive, so if three taker fee agreements have skim percents of 10%, 20%,
+/// and 30%, the total skim percent for the route will be 60%.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeeShareAgreement")]
+pub struct TakerFeeShareAgreement {
+    /// denom is the denom that has the taker fee share agreement.
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+    /// skim_percent is the percentage of taker fees that will be skimmed for the
+    /// denom, in the event that the denom is included in the swap route.
+    #[prost(string, tag = "2")]
+    pub skim_percent: ::prost::alloc::string::String,
+    /// skim_address is the address belonging to the respective denom
+    /// that the skimmed taker fees will be sent to at the end of each epoch.
+    #[prost(string, tag = "3")]
+    pub skim_address: ::prost::alloc::string::String,
+}
+/// TakerFeeSkimAccumulator accumulates the total skimmed taker fees for each
+/// denom that has a taker fee share agreement.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeeSkimAccumulator")]
+pub struct TakerFeeSkimAccumulator {
+    /// denom is the denom that has the taker fee share agreement.
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+    /// skimmed_taker_fees is the total skimmed taker fees for the denom.
+    #[prost(message, repeated, tag = "2")]
+    pub skimmed_taker_fees:
+        ::prost::alloc::vec::Vec<super::super::super::cosmos::base::v1beta1::Coin>,
+}
+/// AlloyContractTakerFeeShareState contains the contract address of the alloyed
+/// asset pool, along with the adjusted taker fee share agreements for any asset
+/// within the alloyed asset pool that has a taker fee share agreement. If for
+/// instance there are two denoms, and denomA makes up 50 percent and denomB
+/// makes up 50 percent, and denom A has a taker fee share agreement with a skim
+/// percent of 10%, then the adjusted taker fee share agreement for denomA will
+/// be 5%.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.AlloyContractTakerFeeShareState")]
+pub struct AlloyContractTakerFeeShareState {
+    /// contract_address is the address of the alloyed asset pool contract.
+    #[prost(string, tag = "1")]
+    pub contract_address: ::prost::alloc::string::String,
+    /// taker_fee_share_agreements is the adjusted taker fee share agreements for
+    /// any asset within the alloyed asset pool that has a taker fee share
+    /// agreement.
+    #[prost(message, repeated, tag = "2")]
+    pub taker_fee_share_agreements: ::prost::alloc::vec::Vec<TakerFeeShareAgreement>,
+}
 /// =============================== Params
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -639,6 +818,10 @@ pub struct ParamsResponse {
     response_type = EstimateSwapExactAmountInResponse
 )]
 pub struct EstimateSwapExactAmountInRequest {
+    /// DEPRECATED
+    #[deprecated]
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
     #[deprecated]
     #[prost(uint64, tag = "2")]
     #[serde(alias = "poolID")]
@@ -756,6 +939,10 @@ pub struct EstimateSwapExactAmountInResponse {
     response_type = EstimateSwapExactAmountOutResponse
 )]
 pub struct EstimateSwapExactAmountOutRequest {
+    /// DEPRECATED
+    #[deprecated]
+    #[prost(string, tag = "1")]
+    pub sender: ::prost::alloc::string::String,
     #[deprecated]
     #[prost(uint64, tag = "2")]
     #[serde(alias = "poolID")]
@@ -1298,6 +1485,258 @@ pub struct EstimateTradeBasedOnPriceImpactResponse {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.AllTakerFeeShareAgreementsRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/AllTakerFeeShareAgreements",
+    response_type = AllTakerFeeShareAgreementsResponse
+)]
+pub struct AllTakerFeeShareAgreementsRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.AllTakerFeeShareAgreementsResponse")]
+pub struct AllTakerFeeShareAgreementsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub taker_fee_share_agreements: ::prost::alloc::vec::Vec<TakerFeeShareAgreement>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeeShareAgreementFromDenomRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/TakerFeeShareAgreementFromDenom",
+    response_type = TakerFeeShareAgreementFromDenomResponse
+)]
+pub struct TakerFeeShareAgreementFromDenomRequest {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeeShareAgreementFromDenomResponse")]
+pub struct TakerFeeShareAgreementFromDenomResponse {
+    #[prost(message, optional, tag = "1")]
+    pub taker_fee_share_agreement: ::core::option::Option<TakerFeeShareAgreement>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TakerFeeShareDenomsToAccruedValueRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/TakerFeeShareDenomsToAccruedValue",
+    response_type = TakerFeeShareDenomsToAccruedValueResponse
+)]
+pub struct TakerFeeShareDenomsToAccruedValueRequest {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub taker_fee_denom: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(
+    type_url = "/osmosis.poolmanager.v1beta1.TakerFeeShareDenomsToAccruedValueResponse"
+)]
+pub struct TakerFeeShareDenomsToAccruedValueResponse {
+    #[prost(string, tag = "1")]
+    pub amount: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.AllTakerFeeShareAccumulatorsRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/AllTakerFeeShareAccumulators",
+    response_type = AllTakerFeeShareAccumulatorsResponse
+)]
+pub struct AllTakerFeeShareAccumulatorsRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.AllTakerFeeShareAccumulatorsResponse")]
+pub struct AllTakerFeeShareAccumulatorsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub taker_fee_skim_accumulators: ::prost::alloc::vec::Vec<TakerFeeSkimAccumulator>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.RegisteredAlloyedPoolFromDenomRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/RegisteredAlloyedPoolFromDenom",
+    response_type = RegisteredAlloyedPoolFromDenomResponse
+)]
+pub struct RegisteredAlloyedPoolFromDenomRequest {
+    #[prost(string, tag = "1")]
+    pub denom: ::prost::alloc::string::String,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.RegisteredAlloyedPoolFromDenomResponse")]
+pub struct RegisteredAlloyedPoolFromDenomResponse {
+    #[prost(message, optional, tag = "1")]
+    pub contract_state: ::core::option::Option<AlloyContractTakerFeeShareState>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.RegisteredAlloyedPoolFromPoolIdRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/RegisteredAlloyedPoolFromPoolId",
+    response_type = RegisteredAlloyedPoolFromPoolIdResponse
+)]
+pub struct RegisteredAlloyedPoolFromPoolIdRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "poolID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub pool_id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.RegisteredAlloyedPoolFromPoolIdResponse")]
+pub struct RegisteredAlloyedPoolFromPoolIdResponse {
+    #[prost(message, optional, tag = "1")]
+    pub contract_state: ::core::option::Option<AlloyContractTakerFeeShareState>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.AllRegisteredAlloyedPoolsRequest")]
+#[proto_query(
+    path = "/osmosis.poolmanager.v1beta1.Query/AllRegisteredAlloyedPools",
+    response_type = AllRegisteredAlloyedPoolsResponse
+)]
+pub struct AllRegisteredAlloyedPoolsRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.poolmanager.v1beta1.AllRegisteredAlloyedPoolsResponse")]
+pub struct AllRegisteredAlloyedPoolsResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub contract_states: ::prost::alloc::vec::Vec<AlloyContractTakerFeeShareState>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto_message(type_url = "/osmosis.poolmanager.v1beta1.TrackedVolume")]
 pub struct TrackedVolume {
     #[prost(message, repeated, tag = "1")]
@@ -1315,11 +1754,13 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
     }
     pub fn estimate_swap_exact_amount_in(
         &self,
+        sender: ::prost::alloc::string::String,
         pool_id: u64,
         token_in: ::prost::alloc::string::String,
         routes: ::prost::alloc::vec::Vec<SwapAmountInRoute>,
     ) -> Result<EstimateSwapExactAmountInResponse, cosmwasm_std::StdError> {
         EstimateSwapExactAmountInRequest {
+            sender,
             pool_id,
             token_in,
             routes,
@@ -1356,11 +1797,13 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
     }
     pub fn estimate_swap_exact_amount_out(
         &self,
+        sender: ::prost::alloc::string::String,
         pool_id: u64,
         routes: ::prost::alloc::vec::Vec<SwapAmountOutRoute>,
         token_out: ::prost::alloc::string::String,
     ) -> Result<EstimateSwapExactAmountOutResponse, cosmwasm_std::StdError> {
         EstimateSwapExactAmountOutRequest {
+            sender,
             pool_id,
             routes,
             token_out,
@@ -1461,5 +1904,49 @@ impl<'a, Q: cosmwasm_std::CustomQuery> PoolmanagerQuerier<'a, Q> {
             external_price,
         }
         .query(self.querier)
+    }
+    pub fn all_taker_fee_share_agreements(
+        &self,
+    ) -> Result<AllTakerFeeShareAgreementsResponse, cosmwasm_std::StdError> {
+        AllTakerFeeShareAgreementsRequest {}.query(self.querier)
+    }
+    pub fn taker_fee_share_agreement_from_denom(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<TakerFeeShareAgreementFromDenomResponse, cosmwasm_std::StdError> {
+        TakerFeeShareAgreementFromDenomRequest { denom }.query(self.querier)
+    }
+    pub fn taker_fee_share_denoms_to_accrued_value(
+        &self,
+        denom: ::prost::alloc::string::String,
+        taker_fee_denom: ::prost::alloc::string::String,
+    ) -> Result<TakerFeeShareDenomsToAccruedValueResponse, cosmwasm_std::StdError> {
+        TakerFeeShareDenomsToAccruedValueRequest {
+            denom,
+            taker_fee_denom,
+        }
+        .query(self.querier)
+    }
+    pub fn all_taker_fee_share_accumulators(
+        &self,
+    ) -> Result<AllTakerFeeShareAccumulatorsResponse, cosmwasm_std::StdError> {
+        AllTakerFeeShareAccumulatorsRequest {}.query(self.querier)
+    }
+    pub fn registered_alloyed_pool_from_denom(
+        &self,
+        denom: ::prost::alloc::string::String,
+    ) -> Result<RegisteredAlloyedPoolFromDenomResponse, cosmwasm_std::StdError> {
+        RegisteredAlloyedPoolFromDenomRequest { denom }.query(self.querier)
+    }
+    pub fn registered_alloyed_pool_from_pool_id(
+        &self,
+        pool_id: u64,
+    ) -> Result<RegisteredAlloyedPoolFromPoolIdResponse, cosmwasm_std::StdError> {
+        RegisteredAlloyedPoolFromPoolIdRequest { pool_id }.query(self.querier)
+    }
+    pub fn all_registered_alloyed_pools(
+        &self,
+    ) -> Result<AllRegisteredAlloyedPoolsResponse, cosmwasm_std::StdError> {
+        AllRegisteredAlloyedPoolsRequest {}.query(self.querier)
     }
 }

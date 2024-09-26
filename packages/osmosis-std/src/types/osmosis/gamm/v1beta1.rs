@@ -744,6 +744,40 @@ pub struct MsgExitSwapExternAmountOutResponse {
     #[prost(string, tag = "1")]
     pub share_in_amount: ::prost::alloc::string::String,
 }
+/// =============================== Params
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.ParamsRequest")]
+#[proto_query(
+    path = "/osmosis.gamm.v1beta1.Query/Params",
+    response_type = ParamsResponse
+)]
+pub struct ParamsRequest {}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.gamm.v1beta1.ParamsResponse")]
+pub struct ParamsResponse {
+    #[prost(message, optional, tag = "1")]
+    pub params: ::core::option::Option<Params>,
+}
 /// =============================== Pool
 /// Deprecated: please use the alternative in x/poolmanager
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -1212,6 +1246,10 @@ pub struct QuerySpotPriceRequest {
     pub base_asset_denom: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
     pub quote_asset_denom: ::prost::alloc::string::String,
+    /// DEPRECATED
+    #[deprecated]
+    #[prost(bool, tag = "4")]
+    pub with_swap_fee: bool,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
@@ -1588,11 +1626,13 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
         pool_id: u64,
         base_asset_denom: ::prost::alloc::string::String,
         quote_asset_denom: ::prost::alloc::string::String,
+        with_swap_fee: bool,
     ) -> Result<QuerySpotPriceResponse, cosmwasm_std::StdError> {
         QuerySpotPriceRequest {
             pool_id,
             base_asset_denom,
             quote_asset_denom,
+            with_swap_fee,
         }
         .query(self.querier)
     }
@@ -1638,5 +1678,8 @@ impl<'a, Q: cosmwasm_std::CustomQuery> GammQuerier<'a, Q> {
         &self,
     ) -> Result<QueryCfmmConcentratedPoolLinksResponse, cosmwasm_std::StdError> {
         QueryCfmmConcentratedPoolLinksRequest {}.query(self.querier)
+    }
+    pub fn params(&self) -> Result<ParamsResponse, cosmwasm_std::StdError> {
+        ParamsRequest {}.query(self.querier)
     }
 }

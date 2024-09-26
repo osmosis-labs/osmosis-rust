@@ -34,13 +34,15 @@ pub struct Params {
     /// incentives stay at cl pool.
     #[prost(string, tag = "3")]
     pub balancer_shares_reward_discount: ::prost::alloc::string::String,
-    /// authorized_quote_denoms is a list of quote denoms that can be used as
-    /// token1 when creating a pool. We limit the quote assets to a small set for
-    /// the purposes of having convenient price increments stemming from tick to
-    /// price conversion. These increments are in a human readable magnitude only
-    /// for token1 as a quote. For limit orders in the future, this will be a
-    /// desirable property in terms of UX as to allow users to set limit orders at
-    /// prices in terms of token1 (quote asset) that are easy to reason about.
+    /// DEPRECATED: authorized_quote_denoms is a list of quote denoms that can be
+    /// used as token1 when creating a pool. We limit the quote assets to a small
+    /// set for the purposes of having convenient price increments stemming from
+    /// tick to price conversion. These increments are in a human readable
+    /// magnitude only for token1 as a quote. For limit orders in the future, this
+    /// will be a desirable property in terms of UX as to allow users to set limit
+    /// orders at prices in terms of token1 (quote asset) that are easy to reason
+    /// about.
+    #[deprecated]
     #[prost(string, repeated, tag = "4")]
     pub authorized_quote_denoms: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(message, repeated, tag = "5")]

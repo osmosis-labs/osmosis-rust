@@ -12,7 +12,7 @@ use osmosis_std_derive::CosmwasmExt;
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.capability.v1beta1.Capability")]
+#[proto_message(type_url = "/capability.v1.Capability")]
 pub struct Capability {
     #[prost(uint64, tag = "1")]
     #[serde(
@@ -34,7 +34,7 @@ pub struct Capability {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.capability.v1beta1.Owner")]
+#[proto_message(type_url = "/capability.v1.Owner")]
 pub struct Owner {
     #[prost(string, tag = "1")]
     pub module: ::prost::alloc::string::String,
@@ -54,7 +54,7 @@ pub struct Owner {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.capability.v1beta1.CapabilityOwners")]
+#[proto_message(type_url = "/capability.v1.CapabilityOwners")]
 pub struct CapabilityOwners {
     #[prost(message, repeated, tag = "1")]
     pub owners: ::prost::alloc::vec::Vec<Owner>,
@@ -71,7 +71,7 @@ pub struct CapabilityOwners {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.capability.v1beta1.GenesisOwners")]
+#[proto_message(type_url = "/capability.v1.GenesisOwners")]
 pub struct GenesisOwners {
     /// index is the index of the capability owner.
     #[prost(uint64, tag = "1")]
@@ -96,7 +96,7 @@ pub struct GenesisOwners {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
-#[proto_message(type_url = "/cosmos.capability.v1beta1.GenesisState")]
+#[proto_message(type_url = "/capability.v1.GenesisState")]
 pub struct GenesisState {
     /// index is the capability global index.
     #[prost(uint64, tag = "1")]

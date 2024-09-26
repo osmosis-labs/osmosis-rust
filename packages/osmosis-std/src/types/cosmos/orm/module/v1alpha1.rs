@@ -1,7 +1,7 @@
 use osmosis_std_derive::CosmwasmExt;
 /// Module defines the ORM module which adds providers to the app container for
-/// module-scoped DB's. In the future it may provide gRPC services for interacting
-/// with ORM data.
+/// ORM ModuleDB's and in the future will automatically register query
+/// services for modules that use the ORM.
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(
     Clone,
