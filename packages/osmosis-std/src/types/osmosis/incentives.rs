@@ -944,6 +944,136 @@ pub struct GaugeWeight {
     ::schemars::JsonSchema,
     CosmwasmExt,
 )]
+#[proto_message(type_url = "/osmosis.incentives.QueryInternalGaugesRequest")]
+#[proto_query(
+    path = "/osmosis.incentives.Query/InternalGauges",
+    response_type = QueryInternalGaugesResponse
+)]
+pub struct QueryInternalGaugesRequest {
+    /// Pagination defines pagination for the request
+    #[prost(message, optional, tag = "1")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.QueryInternalGaugesResponse")]
+pub struct QueryInternalGaugesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub gauges: ::prost::alloc::vec::Vec<Gauge>,
+    /// Pagination defines pagination for the response
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.QueryExternalGaugesRequest")]
+#[proto_query(
+    path = "/osmosis.incentives.Query/ExternalGauges",
+    response_type = QueryExternalGaugesResponse
+)]
+pub struct QueryExternalGaugesRequest {
+    /// Pagination defines pagination for the request
+    #[prost(message, optional, tag = "1")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.QueryExternalGaugesResponse")]
+pub struct QueryExternalGaugesResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub gauges: ::prost::alloc::vec::Vec<Gauge>,
+    /// Pagination defines pagination for the response
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.QueryGaugesByPoolIDRequest")]
+#[proto_query(
+    path = "/osmosis.incentives.Query/GaugesByPoolID",
+    response_type = QueryGaugesByPoolIdResponse
+)]
+pub struct QueryGaugesByPoolIdRequest {
+    #[prost(uint64, tag = "1")]
+    #[serde(alias = "ID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub id: u64,
+    /// Pagination defines pagination for the request
+    #[prost(message, optional, tag = "2")]
+    pub pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.incentives.QueryGaugesByPoolIDResponse")]
+pub struct QueryGaugesByPoolIdResponse {
+    #[prost(message, repeated, tag = "1")]
+    pub gauges: ::prost::alloc::vec::Vec<Gauge>,
+    /// Pagination defines pagination for the response
+    #[prost(message, optional, tag = "2")]
+    pub pagination:
+        ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageResponse>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
 #[proto_message(type_url = "/osmosis.incentives.ParamsRequest")]
 #[proto_query(path = "/osmosis.incentives.Query/Params", response_type = ParamsResponse)]
 pub struct ParamsRequest {}
@@ -1223,6 +1353,25 @@ impl<'a, Q: cosmwasm_std::CustomQuery> IncentivesQuerier<'a, Q> {
         group_gauge_id: u64,
     ) -> Result<QueryCurrentWeightByGroupGaugeIdResponse, cosmwasm_std::StdError> {
         QueryCurrentWeightByGroupGaugeIdRequest { group_gauge_id }.query(self.querier)
+    }
+    pub fn internal_gauges(
+        &self,
+        pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryInternalGaugesResponse, cosmwasm_std::StdError> {
+        QueryInternalGaugesRequest { pagination }.query(self.querier)
+    }
+    pub fn external_gauges(
+        &self,
+        pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryExternalGaugesResponse, cosmwasm_std::StdError> {
+        QueryExternalGaugesRequest { pagination }.query(self.querier)
+    }
+    pub fn gauges_by_pool_id(
+        &self,
+        id: u64,
+        pagination: ::core::option::Option<super::super::cosmos::base::query::v1beta1::PageRequest>,
+    ) -> Result<QueryGaugesByPoolIdResponse, cosmwasm_std::StdError> {
+        QueryGaugesByPoolIdRequest { id, pagination }.query(self.querier)
     }
     pub fn params(&self) -> Result<ParamsResponse, cosmwasm_std::StdError> {
         ParamsRequest {}.query(self.querier)

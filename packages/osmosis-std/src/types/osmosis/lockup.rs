@@ -1210,6 +1210,47 @@ pub struct MsgSetRewardReceiverAddressResponse {
     #[prost(bool, tag = "1")]
     pub success: bool,
 }
+/// DEPRECATED
+/// Following messages are deprecated but kept to support indexing.
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.MsgUnlockPeriodLock")]
+pub struct MsgUnlockPeriodLock {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+    #[prost(uint64, tag = "2")]
+    #[serde(alias = "ID")]
+    #[serde(
+        serialize_with = "crate::serde::as_str::serialize",
+        deserialize_with = "crate::serde::as_str::deserialize"
+    )]
+    pub id: u64,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    ::prost::Message,
+    ::serde::Serialize,
+    ::serde::Deserialize,
+    ::schemars::JsonSchema,
+    CosmwasmExt,
+)]
+#[proto_message(type_url = "/osmosis.lockup.MsgUnlockTokens")]
+pub struct MsgUnlockTokens {
+    #[prost(string, tag = "1")]
+    pub owner: ::prost::alloc::string::String,
+}
 pub struct LockupQuerier<'a, Q: cosmwasm_std::CustomQuery> {
     querier: &'a cosmwasm_std::QuerierWrapper<'a, Q>,
 }

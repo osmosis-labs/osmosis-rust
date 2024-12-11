@@ -4,7 +4,7 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 name = "osmosis-std"
 repository = "https://github.com/osmosis-labs/osmosis-rust/"
-version = "0.26.0"
+version = "0.27.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
