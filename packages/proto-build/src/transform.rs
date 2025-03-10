@@ -100,7 +100,6 @@ fn transform_module(
     nested_mod: bool,
 ) -> Vec<Item> {
     let items = transform_items(items, src, ancestors, descriptor);
-    let items = prepend(items);
 
     append(items, src, descriptor, nested_mod)
 }
@@ -131,7 +130,7 @@ fn transform_items(
     ancestors: &[String],
     descriptor: &FileDescriptorSet,
 ) -> Vec<Item> {
-    items
+    let items = items
         .into_iter()
         .map(|i| match i {
             Item::Struct(s) => Item::Struct({
@@ -159,7 +158,16 @@ fn transform_items(
             i => i,
         })
         .map(|i: Item| transform_nested_mod(i, src, ancestors, descriptor))
-        .collect::<Vec<Item>>()
+        .collect::<Vec<Item>>();
+
+    if items.clone().into_iter().any(|i| match i {
+        Item::Struct(_) => true,
+        _ => false,
+    }) {
+        prepend(items)
+    } else {
+        items
+    }
 }
 
 fn transform_nested_mod(
