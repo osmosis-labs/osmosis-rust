@@ -13,4 +13,4 @@ Rust libraries for Osmosis. The following table shows every published crates mai
 
 ---
 
-This repo also contains [`proto-build`](./packages/proto-build) package which is used for autogenrating rust types from proto.
+This repo also contains [`proto-build`](./packages/proto-build) package which is used for autogenerating rust types from proto.
